@@ -1,0 +1,16 @@
+{
+    "name":"pricegsm-webapp",
+    "version":"1.0",
+    "dependencies": {
+        "jquery": "1.10.2",
+        "jquery-ui": "1.10.3",
+        "bootstrap": "3.0.3",
+        "angular": "1.2.5",
+        "angular-animate": "1.2.5",
+        "angular-cookies": "1.2.5",
+        "angular-loader": "1.2.5",
+        "angular-resource": "1.2.5",
+        "angular-route": "1.2.5",
+        "angular-touch": "1.2.5"
+    }
+}

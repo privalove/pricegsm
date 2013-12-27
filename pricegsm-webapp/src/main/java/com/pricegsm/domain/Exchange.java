@@ -1,0 +1,74 @@
+package com.pricegsm.domain;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
+import java.util.Date;
+
+@Entity
+@Table(name = "exchange")
+public class Exchange
+        extends GlobalEntity {
+
+    private Currency from;
+
+    private Currency to;
+
+    private Date date;
+
+    private BigDecimal value = BigDecimal.ONE;
+
+    @Id
+    @Column(name = "id", nullable = false)
+    @GeneratedValue(generator = "Exchange")
+    @SequenceGenerator(name = "Exchange", sequenceName = "exchange_seq", allocationSize = 1)
+    @Override
+    public long getId() {
+        return super.getId();
+    }
+
+    @NotNull
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "from_currency_id", referencedColumnName = "id", nullable = false)
+    public Currency getFrom() {
+        return from;
+    }
+
+    public void setFrom(Currency from) {
+        this.from = from;
+    }
+
+    @NotNull
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "to_currency_id", referencedColumnName = "id", nullable = false)
+    public Currency getTo() {
+        return to;
+    }
+
+    public void setTo(Currency to) {
+        this.to = to;
+    }
+
+    @NotNull
+    @Temporal(TemporalType.TIMESTAMP)
+    @Basic
+    @Column(name = "exchange_date", nullable = false)
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    @NotNull
+    @Basic
+    @Column(name = "value", nullable = false)
+    public BigDecimal getValue() {
+        return value;
+    }
+
+    public void setValue(BigDecimal value) {
+        this.value = value;
+    }
+}
