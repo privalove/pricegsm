@@ -1,6 +1,10 @@
 package com.pricegsm.domain;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.pricegsm.jackson.GlobalEntityDeserializer;
+import com.pricegsm.jackson.GlobalEntitySerializer;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
@@ -80,6 +84,8 @@ public class Order
         this.orderPositions = orderPositions;
     }
 
+    @JsonSerialize(using = GlobalEntitySerializer.class)
+    @JsonDeserialize(using = GlobalEntityDeserializer.class)
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "buyer_id", referencedColumnName = "id", nullable = false)
@@ -91,6 +97,8 @@ public class Order
         this.buyer = buyer;
     }
 
+    @JsonSerialize(using = GlobalEntitySerializer.class)
+    @JsonDeserialize(using = GlobalEntityDeserializer.class)
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "seller_id", referencedColumnName = "id", nullable = false)

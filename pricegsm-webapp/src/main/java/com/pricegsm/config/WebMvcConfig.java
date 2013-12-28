@@ -2,12 +2,21 @@ package com.pricegsm.config;
 
 import static org.springframework.context.annotation.ComponentScan.Filter;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.format.FormatterRegistry;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -21,6 +30,8 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 import org.thymeleaf.templateresolver.TemplateResolver;
 
 import com.pricegsm.Application;
+
+import java.util.List;
 
 @Configuration
 @ComponentScan(basePackageClasses = Application.class, includeFilters = @Filter(Controller.class), useDefaultFilters = false)
@@ -90,4 +101,37 @@ class WebMvcConfig extends WebMvcConfigurationSupport {
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
     }
+
+    protected void addFormatters(FormatterRegistry registry) {
+        //fetch entity by id
+        registry.addConverterFactory(new IdToGlobalEntityConverterFactory());
+    }
+
+    protected void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        MappingJackson2HttpMessageConverter jacksonConverter = new MappingJackson2HttpMessageConverter();
+
+        jacksonConverter.setObjectMapper(objectMapper());
+        converters.add(jacksonConverter);
+    }
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        objectMapper.configure(JsonGenerator.Feature.ESCAPE_NON_ASCII, true);
+
+        //exclude null values from json
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
+        Hibernate4Module module = new Hibernate4Module();
+        module.enable(Hibernate4Module.Feature.FORCE_LAZY_LOADING);
+        module.disable(Hibernate4Module.Feature.USE_TRANSIENT_ANNOTATION);
+        objectMapper.registerModule(module);
+
+        return objectMapper;
+    }
+
+
 }

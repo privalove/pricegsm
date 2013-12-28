@@ -1,5 +1,9 @@
 package com.pricegsm.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.pricegsm.jackson.GlobalEntityDeserializer;
+import com.pricegsm.jackson.GlobalEntitySerializer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -301,6 +305,8 @@ public class User
     /**
      * Current region of user.
      */
+    @JsonSerialize(using = GlobalEntitySerializer.class)
+    @JsonDeserialize(using = GlobalEntityDeserializer.class)
     @ManyToOne
     @JoinColumn(name = "region_id", referencedColumnName = "id")
     public Region getRegion() {

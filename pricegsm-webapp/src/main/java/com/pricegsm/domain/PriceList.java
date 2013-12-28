@@ -1,5 +1,10 @@
 package com.pricegsm.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.pricegsm.jackson.GlobalEntityDeserializer;
+import com.pricegsm.jackson.GlobalEntitySerializer;
+
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -89,6 +94,8 @@ public class PriceList
         this.price = price;
     }
 
+    @JsonSerialize(using = GlobalEntitySerializer.class)
+    @JsonDeserialize(using = GlobalEntityDeserializer.class)
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
@@ -100,6 +107,8 @@ public class PriceList
         this.product = product;
     }
 
+    @JsonSerialize(using = GlobalEntitySerializer.class)
+    @JsonDeserialize(using = GlobalEntityDeserializer.class)
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
@@ -111,6 +120,8 @@ public class PriceList
         this.user = user;
     }
 
+    @JsonSerialize(using = GlobalEntitySerializer.class)
+    @JsonDeserialize(using = GlobalEntityDeserializer.class)
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "currency_id", referencedColumnName = "id", nullable = false)

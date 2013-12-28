@@ -1,5 +1,9 @@
 package com.pricegsm.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.pricegsm.jackson.GlobalEntityDeserializer;
+import com.pricegsm.jackson.GlobalEntitySerializer;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
@@ -57,6 +61,8 @@ public class Product
         this.yandexId = yandex_id;
     }
 
+    @JsonSerialize(using = GlobalEntitySerializer.class)
+    @JsonDeserialize(using = GlobalEntityDeserializer.class)
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "vendor_id", referencedColumnName = "id", nullable = false)
@@ -68,6 +74,8 @@ public class Product
         this.vendor = vendor;
     }
 
+    @JsonSerialize(using = GlobalEntitySerializer.class)
+    @JsonDeserialize(using = GlobalEntityDeserializer.class)
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "color_id", referencedColumnName = "id", nullable = false)

@@ -1,5 +1,10 @@
 package com.pricegsm.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.pricegsm.jackson.GlobalEntityDeserializer;
+import com.pricegsm.jackson.GlobalEntitySerializer;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
@@ -27,6 +32,8 @@ public class Partner
         return super.getId();
     }
 
+    @JsonSerialize(using = GlobalEntitySerializer.class)
+    @JsonDeserialize(using = GlobalEntityDeserializer.class)
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
@@ -38,6 +45,8 @@ public class Partner
         this.user = user;
     }
 
+    @JsonSerialize(using = GlobalEntitySerializer.class)
+    @JsonDeserialize(using = GlobalEntityDeserializer.class)
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "partner_id", referencedColumnName = "id", nullable = false)

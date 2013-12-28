@@ -1,5 +1,9 @@
 package com.pricegsm.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.pricegsm.jackson.GlobalEntityDeserializer;
+import com.pricegsm.jackson.GlobalEntitySerializer;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
@@ -63,6 +67,8 @@ public class DeliveryPlace
         this.active = active;
     }
 
+    @JsonSerialize(using = GlobalEntitySerializer.class)
+    @JsonDeserialize(using = GlobalEntityDeserializer.class)
     @ManyToOne
     @JoinColumn(name = "region_id", referencedColumnName = "id")
     public Region getRegion() {
