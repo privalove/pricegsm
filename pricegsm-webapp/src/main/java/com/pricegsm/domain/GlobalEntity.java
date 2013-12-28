@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 
 /**
  * Base class for entities which have simple ID.
@@ -18,7 +19,7 @@ public class GlobalEntity
     /**
      * Simple Primary Key
      */
-    @Id
+    @Transient
     public long getId() {
         return id;
     }

@@ -139,7 +139,7 @@ public class User
      */
     @Size(max = 255)
     @Basic
-    @Column(name = "seller_delivery_place")
+    @Column(name = "seller_pickup_place")
     public String getSellerPickupPlace() {
         return sellerPickupPlace;
     }

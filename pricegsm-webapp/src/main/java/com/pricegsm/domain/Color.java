@@ -68,7 +68,7 @@ public class Color
      */
     @Size(max = 255)
     @Basic
-    @Column(name = "name")
+    @Column(name = "yandex_color")
     public String getYandexColor() {
         return yandexColor;
     }
