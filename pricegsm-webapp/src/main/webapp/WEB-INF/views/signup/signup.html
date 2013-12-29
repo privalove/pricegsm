@@ -2,34 +2,37 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Signup</title>
+    <title th:text="#{page.signup.title}">Pricegsm :: Регистрация</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/bootstrap.min.css}"/>
-    <link href="../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}" />
-    <script src="http://code.jquery.com/jquery-latest.js"></script>
-    <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
+    <link href="../../../resources/components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" media="screen" th:href="@{/resources/components/bootstrap/dist/css/bootstrap.min.css}"/>
+    <link href="../../../resources/components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" media="screen" th:href="@{/resources/components/bootstrap/dist/css/bootstrap-theme.min.css}"/>
+    <link href="../../../resources/css/common/common.css" rel="stylesheet" media="screen" th:href="@{/resources/css/common/common.css}" />
+    <link href="../../../resources/css/default/custom.css" rel="stylesheet" media="screen" th:href="@{/resources/css/default/custom.css}" />
+
+    <script src="../../../resources/components/jquery/jquery.min.js" th:src="@{/resources/components/jquery/jquery.min.js}"></script>
+    <script src="../../../resources/components/bootstrap/dist/js/bootstrap.min.js" th:src="@{/resources/components/bootstrap/dist/js/bootstrap.min.js}"></script>
 </head>
 
 <body>
 
-<form class="form-narrow form-horizontal" method="post" th:action="@{/signup}" th:object="${signupForm}">
+<form class="form-narrow form-horizontal" method="post" th:action="@{/signup}" th:object="${registrationForm}">
     <!-- /* Show general error message when form contains errors */ -->
-    <th:block th:if="${#fields.hasErrors('${signupForm.*}')}">
-        <div th:replace="fragments/alert :: alert (type='danger', message='Form contains errors. Please try again.')">Alert</div>
+    <th:block th:if="${#fields.hasErrors('${registrationForm.*}')}">
+        <div th:replace="fragments/alert :: alert (type='danger', message=#{alert.validationForm})">Внимание</div>
     </th:block>
     <fieldset>
-        <legend>Please Sign Up</legend>
+        <legend th:text="#{page.signup.welcome}">Please Sign Up</legend>
         <div class="form-group" th:classappend="${#fields.hasErrors('email')}? 'has-error'">
-            <label for="email" class="col-lg-2 control-label">Email</label>
+            <label for="email" class="col-lg-2 control-label" th:text="#{registrationForm.email}">Email</label>
             <div class="col-lg-10">
-                <input type="text" class="form-control" id="email" placeholder="Email address" th:field="*{email}" />
+                <input type="text" class="form-control" id="email" th:placeholder="#{registrationForm.email}" placeholder="Email address" th:field="*{email}" />
                 <span class="help-block" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Incorrect email</span>
             </div>
         </div>
         <div class="form-group" th:classappend="${#fields.hasErrors('password')}? 'has-error'">
-            <label for="password" class="col-lg-2 control-label">Password</label>
+            <label for="password" class="col-lg-2 control-label" th:text="#{registrationForm.password}">Password</label>
             <div class="col-lg-10">
-                <input type="password" class="form-control" id="password" placeholder="Password" th:field="*{password}"/>
+                <input type="password" class="form-control" id="password" th:placeholder="#{registrationForm.password}" placeholder="Password" th:field="*{password}"/>
                 <span class="help-block" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Incorrect password</span>
             </div>
         </div>

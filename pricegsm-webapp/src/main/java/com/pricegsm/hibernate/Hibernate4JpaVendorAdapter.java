@@ -5,6 +5,9 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
 import javax.persistence.spi.PersistenceProvider;
 
+/**
+ * Support new hibernate 4.0
+ */
 public class Hibernate4JpaVendorAdapter
         extends HibernateJpaVendorAdapter {
 
