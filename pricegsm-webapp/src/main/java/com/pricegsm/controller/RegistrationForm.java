@@ -2,6 +2,7 @@ package com.pricegsm.controller;
 
 import com.pricegsm.domain.User;
 import com.pricegsm.validation.UniqueUsername;
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Size;
@@ -29,6 +30,7 @@ public class RegistrationForm
     }
 
     @UniqueUsername
+    @Email
     @NotBlank
     @Size(max = 255)
     public String getEmail() {

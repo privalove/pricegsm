@@ -4,15 +4,19 @@ CREATE TABLE "currency" (
   "code"        VARCHAR(255),
   "symbol"      VARCHAR(255),
 
-  "modified_by" BIGINT,
+  "modified_by" BIGINT       NOT NULL DEFAULT 0,
   "modified"    TIMESTAMP WITH TIME ZONE,
-  CONSTRAINT "currency_pkey" PRIMARY KEY ("id")
+  CONSTRAINT "currency_pkey" PRIMARY KEY ("id"),
+  CONSTRAINT "currency_name_unique" UNIQUE (name)
 );
 ALTER TABLE "currency" OWNER TO pricegsmowner;
 
-CREATE SEQUENCE "currency_seq";
+CREATE SEQUENCE "currency_seq" START 4;
 ALTER TABLE "currency_seq" OWNER TO pricegsmowner;
 
+INSERT INTO currency (id, name, code, symbol) VALUES (1, 'Доллар США', 'USD', '$');
+INSERT INTO currency (id, name, code, symbol) VALUES (2, 'Евро', 'EUR', '€');
+INSERT INTO currency (id, name, code, symbol) VALUES (3, 'Российский рубль', 'RUB', 'р.');
 
 CREATE TABLE "region" (
   "id"          BIGINT       NOT NULL,
@@ -20,16 +24,17 @@ CREATE TABLE "region" (
   "active"      BOOLEAN      NOT NULL DEFAULT TRUE,
   "description" TEXT,
 
-  "modified_by" BIGINT,
+  "modified_by" BIGINT       NOT NULL DEFAULT 0,
   "modified"    TIMESTAMP WITH TIME ZONE,
-  CONSTRAINT "region_pkey" PRIMARY KEY ("id")
+  CONSTRAINT "region_pkey" PRIMARY KEY ("id"),
+  CONSTRAINT "region_name_unique" UNIQUE (name)
 );
 ALTER TABLE "region" OWNER TO pricegsmowner;
 
 CREATE SEQUENCE "region_seq" START 2;
 ALTER TABLE "region_seq" OWNER TO pricegsmowner;
 
-insert into region(id, name) values (1, 'Москва');
+INSERT INTO region (id, name) VALUES (1, 'Москва');
 
 CREATE TABLE "base_user" (
   "id"          BIGINT       NOT NULL,
@@ -38,14 +43,19 @@ CREATE TABLE "base_user" (
   "password"    VARCHAR(255) NOT NULL,
   "active"      BOOLEAN      NOT NULL DEFAULT TRUE,
 
-  "modified_by" BIGINT,
+  "modified_by" BIGINT       NOT NULL DEFAULT 0,
   "modified"    TIMESTAMP WITH TIME ZONE,
-  CONSTRAINT "base_user_pkey" PRIMARY KEY ("id")
+  CONSTRAINT "base_user_pkey" PRIMARY KEY ("id"),
+  CONSTRAINT "base_user_email_unique" UNIQUE (email)
 );
 ALTER TABLE "base_user" OWNER TO pricegsmowner;
 
-CREATE SEQUENCE "base_user_seq";
+CREATE SEQUENCE "base_user_seq" START 3;
 ALTER TABLE "base_user_seq" OWNER TO pricegsmowner;
+
+INSERT INTO base_user (id, name, email, password) VALUES (1, 'Администратор', 'admin@pricegsm.com', '8e56be82bda733fa92b4430a8bcaf6f866e01e80d2934341b4c2a5fe02e4d48cf9ebe3d516a70d27');
+INSERT INTO base_user (id, name, email, password) VALUES (2, 'Поставщик', 'seller@pricegsm.com', '8e56be82bda733fa92b4430a8bcaf6f866e01e80d2934341b4c2a5fe02e4d48cf9ebe3d516a70d27');
+INSERT INTO base_user (id, name, email, password) VALUES (3, 'Покупатель', 'buyer@pricegsm.com', '147304244d17a96628240864b27db2fe8a097474ff830ada4cc3d495799325c7d6302697b8c529d6');
 
 CREATE TABLE "pricegsm_user" (
   "id"                    BIGINT         NOT NULL,
@@ -63,17 +73,24 @@ CREATE TABLE "pricegsm_user" (
   "seller_delivery_free"  BOOLEAN        NOT NULL DEFAULT FALSE,
   "seller_delivery_min"   INTEGER        NOT NULL DEFAULT 1,
   "seller_delivery_paid"  BOOLEAN        NOT NULL DEFAULT FALSE,
-  "seller_delivery_cost"  NUMERIC(10, 2),
+  "seller_delivery_cost"  NUMERIC(10, 2) NOT NULL DEFAULT 0,
   "buyer_delivery_place"  VARCHAR(255),
   "buyer_delivery_from"   TIME,
   "buyer_delivery_to"     TIME,
   "region_id"             BIGINT,
   "balance"               NUMERIC(10, 2) NOT NULL DEFAULT 0,
+  "token"                 VARCHAR(255)   NOT NULL,
+  "email_valid"           BOOLEAN        NOT NULL DEFAULT FALSE,
+
   CONSTRAINT "user_pkey" PRIMARY KEY ("id"),
   CONSTRAINT "user_to_base_user_fkey" FOREIGN KEY ("id") REFERENCES "base_user" ("id"),
-  CONSTRAINT "user_to_region_fkey" FOREIGN KEY ("region_id") REFERENCES "region" ("id")
+  CONSTRAINT "user_to_region_fkey" FOREIGN KEY ("region_id") REFERENCES "region" ("id"),
+  CONSTRAINT "user_token_unique" UNIQUE (token)
 );
 ALTER TABLE "pricegsm_user" OWNER TO pricegsmowner;
+
+INSERT INTO pricegsm_user (id, region_id, token, email_valid) VALUES (2, 1, 'b64613bb36164c968013b4340a43300e', TRUE);
+INSERT INTO pricegsm_user (id, region_id, token, email_valid) VALUES (3, 1, '4771044d44ef4242a0d84ae095f6f3cf', TRUE);
 
 CREATE TABLE administrator (
   "id" BIGINT NOT NULL,
@@ -82,6 +99,8 @@ CREATE TABLE administrator (
 );
 ALTER TABLE "administrator" OWNER TO pricegsmowner;
 
+INSERT INTO administrator(id) values (1);
+
 CREATE TABLE "color" (
   "id"           BIGINT       NOT NULL,
   "name"         VARCHAR(255) NOT NULL,
@@ -89,29 +108,45 @@ CREATE TABLE "color" (
   "active"       BOOLEAN      NOT NULL DEFAULT TRUE,
   "description"  TEXT,
 
-  "modified_by"  BIGINT,
+  "modified_by"  BIGINT       NOT NULL DEFAULT 0,
   "modified"     TIMESTAMP WITH TIME ZONE,
   CONSTRAINT "color_pkey" PRIMARY KEY ("id")
 );
 ALTER TABLE "color" OWNER TO pricegsmowner;
 
-CREATE SEQUENCE "color_seq";
+CREATE SEQUENCE "color_seq" START 10;
 ALTER TABLE "color_seq" OWNER TO pricegsmowner;
+
+INSERT INTO color (id, name, yandex_color) VALUES (1, 'Black', 'black');
+INSERT INTO color (id, name, yandex_color) VALUES (2, 'White', 'white');
+INSERT INTO color (id, name, yandex_color) VALUES (3, 'Silver', 'silver');
+INSERT INTO color (id, name, yandex_color) VALUES (4, 'Space Gray', 'gray');
+INSERT INTO color (id, name, yandex_color) VALUES (5, 'Gold', 'gold');
+
+INSERT INTO color (id, name, yandex_color) VALUES (6, 'Green', 'green');
+INSERT INTO color (id, name, yandex_color) VALUES (7, 'Pink', 'pink');
+INSERT INTO color (id, name, yandex_color) VALUES (8, 'Blue', 'blue');
+INSERT INTO color (id, name, yandex_color) VALUES (9, 'Yellow', 'yellow');
 
 CREATE TABLE "vendor" (
   "id"          BIGINT       NOT NULL,
   "name"        VARCHAR(255) NOT NULL,
+  "short_name"  VARCHAR(20)  NOT NULL,
   "active"      BOOLEAN      NOT NULL DEFAULT TRUE,
   "description" TEXT,
 
-  "modified_by" BIGINT,
+  "modified_by" BIGINT       NOT NULL DEFAULT 0,
   "modified"    TIMESTAMP WITH TIME ZONE,
   CONSTRAINT "vendor_pkey" PRIMARY KEY ("id")
 );
 ALTER TABLE "vendor" OWNER TO pricegsmowner;
 
-CREATE SEQUENCE "vendor_seq";
+CREATE SEQUENCE "vendor_seq" START 3;
 ALTER TABLE "vendor_seq" OWNER TO pricegsmowner;
+
+INSERT INTO vendor (id, name, short_name) VALUES (1, 'Apple IPhone', 'Apple');
+INSERT INTO vendor (id, name, short_name) VALUES (2, 'Apple IPad', 'Apple');
+
 
 CREATE TABLE "product" (
   "id"          BIGINT       NOT NULL,
@@ -122,7 +157,7 @@ CREATE TABLE "product" (
   "active"      BOOLEAN      NOT NULL DEFAULT TRUE,
   "description" TEXT,
 
-  "modified_by" BIGINT,
+  "modified_by" BIGINT       NOT NULL DEFAULT 0,
   "modified"    TIMESTAMP WITH TIME ZONE,
   CONSTRAINT "product_pkey" PRIMARY KEY ("id"),
   CONSTRAINT "product_to_vendor_fkey" FOREIGN KEY ("vendor_id") REFERENCES "vendor" ("id") ON DELETE CASCADE,
@@ -130,8 +165,32 @@ CREATE TABLE "product" (
 );
 ALTER TABLE "product" OWNER TO pricegsmowner;
 
-CREATE SEQUENCE "product_seq";
+CREATE SEQUENCE "product_seq" START 10;
 ALTER TABLE "product_seq" OWNER TO pricegsmowner;
+
+INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (1, 'iPhone 5S 16Gb', '10495456', 1, 3);
+INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (2, 'iPhone 5S 16Gb', '10495456', 1, 4);
+INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (3, 'iPhone 5S 16Gb', '10495456', 1, 5);
+
+INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (4, 'iPhone 5S 32Gb', '10495486', 1, 3);
+INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (5, 'iPhone 5S 32Gb', '10495486', 1, 4);
+INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (6, 'iPhone 5S 32Gb', '10495486', 1, 5);
+
+INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (7, 'iPhone 5S 64Gb', '10495487', 1, 3);
+INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (8, 'iPhone 5S 64Gb', '10495487', 1, 4);
+INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (9, 'iPhone 5S 64Gb', '10495487', 1, 5);
+
+INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (10, 'iPhone 5C 16Gb', '10495457', 1, 1);
+INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (11, 'iPhone 5C 16Gb', '10495457', 1, 6);
+INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (12, 'iPhone 5C 16Gb', '10495457', 1, 7);
+INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (13, 'iPhone 5C 16Gb', '10495457', 1, 8);
+INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (14, 'iPhone 5C 16Gb', '10495457', 1, 9);
+
+INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (15, 'iPhone 5C 32Gb', '10495515', 1, 1);
+INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (16, 'iPhone 5C 32Gb', '10495515', 1, 6);
+INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (17, 'iPhone 5C 32Gb', '10495515', 1, 7);
+INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (18, 'iPhone 5C 32Gb', '10495515', 1, 8);
+INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (19, 'iPhone 5C 32Gb', '10495515', 1, 9);
 
 
 CREATE TABLE "order" (
@@ -155,7 +214,7 @@ CREATE TABLE "order" (
   "total_price"   NUMERIC(10, 2) NOT NULL,
   "total_amount"  INTEGER        NOT NULL,
 
-  "modified_by"   BIGINT,
+  "modified_by"   BIGINT         NOT NULL DEFAULT 0,
   "modified"      TIMESTAMP WITH TIME ZONE,
   CONSTRAINT "order_pkey" PRIMARY KEY ("id"),
   CONSTRAINT "order_to_seller_fkey" FOREIGN KEY ("seller_id") REFERENCES "pricegsm_user" ("id"),
@@ -177,7 +236,7 @@ CREATE TABLE "order_position" (
   "version"     INTEGER,
   "currency_id" BIGINT         NOT NULL,
 
-  "modified_by" BIGINT,
+  "modified_by" BIGINT         NOT NULL DEFAULT 0,
   "modified"    TIMESTAMP WITH TIME ZONE,
   CONSTRAINT "order_position_pkey" PRIMARY KEY ("id"),
   CONSTRAINT "order_position_to_order_fkey" FOREIGN KEY ("order_id") REFERENCES "order" ("id") ON DELETE CASCADE,
@@ -200,7 +259,7 @@ CREATE TABLE "yandex_price" (
   "shop"        VARCHAR(255),
   "link"        VARCHAR(255),
 
-  "modified_by" BIGINT,
+  "modified_by" BIGINT                   NOT NULL DEFAULT 0,
   "modified"    TIMESTAMP WITH TIME ZONE,
   CONSTRAINT "yandex_price_pkey" PRIMARY KEY ("id"),
   CONSTRAINT "yandex_price_to_product_fkey" FOREIGN KEY ("product_id") REFERENCES "product" ("id") ON DELETE CASCADE
@@ -219,7 +278,7 @@ CREATE TABLE "world_price" (
   "price_eur"   NUMERIC(10, 2),
   "price_usd"   NUMERIC(10, 2),
 
-  "modified_by" BIGINT,
+  "modified_by" BIGINT                   NOT NULL DEFAULT 0,
   "modified"    TIMESTAMP WITH TIME ZONE,
   CONSTRAINT "world_price_pkey" PRIMARY KEY ("id"),
   CONSTRAINT "world_price_to_product_fkey" FOREIGN KEY ("product_id") REFERENCES "product" ("id") ON DELETE CASCADE
@@ -243,7 +302,7 @@ CREATE TABLE "pricelist" (
   "min_order_quantity" INTEGER        NOT NULL DEFAULT 1,
   "description"        TEXT,
 
-  "modified_by"        BIGINT,
+  "modified_by"        BIGINT         NOT NULL DEFAULT 0,
   "modified"           TIMESTAMP WITH TIME ZONE,
   CONSTRAINT "pricelist_pkey" PRIMARY KEY ("id"),
   CONSTRAINT "pricelist_to_user_fkey" FOREIGN KEY ("user_id") REFERENCES "pricegsm_user" ("id") ON DELETE CASCADE,
@@ -263,7 +322,7 @@ CREATE TABLE "exchange" (
   "from_currency_id" BIGINT                   NOT NULL,
   "to_currency_id"   BIGINT                   NOT NULL,
 
-  "modified_by"      BIGINT,
+  "modified_by"      BIGINT                   NOT NULL DEFAULT 0,
   "modified"         TIMESTAMP WITH TIME ZONE,
   CONSTRAINT "exchange_pkey" PRIMARY KEY ("id"),
   CONSTRAINT "exchange_to_from_currency_fkey" FOREIGN KEY ("from_currency_id") REFERENCES "currency" ("id") ON DELETE CASCADE,
@@ -282,7 +341,7 @@ CREATE TABLE "partner" (
   "confirmed"      BOOLEAN NOT NULL DEFAULT FALSE,
   "show_pricelist" BOOLEAN NOT NULL DEFAULT TRUE,
 
-  "modified_by"    BIGINT,
+  "modified_by"    BIGINT  NOT NULL DEFAULT 0,
   "modified"       TIMESTAMP WITH TIME ZONE,
   CONSTRAINT "partner_pkey" PRIMARY KEY ("id"),
   CONSTRAINT "partner_to_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "pricegsm_user" ("id") ON DELETE CASCADE,
@@ -300,10 +359,12 @@ CREATE TABLE "delivery_place" (
   "region_id"   BIGINT       NOT NULL,
   "description" TEXT,
 
-  "modified_by" BIGINT,
+  "modified_by" BIGINT       NOT NULL DEFAULT 0,
   "modified"    TIMESTAMP WITH TIME ZONE,
   CONSTRAINT "delivery_place_pkey" PRIMARY KEY ("id"),
-  CONSTRAINT "delivery_place_to_region_fkey" FOREIGN KEY ("region_id") REFERENCES "region" ("id")
+  CONSTRAINT "delivery_place_to_region_fkey" FOREIGN KEY ("region_id") REFERENCES "region" ("id"),
+  CONSTRAINT "delivery_place_name_unique" UNIQUE (name)
+
 );
 ALTER TABLE "delivery_place" OWNER TO pricegsmowner;
 

@@ -1,7 +1,6 @@
 package com.pricegsm.domain;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -25,7 +24,6 @@ public class BaseEntity
     /**
      * ID of user, who created/last modified this entity.
      */
-    @Size(max = 255)
     @Basic
     @Column(name = "modified_by")
     public long getModifiedBy() {

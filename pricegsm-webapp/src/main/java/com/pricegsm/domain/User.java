@@ -1,9 +1,11 @@
 package com.pricegsm.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.pricegsm.jackson.GlobalEntityDeserializer;
 import com.pricegsm.jackson.GlobalEntitySerializer;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -62,6 +64,11 @@ public class User
     private Region region;
 
     private BigDecimal balance = BigDecimal.ZERO;
+
+    private String token;
+
+    private boolean emailValid;
+
 
     @Size(max = 255)
     @Basic
@@ -328,6 +335,34 @@ public class User
 
     public void setBalance(BigDecimal balance) {
         this.balance = balance;
+    }
+
+    /**
+     * Unique secret token for email confirmation or unsubscribe
+     */
+    @NotBlank
+    @JsonIgnore
+    @Basic
+    @Column(name = "token", nullable = false)
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    /**
+     * Is email confirmed
+     */
+    @Basic
+    @Column(name = "email_valid")
+    public boolean isEmailValid() {
+        return emailValid;
+    }
+
+    public void setEmailValid(boolean emailValidated) {
+        this.emailValid = emailValidated;
     }
 
     @Transient

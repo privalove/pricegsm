@@ -10,6 +10,12 @@ import javax.validation.constraints.Size;
 public class Currency
         extends GlobalEntity {
 
+    public static final long USD = 1L;
+
+    public static final long EUR = 2L;
+
+    public static final long RUB = 2L;
+
     private String name;
 
     private String code;

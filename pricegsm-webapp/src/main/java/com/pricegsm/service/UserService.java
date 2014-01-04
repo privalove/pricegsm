@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.Transient;
+import java.util.UUID;
 
 @Service
 public class UserService
@@ -41,6 +41,8 @@ public class UserService
 
         entity.setPassword(persisted.getPassword());
         entity.setBalance(persisted.getBalance());
+        entity.setToken(persisted.getToken());
+        entity.setEmailValid(persisted.isEmailValid());
     }
 
     /**
@@ -50,6 +52,7 @@ public class UserService
     public User getDefaultInstance() {
         User user = super.getDefaultInstance();
         user.setRegion(regionDao.load(Region.MOSCOW));
+        user.setToken(UUID.randomUUID().toString().replaceAll("-", ""));
         return user;
     }
 }

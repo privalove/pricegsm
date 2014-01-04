@@ -16,6 +16,8 @@ public class Vendor
 
     private String name;
 
+    private String shortName;
+
     private String description;
 
     private boolean active = true;
@@ -39,6 +41,18 @@ public class Vendor
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @NotBlank
+    @Size(max = 20)
+    @Basic
+    @Column(name = "short_name", nullable = false)
+    public String getShortName() {
+        return shortName;
+    }
+
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
     }
 
     @Lob
