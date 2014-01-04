@@ -1,6 +1,8 @@
 package com.pricegsm.service;
 
+import com.pricegsm.dao.RegionDao;
 import com.pricegsm.dao.UserDao;
+import com.pricegsm.domain.Region;
 import com.pricegsm.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,6 +19,9 @@ public class UserService
 
     @Autowired
     private UserDao dao;
+
+    @Autowired
+    private RegionDao regionDao;
 
     @Override
     protected UserDao getDao() {
@@ -36,5 +41,15 @@ public class UserService
 
         entity.setPassword(persisted.getPassword());
         entity.setBalance(persisted.getBalance());
+    }
+
+    /**
+     * Prepare default user settings before registration.
+     */
+    @Override
+    public User getDefaultInstance() {
+        User user = super.getDefaultInstance();
+        user.setRegion(regionDao.load(Region.MOSCOW));
+        return user;
     }
 }

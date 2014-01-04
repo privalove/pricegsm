@@ -1,5 +1,7 @@
 package com.pricegsm.controller;
 
+import com.pricegsm.domain.User;
+import com.pricegsm.validation.UniqueUsername;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Size;
@@ -26,6 +28,7 @@ public class RegistrationForm
         this.name = name;
     }
 
+    @UniqueUsername
     @NotBlank
     @Size(max = 255)
     public String getEmail() {
@@ -54,5 +57,13 @@ public class RegistrationForm
 
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
+    }
+
+    public User toUser(User user) {
+        user.setName(getName());
+        user.setPassword(getPassword());
+        user.setEmail(getEmail());
+
+        return user;
     }
 }

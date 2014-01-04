@@ -26,9 +26,10 @@ CREATE TABLE "region" (
 );
 ALTER TABLE "region" OWNER TO pricegsmowner;
 
-CREATE SEQUENCE "region_seq";
+CREATE SEQUENCE "region_seq" START 2;
 ALTER TABLE "region_seq" OWNER TO pricegsmowner;
 
+insert into region(id, name) values (1, 'Москва');
 
 CREATE TABLE "base_user" (
   "id"          BIGINT       NOT NULL,

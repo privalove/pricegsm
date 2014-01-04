@@ -7,6 +7,7 @@ import javax.persistence.spi.PersistenceProvider;
 
 /**
  * Support new hibernate 4.0
+ * TODO update hibernate later to avoid false warning https://hibernate.atlassian.net/browse/HHH-8735
  */
 public class Hibernate4JpaVendorAdapter
         extends HibernateJpaVendorAdapter {

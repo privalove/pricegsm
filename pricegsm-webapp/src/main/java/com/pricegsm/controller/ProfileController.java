@@ -3,6 +3,7 @@ package com.pricegsm.controller;
 import com.pricegsm.domain.User;
 import com.pricegsm.securiry.PrincipalHolder;
 import com.pricegsm.service.UserService;
+import com.pricegsm.validation.PasswordValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -47,11 +48,12 @@ public class ProfileController {
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     public String register(@Valid RegistrationForm registrationForm, BindingResult result) {
 
+        new PasswordValidator().validate(registrationForm, result);
+
         if (result.hasErrors()) {
             return "signup/signup";
         }
-        //user.setId(0);
-        //userService.save(user);
+        userService.save(registrationForm.toUser(userService.getDefaultInstance()));
 
         return "redirect:/";
     }

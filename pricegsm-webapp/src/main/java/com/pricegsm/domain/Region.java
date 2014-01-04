@@ -14,6 +14,8 @@ public class Region
         extends GlobalEntity
         implements Activable {
 
+    public static final Long MOSCOW = 1L;
+
     private String name;
 
     private String description;
