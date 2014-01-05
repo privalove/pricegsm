@@ -1,0 +1,1250 @@
+<!-- This tag handles the report titles component -->
+
+<div class="reportTitleCombo" id="reportTitleCombo">
+    <div class="reportTitle">
+        Web Search Interest: <b>купить iphone 5</b>.&nbsp;Worldwide, Past 12 months.<div id="shareButtons" style="display: inline-block; padding-left: 15px;">
+
+        <a onclick="trends.Utils.openInPopup(600, 600, 'https://plus.google.com/share?url=%s');return false;"
+           class="share-button">
+            <div class="goog-inline-block fs04img SPRITE_gplus_share"
+                 style=''
+                    ></div></a>
+
+    </div><!-- end of div shareButtons -->
+    </div>
+    <script type="text/javascript">
+
+
+        function setTitle() {
+            document.title = 'Google Trends' +
+                    ' -  Web Search Interest: купить iphone 5 - Worldwide, Past 12 months';
+        }
+
+        window.setTimeout(setTitle, 0);
+    </script>
+</div>
+<script type="text/javascript">
+    trends.Utils.moveElement('reportTitleCombo', 'summaryMessage');
+</script>
+<div id="categorySuggestContent">
+    <div class="category-suggest-wrap">
+        <div class="category-suggest-container">
+      <span class="category-suggest-title">
+        Recommended categories:</span>
+            <div class="category-suggest-item">
+                <a href="#cat=0-13&q=%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C+iphone+5&date=today+12-m&cmpt=q"
+                   onclick="trends.CategorySuggest.onClick('Internet \46 Telecom')">
+                    <span class="category-suggest-item-content">Internet & Telecom</span>
+                </a>
+            </div>
+            <div class="category-suggest-item">
+                <a href="#cat=0-5&q=%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C+iphone+5&date=today+12-m&cmpt=q"
+                   onclick="trends.CategorySuggest.onClick('Computers \46 Electronics')">
+                    <span class="category-suggest-item-content">Computers & Electronics</span>
+                </a>
+            </div>
+            <div class="category-suggest-item">
+                <a href="#cat=0-18&q=%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C+iphone+5&date=today+12-m&cmpt=q"
+                   onclick="trends.CategorySuggest.onClick('Shopping')">
+                    <span class="category-suggest-item-content">Shopping</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    trends.Utils.moveElement('categorySuggestContent', 'categorySuggest');
+</script>
+<div id="report">
+<div id="reportMain">
+<div class="timeSection">
+    <div class="primaryBand timeBand">
+        <div class="timeBandTitle">
+            Interest over time</div>
+        <div class="timeBandTooltip trendsBandTooltip">
+            <div id="timeBand_tip_a" class="tooltip-icon"><div class="SPRITE_help"></div></div><div id="timeBand_tip_c" class="tooltip-box"><div class="tooltip-message" id="timeBand_tip_msg">Numbers represent search volume relative to the highest point on the chart, which is always 100. Hover over any point to see the search volume at that time. <a href="http://support.google.com/trends/bin/answer.py?hl=en-US&answer=87285">Learn more</a></div></div><script type="text/javascript">new trends.Tooltip('timeBand_tip_a', 'timeBand_tip_c',undefined,undefined);</script></div>
+        <div class="timeBandScaleLabel">
+            The number 100 represents the peak search volume</div>
+        <div class="timeBandCheckboxMenus">
+            <script type="text/javascript">
+
+                var TimeBand_forecast_listeners = [];
+                var TimeBand_forecast_checkbox_checked = "false";
+
+                TimeBand_forecast_register = function(listenerFunc) {
+                    TimeBand_forecast_listeners.push(listenerFunc);
+                }
+
+                function TimeBand_forecast_checkbox_changed() {
+                    var current = JfkUtils.isChecked(TimeBand_forecast_checkbox_checkbox);
+
+                    if (current != TimeBand_forecast_checkbox_checked) {
+                        TimeBand_forecast_checkbox_checked = current;
+                        for(var i = 0; i < TimeBand_forecast_listeners.length; i++) {
+                            TimeBand_forecast_listeners[i](current);
+                        }
+
+                        trends.PageTracker.analyticsTrackEvent('toggle forecast vis.',
+                                'Forecast');
+
+                    }
+                }
+            </script>
+
+            <div class="timeBandCheckboxMenu">
+                <span id="TimeBand_forecast_checkbox" style="vertical-align: middle;"></span>
+                <span id="TimeBand_forecast_checkbox_label" style="vertical-align: middle;">Forecast</span>
+                <script type="text/javascript">
+                    var TimeBand_forecast_checkbox_checkbox = JfkUtils.createCheckbox('TimeBand_forecast_checkbox',
+                            'TimeBand_forecast_checkbox_label', false, false, TimeBand_forecast_checkbox_changed);
+                </script>
+                <div class="forecast-tooltip">
+                    <div id="TimeBand_forecast_checkbox_tip_a" class="tooltip-icon"><div class="SPRITE_help"></div></div><div id="TimeBand_forecast_checkbox_tip_c" class="tooltip-box"><div class="tooltip-message" id="TimeBand_forecast_checkbox_tip_msg">No forecast is available for this time period. <a href='http://support.google.com/trends/bin/answer.py?hl=en-US&answer=153705'> Learn more </a></div></div><script type="text/javascript">new trends.Tooltip('TimeBand_forecast_checkbox_tip_a', 'TimeBand_forecast_checkbox_tip_c','true',undefined);</script></div>
+            </div>
+            <script type="text/javascript">
+
+                var TimeBand_headlines_listeners = [];
+                var TimeBand_headlines_checkbox_checked = "false";
+
+                TimeBand_headlines_register = function(listenerFunc) {
+                    TimeBand_headlines_listeners.push(listenerFunc);
+                }
+
+                function TimeBand_headlines_checkbox_changed() {
+                    var current = JfkUtils.isChecked(TimeBand_headlines_checkbox_checkbox);
+
+                    if (current != TimeBand_headlines_checkbox_checked) {
+                        TimeBand_headlines_checkbox_checked = current;
+                        for(var i = 0; i < TimeBand_headlines_listeners.length; i++) {
+                            TimeBand_headlines_listeners[i](current);
+                        }
+
+                        trends.PageTracker.analyticsTrackEvent('toggle news vis.',
+                                'News headlines');
+
+                    }
+                }
+            </script>
+
+            <div class="timeBandCheckboxMenu">
+                <span id="TimeBand_headlines_checkbox" style="vertical-align: middle;"></span>
+                <span id="TimeBand_headlines_checkbox_label" style="vertical-align: middle;">News headlines</span>
+                <script type="text/javascript">
+                    var TimeBand_headlines_checkbox_checkbox = JfkUtils.createCheckbox('TimeBand_headlines_checkbox',
+                            'TimeBand_headlines_checkbox_label', false, false, TimeBand_headlines_checkbox_changed);
+                </script>
+                <div class="forecast-tooltip">
+                    <div id="TimeBand_headlines_checkbox_tip_a" class="tooltip-icon"><div class="SPRITE_help"></div></div><div id="TimeBand_headlines_checkbox_tip_c" class="tooltip-box"><div class="tooltip-message" id="TimeBand_headlines_checkbox_tip_msg">News stories weren't found for your query.</div></div><script type="text/javascript">new trends.Tooltip('TimeBand_headlines_checkbox_tip_a', 'TimeBand_headlines_checkbox_tip_c','true',undefined);</script></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+    </script>
+    <div id="overviewSearchesOverTimeDiv"
+         class="overviewSearchesOverTimeDiv">
+        <script type="text/javascript">
+
+            function TIMESERIES_GRAPH_divName(idx) {
+                return "TIMESERIES_GRAPH" + "_" + idx;
+            }
+
+            function TIMESERIES_GRAPH_switchChart(checked) {
+                var oldIdx = checked ? 0: 1;
+                var newIdx = checked ? 1: 0;
+                document.getElementById('TIMESERIES_GRAPH_' + oldIdx).style.display = "none";
+                document.getElementById('TIMESERIES_GRAPH_' + newIdx).style.display = "";
+            }
+
+            function TIMESERIES_GRAPH_Init() {
+
+            }
+
+        </script>
+        <div id="TIMESERIES_GRAPH_0">
+            <table cellpadding="0" cellspacing="0" >
+                <tr><td>
+                    <div id="TIMESERIES_GRAPH_0-time-chart"></div>
+                    <script type="text/javascript">
+                        var chartData = {"height":230,"percentData":false,"showHeadlines":false,"headlineDataPoints":[],"colors":["#1155cc"],"width":774,"columns":[{"id":"d","label":"Date","type":"date"},{"role":"annotation","type":"string"},{"p":{"html":true},"role":"annotationText","type":"string"},{"id":"q0","label":"купить iphone 5","type":"number"},{"role":"annotation","type":"string"},{"p":{"html":true},"role":"annotationText","type":"string"},{"role":"certainty","type":"boolean"}],"axisAnnotations":[],"rows":[[{"f":"Feb 5\u201311, 2012","v":new Date(2012, 1, 8)},null,null,5,null,null,true],[{"f":"Feb 12\u201318, 2012","v":new Date(2012, 1, 15)},null,null,5,null,null,true],[{"f":"Feb 19\u201325, 2012","v":new Date(2012, 1, 22)},null,null,7,null,null,true],[{"f":"Feb 26 \u2013 Mar 3, 2012","v":new Date(2012, 1, 29)},null,null,6,null,null,true],[{"f":"Mar 4\u201310, 2012","v":new Date(2012, 2, 7)},null,null,6,null,null,true],[{"f":"Mar 11\u201317, 2012","v":new Date(2012, 2, 14)},null,null,4,null,null,true],[{"f":"Mar 18\u201324, 2012","v":new Date(2012, 2, 21)},null,null,6,null,null,true],[{"f":"Mar 25\u201331, 2012","v":new Date(2012, 2, 28)},null,null,5,null,null,true],[{"f":"Apr 1\u20137, 2012","v":new Date(2012, 3, 4)},null,null,5,null,null,true],[{"f":"Apr 8\u201314, 2012","v":new Date(2012, 3, 11)},null,null,4,null,null,true],[{"f":"Apr 15\u201321, 2012","v":new Date(2012, 3, 18)},null,null,3,null,null,true],[{"f":"Apr 22\u201328, 2012","v":new Date(2012, 3, 25)},null,null,5,null,null,true],[{"f":"Apr 29 \u2013 May 5, 2012","v":new Date(2012, 4, 2)},null,null,4,null,null,true],[{"f":"May 6\u201312, 2012","v":new Date(2012, 4, 9)},null,null,4,null,null,true],[{"f":"May 13\u201319, 2012","v":new Date(2012, 4, 16)},null,null,4,null,null,true],[{"f":"May 20\u201326, 2012","v":new Date(2012, 4, 23)},null,null,4,null,null,true],[{"f":"May 27 \u2013 Jun 2, 2012","v":new Date(2012, 4, 30)},null,null,5,null,null,true],[{"f":"Jun 3\u20139, 2012","v":new Date(2012, 5, 6)},null,null,4,null,null,true],[{"f":"Jun 10\u201316, 2012","v":new Date(2012, 5, 13)},null,null,5,null,null,true],[{"f":"Jun 17\u201323, 2012","v":new Date(2012, 5, 20)},null,null,4,null,null,true],[{"f":"Jun 24\u201330, 2012","v":new Date(2012, 5, 27)},null,null,6,null,null,true],[{"f":"Jul 1\u20137, 2012","v":new Date(2012, 6, 4)},null,null,6,null,null,true],[{"f":"Jul 8\u201314, 2012","v":new Date(2012, 6, 11)},null,null,5,null,null,true],[{"f":"Jul 15\u201321, 2012","v":new Date(2012, 6, 18)},null,null,6,null,null,true],[{"f":"Jul 22\u201328, 2012","v":new Date(2012, 6, 25)},null,null,7,null,null,true],[{"f":"Jul 29 \u2013 Aug 4, 2012","v":new Date(2012, 7, 1)},null,null,7,null,null,true],[{"f":"Aug 5\u201311, 2012","v":new Date(2012, 7, 8)},null,null,8,null,null,true],[{"f":"Aug 12\u201318, 2012","v":new Date(2012, 7, 15)},null,null,9,null,null,true],[{"f":"Aug 19\u201325, 2012","v":new Date(2012, 7, 22)},null,null,9,null,null,true],[{"f":"Aug 26 \u2013 Sep 1, 2012","v":new Date(2012, 7, 29)},null,null,11,null,null,true],[{"f":"Sep 2\u20138, 2012","v":new Date(2012, 8, 5)},null,null,16,null,null,true],[{"f":"Sep 9\u201315, 2012","v":new Date(2012, 8, 12)},null,null,92,null,null,true],[{"f":"Sep 16\u201322, 2012","v":new Date(2012, 8, 19)},null,null,89,null,null,true],[{"f":"Sep 23\u201329, 2012","v":new Date(2012, 8, 26)},null,null,90,null,null,true],[{"f":"Sep 30 \u2013 Oct 6, 2012","v":new Date(2012, 9, 3)},null,null,58,null,null,true],[{"f":"Oct 7\u201313, 2012","v":new Date(2012, 9, 10)},null,null,61,null,null,true],[{"f":"Oct 14\u201320, 2012","v":new Date(2012, 9, 17)},null,null,59,null,null,true],[{"f":"Oct 21\u201327, 2012","v":new Date(2012, 9, 24)},null,null,65,null,null,true],[{"f":"Oct 28 \u2013 Nov 3, 2012","v":new Date(2012, 9, 31)},null,null,57,null,null,true],[{"f":"Nov 4\u201310, 2012","v":new Date(2012, 10, 7)},null,null,60,null,null,true],[{"f":"Nov 11\u201317, 2012","v":new Date(2012, 10, 14)},null,null,64,null,null,true],[{"f":"Nov 18\u201324, 2012","v":new Date(2012, 10, 21)},null,null,61,null,null,true],[{"f":"Nov 25 \u2013 Dec 1, 2012","v":new Date(2012, 10, 28)},null,null,68,null,null,true],[{"f":"Dec 2\u20138, 2012","v":new Date(2012, 11, 5)},null,null,70,null,null,true],[{"f":"Dec 9\u201315, 2012","v":new Date(2012, 11, 12)},null,null,86,null,null,true],[{"f":"Dec 16\u201322, 2012","v":new Date(2012, 11, 19)},null,null,92,null,null,true],[{"f":"Dec 23\u201329, 2012","v":new Date(2012, 11, 26)},null,null,100,null,null,true],[{"f":"Dec 30, 2012 \u2013 Jan 5, 2013","v":new Date(2013, 0, 2)},null,null,75,null,null,true],[{"f":"Jan 6\u201312, 2013","v":new Date(2013, 0, 9)},null,null,66,null,null,true],[{"f":"Jan 13\u201319, 2013","v":new Date(2013, 0, 16)},null,null,58,null,null,true],[{"f":"Jan 20\u201326, 2013","v":new Date(2013, 0, 23)},null,null,54,null,null,true],[{"f":"Jan 27 \u2013 Feb 2, 2013","v":new Date(2013, 0, 30)},null,null,48,null,null,true],[{"f":"Feb 3\u20139, 2013","v":new Date(2013, 1, 6)},null,null,null,null,null,true]]}; var NEWS_HEADLINE_LIST_htmlChart = new trends.HtmlChart( 'TIMESERIES_GRAPH_0-time-chart', chartData.columns, chartData.rows, chartData.headlineDataPoints, 'NEWS_HEADLINE_LIST' , chartData.showHeadlines,false, chartData.percentData, chartData.colors, chartData.width, chartData.height, chartData.axisAnnotations);NEWS_HEADLINE_LIST_htmlChart.render();TimeBand_headlines_register(function(withAnnotations) {
+                            var htmlChart = trends.HtmlChart.headlineIdsToCharts['NEWS_HEADLINE_LIST'];
+                            if (htmlChart) {
+                                htmlChart.onHeadlineVisibilityChanged(withAnnotations);
+                            }
+                        });
+                    </script>
+                </td></tr>
+            </table>
+            <div class="time-chart-share">
+                <div class="embed-button" onclick="shareControl_TIMESERIES_GRAPH_0_share.show()">
+                    Embed</div>
+
+                <div id="TIMESERIES_GRAPH_0_share_d" style="display: none">
+                    <div class="modal-dialog-title">
+                        Embed chart</div>
+                    <div class="embed-dialog-param-line">
+      <span class="embed-dialog-param-line-caption">
+        Width</span>
+                        <input id="TIMESERIES_GRAPH_0_share_width" class="jfk-textinput embed-dialog-textinput"
+                               onchange="shareControl_TIMESERIES_GRAPH_0_share.update()"
+                               value="500" />
+      <span class="embed-dialog-param-line-caption">
+        Height</span>
+                        <input id="TIMESERIES_GRAPH_0_share_height" class="jfk-textinput embed-dialog-textinput"
+                               onchange="shareControl_TIMESERIES_GRAPH_0_share.update()"
+                               value="330" />
+
+      <span style='display: none;'>
+        <span id="TIMESERIES_GRAPH_0_share_alternative_format_checkbox"
+              class="embed-dialog-param-line-checkbox">
+        </span>
+        <span id="TIMESERIES_GRAPH_0_share_alternative_format_label"
+              class="embed-dialog-param-line-caption">
+          </span>
+      </span>
+                    </div>
+
+                    <div class="modal-dialog-content">
+                        <div class="embed-dialog-message">
+                            Paste this into any HTML page:</div>
+                        <textarea id="TIMESERIES_GRAPH_0_share_content" class="embed-script-container"
+                                  onclick="this.focus();this.select();"
+                                  readonly="readonly"></textarea>
+                    </div>
+                </div>
+
+                <script type="text/javascript">
+                    var shareControl_TIMESERIES_GRAPH_0_share = new trends.ShareControl(
+                            "TIMESERIES_GRAPH_0_share", "//www.google.com/trends/embed.js?hl\75en-US\46q\75%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C+iphone+5\46date\75today+12-m\46cmpt\75q\46content\0751\46cid\75TIMESERIES_GRAPH_0\46export\0755\46w\75%d\46h\75%d"
+
+                    );
+                </script>
+            </div>
+        </div>
+        <script type="text/javascript">
+            TIMESERIES_GRAPH_Init();
+        </script>
+
+    </div>
+</div>
+<div id="tabPane"></div>
+<div class="single-tab-container">
+<div id="tabPage0">
+<div class="geoSection">
+<h2 class="primaryBand geoBand">
+    <table cellpadding="0" cellspacing="0" style="width:100%;">
+        <tr>
+            <td class="geoBandTitle">
+                <span class="vertical-align">Regional interest</span>
+                <div class="geoBandTooltip trendsBandTooltip">
+                    <div id="GeoBand0_0_tip_a" class="tooltip-icon"><div class="SPRITE_help"></div></div><div id="GeoBand0_0_tip_c" class="tooltip-box"><div class="tooltip-message" id="GeoBand0_0_tip_msg">Numbers represent search volume relative to the highest point on the map which is always 100. Click on any region/point to see more details on the search volume there.</div></div><script type="text/javascript">new trends.Tooltip('GeoBand0_0_tip_a', 'GeoBand0_0_tip_c',undefined,undefined);</script></div>
+            </td>
+            <td>
+                <div id="geoBandTabControl0"
+                     class="trends-tab-control geo-band-tab-control"></div>
+                <div id="geoBandTabControlMapButton0">
+                    <div class="inline-block SPRITE_globe jfk-button-img"></div>
+                </div>
+                <div id="geoBandTabControlListButton0">
+                    <div class="inline-block SPRITE_list jfk-button-img"></div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</h2>
+
+<script type="text/javascript">
+
+    var GeoBand0_0_listeners = [];
+    GeoBand0_0_register = function(listenerFunc) {
+        GeoBand0_0_listeners.push(listenerFunc);
+    }
+    GeoBand0_0_fire = function(level, oldIndex, newIndex) {
+        for(var i = 0; i < GeoBand0_0_listeners.length; i++) {
+            GeoBand0_0_listeners[i](level, oldIndex, newIndex);
+        }
+    }
+</script>
+<div id="trendsReportTopLocations0"
+     class="trendsReportTopLocations verticalMargin"
+     style="display: none;">
+<script type="text/javascript">
+
+    var GEO_TABLE_0_selected = 0;
+
+    function GEO_TABLE_0_SwitchCommon(level, newindex) {
+        var oldDivId =
+                "GEO_TABLE" + "_" + GEO_TABLE_0_selected + "_" + 0;
+        GEO_TABLE_0_selected = newindex;
+        var newDivId =
+                "GEO_TABLE" + "_" + GEO_TABLE_0_selected + "_" + 0;
+        document.getElementById(oldDivId).style.display = "none";
+        document.getElementById(newDivId).style.display = "";
+    }
+
+    function GEO_TABLE_0_Level1Switch(oldindex, newindex) {
+        GEO_TABLE_SwitchCommon(1, newindex);
+    }
+
+    GeoBand0_0_register(
+            function(level, oldIndex, newIndex) {
+                GEO_TABLE_0_SwitchCommon(level, newIndex);
+            }
+    );
+</script>
+
+<table cellpadding="0" cellspacing="0" style="width:100%">
+<tr>
+<td colspan="2">
+<div id="GEO_TABLE_0_0"
+     style="">
+    <div><table id="COUNTRY_Table_0table" class='trends-table' cellpadding='0' cellspacing='0'
+                style='width: 100%'>
+        <tr><td>
+            <table class='trends-table-data' cellpadding='0' cellspacing='0'>
+                <tr class='trends-table-row '>
+                    <td class="trends-bar-chart-name-cell trends-bar-chart-row-first">
+                        <a title="" style="" href="#q=%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C+iphone+5&date=today+12-m&cmpt=q&geo=RU" onclick="trends.PageTracker.analyticsTrackEvent('top locations drilldown', 'Russia');"
+                                >Russia</a>
+                    </td>
+                    <td class="trends-bar-chart-value-cell trends-bar-chart-row-first">
+                        <table cellpadding="0" cellspacing="0" class='trends-hbars-barscell'>
+                            <tr>
+                                <td class="trends-hbars-value">
+                                    100</td>
+                                <td class="trends-hbars-bar">
+                                    <div style='width:100%;  background-color:#1155cc;'></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr class='trends-table-row trends-table-alt-row '>
+                    <td class="trends-bar-chart-name-cell trends-bar-chart-row">
+                        <a title="" style="" href="#q=%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C+iphone+5&date=today+12-m&cmpt=q&geo=UA" onclick="trends.PageTracker.analyticsTrackEvent('top locations drilldown', 'Ukraine');"
+                                >Ukraine</a>
+                    </td>
+                    <td class="trends-bar-chart-value-cell trends-bar-chart-row">
+                        <table cellpadding="0" cellspacing="0" class='trends-hbars-barscell'>
+                            <tr>
+                                <td class="trends-hbars-value">
+                                    86</td>
+                                <td class="trends-hbars-bar">
+                                    <div style='width:86%;  background-color:#1155cc;'></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr class='trends-table-row '>
+                    <td class="trends-bar-chart-name-cell trends-bar-chart-row">
+                        <a title="" style="" href="#q=%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C+iphone+5&date=today+12-m&cmpt=q&geo=BY" onclick="trends.PageTracker.analyticsTrackEvent('top locations drilldown', 'Belarus');"
+                                >Belarus</a>
+                    </td>
+                    <td class="trends-bar-chart-value-cell trends-bar-chart-row">
+                        <table cellpadding="0" cellspacing="0" class='trends-hbars-barscell'>
+                            <tr>
+                                <td class="trends-hbars-value">
+                                    54</td>
+                                <td class="trends-hbars-bar">
+                                    <div style='width:54%;  background-color:#1155cc;'></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr class='trends-table-row trends-table-alt-row '>
+                    <td class="trends-bar-chart-name-cell trends-bar-chart-row-last">
+                        <a title="" style="" href="#q=%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C+iphone+5&date=today+12-m&cmpt=q&geo=KZ" onclick="trends.PageTracker.analyticsTrackEvent('top locations drilldown', 'Kazakhstan');"
+                                >Kazakhstan</a>
+                    </td>
+                    <td class="trends-bar-chart-value-cell trends-bar-chart-row-last">
+                        <table cellpadding="0" cellspacing="0" class='trends-hbars-barscell'>
+                            <tr>
+                                <td class="trends-hbars-value">
+                                    41</td>
+                                <td class="trends-hbars-bar">
+                                    <div style='width:41%;  background-color:#1155cc;'></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table></td></tr>
+        </td></tr></table>
+        <div class="searches-share">
+            <div class="embed-button" onclick="shareControl_GEO_TABLE_0_0.show()">
+                Embed</div>
+
+            <div id="GEO_TABLE_0_0_d" style="display: none">
+                <div class="modal-dialog-title">
+                    Embed chart</div>
+                <div class="embed-dialog-param-line">
+      <span class="embed-dialog-param-line-caption">
+        Width</span>
+                    <input id="GEO_TABLE_0_0_width" class="jfk-textinput embed-dialog-textinput"
+                           onchange="shareControl_GEO_TABLE_0_0.update()"
+                           value="500" />
+      <span class="embed-dialog-param-line-caption">
+        Height</span>
+                    <input id="GEO_TABLE_0_0_height" class="jfk-textinput embed-dialog-textinput"
+                           onchange="shareControl_GEO_TABLE_0_0.update()"
+                           value="330" />
+
+      <span style='display: none;'>
+        <span id="GEO_TABLE_0_0_alternative_format_checkbox"
+              class="embed-dialog-param-line-checkbox">
+        </span>
+        <span id="GEO_TABLE_0_0_alternative_format_label"
+              class="embed-dialog-param-line-caption">
+          </span>
+      </span>
+                </div>
+
+                <div class="modal-dialog-content">
+                    <div class="embed-dialog-message">
+                        Paste this into any HTML page:</div>
+                    <textarea id="GEO_TABLE_0_0_content" class="embed-script-container"
+                              onclick="this.focus();this.select();"
+                              readonly="readonly"></textarea>
+                </div>
+            </div>
+
+            <script type="text/javascript">
+                var shareControl_GEO_TABLE_0_0 = new trends.ShareControl(
+                        "GEO_TABLE_0_0", "//www.google.com/trends/embed.js?hl\75en-US\46q\75%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C+iphone+5\46date\75today+12-m\46cmpt\75q\46content\0751\46cid\75GEO_TABLE_0_0\46export\0755\46w\75%d\46h\75%d"
+
+                );
+            </script>
+        </div>
+    </div>
+</div>
+<div id="GEO_TABLE_1_0"
+     style="display:none;">
+<div><table id="CITY_Table_0table" class='trends-table' cellpadding='0' cellspacing='0'
+            style='width: 100%'>
+    <tr><td>
+        <table class='trends-table-data' cellpadding='0' cellspacing='0'>
+            <tr class='trends-table-row '>
+                <td class="trends-bar-chart-name-cell trends-bar-chart-row-first">
+                    Moscow</td>
+                <td class="trends-bar-chart-value-cell trends-bar-chart-row-first">
+                    <table cellpadding="0" cellspacing="0" class='trends-hbars-barscell'>
+                        <tr>
+                            <td class="trends-hbars-value">
+                                100</td>
+                            <td class="trends-hbars-bar">
+                                <div style='width:100%;  background-color:#1155cc;'></div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr class='trends-table-row trends-table-alt-row '>
+                <td class="trends-bar-chart-name-cell trends-bar-chart-row">
+                    Kyiv</td>
+                <td class="trends-bar-chart-value-cell trends-bar-chart-row">
+                    <table cellpadding="0" cellspacing="0" class='trends-hbars-barscell'>
+                        <tr>
+                            <td class="trends-hbars-value">
+                                70</td>
+                            <td class="trends-hbars-bar">
+                                <div style='width:70%;  background-color:#1155cc;'></div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr class='trends-table-row '>
+                <td class="trends-bar-chart-name-cell trends-bar-chart-row">
+                    St Petersburg</td>
+                <td class="trends-bar-chart-value-cell trends-bar-chart-row">
+                    <table cellpadding="0" cellspacing="0" class='trends-hbars-barscell'>
+                        <tr>
+                            <td class="trends-hbars-value">
+                                65</td>
+                            <td class="trends-hbars-bar">
+                                <div style='width:65%;  background-color:#1155cc;'></div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr class='trends-table-row trends-table-alt-row '>
+                <td class="trends-bar-chart-name-cell trends-bar-chart-row">
+                    Odessa</td>
+                <td class="trends-bar-chart-value-cell trends-bar-chart-row">
+                    <table cellpadding="0" cellspacing="0" class='trends-hbars-barscell'>
+                        <tr>
+                            <td class="trends-hbars-value">
+                                43</td>
+                            <td class="trends-hbars-bar">
+                                <div style='width:43%;  background-color:#1155cc;'></div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr class='trends-table-row '>
+                <td class="trends-bar-chart-name-cell trends-bar-chart-row">
+                    Kharkiv</td>
+                <td class="trends-bar-chart-value-cell trends-bar-chart-row">
+                    <table cellpadding="0" cellspacing="0" class='trends-hbars-barscell'>
+                        <tr>
+                            <td class="trends-hbars-value">
+                                42</td>
+                            <td class="trends-hbars-bar">
+                                <div style='width:42%;  background-color:#1155cc;'></div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr class='trends-table-row trends-table-alt-row '>
+                <td class="trends-bar-chart-name-cell trends-bar-chart-row">
+                    Dnipropetrovs'k</td>
+                <td class="trends-bar-chart-value-cell trends-bar-chart-row">
+                    <table cellpadding="0" cellspacing="0" class='trends-hbars-barscell'>
+                        <tr>
+                            <td class="trends-hbars-value">
+                                39</td>
+                            <td class="trends-hbars-bar">
+                                <div style='width:39%;  background-color:#1155cc;'></div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr class='trends-table-row '>
+                <td class="trends-bar-chart-name-cell trends-bar-chart-row">
+                    Yekaterinburg</td>
+                <td class="trends-bar-chart-value-cell trends-bar-chart-row">
+                    <table cellpadding="0" cellspacing="0" class='trends-hbars-barscell'>
+                        <tr>
+                            <td class="trends-hbars-value">
+                                38</td>
+                            <td class="trends-hbars-bar">
+                                <div style='width:38%;  background-color:#1155cc;'></div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr class='trends-table-row trends-table-alt-row '>
+                <td class="trends-bar-chart-name-cell trends-bar-chart-row">
+                    Minsk</td>
+                <td class="trends-bar-chart-value-cell trends-bar-chart-row">
+                    <table cellpadding="0" cellspacing="0" class='trends-hbars-barscell'>
+                        <tr>
+                            <td class="trends-hbars-value">
+                                36</td>
+                            <td class="trends-hbars-bar">
+                                <div style='width:36%;  background-color:#1155cc;'></div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr class='trends-table-row '>
+                <td class="trends-bar-chart-name-cell trends-bar-chart-row">
+                    Krasnodar</td>
+                <td class="trends-bar-chart-value-cell trends-bar-chart-row">
+                    <table cellpadding="0" cellspacing="0" class='trends-hbars-barscell'>
+                        <tr>
+                            <td class="trends-hbars-value">
+                                30</td>
+                            <td class="trends-hbars-bar">
+                                <div style='width:30%;  background-color:#1155cc;'></div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr class='trends-table-row trends-table-alt-row '>
+                <td class="trends-bar-chart-name-cell trends-bar-chart-row-last">
+                    Rostov-na-Donu</td>
+                <td class="trends-bar-chart-value-cell trends-bar-chart-row-last">
+                    <table cellpadding="0" cellspacing="0" class='trends-hbars-barscell'>
+                        <tr>
+                            <td class="trends-hbars-value">
+                                27</td>
+                            <td class="trends-hbars-bar">
+                                <div style='width:27%;  background-color:#1155cc;'></div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table></td></tr>
+    </td></tr></table>
+<div class="searches-share">
+    <div class="embed-button" onclick="shareControl_GEO_TABLE_0_1.show()">
+        Embed</div>
+
+    <div id="GEO_TABLE_0_1_d" style="display: none">
+        <div class="modal-dialog-title">
+            Embed chart</div>
+        <div class="embed-dialog-param-line">
+      <span class="embed-dialog-param-line-caption">
+        Width</span>
+            <input id="GEO_TABLE_0_1_width" class="jfk-textinput embed-dialog-textinput"
+                   onchange="shareControl_GEO_TABLE_0_1.update()"
+                   value="500" />
+      <span class="embed-dialog-param-line-caption">
+        Height</span>
+            <input id="GEO_TABLE_0_1_height" class="jfk-textinput embed-dialog-textinput"
+                   onchange="shareControl_GEO_TABLE_0_1.update()"
+                   value="330" />
+
+      <span style='display: none;'>
+        <span id="GEO_TABLE_0_1_alternative_format_checkbox"
+              class="embed-dialog-param-line-checkbox">
+        </span>
+        <span id="GEO_TABLE_0_1_alternative_format_label"
+              class="embed-dialog-param-line-caption">
+          </span>
+      </span>
+        </div>
+
+        <div class="modal-dialog-content">
+            <div class="embed-dialog-message">
+                Paste this into any HTML page:</div>
+            <textarea id="GEO_TABLE_0_1_content" class="embed-script-container"
+                      onclick="this.focus();this.select();"
+                      readonly="readonly"></textarea>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var shareControl_GEO_TABLE_0_1 = new trends.ShareControl(
+                "GEO_TABLE_0_1", "//www.google.com/trends/embed.js?hl\75en-US\46q\75%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C+iphone+5\46date\75today+12-m\46cmpt\75q\46content\0751\46cid\75GEO_TABLE_0_1\46export\0755\46w\75%d\46h\75%d"
+
+        );
+    </script>
+</div>
+</div>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div id="trendsReportHeatMap0" class="trendsReportHeatMapContainer">
+    <div class="geo-breadcrumb">
+    </div>
+    <div id="GEO_MAP_ANIMATION_0_map"
+         class="trendsReportHeatMap"
+         style="width: 355px; height: 310px;">
+    </div>
+
+    <script type="text/javascript">
+        var gvizGeoMap_GEO_MAP_ANIMATION_0 = new trends.MultiSegmentMap(
+                {"country":{"gvizData":[["regionCode","name","Search volume index"],["RU","Russia",100],["UA","Ukraine",86],["BY","Belarus",54],["KZ","Kazakhstan",41],["AC","Ascension Island",0],["AD","Andorra",0],["AE","United Arab Emirates",0],["AF","Afghanistan",0],["AG","Antigua and Barbuda",0],["AI","Anguilla",0],["AL","Albania",0],["AM","Armenia",0],["AN","Netherlands Antilles",0],["AO","Angola",0],["AQ","Antarctica",0],["AR","Argentina",0],["AS","American Samoa",0],["AT","Austria",0],["AU","Australia",0],["AW","Aruba",0],["AX","Åland Islands",0],["AZ","Azerbaijan",0],["BA","Bosnia and Herzegovina",0],["BB","Barbados",0],["BD","Bangladesh",0],["BE","Belgium",0],["BF","Burkina Faso",0],["BG","Bulgaria",0],["BH","Bahrain",0],["BI","Burundi",0],["BJ","Benin",0],["BL","Saint Barthélemy",0],["BM","Bermuda",0],["BN","Brunei",0],["BO","Bolivia",0],["BQ","Caribbean Netherlands",0],["BR","Brazil",0],["BS","Bahamas",0],["BT","Bhutan",0],["BU","Myanmar [Burma]",0],["BV","Bouvet Island",0],["BW","Botswana",0],["BZ","Belize",0],["CA","Canada",0],["CC","Cocos [Keeling] Islands",0],["CD","Congo [DRC]",0],["CF","Central African Republic",0],["CG","Congo [Republic]",0],["CH","Switzerland",0],["CI","Côte d\u2019Ivoire",0],["CK","Cook Islands",0],["CL","Chile",0],["CM","Cameroon",0],["CN","China",0],["CO","Colombia",0],["CP","Clipperton Island",0],["CR","Costa Rica",0],["CS","Serbia",0],["CU","Cuba",0],["CV","Cape Verde",0],["CW","Curaçao",0],["CX","Christmas Island",0],["CY","Cyprus",0],["CZ","Czech Republic",0],["DD","East Germany",0],["DE","Germany",0],["DG","Diego Garcia",0],["DJ","Djibouti",0],["DK","Denmark",0],["DM","Dominica",0],["DO","Dominican Republic",0],["DZ","Algeria",0],["EC","Ecuador",0],["EE","Estonia",0],["EG","Egypt",0],["EH","Western Sahara",0],["ER","Eritrea",0],["ES","Spain",0],["ET","Ethiopia",0],["EU","European Union",0],["FI","Finland",0],["FJ","Fiji",0],["FK","Falkland Islands [Islas Malvinas]",0],["FM","Micronesia",0],["FO","Faroe Islands",0],["FR","France",0],["FX","France",0],["GA","Gabon",0],["GB","United Kingdom",0],["GD","Grenada",0],["GE","Georgia",0],["GF","French Guiana",0],["GG","Guernsey",0],["GH","Ghana",0],["GI","Gibraltar",0],["GL","Greenland",0],["GM","Gambia",0],["GN","Guinea",0],["GP","Guadeloupe",0],["GQ","Equatorial Guinea",0],["GR","Greece",0],["GS","South Georgia and the South Sandwich Islands",0],["GT","Guatemala",0],["GU","Guam",0],["GW","Guinea-Bissau",0],["GY","Guyana",0],["HK","Hong Kong",0],["HM","Heard Island and McDonald Islands",0],["HN","Honduras",0],["HR","Croatia",0],["HT","Haiti",0],["HU","Hungary",0],["ID","Indonesia",0],["IE","Ireland",0],["IL","Israel",0],["IM","Isle of Man",0],["IN","India",0],["IO","British Indian Ocean Territory",0],["IQ","Iraq",0],["IR","Iran",0],["IS","Iceland",0],["IT","Italy",0],["JE","Jersey",0],["JM","Jamaica",0],["JO","Jordan",0],["JP","Japan",0],["KE","Kenya",0],["KG","Kyrgyzstan",0],["KH","Cambodia",0],["KI","Kiribati",0],["KM","Comoros",0],["KN","Saint Kitts and Nevis",0],["KP","North Korea",0],["KR","South Korea",0],["KW","Kuwait",0],["KY","Cayman Islands",0],["LA","Laos",0],["LB","Lebanon",0],["LC","Saint Lucia",0],["LI","Liechtenstein",0],["LK","Sri Lanka",0],["LR","Liberia",0],["LS","Lesotho",0],["LT","Lithuania",0],["LU","Luxembourg",0],["LV","Latvia",0],["LY","Libya",0],["MA","Morocco",0],["MC","Monaco",0],["MD","Moldova",0],["ME","Montenegro",0],["MF","Saint Martin",0],["MG","Madagascar",0],["MH","Marshall Islands",0],["MK","Macedonia [FYROM]",0],["ML","Mali",0],["MM","Myanmar [Burma]",0],["MN","Mongolia",0],["MO","Macau",0],["MP","Northern Mariana Islands",0],["MQ","Martinique",0],["MR","Mauritania",0],["MS","Montserrat",0],["MT","Malta",0],["MU","Mauritius",0],["MV","Maldives",0],["MW","Malawi",0],["MX","Mexico",0],["MY","Malaysia",0],["MZ","Mozambique",0],["NA","Namibia",0],["NC","New Caledonia",0],["NE","Niger",0],["NF","Norfolk Island",0],["NG","Nigeria",0],["NI","Nicaragua",0],["NL","Netherlands",0],["NO","Norway",0],["NP","Nepal",0],["NR","Nauru",0],["NT","Neutral Zone",0],["NU","Niue",0],["NZ","New Zealand",0],["OM","Oman",0],["PA","Panama",0],["PE","Peru",0],["PF","French Polynesia",0],["PG","Papua New Guinea",0],["PH","Philippines",0],["PK","Pakistan",0],["PL","Poland",0],["PM","Saint Pierre and Miquelon",0],["PN","Pitcairn Islands",0],["PR","Puerto Rico",0],["PS","Palestinian Territories",0],["PT","Portugal",0],["PW","Palau",0],["PY","Paraguay",0],["QA","Qatar",0],["QO","Outlying Oceania",0],["RE","Réunion",0],["RO","Romania",0],["RS","Serbia",0],["RW","Rwanda",0],["SA","Saudi Arabia",0],["SB","Solomon Islands",0],["SC","Seychelles",0],["SD","Sudan",0],["SE","Sweden",0],["SG","Singapore",0],["SH","Saint Helena",0],["SI","Slovenia",0],["SJ","Svalbard and Jan Mayen",0],["SK","Slovakia",0],["SL","Sierra Leone",0],["SM","San Marino",0],["SN","Senegal",0],["SO","Somalia",0],["SR","Suriname",0],["SS","South Sudan",0],["ST","São Tomé and Príncipe",0],["SU","Union of Soviet Socialist Republics",0],["SV","El Salvador",0],["SX","Sint Maarten",0],["SY","Syria",0],["SZ","Swaziland",0],["TA","Tristan da Cunha",0],["TC","Turks and Caicos Islands",0],["TD","Chad",0],["TF","French Southern Territories",0],["TG","Togo",0],["TH","Thailand",0],["TJ","Tajikistan",0],["TK","Tokelau",0],["TL","Timor-Leste",0],["TM","Turkmenistan",0],["TN","Tunisia",0],["TO","Tonga",0],["TP","Timor-Leste",0],["TR","Turkey",0],["TT","Trinidad and Tobago",0],["TV","Tuvalu",0],["TW","Taiwan",0],["TZ","Tanzania",0],["UG","Uganda",0],["UM","U.S. Outlying Islands",0],["US","United States",0],["UY","Uruguay",0],["UZ","Uzbekistan",0],["VA","Vatican City",0],["VC","Saint Vincent and the Grenadines",0],["VE","Venezuela",0],["VG","British Virgin Islands",0],["VI","U.S. Virgin Islands",0],["VN","Vietnam",0],["VU","Vanuatu",0],["WF","Wallis and Futuna",0],["WS","Samoa",0],["XA","XA",0],["XB","XB",0],["XC","XC",0],["YD","People\u0027s Democratic Republic of Yemen",0],["YE","Yemen",0],["YT","Mayotte",0],["YU","Serbia",0],["ZA","South Africa",0],["ZM","Zambia",0],["ZR","Congo [DRC]",0],["ZW","Zimbabwe",0],["ZZ","Unknown Region",0]],"segIndex":0,"options":{"region":"world","height":310,"backgroundColor":"none","width":355,"displayMode":"regions","resolution":"countries","colorAxis":{"colors":["#E8EDFA","#0B51D4"],"minValue":0,"maxValue":100},"forceIFrame":false}},"city":{"gvizData":[["lat","lng","city","Search volume index"],[55.755786,37.617633,"Moscow",100],[50.45,30.523333,"Kyiv",70],[59.939039,30.315785,"St Petersburg",65],[46.466667,30.733333,"Odessa",43],[49.94807,36.212298,"Kharkiv",42],[48.45,34.983333,"Dnipropetrovs\u0027k",39],[56.837814,60.596842,"Yekaterinburg",38],[53.905117,27.561184,"Minsk",36],[45.042149,38.98064,"Krasnodar",30],[47.233189,39.715,"Rostov-na-Donu",27]],"segIndex":1,"options":{"region":"world","height":310,"backgroundColor":"none","width":355,"displayMode":"markers","resolution":"countries","colorAxis":{"colors":["#E8EDFA","#0B51D4"],"minValue":0,"maxValue":100},"forceIFrame":false}}}, 0,
+                '#q\75%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C+iphone+5\46date\75today+12-m\46cmpt\75q\46geo\75%25s',
+                'fetchComponent?q\75%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C+iphone+5\46date\75today+12-m\46cmpt\75q\46cid\75GEO_MAP_ANIMATION_%25s_%25s\46export\0756', 'GEO_MAP_ANIMATION_0'
+
+                , '//www.gstatic.com/charts/geochart/7'
+        );
+
+        function GEO_MAP_ANIMATION_0_updateEmbedUrlFormat(geoLevel) {
+
+            shareControl_GEO_MAP_ANIMATION_0_share.setEmbedSnippetFormat(
+                    '//www.google.com/trends/embed.js?hl\75en-US\46q\75%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C+iphone+5\46date\75today+12-m\46cmpt\75q\46content\0751\46cid\75GEO_MAP_0___GEO__\46export\0755\46w\75%d\46h\75%d'.replace(
+                            '__GEO__', geoLevel));
+
+        }
+
+
+        var GEO_MAP_ANIMATION_0_eventHandler = gvizGeoMap_GEO_MAP_ANIMATION_0.getRegisteredEventHandler();
+        GeoBand0_0_register(
+                function(level, oldIndex, newIndex) {
+                    GEO_MAP_ANIMATION_0_updateEmbedUrlFormat(newIndex);
+                    GEO_MAP_ANIMATION_0_eventHandler(level, oldIndex, newIndex);
+                });
+    </script>
+
+    <div id="GEO_MAP_ANIMATION_0_footer" class="geo-map-footer">
+        <div class="geo-map-share">
+            <div class="embed-button" onclick="shareControl_GEO_MAP_ANIMATION_0_share.show()">
+                Embed</div>
+
+            <div id="GEO_MAP_ANIMATION_0_share_d" style="display: none">
+                <div class="modal-dialog-title">
+                    Embed chart</div>
+                <div class="embed-dialog-param-line">
+      <span class="embed-dialog-param-line-caption">
+        Width</span>
+                    <input id="GEO_MAP_ANIMATION_0_share_width" class="jfk-textinput embed-dialog-textinput"
+                           onchange="shareControl_GEO_MAP_ANIMATION_0_share.update()"
+                           value="500" />
+      <span class="embed-dialog-param-line-caption">
+        Height</span>
+                    <input id="GEO_MAP_ANIMATION_0_share_height" class="jfk-textinput embed-dialog-textinput"
+                           onchange="shareControl_GEO_MAP_ANIMATION_0_share.update()"
+                           value="530" />
+
+      <span style='display: none;'>
+        <span id="GEO_MAP_ANIMATION_0_share_alternative_format_checkbox"
+              class="embed-dialog-param-line-checkbox">
+        </span>
+        <span id="GEO_MAP_ANIMATION_0_share_alternative_format_label"
+              class="embed-dialog-param-line-caption">
+          </span>
+      </span>
+                </div>
+
+                <div class="modal-dialog-content">
+                    <div class="embed-dialog-message">
+                        Paste this into any HTML page:</div>
+                    <textarea id="GEO_MAP_ANIMATION_0_share_content" class="embed-script-container"
+                              onclick="this.focus();this.select();"
+                              readonly="readonly"></textarea>
+                </div>
+            </div>
+
+            <script type="text/javascript">
+                var shareControl_GEO_MAP_ANIMATION_0_share = new trends.ShareControl(
+                        "GEO_MAP_ANIMATION_0_share", "//www.google.com/trends/embed.js?hl\75en-US\46q\75%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C+iphone+5\46date\75today+12-m\46cmpt\75q\46content\0751\46cid\75GEO_MAP_0_0\46export\0755\46w\75%d\46h\75%d"
+
+                );
+            </script>
+        </div>
+        <div id="GEO_MAP_ANIMATION_0_startAnimation"
+             style="display:none;"
+             class="animation-msg">
+  <span>
+      View change over time</span>
+            <div id="GEO_MAP_ANIMATION_0AnimationTip_tip_a" class="tooltip-icon"><div class="SPRITE_help"></div></div><div id="GEO_MAP_ANIMATION_0AnimationTip_tip_c" class="tooltip-box"><div class="tooltip-message" id="GEO_MAP_ANIMATION_0AnimationTip_tip_msg">Click this link to see how a search term's popularity changes over time, across regions. <a href="http://support.google.com/trends/bin/answer.py?hl=en-US&answer=156671">Learn more</a></div></div><script type="text/javascript">new trends.Tooltip('GEO_MAP_ANIMATION_0AnimationTip_tip_a', 'GEO_MAP_ANIMATION_0AnimationTip_tip_c',undefined,undefined);</script></div>
+        <div id="GEO_MAP_ANIMATION_0_animationContent" class="animation-container">
+            <div id="GEO_MAP_ANIMATION_0_animationLoading"
+                 style="display:none;"
+                 class="animation-msg">
+                <img  src="/trends/resources/1964626681-loading.gif" style='vertical-align: middle;'/></div>
+            <div id="GEO_MAP_ANIMATION_0_animationTimeout"
+                 style="display:none;">
+                <table class="hint " >
+                    <tr>
+                        <td><div class="goog-inline-block fs04img SPRITE_exclamation"
+                                 style=''
+                                ></div></td><td><p><span class="animation-error">
+        This seems to be taking too long. Click <a onclick="return gvizGeoMap_GEO_MAP_ANIMATION_0.loadAnimation();">here</a> to retry.</span>
+                    </p></td>
+                    </tr>
+                </table>
+            </div>
+            <div id="GEO_MAP_ANIMATION_0_animationError"
+                 style="display:none;">
+                <table class="hint " >
+                    <tr>
+                        <td><div class="goog-inline-block fs04img SPRITE_exclamation"
+                                 style=''
+                                ></div></td><td><p><span class="animation-error">%s</span>
+                    </p></td>
+                    </tr>
+                </table>
+            </div>
+            <div id="GEO_MAP_ANIMATION_0_animationButtons"
+                 style="display:none;">
+                <div class="animation-control">
+                    <div id="GEO_MAP_ANIMATION_0_play_pause_div" class="animation-playpause">
+        <span id="GEO_MAP_ANIMATION_0_animationPause" style="display: none;">
+          <a onclick="return gvizGeoMap_GEO_MAP_ANIMATION_0.pauseAnimation();">
+              <img id="GEO_MAP_ANIMATION_0_pause_image"  src="/trends/resources/3111801320-pause.gif"/><img id="GEO_MAP_ANIMATION_0_pause_over_image"  src="/trends/resources/3502354573-pause_over.gif"/></a>
+        </span>
+        <span id="GEO_MAP_ANIMATION_0_animationPlay">
+          <a onclick="return gvizGeoMap_GEO_MAP_ANIMATION_0.playAnimation(10);">
+              <img id="GEO_MAP_ANIMATION_0_play_image"  src="/trends/resources/3035707513-play.gif"/><img id="GEO_MAP_ANIMATION_0_play_over_image"  src="/trends/resources/1620550102-play_over.gif"/></a>
+        </span>
+                    </div>
+                    <div id="GEO_MAP_ANIMATION_0_animationSlider" class="goog-slider animation-slider">
+                        <div class="goog-slider-scale"></div>
+                        <div class="goog-slider-thumb"></div>
+                    </div>
+                    <div class="animation-time">
+                        <span id="GEO_MAP_ANIMATION_0_animationTime"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="GEO_MAP_ANIMATION_0_caption" class="heatMapCaption"></div>
+    <div id="GEO_MAP_ANIMATION_0_error" class="heatMapError" style="display:none;"></div>
+
+</div>
+<div id="geoHorizontalLinksMenu0"
+     class="geoHorizontalLinksMenu geoHorizontalLinksMenuForMap">
+    <script type="text/javascript">
+
+        function GeoBand0_select1_getElement(index) {
+            return document.getElementById("GeoBand0_select1_" + index);
+        }
+
+        function GeoBand0_select1_setSelectedStyle(element, isSelected) {
+            element.style.color = isSelected ? '#333333' : '';
+            element.className = isSelected ? 'disabledAnchor' : '';
+        }
+        var GeoBand0_select1_selected = "0";
+
+        function GeoBand0_select1_init() {
+            var current = GeoBand0_select1_getElement(GeoBand0_select1_selected);
+            GeoBand0_select1_setSelectedStyle(current, true);
+        }
+
+        function GeoBand0_select1_linkClicked(newindex) {
+
+            if (newindex == GeoBand0_select1_selected) {
+                return false;
+            }
+
+            var current = GeoBand0_select1_getElement(GeoBand0_select1_selected);
+            var newLink = GeoBand0_select1_getElement(newindex);
+
+            (function(oldIndex, newIndex) {
+                GeoBand0_0_fire(1, oldIndex, newIndex);})(GeoBand0_select1_selected, newindex);
+
+            // change style
+            GeoBand0_select1_setSelectedStyle(current, false);
+            GeoBand0_select1_setSelectedStyle(newLink, true);
+            GeoBand0_select1_selected = newindex;
+            return true;
+
+        }
+
+    </script>
+
+    <div class="horizontalLinksMenu">
+<span class="horizontal-link-menu-first">
+    <a id="GeoBand0_select1_0" onclick="trends.PageTracker.analyticsTrackEvent('geo zoom level change', 'Region');GeoBand0_select1_linkClicked(0);"
+            >Region</a>
+</span>
+<span class="horizontal-link-menu-item">
+    <a id="GeoBand0_select1_1" onclick="trends.PageTracker.analyticsTrackEvent('geo zoom level change', 'City');GeoBand0_select1_linkClicked(1);"
+            >City</a>
+</span>
+    </div>
+    <script type="text/javascript">
+        GeoBand0_select1_init();
+    </script>
+</div>
+</div>
+<script type="text/javascript">
+    var trendsTabControl0 = new trends.TabControl(
+            'geoBandTabControl0', [
+                new trends.TabControl.TabData(
+                        'trendsReportHeatMap0',
+                        'geoBandTabControlMapButton0',
+                        'Map'),
+                new trends.TabControl.TabData(
+                        'trendsReportTopLocations0',
+                        'geoBandTabControlListButton0',
+                        'List')],
+            true);
+    trendsTabControl0.registerSwitchCallback(function(tabControlEvent) {
+        var tabControl = tabControlEvent.target;
+        var geoHorizontalLinksMenu =
+                document.getElementById('geoHorizontalLinksMenu0');
+        if (tabControl.getSelectedTabIndex() == 0) {
+            geoHorizontalLinksMenu.className =
+                    'geoHorizontalLinksMenu geoHorizontalLinksMenuForMap';
+        } else {
+            geoHorizontalLinksMenu.className =
+                    'geoHorizontalLinksMenu geoHorizontalLinksMenuForList';
+        }
+    });
+</script>
+<div class="searchesSection ">
+<h2 class="primaryBand">
+    <table cellpadding="0" cellspacing="0" style="width: 100%; white-space:nowrap;">
+        <tr>
+            <td class="searchTermsTitle">
+                <span class="vertical-align">Related terms</span>
+                <div class="searchBandTooltip trendsBandTooltip">
+                    <div id="SearchBand0__tip_a" class="tooltip-icon"><div class="SPRITE_help"></div></div><div id="SearchBand0__tip_c" class="tooltip-box"><div class="tooltip-message" id="SearchBand0__tip_msg">People whose searches match the restrictions most often searched for these terms too. <a href="http://support.google.com/trends/bin/answer.py?hl=en-US&answer=99742">Learn more </a></div></div><script type="text/javascript">new trends.Tooltip('SearchBand0__tip_a', 'SearchBand0__tip_c',undefined,undefined);</script></div>
+            </td>
+            <td style="text-align: right;">
+                <div id="searchBandTabControl0"
+                     class="trends-tab-control search-band-tab-control"></div>
+                <div id="searchBandTabControlTopButton0">
+                    Top</div>
+                <div id="searchBandTabControlRisingButton0">
+                    Rising</div>
+            </td>
+        </tr>
+    </table>
+</h2>
+<div id="trendsReportTopSearchesDiv0"
+     class="trendsReportTopSearchesDiv verticalMargin">
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td>
+<div class="elementInCompositeTall"
+     id="TOP_QUERIES_0_0">
+<div><table id="TOP_QUERIES_0_0table" class='trends-table' cellpadding='0' cellspacing='0'
+            style='width: 100%'>
+    <tr><td>
+        <table class='trends-table-data' cellpadding='0' cellspacing='0'>
+            <tr class='trends-table-row '>
+                <td class="trends-bar-chart-name-cell trends-bar-chart-row-first">
+                    <a title="" style="" href="#q=%22%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C+iphone+4s%22&date=today+12-m&cmpt=q" onclick="trends.PageTracker.analyticsTrackEvent('top keywords drilldown', 'купить iphone 4s');"
+                            >купить iphone 4s</a>
+                    <a target="_blank" class="google-link" href="http://www.google.com/search?q=%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C+iphone+4s" onclick="trends.PageTracker.analyticsTrackEvent('top keywords drilldown g link', 'купить iphone 4s');"
+                            ><div class="trends-bar-chart-google-link-image SPRITE_search">
+                    </div>
+                    </a>
+                </td>
+                <td class="trends-bar-chart-value-cell trends-bar-chart-row-first">
+                    <table cellpadding="0" cellspacing="0" class='trends-hbars-barscell'>
+                        <tr>
+                            <td class="trends-hbars-value">
+                                100</td>
+                            <td class="trends-hbars-bar">
+                                <div style='width:100%;  background-color:#1155cc;'></div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr class='trends-table-row trends-table-alt-row '>
+                <td class="trends-bar-chart-name-cell trends-bar-chart-row">
+                    <a title="" style="" href="#q=%22iphone+4+%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C%22&date=today+12-m&cmpt=q" onclick="trends.PageTracker.analyticsTrackEvent('top keywords drilldown', 'iphone 4 купить');"
+                            >iphone 4 купить</a>
+                    <a target="_blank" class="google-link" href="http://www.google.com/search?q=iphone+4+%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C" onclick="trends.PageTracker.analyticsTrackEvent('top keywords drilldown g link', 'iphone 4 купить');"
+                            ><div class="trends-bar-chart-google-link-image SPRITE_search">
+                    </div>
+                    </a>
+                </td>
+                <td class="trends-bar-chart-value-cell trends-bar-chart-row">
+                    <table cellpadding="0" cellspacing="0" class='trends-hbars-barscell'>
+                        <tr>
+                            <td class="trends-hbars-value">
+                                100</td>
+                            <td class="trends-hbars-bar">
+                                <div style='width:100%;  background-color:#1155cc;'></div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr class='trends-table-row '>
+                <td class="trends-bar-chart-name-cell trends-bar-chart-row">
+                    <a title="" style="" href="#q=%22%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C+apple%22&date=today+12-m&cmpt=q" onclick="trends.PageTracker.analyticsTrackEvent('top keywords drilldown', 'купить apple');"
+                            >купить apple</a>
+                    <a target="_blank" class="google-link" href="http://www.google.com/search?q=%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C+apple" onclick="trends.PageTracker.analyticsTrackEvent('top keywords drilldown g link', 'купить apple');"
+                            ><div class="trends-bar-chart-google-link-image SPRITE_search">
+                    </div>
+                    </a>
+                </td>
+                <td class="trends-bar-chart-value-cell trends-bar-chart-row">
+                    <table cellpadding="0" cellspacing="0" class='trends-hbars-barscell'>
+                        <tr>
+                            <td class="trends-hbars-value">
+                                80</td>
+                            <td class="trends-hbars-bar">
+                                <div style='width:80%;  background-color:#1155cc;'></div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr class='trends-table-row trends-table-alt-row '>
+                <td class="trends-bar-chart-name-cell trends-bar-chart-row">
+                    <a title="" style="" href="#q=%22iphone+5+%D1%86%D0%B5%D0%BD%D0%B0%22&date=today+12-m&cmpt=q" onclick="trends.PageTracker.analyticsTrackEvent('top keywords drilldown', 'iphone 5 цена');"
+                            >iphone 5 цена</a>
+                    <a target="_blank" class="google-link" href="http://www.google.com/search?q=iphone+5+%D1%86%D0%B5%D0%BD%D0%B0" onclick="trends.PageTracker.analyticsTrackEvent('top keywords drilldown g link', 'iphone 5 цена');"
+                            ><div class="trends-bar-chart-google-link-image SPRITE_search">
+                    </div>
+                    </a>
+                </td>
+                <td class="trends-bar-chart-value-cell trends-bar-chart-row">
+                    <table cellpadding="0" cellspacing="0" class='trends-hbars-barscell'>
+                        <tr>
+                            <td class="trends-hbars-value">
+                                75</td>
+                            <td class="trends-hbars-bar">
+                                <div style='width:75%;  background-color:#1155cc;'></div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr class='trends-table-row '>
+                <td class="trends-bar-chart-name-cell trends-bar-chart-row">
+                    <a title="" style="" href="#q=%22%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C+%D0%B0%D0%B9%D1%84%D0%BE%D0%BD+5%22&date=today+12-m&cmpt=q" onclick="trends.PageTracker.analyticsTrackEvent('top keywords drilldown', 'купить айфон 5');"
+                            >купить айфон 5</a>
+                    <a target="_blank" class="google-link" href="http://www.google.com/search?q=%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C+%D0%B0%D0%B9%D1%84%D0%BE%D0%BD+5" onclick="trends.PageTracker.analyticsTrackEvent('top keywords drilldown g link', 'купить айфон 5');"
+                            ><div class="trends-bar-chart-google-link-image SPRITE_search">
+                    </div>
+                    </a>
+                </td>
+                <td class="trends-bar-chart-value-cell trends-bar-chart-row">
+                    <table cellpadding="0" cellspacing="0" class='trends-hbars-barscell'>
+                        <tr>
+                            <td class="trends-hbars-value">
+                                50</td>
+                            <td class="trends-hbars-bar">
+                                <div style='width:50%;  background-color:#1155cc;'></div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr class='trends-table-row trends-table-alt-row '>
+                <td class="trends-bar-chart-name-cell trends-bar-chart-row">
+                    <a title="" style="" href="#q=%22%D0%B0%D0%B9%D1%84%D0%BE%D0%BD+5%22&date=today+12-m&cmpt=q" onclick="trends.PageTracker.analyticsTrackEvent('top keywords drilldown', 'айфон 5');"
+                            >айфон 5</a>
+                    <a target="_blank" class="google-link" href="http://www.google.com/search?q=%D0%B0%D0%B9%D1%84%D0%BE%D0%BD+5" onclick="trends.PageTracker.analyticsTrackEvent('top keywords drilldown g link', 'айфон 5');"
+                            ><div class="trends-bar-chart-google-link-image SPRITE_search">
+                    </div>
+                    </a>
+                </td>
+                <td class="trends-bar-chart-value-cell trends-bar-chart-row">
+                    <table cellpadding="0" cellspacing="0" class='trends-hbars-barscell'>
+                        <tr>
+                            <td class="trends-hbars-value">
+                                45</td>
+                            <td class="trends-hbars-bar">
+                                <div style='width:45%;  background-color:#1155cc;'></div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr class='trends-table-row '>
+                <td class="trends-bar-chart-name-cell trends-bar-chart-row-last">
+                    <a title="" style="" href="#q=%22%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C+%D0%B0%D0%B9%D1%84%D0%BE%D0%BD%22&date=today+12-m&cmpt=q" onclick="trends.PageTracker.analyticsTrackEvent('top keywords drilldown', 'купить айфон');"
+                            >купить айфон</a>
+                    <a target="_blank" class="google-link" href="http://www.google.com/search?q=%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C+%D0%B0%D0%B9%D1%84%D0%BE%D0%BD" onclick="trends.PageTracker.analyticsTrackEvent('top keywords drilldown g link', 'купить айфон');"
+                            ><div class="trends-bar-chart-google-link-image SPRITE_search">
+                    </div>
+                    </a>
+                </td>
+                <td class="trends-bar-chart-value-cell trends-bar-chart-row-last">
+                    <table cellpadding="0" cellspacing="0" class='trends-hbars-barscell'>
+                        <tr>
+                            <td class="trends-hbars-value">
+                                45</td>
+                            <td class="trends-hbars-bar">
+                                <div style='width:45%;  background-color:#1155cc;'></div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table></td></tr>
+    </td></tr></table>
+    <div class="searches-share">
+        <div class="embed-button" onclick="shareControl_TOP_QUERIES_0_0.show()">
+            Embed</div>
+
+        <div id="TOP_QUERIES_0_0_d" style="display: none">
+            <div class="modal-dialog-title">
+                Embed chart</div>
+            <div class="embed-dialog-param-line">
+      <span class="embed-dialog-param-line-caption">
+        Width</span>
+                <input id="TOP_QUERIES_0_0_width" class="jfk-textinput embed-dialog-textinput"
+                       onchange="shareControl_TOP_QUERIES_0_0.update()"
+                       value="300" />
+      <span class="embed-dialog-param-line-caption">
+        Height</span>
+                <input id="TOP_QUERIES_0_0_height" class="jfk-textinput embed-dialog-textinput"
+                       onchange="shareControl_TOP_QUERIES_0_0.update()"
+                       value="420" />
+
+      <span style='display: none;'>
+        <span id="TOP_QUERIES_0_0_alternative_format_checkbox"
+              class="embed-dialog-param-line-checkbox">
+        </span>
+        <span id="TOP_QUERIES_0_0_alternative_format_label"
+              class="embed-dialog-param-line-caption">
+          </span>
+      </span>
+            </div>
+
+            <div class="modal-dialog-content">
+                <div class="embed-dialog-message">
+                    Paste this into any HTML page:</div>
+                <textarea id="TOP_QUERIES_0_0_content" class="embed-script-container"
+                          onclick="this.focus();this.select();"
+                          readonly="readonly"></textarea>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            var shareControl_TOP_QUERIES_0_0 = new trends.ShareControl(
+                    "TOP_QUERIES_0_0", "//www.google.com/trends/embed.js?hl\75en-US\46q\75%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C+iphone+5\46date\75today+12-m\46cmpt\75q\46content\0751\46cid\75TOP_QUERIES_0_0\46export\0755\46w\75%d\46h\75%d"
+
+            );
+        </script>
+    </div>
+</div>
+</div>
+</td>
+</tr>
+</table>
+
+<script type="text/javascript">
+
+    var TOP_QUERIES0_controller =
+            new trends.SearchesCompositeTables(
+                    'TOP_QUERIES',
+                    0,
+                    2,
+                    0,
+                    0,
+                    true,
+                    'hl\75en-US\46q\75%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C%20iphone%205\46date\75today%2012-m\46cmpt\75q\46content\0751',
+                    60000,
+                    []);
+</script>
+
+</div>
+<div id="trendsReportRisingSearches0"
+     class="trendsReportRisingSearches verticalMargin"
+     style="display: none;">
+    <table cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+            <td>
+                <div class="elementInCompositeTall"
+                     id="RISING_QUERIES_0_0">
+                    <div><table id="RISING_QUERIES_0_0table" class='trends-table' cellpadding='0' cellspacing='0'
+                                style='width: 100%'>
+                        <tr><td>
+                            <table class='trends-table-data' cellpadding='0' cellspacing='0'>
+                                <tr class='trends-table-row '>
+                                    <td class="trends-bar-chart-name-cell trends-bar-chart-row-first">
+                                        <a title="" style="" href="#q=%22%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C+apple%22&date=today+12-m&cmpt=q" onclick="trends.PageTracker.analyticsTrackEvent('rising drilldown', 'купить apple');"
+                                                >купить apple</a>
+                                        <a target="_blank" class="google-link" href="http://www.google.com/search?q=%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C+apple" onclick="trends.PageTracker.analyticsTrackEvent('rising drilldown g link', 'купить apple');"
+                                                ><div class="trends-bar-chart-google-link-image SPRITE_search">
+                                        </div>
+                                        </a>
+                                    </td>
+                                    <td class="trends-bar-chart-value-cell trends-bar-chart-row-first">
+                                        +40%
+                                    </td>
+                                </tr>
+                                <tr class='trends-table-row trends-table-alt-row '>
+                                    <td class="trends-bar-chart-name-cell trends-bar-chart-row">
+                                        <a title="" style="" href="#q=%22%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C+iphone+4s%22&date=today+12-m&cmpt=q" onclick="trends.PageTracker.analyticsTrackEvent('rising drilldown', 'купить iphone 4s');"
+                                                >купить iphone 4s</a>
+                                        <a target="_blank" class="google-link" href="http://www.google.com/search?q=%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C+iphone+4s" onclick="trends.PageTracker.analyticsTrackEvent('rising drilldown g link', 'купить iphone 4s');"
+                                                ><div class="trends-bar-chart-google-link-image SPRITE_search">
+                                        </div>
+                                        </a>
+                                    </td>
+                                    <td class="trends-bar-chart-value-cell trends-bar-chart-row">
+                                        +40%
+                                    </td>
+                                </tr>
+                                <tr class='trends-table-row '>
+                                    <td class="trends-bar-chart-name-cell trends-bar-chart-row-last">
+                                        <a title="" style="" href="#q=%22%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C+%D0%B0%D0%B9%D1%84%D0%BE%D0%BD+5%22&date=today+12-m&cmpt=q" onclick="trends.PageTracker.analyticsTrackEvent('rising drilldown', 'купить айфон 5');"
+                                                >купить айфон 5</a>
+                                        <a target="_blank" class="google-link" href="http://www.google.com/search?q=%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C+%D0%B0%D0%B9%D1%84%D0%BE%D0%BD+5" onclick="trends.PageTracker.analyticsTrackEvent('rising drilldown g link', 'купить айфон 5');"
+                                                ><div class="trends-bar-chart-google-link-image SPRITE_search">
+                                        </div>
+                                        </a>
+                                    </td>
+                                    <td class="trends-bar-chart-value-cell trends-bar-chart-row-last">
+                                        +40%
+                                    </td>
+                                </tr>
+                            </table></td></tr>
+                        </td></tr></table>
+                        <div class="searches-share">
+                            <div class="embed-button" onclick="shareControl_RISING_QUERIES_0_0.show()">
+                                Embed</div>
+
+                            <div id="RISING_QUERIES_0_0_d" style="display: none">
+                                <div class="modal-dialog-title">
+                                    Embed chart</div>
+                                <div class="embed-dialog-param-line">
+      <span class="embed-dialog-param-line-caption">
+        Width</span>
+                                    <input id="RISING_QUERIES_0_0_width" class="jfk-textinput embed-dialog-textinput"
+                                           onchange="shareControl_RISING_QUERIES_0_0.update()"
+                                           value="300" />
+      <span class="embed-dialog-param-line-caption">
+        Height</span>
+                                    <input id="RISING_QUERIES_0_0_height" class="jfk-textinput embed-dialog-textinput"
+                                           onchange="shareControl_RISING_QUERIES_0_0.update()"
+                                           value="420" />
+
+      <span style='display: none;'>
+        <span id="RISING_QUERIES_0_0_alternative_format_checkbox"
+              class="embed-dialog-param-line-checkbox">
+        </span>
+        <span id="RISING_QUERIES_0_0_alternative_format_label"
+              class="embed-dialog-param-line-caption">
+          </span>
+      </span>
+                                </div>
+
+                                <div class="modal-dialog-content">
+                                    <div class="embed-dialog-message">
+                                        Paste this into any HTML page:</div>
+                                    <textarea id="RISING_QUERIES_0_0_content" class="embed-script-container"
+                                              onclick="this.focus();this.select();"
+                                              readonly="readonly"></textarea>
+                                </div>
+                            </div>
+
+                            <script type="text/javascript">
+                                var shareControl_RISING_QUERIES_0_0 = new trends.ShareControl(
+                                        "RISING_QUERIES_0_0", "//www.google.com/trends/embed.js?hl\75en-US\46q\75%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C+iphone+5\46date\75today+12-m\46cmpt\75q\46content\0751\46cid\75RISING_QUERIES_0_0\46export\0755\46w\75%d\46h\75%d"
+
+                                );
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <script type="text/javascript">
+
+        var RISING_QUERIES0_controller =
+                new trends.SearchesCompositeTables(
+                        'RISING_QUERIES',
+                        0,
+                        2,
+                        0,
+                        0,
+                        true,
+                        'hl\75en-US\46q\75%D0%BA%D1%83%D0%BF%D0%B8%D1%82%D1%8C%20iphone%205\46date\75today%2012-m\46cmpt\75q\46content\0751',
+                        60000,
+                        []);
+    </script>
+
+</div>
+</div>
+<script type="text/javascript">
+    new trends.TabControl('searchBandTabControl0', [
+        new trends.TabControl.TabData(
+                'trendsReportTopSearchesDiv0',
+                'searchBandTabControlTopButton0',
+                undefined),
+        new trends.TabControl.TabData(
+                'trendsReportRisingSearches0',
+                'searchBandTabControlRisingButton0',
+                undefined)]);
+</script>
+</div>
+</div>
+</div>
+</div>
+
+<script type="text/javascript">
+    trends.PageTracker.init(_gat._getTracker('UA-4401283-1'),
+            '/trends/');
+
+
+    trends.PageTracker.trackLoggedIn(true);
+
+
+    trends.PageTracker.trackSrch('', 'web search');
+
+    trends.PageTracker.trackPageView();
+</script>

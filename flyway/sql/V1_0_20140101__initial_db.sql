@@ -141,17 +141,24 @@ CREATE TABLE "vendor" (
 );
 ALTER TABLE "vendor" OWNER TO pricegsmowner;
 
-CREATE SEQUENCE "vendor_seq" START 3;
+CREATE SEQUENCE "vendor_seq" START 9;
 ALTER TABLE "vendor_seq" OWNER TO pricegsmowner;
 
 INSERT INTO vendor (id, name, short_name) VALUES (1, 'Apple IPhone', 'Apple');
 INSERT INTO vendor (id, name, short_name) VALUES (2, 'Apple IPad', 'Apple');
+INSERT INTO vendor (id, name, short_name) VALUES (3, 'Sony Mobile', 'Sony');
+INSERT INTO vendor (id, name, short_name) VALUES (4, 'Sony Tablet', 'Sony');
+INSERT INTO vendor (id, name, short_name) VALUES (5, 'Samsung Mobile', 'Samsung');
+INSERT INTO vendor (id, name, short_name) VALUES (6, 'Samsung Tablet', 'Samsung');
+INSERT INTO vendor (id, name, short_name) VALUES (7, 'Nokia', 'Nokia');
+INSERT INTO vendor (id, name, short_name) VALUES (8, 'HTC', 'HTC');
 
 
 CREATE TABLE "product" (
   "id"          BIGINT       NOT NULL,
   "name"        VARCHAR(255) NOT NULL,
   "yandex_id"   VARCHAR(255) NOT NULL,
+  "yandex_type_id"  VARCHAR(255) NOT NULL DEFAULT '91491', -- mobile phones
   "vendor_id"   BIGINT       NOT NULL,
   "color_id"    BIGINT       NOT NULL,
   "active"      BOOLEAN      NOT NULL DEFAULT TRUE,
@@ -368,8 +375,13 @@ CREATE TABLE "delivery_place" (
 );
 ALTER TABLE "delivery_place" OWNER TO pricegsmowner;
 
-CREATE SEQUENCE "delivery_place_seq";
+CREATE SEQUENCE "delivery_place_seq" START 5;
 ALTER TABLE "delivery_place_seq" OWNER TO pricegsmowner;
+
+insert into delivery_place(id, name, region_id) values (1, 'Савелово', 1);
+insert into delivery_place(id, name, region_id) values (2, 'Митино', 1);
+insert into delivery_place(id, name, region_id) values (3, 'Гарбушка', 1);
+insert into delivery_place(id, name, region_id) values (4, 'Москва', 1);
 
 CREATE TABLE "persistent_logins" (
   "series"    VARCHAR(64) NOT NULL,

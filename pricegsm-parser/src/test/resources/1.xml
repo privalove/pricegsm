@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html>
+    <head/>
+    <body>
+        <div class="reportTitleCombo" id="reportTitleCombo">
+            <div class="reportTitle">
+
+                Web Search Interest:
+                <b>
+                    купить iphone 5
+                </b>
+                . Russia, Past 12 months.
+                <div id="shareButtons" style="display: inline-block; padding-left: 15px;">
+                    <a onclick="trends.Utils.openInPopup(600, 600, 'https://plus.google.com/share?url=%s');return false;"
+                       class="share-button">
+                        <div class="goog-inline-block fs04img SPRITE_gplus_share" style="">
+                        </div>
+                    </a>
+                </div>
+                <!-- end of div shareButtons -->
+            </div>
+            <script type="text/javascript">
+                //<![CDATA[
+
+    
+
+    function setTitle() {
+      document.title = 'Google Trends' +
+          ' -  Web Search Interest: купить iphone 5 - Russia, Past 12 months';
+    }
+    
+    window.setTimeout(setTitle, 0);
+  
+//]]>
+            </script>
+        </div>
+        <script type="text/javascript">
+            //<![CDATA[
+
+  trends.Utils.moveElement('reportTitleCombo', 'summaryMessage');
+
+//]]>
+        </script>
+        <div id="categorySuggestContent">
+        </div>
+        <script type="text/javascript">
+            //<![CDATA[
+
+  trends.Utils.moveElement('categorySuggestContent', 'categorySuggest');
+
+//]]>
+        </script>
+        <div id="report">
+            <div class="timeBandTitle">
+
+                Not enough search volume to show graphs.
+            </div>
+            <div class="timeBandSubTitle">
+
+                Suggestions:
+                <ul>
+                    <li>
+                        Make sure all words are spelled correctly.
+                    </li>
+                    <li>
+                        Try different search terms.
+                    </li>
+                    <li>
+                        Try more general search terms.
+                    </li>
+                    <li>
+                        Try fewer search terms.
+                    </li>
+                    <li>
+                        Try searching data for all years and all regions.
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <script type="text/javascript">
+            //<![CDATA[
+
+  trends.PageTracker.init(_gat._getTracker('UA-4401283-1'),
+      '/trends/');
+
+   
+  trends.PageTracker.trackLoggedIn(true);
+
+  
+    trends.PageTracker.trackSrch('', 'web search');
+  
+  trends.PageTracker.trackPageView();
+
+//]]>
+        </script>
+    </body>
+</html>

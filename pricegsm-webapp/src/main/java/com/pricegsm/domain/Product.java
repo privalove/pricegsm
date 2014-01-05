@@ -20,6 +20,8 @@ public class Product
 
     private String yandexId;
 
+    private String yandexTypeId = "91491";
+
     private Vendor vendor;
 
     private Color color;
@@ -59,6 +61,17 @@ public class Product
 
     public void setYandexId(String yandex_id) {
         this.yandexId = yandex_id;
+    }
+
+    @Size(max = 255)
+    @Basic
+    @Column(name = "yandex_type_id", nullable = false)
+    public String getYandexTypeId() {
+        return yandexTypeId;
+    }
+
+    public void setYandexTypeId(String yandexTypeId) {
+        this.yandexTypeId = yandexTypeId;
     }
 
     @JsonSerialize(using = GlobalEntitySerializer.class)
