@@ -34,6 +34,10 @@ public class YandexPrice
 
     private String link;
 
+    private BigDecimal price;
+
+    private String color;
+
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(generator = "YandexPrice")
@@ -132,5 +136,23 @@ public class YandexPrice
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    @Transient
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    @Transient
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }

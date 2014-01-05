@@ -40,10 +40,11 @@ public class CurrencyParser {
     }
 
     public String parse() {
-        final WebClient webClient = new WebClient(BrowserVersion.FIREFOX_10);
+        final WebClient webClient = new WebClient(BrowserVersion.FIREFOX_17);
         webClient.getOptions().setRedirectEnabled(true);
         webClient.getOptions().setJavaScriptEnabled(false);
         webClient.getOptions().setCssEnabled(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page;
         try {
             page = getPage(webClient);

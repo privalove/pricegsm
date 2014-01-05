@@ -3,6 +3,7 @@ package com.pricegsm.config;
 import com.pricegsm.Application;
 import com.pricegsm.hibernate.Hibernate4JpaVendorAdapter;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.AdviceMode;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;

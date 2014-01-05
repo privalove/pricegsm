@@ -1,15 +1,26 @@
 package com.pricegsm.util;
 
+import com.google.common.base.Charsets;
+import com.google.common.primitives.Longs;
+import com.oracle.javafx.jmx.json.JSONException;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.util.CollectionUtils;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.security.MessageDigest;
-import java.util.Collection;
+import java.util.*;
 
 /**
  * @author andreybugaev
@@ -110,6 +121,53 @@ public final class Utils {
             }
         }
         return String.valueOf(entity);
+    }
+
+    /**
+     * Midnight time 00:00
+     */
+    public static Date today() {
+        return DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH);
+    }
+
+    /**
+     * @return 10:00, 14:00, 18:00
+     */
+    public static List<Date> yandexTimes() {
+        return Arrays.asList(DateUtils.addHours(today(), 10), DateUtils.addHours(today(), 14), DateUtils.addHours(today(), 18));
+    }
+
+    /**
+     * @return Closest yandex time from {@link #yandexTimes()}
+     */
+    public static Date yandexTime() {
+        final long time = today().getTime();
+        List<Date> dates = new ArrayList<>(yandexTimes());
+        Collections.sort(dates, new Comparator<Date>() {
+            @Override
+            public int compare(Date o1, Date o2) {
+
+                long t1 = Math.abs(o1.getTime() - time);
+                long t2 = Math.abs(o2.getTime() - time);
+                return Longs.compare(t1, t2);
+            }
+        });
+
+        return dates.get(0);
+    }
+
+    public static String readFromUrl(String url) throws IOException {
+        try(InputStream is = new URL(url).openStream()) {
+            BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charsets.UTF_8));
+            return IOUtils.toString(rd);
+        }
+    }
+
+    public static JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
+        try(InputStream is = new URL(url).openStream()) {
+            BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charsets.UTF_8));
+            return new JSONObject(IOUtils.toString(rd));
+        }
     }
 
 }

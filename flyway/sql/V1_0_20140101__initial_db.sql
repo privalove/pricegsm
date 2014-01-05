@@ -269,7 +269,8 @@ CREATE TABLE "yandex_price" (
   "modified_by" BIGINT                   NOT NULL DEFAULT 0,
   "modified"    TIMESTAMP WITH TIME ZONE,
   CONSTRAINT "yandex_price_pkey" PRIMARY KEY ("id"),
-  CONSTRAINT "yandex_price_to_product_fkey" FOREIGN KEY ("product_id") REFERENCES "product" ("id") ON DELETE CASCADE
+  CONSTRAINT "yandex_price_to_product_fkey" FOREIGN KEY ("product_id") REFERENCES "product" ("id") ON DELETE CASCADE,
+  CONSTRAINT "yandex_price_unique" UNIQUE (shop, position, product_id, sell_date)
 );
 ALTER TABLE "yandex_price" OWNER TO pricegsmowner;
 

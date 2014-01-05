@@ -23,6 +23,16 @@ public class Exchange
 
     private BigDecimal value = BigDecimal.ONE;
 
+    public Exchange() {
+    }
+
+    public Exchange(Currency from, Currency to, Date date, BigDecimal value) {
+        this.from = from;
+        this.to = to;
+        this.date = date;
+        this.value = value;
+    }
+
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(generator = "Exchange")

@@ -20,6 +20,8 @@ http://www.springframework.org/schema/security/spring-security-3.2.xsd">
                 />
 		<security:intercept-url pattern="/signin" access="permitAll" />
 		<security:intercept-url pattern="/signup" access="permitAll" />
+		<security:intercept-url pattern="/yandex" access="permitAll" />
+		<security:intercept-url pattern="/exchange" access="permitAll" />
 		<security:intercept-url pattern="/**" access="isAuthenticated()" />
 	</security:http>
 	

@@ -31,7 +31,7 @@
         <junit.version>4.11</junit.version>
         <mockito.version>1.9.5</mockito.version>
         <postgresql.version>9.2-1004-jdbc4</postgresql.version>
-        <commons-lang.version>3.1</commons-lang.version>
+        <commons-lang.version>3.2</commons-lang.version>
     </properties>
 
     <build>
@@ -133,6 +133,10 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aspects</artifactId>
         </dependency>
         <!-- Security -->
         <dependency>
@@ -291,6 +295,16 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20131018</version>
         </dependency>
         <!-- Test -->
         <dependency>

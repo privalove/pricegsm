@@ -1,6 +1,7 @@
 package com.pricegsm.config;
 
 import org.springframework.core.annotation.Order;
+import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
@@ -30,7 +31,10 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
         CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
         characterEncodingFilter.setEncoding("UTF-8");
         characterEncodingFilter.setForceEncoding(true);
-        return new Filter[] {characterEncodingFilter};
+
+
+        //OpenEntityManagerInViewFilter openEntityManagerInViewFilter = new OpenEntityManagerInViewFilter();
+        return new Filter[] {characterEncodingFilter/*, openEntityManagerInViewFilter*/};
     }
 
     @Override

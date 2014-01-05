@@ -14,7 +14,7 @@ public class Currency
 
     public static final long EUR = 2L;
 
-    public static final long RUB = 2L;
+    public static final long RUB = 3L;
 
     private String name;
 
