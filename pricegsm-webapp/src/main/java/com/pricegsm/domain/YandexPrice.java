@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.pricegsm.jackson.GlobalEntityDeserializer;
 import com.pricegsm.jackson.GlobalEntitySerializer;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -156,5 +158,31 @@ public class YandexPrice
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        YandexPrice that = (YandexPrice) o;
+        EqualsBuilder builder = new EqualsBuilder();
+        builder.append(getPosition(), that.getPosition());
+        builder.append(getDate(), that.getDate());
+        builder.append(getProduct(), that.getProduct());
+        builder.append(getShop(), that.getShop());
+
+        return builder.isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .append(getPosition())
+                .append(getDate())
+                .append(getProduct())
+                .append(getShop())
+                .toHashCode();
     }
 }

@@ -18,7 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.math.RoundingMode;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class YandexPriceService
@@ -72,6 +74,9 @@ public class YandexPriceService
 
                             int error = result.getInt("error");
 
+                            //check unique constrain in set
+                            Set<YandexPrice> set = new HashSet<>();
+
                             if (error == 0) {
                                 JSONArray offers = result.getJSONArray("offers");
 
@@ -85,17 +90,19 @@ public class YandexPriceService
                                     yandexPrice.setPriceUsd(yandexPrice.getPrice().divide(usd.getValue(), RoundingMode.HALF_UP));
                                     yandexPrice.setPriceEur(yandexPrice.getPrice().divide(eur.getValue(), RoundingMode.HALF_UP));
 
-                                }
-
-                                //save only one price per color
-                                for (Product color : colors) {
-                                    for (YandexPrice yandexPrice : prices) {
-                                        if (yandexPrice.getColor().equalsIgnoreCase(color.getColor().getYandexColor())) {
+                                    for (Product color : colors) {
+                                        if (yandexPrice.getColor().equalsIgnoreCase(color.getColor().getYandexColor())
+                                                && !set.contains(yandexPrice)) {
                                             yandexPrice.setProduct(color);
-                                            save(yandexPrice);
+                                            set.add(yandexPrice);
                                             break;
                                         }
                                     }
+
+                                }
+
+                                for (YandexPrice yandexPrice : set) {
+                                    save(yandexPrice);
                                 }
                             }
                         }
