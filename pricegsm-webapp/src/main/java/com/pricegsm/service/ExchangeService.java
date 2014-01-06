@@ -64,10 +64,10 @@ public class ExchangeService
 
                     double usdRate = data.getJSONObject("USD_RUB").getDouble("value");
                     double eurRate = data.getJSONObject("EUR_RUB").getDouble("value");
-
+                    double uerUsdRate = data.getJSONObject("EUR_USD").getDouble("value");
                     save(new Exchange(usd, rub, date, new BigDecimal(usdRate)));
                     save(new Exchange(eur, rub, date, new BigDecimal(eurRate)));
-                    save(new Exchange(eur, usd, date, new BigDecimal(eurRate / usdRate)));
+                    save(new Exchange(eur, usd, date, new BigDecimal(uerUsdRate)));
                     logger.info("Exchanges have been saved successfully");
                 }
             }

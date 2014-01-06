@@ -6,13 +6,17 @@ import com.pricegsm.dao.ExchangeDao;
 import com.pricegsm.dao.ProductDao;
 import com.pricegsm.dao.YandexPriceDao;
 import com.pricegsm.domain.*;
+import com.pricegsm.util.ApplicationContextProvider;
 import com.pricegsm.util.Utils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
 
@@ -29,16 +33,13 @@ public class YandexPriceService
     @Autowired
     private ExchangeDao exchangeDao;
 
-    @Autowired
-    @Lazy
-    private ObjectMapper objectMapper;
-
     @Override
     protected YandexPriceDao getDao() {
         return dao;
     }
 
     @Scheduled(cron = "0 1,3,5 10,14,18 * * ?")
+    @Transactional
     public void readYandexData() throws IOException {
         List<Object[]> dates = getDao().findLast();
 
@@ -49,52 +50,68 @@ public class YandexPriceService
             Exchange eur = exchangeDao.getLast(Currency.EUR, Currency.RUB);
 
             for (Object[] pair : dates) {
-                Long productId = (Long) pair[0];
+                String yandexId = (String) pair[0];
                 Date date = (Date) pair[1];
-                Product product = productDao.load(productId);
-                List<Product> colors = productDao.findByYandexId(product.getYandexId());
+                List<Product> colors = productDao.findByYandexId(yandexId);
 
                 try {
 
                     if (date == null || date.before(yandexTime)) {
-                        String url = AppSettings.getParserUrl() + "/yandex?yandexId=" + product.getYandexId();
+                        String url = AppSettings.getParserUrl() + "/yandex?yandexId=" + yandexId;
 
                         for (Product color : colors) {
                             url += "&color=" + color.getColor().getYandexColor();
                         }
 
-                        YandexParserResult response = objectMapper.readValue(Utils.readFromUrl(url), YandexParserResult.class);
+                        logger.info("Fetch url: {}", url);
 
-                        if (response.getError() == 0) {
-                            for (YandexPrice yandexPrice : response.getOffers()) {
-                                yandexPrice.setDate(yandexTime);
+                        JSONObject response = Utils.readJsonFromUrl(url);
+                        JSONObject result = response.getJSONObject("result");
 
-                                yandexPrice.setPriceRub(yandexPrice.getPrice());
-                                yandexPrice.setPriceUsd(yandexPrice.getPrice().divide(usd.getValue()));
-                                yandexPrice.setPriceRub(yandexPrice.getPrice().divide(eur.getValue()));
+                        if (result != null) {
 
-                                for (Product color : colors) {
-                                    if (yandexPrice.getColor().equalsIgnoreCase(color.getColor().getYandexColor())) {
-                                        yandexPrice.setProduct(color);
-                                        break;
-                                    }
+                            int error = result.getInt("error");
+
+                            if (error == 0) {
+                                JSONArray offers = result.getJSONArray("offers");
+
+
+                                YandexPrice[] prices = getObjectMapper().readValue(offers.toString(), YandexPrice[].class);
+
+                                for (YandexPrice yandexPrice : prices) {
+                                    yandexPrice.setDate(yandexTime);
+
+                                    yandexPrice.setPriceRub(yandexPrice.getPrice());
+                                    yandexPrice.setPriceUsd(yandexPrice.getPrice().divide(usd.getValue(), RoundingMode.HALF_UP));
+                                    yandexPrice.setPriceEur(yandexPrice.getPrice().divide(eur.getValue(), RoundingMode.HALF_UP));
+
                                 }
 
-                                try {
-                                    save(yandexPrice);
-                                } catch (Exception e) {
-                                    logger.warn("Error save yandex data for product {}: {}", yandexPrice.getProduct().getId(), Throwables.getRootCause(e));
+                                //save only one price per color
+                                for (Product color : colors) {
+                                    for (YandexPrice yandexPrice : prices) {
+                                        if (yandexPrice.getColor().equalsIgnoreCase(color.getColor().getYandexColor())) {
+                                            yandexPrice.setProduct(color);
+                                            save(yandexPrice);
+                                            break;
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
 
                 } catch (Exception e) {
-                    logger.warn("Error parse yandex data for product {}: {}", product.getId(), Throwables.getRootCause(e));
+                    logger.warn("Error parse yandex data for product {}: {}", yandexId, Throwables.getRootCause(e));
+                    logger.warn(e.getMessage(), e);
                 }
             }
 
         }
 
+    }
+
+    private ObjectMapper getObjectMapper() {
+        return ApplicationContextProvider.getApplicationContext().getBean(ObjectMapper.class);
     }
 }

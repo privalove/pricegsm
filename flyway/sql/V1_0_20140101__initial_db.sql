@@ -264,7 +264,7 @@ CREATE TABLE "yandex_price" (
   "price_eur"   NUMERIC(10, 2),
   "price_usd"   NUMERIC(10, 2),
   "shop"        VARCHAR(255),
-  "link"        VARCHAR(255),
+  "link"        TEXT, -- unbelievable long urls from yandex
 
   "modified_by" BIGINT                   NOT NULL DEFAULT 0,
   "modified"    TIMESTAMP WITH TIME ZONE,

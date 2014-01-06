@@ -13,7 +13,7 @@
                     <xsl:value-of select="$position"/>
                 </position>
                 <price>
-                    <xsl:value-of select="replace(.//span[@class='b-prices__num']/text(), '\s' ,'')"/>
+                    <xsl:value-of select="replace(.//span[@class='b-prices__num']/text(), '[^0-9]' ,'')"/>
                 </price>
                 <xsl:variable name="fullName" select="lower-case(.//h3[@class='b-offers__title']/a/text())"/>
                 <name>

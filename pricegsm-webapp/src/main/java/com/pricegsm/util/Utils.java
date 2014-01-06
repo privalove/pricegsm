@@ -141,7 +141,7 @@ public final class Utils {
      * @return Closest yandex time from {@link #yandexTimes()}
      */
     public static Date yandexTime() {
-        final long time = today().getTime();
+        final long time = new Date().getTime();
         List<Date> dates = new ArrayList<>(yandexTimes());
         Collections.sort(dates, new Comparator<Date>() {
             @Override

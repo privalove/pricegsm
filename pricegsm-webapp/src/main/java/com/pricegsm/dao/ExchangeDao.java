@@ -15,6 +15,7 @@ public class ExchangeDao
                     .createQuery("select e from Exchange e where e.from.id = :from and e.to.id = :to order by e.date desc")
                     .setParameter("from", from)
                     .setParameter("to", to)
+                    .setMaxResults(1)
                     .getSingleResult();
         } catch (NoResultException e) {
             return null;

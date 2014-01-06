@@ -7,6 +7,7 @@ import com.pricegsm.jackson.GlobalEntitySerializer;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -115,6 +116,7 @@ public class YandexPrice
     /**
      * Shop name.
      */
+    @Size(max = 255)
     @Basic
     @Column(name = "shop")
     public String getShop() {
@@ -128,7 +130,7 @@ public class YandexPrice
     /**
      * Link to internet shop.
      */
-    @Basic
+    @Lob
     @Column(name = "link")
     public String getLink() {
         return link;
