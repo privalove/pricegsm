@@ -1,13 +1,202 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-    <head>
-        <title>Layout Page</title>
-        <link rel="stylesheet" media="screen" th:href="@{/resources/css/common/common.css}"/>
-        <link rel="stylesheet" media="screen" th:href="@{/resources/css/default/custom.css}"/>
-        <link rel="stylesheet" media="screen" th:href="@{/resources/component/bootstrap/dist/css/bootstrap.css}"/>
-    </head>
-    <body layout:fragment="body">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org"  ng-app="pricegsm">
+<!-- start: HEAD -->
+<head>
+    <title>Pricegsm :: Главная страница</title>
+    <!-- start: META -->
+    <meta charset="utf-8"/>
+    <!--[if IE]>
+    <meta http-equiv='X-UA-Compatible' content="IE=edge,chrome=1"/>
+    <![endif]-->
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta content="" name="description"/>
+    <meta content="" name="author"/>
+    <!-- end: META -->
+    <!-- start: MAIN CSS -->
+    <link rel="stylesheet" type="text/css" href="../../../resources/components/bootstrap/dist/css/bootstrap.min.css"
+          th:href="@{/resources/components/bootstrap/dist/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../../resources/components/font-awesome/css/font-awesome.min.css"
+          th:href="@{/resources/components/font-awesome/css/font-awesome.min.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../../resources/assets/common/fonts/style.css"
+          th:href="@{/resources/assets/common/fonts/style.css}"/>
 
-    </body>
+    <link rel="stylesheet" type="text/css" href="../../../resources/assets/common/css/main.css"
+          th:href="@{/resources/assets/common/css/main.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../../resources/assets/common/css/main-responsive.css"
+          th:href="@{/resources/assets/common/css/main-responsive.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../../resources/assets/common/css/common.css"
+          th:href="@{/resources/assets/common/css/common.css}"/>
+
+    <link rel="stylesheet" type="text/css" href="../../../resources/assets/default/css/theme.css"
+          th:href="@{/resources/assets/default/css/theme.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../../resources/assets/default/css/custom.css"
+          th:href="@{/resources/assets/default/css/custom.css}"/>
+
+    <link rel="stylesheet" type="text/css" href="../../../resources/assets/common/css/print.css"
+          th:href="@{/resources/assets/common/css/print.css}" media="print"/>
+
+    <link rel="shortcut icon" href="../../../favicon.ico" th:href="@{/favicon.ico}"/>
+</head>
+<!-- end: HEAD -->
+<!-- start: BODY -->
+<body ng-controller="AppCtrl">
+<!-- start: HEADER -->
+<nav class="navbar navbar-fixed-top" role="navigation">
+    <!-- start: TOP NAVIGATION CONTAINER -->
+    <div class="container">
+        <div class="navbar-header">
+            <!-- start: RESPONSIVE MENU TOGGLER -->
+            <button data-target="#main-menu" data-toggle="collapse" class="navbar-toggle" type="button">
+                <span class="clip-list-2"></span>
+            </button>
+            <!-- end: RESPONSIVE MENU TOGGLER -->
+            <!-- start: LOGO -->
+            <a class="navbar-brand" href="#" th:href="@{/}">
+                PRICE<i class="clip-clip"></i>GSM
+            </a>
+            <!-- end: LOGO -->
+        </div>
+        <div class="collapse navbar-collapse" id="main-menu">
+            <!-- start: TOP NAVIGATION MENU -->
+            <ul class="main-navigation-menu nav navbar-nav">
+                <!-- start: TO-DO DROPDOWN -->
+                <li>
+                    <a href="#/" class="dropdown-toggle">
+                        <i class="clip-home-3"></i>
+                        <span class="title" th:text="#{page.main}">Главная</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#/marketplace" class="dropdown-toggle">
+                        <i class="clip-globe"></i>
+                        <span class="title" th:text="#{page.marketplace}">Площадка</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#/order" class="dropdown-toggle">
+                        <i class="clip-download-3"></i>
+                        <span class="title" th:text="#{page.order}">Заказы</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#/sales" class="dropdown-toggle">
+                        <i class="clip-upload-3"></i>
+                        <span class="title" th:text="#{page.sales}">Продажи</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#/price_list" class="dropdown-toggle">
+                        <i class="clip-list-4"></i>
+                        <span class="title" th:text="#{page.priceList}">Прайс-Лист</span>
+
+                    </a>
+                </li>
+                <li>
+                    <a href="#/partner" class="dropdown-toggle">
+                        <i class="clip-users-3"></i>
+                        <span class="title" th:text="#{page.partner}">Контрагенты</span>
+
+                    </a>
+                </li>
+            </ul>
+            <!-- end: MESSAGE DROPDOWN -->
+            <!-- start: USER DROPDOWN -->
+            <ul class="main-navigation-menu nav navbar-nav navbar-right">
+                <li>
+                    <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" data-close-others="true"
+                       href="#">
+                        <i class="clip-user-3"></i>
+                        <span>Пользователь системы</span>
+                        <i class="clip-chevron-down"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="#/profile" th:text="#{page.profile}">
+                                Профиль
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#" th:href="@{/logout}">
+                                <i class="clip-exit"></i>
+                                <span th:text="#{page.logout}">Выход</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <!-- end: USER DROPDOWN -->
+            <!-- end: TOP NAVIGATION MENU -->
+        </div>
+    </div>
+    <!-- end: TOP NAVIGATION CONTAINER -->
+</nav>
+<!-- end: HEADER -->
+<!-- start: MAIN CONTAINER -->
+<div class="main-container">
+    <!-- start: PAGE -->
+    <div class="main-content">
+        <div class="container ng-view">
+
+        </div>
+    </div>
+    <!-- end: PAGE -->
+</div>
+<!-- end: MAIN CONTAINER -->
+<!-- start: FOOTER -->
+<div class="footer clearfix">
+    <div class="footer-inner">
+        2014 &copy; pricegsm.com
+    </div>
+    <div class="footer-items">
+        <span class="go-top"><i class="clip-chevron-up"></i></span>
+    </div>
+</div>
+<!-- end: FOOTER -->
+<script>
+    R = {
+        base : "/pricegsm"
+    }
+</script>
+<script src="../../../resources/components/jquery/jquery.min.js"
+        th:src="@{/resources/components/jquery/jquery.min.js}"></script>
+<script src="../../../resources/components/jquery-ui/ui/minified/jquery-ui.min.js"
+        th:src="@{/resources/components/jquery-ui/ui/minified/jquery-ui.min.js}"></script>
+<script src="../../../resources/components/bootstrap/dist/js/bootstrap.min.js"
+        th:src="@{/resources/components/bootstrap/dist/js/bootstrap.min.js}"></script>
+<script src="../../../resources/components/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js"
+        th:src="@{/resources/components/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js}"></script>
+<script src="../../../resources/components/flot/jquery.flot.min.js"
+        th:src="@{/resources/components/flot/jquery.flot.min.js}"></script>
+<script src="../../../resources/components/flot/jquery.flot.pie.min.js"
+        th:src="@{/resources/components/flot/jquery.flot.pie.min.js}"></script>
+<script src="../../../resources/components/flot/jquery.flot.resize.min.js"
+        th:src="@{/resources/components/flot/jquery.flot.resize.min.js}"></script>
+<script src="../../../resources/components/flot/jquery.flot.stack.min.js"
+        th:src="@{/resources/components/flot/jquery.flot.stack.min.js}"></script>
+<script src="../../../resources/components/flot/jquery.flot.time.min.js"
+        th:src="@{/resources/components/flot/jquery.flot.time.min.js}"></script>
+
+<script src="../../../resources/components/angular/angular.min.js"
+        th:src="@{/resources/components/angular/angular.min.js}"></script>
+<script src="../../../resources/components/angular-cookies/angular-cookies.min.js"
+        th:src="@{/resources/components/angular-cookies/angular-cookies.min.js}"></script>
+<script src="../../../resources/components/angular-loader/angular-loader.min.js"
+        th:src="@{/resources/components/angular-loader/angular-loader.min.js}"></script>
+<script src="../../../resources/components/angular-resource/angular-resource.min.js"
+        th:src="@{/resources/components/angular-resource/angular-resource.min.js}"></script>
+<script src="../../../resources/components/angular-route/angular-route.min.js"
+        th:src="@{/resources/components/angular-route/angular-route.min.js}"></script>
+
+<!-- angular files -->
+<script src="../../../resources/js/services.js" th:src="@{/resources/js/services.js}"></script>
+<script src="../../../resources/js/directives.js" th:src="@{/resources/js/directives.js}"></script>
+<script src="../../../resources/js/controllers.js" th:src="@{/resources/js/controllers.js}"></script>
+<script src="../../../resources/js/app.js" th:src="@{/resources/js/app.js}"></script>
+
+</body>
+<!-- end: BODY -->
 </html>
