@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('pricegsm', ['ngRoute'])
+    angular.module('pricegsm', ['ngRoute', 'ngGrid', 'ui.bootstrap', "pg.services"])
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider
                 .when('/', {templateUrl: R.base + '/index', controller: IndexCtrl, resolve: IndexCtrl.resolve})

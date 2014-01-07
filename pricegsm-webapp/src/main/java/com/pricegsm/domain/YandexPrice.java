@@ -132,7 +132,7 @@ public class YandexPrice
     /**
      * Link to internet shop.
      */
-    @Lob
+    @Basic
     @Column(name = "link")
     public String getLink() {
         return link;

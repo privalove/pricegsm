@@ -121,4 +121,16 @@ public class YandexPriceService
     private ObjectMapper getObjectMapper() {
         return ApplicationContextProvider.getApplicationContext().getBean(ObjectMapper.class);
     }
+
+    public Date findLastDate(long productId) {
+        return getDao().findLastDate(productId);
+    }
+
+    public YandexPrice findLastMinPrice(long productId) {
+        return postLoad(getDao().findLastMinPrice(productId));
+    }
+
+    public YandexPrice findByDateMinPrice(long productId, Date date) {
+        return postLoad(getDao().findByDateMinPrice(productId, date));
+    }
 }

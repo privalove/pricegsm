@@ -15,4 +15,10 @@ public class ProductDao
                 .setParameter("yandexId", yandexId)
                 .getResultList();
     }
+
+    public List<Product> findActiveOrderByVendorAndName() {
+        return getEntityManager()
+                .createQuery("select p from Product p inner join p.vendor v inner join p.color c where p.active = true order by  v.name, p.name, c.name")
+                .getResultList();
+    }
 }

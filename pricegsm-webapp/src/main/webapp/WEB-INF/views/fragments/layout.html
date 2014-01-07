@@ -22,6 +22,8 @@
           th:href="@{/resources/components/font-awesome/css/font-awesome.min.css}"/>
     <link rel="stylesheet" type="text/css" href="../../../resources/assets/common/fonts/style.css"
           th:href="@{/resources/assets/common/fonts/style.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../../resources/components/angular-grid/ng-grid.min.css"
+          th:href="@{/resources/components/angular-grid/ng-grid.min.css}"/>
 
     <link rel="stylesheet" type="text/css" href="../../../resources/assets/common/css/main.css"
           th:href="@{/resources/assets/common/css/main.css}"/>
@@ -64,38 +66,38 @@
             <ul class="main-navigation-menu nav navbar-nav">
                 <!-- start: TO-DO DROPDOWN -->
                 <li>
-                    <a href="#/" class="dropdown-toggle">
+                    <a href="#/">
                         <i class="clip-home-3"></i>
                         <span class="title" th:text="#{page.main}">Главная</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#/marketplace" class="dropdown-toggle">
+                    <a href="#/marketplace">
                         <i class="clip-globe"></i>
                         <span class="title" th:text="#{page.marketplace}">Площадка</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#/order" class="dropdown-toggle">
+                    <a href="#/order">
                         <i class="clip-download-3"></i>
                         <span class="title" th:text="#{page.order}">Заказы</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#/sales" class="dropdown-toggle">
+                    <a href="#/sales">
                         <i class="clip-upload-3"></i>
                         <span class="title" th:text="#{page.sales}">Продажи</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#/price_list" class="dropdown-toggle">
+                    <a href="#/price_list">
                         <i class="clip-list-4"></i>
                         <span class="title" th:text="#{page.priceList}">Прайс-Лист</span>
 
                     </a>
                 </li>
                 <li>
-                    <a href="#/partner" class="dropdown-toggle">
+                    <a href="#/partner">
                         <i class="clip-users-3"></i>
                         <span class="title" th:text="#{page.partner}">Контрагенты</span>
 
@@ -190,6 +192,12 @@
         th:src="@{/resources/components/angular-resource/angular-resource.min.js}"></script>
 <script src="../../../resources/components/angular-route/angular-route.min.js"
         th:src="@{/resources/components/angular-route/angular-route.min.js}"></script>
+<script src="../../../resources/components/angular-bootstrap/ui-bootstrap-tpls.min.js"
+        th:src="@{/resources/components/angular-bootstrap/ui-bootstrap-tpls.min.js}"></script>
+<script src="../../../resources/components/angular-grid/build/ng-grid.min.js"
+        th:src="@{/resources/components/angular-grid/build/ng-grid.min.js}"></script>
+<script src="../../../resources/components/angular-grid/plugins/ng-grid-flexible-height.js"
+        th:src="@{/resources/components/angular-grid/plugins/ng-grid-flexible-height.js}"></script>
 
 <!-- angular files -->
 <script src="../../../resources/js/services.js" th:src="@{/resources/js/services.js}"></script>
