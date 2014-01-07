@@ -133,4 +133,8 @@ public class YandexPriceService
     public YandexPrice findByDateMinPrice(long productId, Date date) {
         return postLoad(getDao().findByDateMinPrice(productId, date));
     }
+
+    public List<YandexPrice> findByDateForProducts(Date date, List<Product> products) {
+        return postLoad(getDao().findByDateForProducts(date, products));
+    }
 }

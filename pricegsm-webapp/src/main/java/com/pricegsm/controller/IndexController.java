@@ -67,9 +67,14 @@ public class IndexController {
                 .payload("chartRange", chartRange)
 
                 .payload("prices", fetchPrices(dynRange, currency))
-                .payload("yandexPrices", fetchYandexPrices(selected, shopDate))
+                .payload("colors", fetchColors(selected))
+                .payload("yandexPrices", fetchYandexPrices(selected, shopDate, currency))
                 .payload("chart", fetchChart(selected, chartData, chartRange))
                 .payload("product", selected);
+    }
+
+    private List<String> fetchColors(Product selected) {
+        return productService.findColors(selected.getYandexId());
     }
 
     private Map<String, Object> fetchChart(Product selected, String chartData, int chartRange) {
@@ -78,12 +83,55 @@ public class IndexController {
         return result;
     }
 
-    private List<Map<String, Object>> fetchYandexPrices(Product selected, Date shopDate) {
+    /**
+     * [{
+     * shop: "Price-Killers",
+     * link: "http://price-killers.ru/iphone-5s-16gb",
+     * Gold: 768,
+     * Space Gray: 771,
+     * Silver: 731
+     * }]
+     */
+    private List<Map<String, Object>> fetchYandexPrices(Product selected, Date shopDate, int currency) {
         List<Map<String, Object>> result = new ArrayList<>();
+
+        List<Product> products = productService.findByYandexId(selected.getYandexId());
+
+        List<YandexPrice> prices = yandexPriceService.findByDateForProducts(DateUtils.addDays(shopDate, 1), products);
+
+        Map<String, Map<String, Object>> unique = new HashMap<>();
+
+        for (YandexPrice price : prices) {
+            Map<String, Object> map = unique.get(price.getShop());
+            if (map == null) {
+                map = new HashMap<>();
+                map.put("shop", price.getShop());
+                map.put("link", price.getLink());
+                result.add(map);
+                unique.put(price.getShop(), map);
+            }
+
+            String name = price.getProduct().getColor().getName();
+            map.put(name, getPrice(price, currency));
+        }
 
         return result;
     }
 
+    /**
+     * [{
+     * id: 14,
+     * product: "iPhone 5C 16Gb",
+     * color: "Yellow",
+     * vendor: "Apple IPhone",
+     * retail: 593,
+     * retailDelta: -5,
+     * opt: 550,
+     * optDelta: -7,
+     * world: 500,
+     * worldDelta: -20
+     * }]
+     */
     private List<ProductPriceForm> fetchPrices(int dynRange, int currency) {
         List<ProductPriceForm> result = new ArrayList<>();
 

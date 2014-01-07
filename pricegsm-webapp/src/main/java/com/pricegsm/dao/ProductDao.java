@@ -11,7 +11,7 @@ public class ProductDao
 
     public List<Product> findByYandexId(String yandexId) {
         return getEntityManager()
-                .createQuery("select p from Product p where p.yandexId = :yandexId")
+                .createQuery("select p from Product p where p.active = true and p.yandexId = :yandexId")
                 .setParameter("yandexId", yandexId)
                 .getResultList();
     }
@@ -19,6 +19,13 @@ public class ProductDao
     public List<Product> findActiveOrderByVendorAndName() {
         return getEntityManager()
                 .createQuery("select p from Product p inner join p.vendor v inner join p.color c where p.active = true order by  v.name, p.name, c.name")
+                .getResultList();
+    }
+
+    public List<String> findColors(String yandexId) {
+        return getEntityManager()
+                .createQuery("select distinct c.name from Product p inner join p.color c where p.yandexId = :yandexId order by c.name")
+                .setParameter("yandexId", yandexId)
                 .getResultList();
     }
 }

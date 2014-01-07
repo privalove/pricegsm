@@ -22,4 +22,12 @@ public class ProductService
     public List<Product> findActiveOrderByVendorAndName() {
         return postLoad(getDao().findActiveOrderByVendorAndName());
     }
+
+    public List<Product> findByYandexId(String yandexId) {
+        return postLoad(getDao().findByYandexId(yandexId));
+    }
+
+    public List<String> findColors(String yandexId) {
+        return getDao().findColors(yandexId);
+    }
 }

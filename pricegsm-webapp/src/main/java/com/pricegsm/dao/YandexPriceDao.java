@@ -1,5 +1,6 @@
 package com.pricegsm.dao;
 
+import com.pricegsm.domain.Product;
 import com.pricegsm.domain.YandexPrice;
 import org.springframework.stereotype.Repository;
 
@@ -51,5 +52,13 @@ public class YandexPriceDao
         } catch (NoResultException e) {
             return null;
         }
+    }
+
+    public List<YandexPrice> findByDateForProducts(Date date, List<Product> products) {
+        return getEntityManager()
+                .createQuery("select y from YandexPrice y where y.product in :products and y.date = (select max(date) from YandexPrice where date <= :date) order by y.position, y.shop")
+                .setParameter("date", date)
+                .setParameter("products", products)
+                .getResultList();
     }
 }

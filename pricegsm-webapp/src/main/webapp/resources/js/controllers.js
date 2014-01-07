@@ -12,14 +12,25 @@ function IndexCtrl($scope, indexResource) {
             multiSelect: false,
             plugins: [new ngGridFlexibleHeightPlugin()],
             columnDefs:[
-                {field:'vendor', displayName:'Производитель'},
+                {field:'vendor', displayName:'', width:0},
                 {field:'product', displayName:'Наименование'},
                 {field:'color', displayName:'Цвет'},
                 {field:'retail', displayName:'Розница'},
                 {field:'opt', displayName:'Опт'},
                 {field:'world', displayName:'Мир'}
             ]
-        }
+        };
+
+        var shopColumnDefs = [{field:'shop', displayName:'Магазин'}];
+        angular.forEach($scope.colors, function(value){
+            shopColumnDefs.push({field:value});
+        });
+
+        $scope.gridShopOptions = {
+            data: $scope.yandexPrices,
+            plugins: [new ngGridFlexibleHeightPlugin({minHeight:200})],
+            columnDefs: shopColumnDefs
+        };
 
     }
 }
