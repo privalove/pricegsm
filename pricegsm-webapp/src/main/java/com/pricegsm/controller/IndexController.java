@@ -7,6 +7,7 @@ import com.pricegsm.domain.YandexPrice;
 import com.pricegsm.service.ProductService;
 import com.pricegsm.service.WorldPriceService;
 import com.pricegsm.service.YandexPriceService;
+import com.pricegsm.util.Utils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -69,7 +70,26 @@ public class IndexController {
                 .payload("prices", fetchPrices(dynRange, currency))
                 .payload("colors", fetchColors(selected))
                 .payload("yandexPrices", fetchYandexPrices(selected, shopDate, currency))
-                .payload("chart", fetchChart(selected, chartData, chartRange))
+                .payload("chart", fetchChart(selected, currency, chartData, chartRange))
+                .payload("product", selected);
+    }
+
+    @RequestMapping(value = "/index/chart.json", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public OperationResult chart(
+            @RequestParam(value = "product", defaultValue = "1") long productId,
+            @RequestParam(defaultValue = "1") int currency,
+            @RequestParam(defaultValue = "retail") String chartData,
+            @RequestParam(defaultValue = "7") int chartRange) {
+
+        Product selected = productService.load(productId);
+
+        return OperationResult.ok()
+                .payload("currency", Math.min(currency, Currency.RUB))
+                .payload("chartData", chartData)
+                .payload("chartRange", chartRange)
+
+                .payload("chart", fetchChart(selected, currency, chartData, chartRange))
                 .payload("product", selected);
     }
 
@@ -77,8 +97,25 @@ public class IndexController {
         return productService.findColors(selected.getYandexId());
     }
 
-    private Map<String, Object> fetchChart(Product selected, String chartData, int chartRange) {
+    private Map<String, Object> fetchChart(Product selected, int currency, String chartData, int chartRange) {
         Map<String, Object> result = new HashMap<>();
+
+        Date to = DateUtils.addDays(Utils.today(), 1);
+        Date from =  DateUtils.addDays(to, -chartRange);
+
+        List<Product> products = productService.findByYandexId(selected.getYandexId());
+
+        Map<String, Object> data = new HashMap<>();
+
+        for (Product product : products) {
+            switch (chartData) {
+                default: data.put(product.getColor().getName(), yandexPriceService.getChartData(product.getId(), currency, from, to));
+            }
+        }
+
+        result.put("data", data);
+        result.put("from", from);
+        result.put("to", to);
 
         return result;
     }

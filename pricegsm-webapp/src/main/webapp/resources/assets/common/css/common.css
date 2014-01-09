@@ -9,3 +9,8 @@
 li.dropdown.current-user .dropdown-toggle {
     padding: 15px 15px 9px;
 }
+
+.pg-chart-container {
+    width: 100%;
+    height: 300px;
+}

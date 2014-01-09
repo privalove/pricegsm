@@ -2,44 +2,125 @@ function AppCtrl() {
 
 }
 
-function IndexCtrl($scope, indexResource) {
+function IndexCtrl($scope, $cookies, indexResource, IndexResource, IndexChartResource) {
+    $scope.fillCookies = function (payload) {
+        if (payload.product) {
+            $cookies.product = payload.product.id + "";
+        }
+        if (payload.chartData) {
+            $cookies.chartData = payload.chartData;
+        }
+        if (payload.chartRange) {
+            $cookies.chartRange = payload.chartRange + "";
+        }
+        if (payload.currency) {
+            $cookies.currency = payload.currency + "";
+        }
+        if (payload.dynRange) {
+            $cookies.dynRange = payload.dynRange + "";
+        }
+    };
+
+    $scope.getIndexChartResource = function (data) {
+        return IndexChartResource.get(angular.extend({
+            product: $cookies.product,
+            chartData: $cookies.chartData,
+            chartRange: $cookies.chartRange,
+            currency: $cookies.currency
+        }, data)).$promise;
+    };
+
     if (indexResource.ok) {
         angular.extend($scope, indexResource.payload);
+
+        $scope.fillCookies(indexResource.payload);
 
         $scope.gridPriceOptions = {
             data: $scope.prices,
             groups: ['vendor'],
             multiSelect: false,
             plugins: [new ngGridFlexibleHeightPlugin()],
-            columnDefs:[
-                {field:'vendor', displayName:'', width:0},
-                {field:'product', displayName:'Наименование'},
-                {field:'color', displayName:'Цвет'},
-                {field:'retail', displayName:'Розница'},
-                {field:'opt', displayName:'Опт'},
-                {field:'world', displayName:'Мир'}
+            columnDefs: [
+                {field: 'vendor', displayName: '', width: 0},
+                {field: 'product', displayName: 'Наименование'},
+                {field: 'color', displayName: 'Цвет'},
+                {field: 'retail', displayName: 'Розница'},
+                {field: 'opt', displayName: 'Опт'},
+                {field: 'world', displayName: 'Мир'}
             ]
         };
 
-        var shopColumnDefs = [{field:'shop', displayName:'Магазин'}];
-        angular.forEach($scope.colors, function(value){
-            shopColumnDefs.push({field:value});
+        var shopColumnDefs = [
+            {field: 'shop', displayName: 'Магазин'}
+        ];
+        angular.forEach($scope.colors, function (value) {
+            shopColumnDefs.push({field: value});
         });
 
         $scope.gridShopOptions = {
             data: $scope.yandexPrices,
-            plugins: [new ngGridFlexibleHeightPlugin({minHeight:200})],
+            plugins: [new ngGridFlexibleHeightPlugin({minHeight: 200})],
             columnDefs: shopColumnDefs
         };
+
+        $scope.chartDatas = [];
+        angular.forEach($scope.chart.data, function (data, color) {
+            $scope.chartDatas.push({
+                data: data,
+                label: color
+            })
+        });
+
+        $scope.chartDetails = {
+            legend: {show: true},
+            xaxis: {show: true, mode: "time", min: $scope.chart.from, max: $scope.chart.to}
+        };
+
+        $scope.$watch("chartRange", function (newValue, oldValue) {
+            if (newValue != oldValue) {
+                $scope.getIndexChartResource({chartRange: newValue}).then(function (indexChartResource) {
+                    if (indexChartResource.ok) {
+                        angular.extend($scope, indexChartResource.payload);
+
+                        $scope.fillCookies(indexChartResource.payload);
+
+                        var chartDatas = [];
+                        angular.forEach($scope.chart.data, function (data, color) {
+                            chartDatas.push({
+                                data: data,
+                                label: color
+                            })
+                        });
+                        $scope.chartDatas = chartDatas;
+
+                        $scope.chartDetails = {
+                            legend: {show: true},
+                            xaxis: {show: true, mode: "time", min: $scope.chart.from, max: $scope.chart.to}
+                        };
+                    }
+                });
+            }
+
+        });
 
     }
 }
 
 IndexCtrl.resolve = {
-    indexResource: function (IndexResource) {
-        return IndexResource.get().$promise;
+    indexResource: function (IndexResource, $cookies) {
+        return getIndexResource(IndexResource, $cookies, {});
     }
 };
+
+function getIndexResource(IndexResource, $cookies, data) {
+    return IndexResource.get(angular.extend({
+        product: $cookies.product,
+        chartData: $cookies.chartData,
+        chartRange: $cookies.chartRange,
+        currency: $cookies.currency,
+        dynRange: $cookies.dynRange
+    }, data)).$promise;
+}
 
 function MarketplaceCtrl($scope) {
 

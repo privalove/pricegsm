@@ -1,5 +1,6 @@
 package com.pricegsm.dao;
 
+import com.pricegsm.domain.Currency;
 import com.pricegsm.domain.Product;
 import com.pricegsm.domain.YandexPrice;
 import org.springframework.stereotype.Repository;
@@ -59,6 +60,29 @@ public class YandexPriceDao
                 .createQuery("select y from YandexPrice y where y.product in :products and y.date = (select max(date) from YandexPrice where date <= :date) order by y.position, y.shop")
                 .setParameter("date", date)
                 .setParameter("products", products)
+                .getResultList();
+    }
+
+    public List<Object[]> getChartData(long productId, int currency, Date from, Date to) {
+
+        String price;
+
+        switch (currency) {
+            case (int) Currency.EUR:
+                price = "priceEur";
+                break;
+            case (int) Currency.USD:
+                price = "priceUsd";
+                break;
+            default:
+                price = "priceRub";
+        }
+
+        return getEntityManager()
+                .createQuery("select y.date, min(y." + price + ") from YandexPrice y where y.product.id =:productId and y.date >= :from and y.date <= :to group by y.date order by y.date")
+                .setParameter("productId", productId)
+                .setParameter("from", from)
+                .setParameter("to", to)
                 .getResultList();
     }
 }

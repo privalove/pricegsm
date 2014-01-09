@@ -137,4 +137,8 @@ public class YandexPriceService
     public List<YandexPrice> findByDateForProducts(Date date, List<Product> products) {
         return postLoad(getDao().findByDateForProducts(date, products));
     }
+
+    public List<Object[]> getChartData(long productId, int currency, Date from, Date to) {
+        return getDao().getChartData(productId, currency, from, to);
+    }
 }

@@ -187,13 +187,13 @@ INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (7, 'iPhon
 INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (8, 'iPhone 5S 64Gb', '10495487', 1, 4);
 INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (9, 'iPhone 5S 64Gb', '10495487', 1, 5);
 
-INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (10, 'iPhone 5C 16Gb', '10495457', 1, 1);
+INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (10, 'iPhone 5C 16Gb', '10495457', 1, 2);
 INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (11, 'iPhone 5C 16Gb', '10495457', 1, 6);
 INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (12, 'iPhone 5C 16Gb', '10495457', 1, 7);
 INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (13, 'iPhone 5C 16Gb', '10495457', 1, 8);
 INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (14, 'iPhone 5C 16Gb', '10495457', 1, 9);
 
-INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (15, 'iPhone 5C 32Gb', '10495515', 1, 1);
+INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (15, 'iPhone 5C 32Gb', '10495515', 1, 2);
 INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (16, 'iPhone 5C 32Gb', '10495515', 1, 6);
 INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (17, 'iPhone 5C 32Gb', '10495515', 1, 7);
 INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (18, 'iPhone 5C 32Gb', '10495515', 1, 8);

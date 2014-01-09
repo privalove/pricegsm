@@ -2,7 +2,8 @@
     'use strict';
 
     var RESOURCES = {
-        "IndexResource" : "/index.json"
+        "IndexResource" : "/index.json",
+        "IndexChartResource" : "/index/chart.json"
     };
 
         angular.module('pg.services', ['ngResource'])
