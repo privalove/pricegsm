@@ -21,6 +21,21 @@ function IndexCtrl($scope, $cookies, indexResource, IndexResource, IndexChartRes
         }
     };
 
+    $scope.fillChart = function () {
+        $scope.chartDatas = [];
+        angular.forEach($scope.chart.data, function (data, color) {
+            $scope.chartDatas.push({
+                data: data,
+                label: color
+            })
+        });
+
+        $scope.chartDetails = {
+            legend: {show: true},
+            xaxis: {show: true, mode: "time", min: $scope.chart.from, max: $scope.chart.to}
+        };
+    };
+
     $scope.getIndexChartResource = function (data) {
         return IndexChartResource.get(angular.extend({
             product: $cookies.product,
@@ -34,9 +49,10 @@ function IndexCtrl($scope, $cookies, indexResource, IndexResource, IndexChartRes
         angular.extend($scope, indexResource.payload);
 
         $scope.fillCookies(indexResource.payload);
+        $scope.fillChart();
 
         $scope.gridPriceOptions = {
-            data: $scope.prices,
+            data: 'prices',
             groups: ['vendor'],
             multiSelect: false,
             plugins: [new ngGridFlexibleHeightPlugin()],
@@ -58,49 +74,36 @@ function IndexCtrl($scope, $cookies, indexResource, IndexResource, IndexChartRes
         });
 
         $scope.gridShopOptions = {
-            data: $scope.yandexPrices,
+            data: 'yandexPrices',
             plugins: [new ngGridFlexibleHeightPlugin({minHeight: 200})],
             columnDefs: shopColumnDefs
-        };
-
-        $scope.chartDatas = [];
-        angular.forEach($scope.chart.data, function (data, color) {
-            $scope.chartDatas.push({
-                data: data,
-                label: color
-            })
-        });
-
-        $scope.chartDetails = {
-            legend: {show: true},
-            xaxis: {show: true, mode: "time", min: $scope.chart.from, max: $scope.chart.to}
         };
 
         $scope.$watch("chartRange", function (newValue, oldValue) {
             if (newValue != oldValue) {
                 $scope.getIndexChartResource({chartRange: newValue}).then(function (indexChartResource) {
                     if (indexChartResource.ok) {
-                        angular.extend($scope, indexChartResource.payload);
+                            angular.extend($scope, indexChartResource.payload);
 
-                        $scope.fillCookies(indexChartResource.payload);
-
-                        var chartDatas = [];
-                        angular.forEach($scope.chart.data, function (data, color) {
-                            chartDatas.push({
-                                data: data,
-                                label: color
-                            })
-                        });
-                        $scope.chartDatas = chartDatas;
-
-                        $scope.chartDetails = {
-                            legend: {show: true},
-                            xaxis: {show: true, mode: "time", min: $scope.chart.from, max: $scope.chart.to}
-                        };
+                            $scope.fillCookies(indexChartResource.payload);
+                            $scope.fillChart();
                     }
                 });
             }
 
+        });
+
+        $scope.$watch("currency", function (newValue, oldValue) {
+            if (newValue != oldValue) {
+                getIndexResource(IndexResource, $cookies, {currency: newValue}).then(function (indexResource) {
+                    if (indexResource.ok) {
+                            angular.extend($scope, indexResource.payload);
+
+                            $scope.fillCookies(indexResource.payload);
+                            $scope.fillChart();
+                    }
+                });
+            }
         });
 
     }
