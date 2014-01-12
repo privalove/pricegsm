@@ -1,7 +1,8 @@
 (function () {
     'use strict';
 
-    angular.module('pricegsm', ['ngRoute', 'ngCookies', 'ngGrid', 'ui.bootstrap', 'pg.services', 'pg.directives'])
+    angular.module('pricegsm', ['ngRoute', 'ngCookies', 'ngAnimate', 'ngGrid', 'ui.bootstrap', 'angular-loading-bar',
+            'pg.services', 'pg.directives'])
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider
                 .when('/', {templateUrl: R.base + '/index', controller: IndexCtrl, resolve: IndexCtrl.resolve})

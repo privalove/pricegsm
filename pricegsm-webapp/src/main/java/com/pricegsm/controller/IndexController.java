@@ -57,7 +57,9 @@ public class IndexController {
         if (shopDate == null) {
             shopDate = yandexPriceService.findLastDate(productId);
         }
-
+        if (shopDate == null) {
+            shopDate = new Date();
+        }
 
         return OperationResult.ok()
                 .payload("currency", Math.min(currency, Currency.RUB))
@@ -123,6 +125,9 @@ public class IndexController {
 
         if (shopDate == null) {
             shopDate = yandexPriceService.findLastDate(productId);
+        }
+        if (shopDate == null) {
+            shopDate = new Date();
         }
 
         return OperationResult.ok()

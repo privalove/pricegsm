@@ -83,6 +83,30 @@ function IndexCtrl($scope, $timeout, $cookies, $filter, indexResource, IndexReso
         }, 300);
     };
 
+    $scope.updateIndexPage = function(currency) {
+        if ($scope.indexTimeout) {
+            $timeout.cancel($scope.indexTimeout);
+        }
+
+        $scope.currencyDisabled = true;
+
+        $scope.indexTimeout = $timeout(function () {
+
+            getIndexResource(IndexResource, $cookies, {currency: currency}).then(function (indexResource) {
+                if (indexResource.ok) {
+                    angular.extend($scope, indexResource.payload);
+
+                    $scope.fillCookies(indexResource.payload);
+                    $scope.fillChart();
+                }
+
+                $scope.currencyDisabled = false;
+            });
+
+        }, 300);
+    };
+
+
     $scope.fillCookies = function (payload) {
         if (payload.product) {
             $cookies.product = payload.product.id + "";
@@ -130,7 +154,7 @@ function IndexCtrl($scope, $timeout, $cookies, $filter, indexResource, IndexReso
         $scope.dateMax = new Date();
 
         var shopColumnDefs = [
-            {field: 'shop', displayName: 'Магазин', cellTemplate: 'resources/template/shopNameCellTemplate.html', width:'25%'}
+            {field: 'shop', displayName: 'Магазин', cellTemplate: 'resources/template/shopNameCellTemplate.html', width: '25%'}
         ];
         angular.forEach($scope.colors, function (value) {
             shopColumnDefs.push({field: 'id' + value.id, displayName: value.name});
@@ -160,11 +184,11 @@ function IndexCtrl($scope, $timeout, $cookies, $filter, indexResource, IndexReso
         groupsCollapsedByDefault: false,
         columnDefs: [
             {field: 'vendor', displayName: '', width: 0},
-            {field: 'product', displayName: 'Наименование', width:"25%"},
+            {field: 'product', displayName: 'Наименование', width: "25%"},
             {field: 'color', displayName: 'Цвет'},
-            {field: 'retail', displayName: 'Розница', cellTemplate:"resources/template/priceCellTemplate.html"},
-            {field: 'opt', displayName: 'Опт', cellTemplate:"resources/template/priceCellTemplate.html"},
-            {field: 'world', displayName: 'Мир', cellTemplate:"resources/template/priceCellTemplate.html"}
+            {field: 'retail', displayName: 'Розница', cellTemplate: "resources/template/priceCellTemplate.html"},
+            {field: 'opt', displayName: 'Опт', cellTemplate: "resources/template/priceCellTemplate.html"},
+            {field: 'world', displayName: 'Мир', cellTemplate: "resources/template/priceCellTemplate.html"}
         ]
     };
 
@@ -193,14 +217,7 @@ function IndexCtrl($scope, $timeout, $cookies, $filter, indexResource, IndexReso
 
         $scope.$watch("currency", function (newValue, oldValue) {
             if (newValue != oldValue) {
-                getIndexResource(IndexResource, $cookies, {currency: newValue}).then(function (indexResource) {
-                    if (indexResource.ok) {
-                            angular.extend($scope, indexResource.payload);
-
-                            $scope.fillCookies(indexResource.payload);
-                            $scope.fillChart();
-                    }
-                });
+                $scope.updateIndexPage(newValue);
             }
         });
 
