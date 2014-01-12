@@ -227,6 +227,7 @@ function IndexCtrl($scope, $timeout, $cookies, $filter, indexResource, IndexReso
 
 IndexCtrl.resolve = {
     indexResource: function (IndexResource, $cookies) {
+        //reset shop date to today on enter index page
         return getIndexResource(IndexResource, $cookies, {shopDate: null});
     }
 };
