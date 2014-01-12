@@ -175,7 +175,6 @@ function IndexCtrl($scope, $timeout, $cookies, $filter, indexResource, IndexReso
         columnDefs: 'shopPricesColumns'
     };
 
-
     //on index resource load
     if (indexResource.ok) {
         angular.extend($scope, indexResource.payload);
@@ -228,7 +227,7 @@ function IndexCtrl($scope, $timeout, $cookies, $filter, indexResource, IndexReso
 
 IndexCtrl.resolve = {
     indexResource: function (IndexResource, $cookies) {
-        return getIndexResource(IndexResource, $cookies, {});
+        return getIndexResource(IndexResource, $cookies, {shopDate: null});
     }
 };
 
