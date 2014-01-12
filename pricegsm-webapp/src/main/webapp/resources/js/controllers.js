@@ -2,7 +2,87 @@ function AppCtrl() {
 
 }
 
-function IndexCtrl($scope, $cookies, indexResource, IndexResource, IndexChartResource) {
+function IndexCtrl($scope, $timeout, $cookies, $filter, indexResource, IndexResource, IndexChartResource, IndexPriceResource, IndexShopResource) {
+
+    $scope.getIndexChartResource = function (data) {
+        return IndexChartResource.get(angular.extend({
+            product: $cookies.product,
+            chartData: $cookies.chartData,
+            chartRange: $cookies.chartRange,
+            currency: $cookies.currency
+        }, data)).$promise;
+    };
+
+    $scope.getIndexPriceResource = function (data) {
+        return IndexPriceResource.get(angular.extend({
+            product: $cookies.product,
+            dynRange: $cookies.dynRange,
+            currency: $cookies.currency
+        }, data)).$promise;
+    };
+
+    $scope.getIndexShopResource = function (data) {
+        return IndexShopResource.get(angular.extend({
+            product: $cookies.product,
+            shopDate: $cookies.shopDate,
+            currency: $cookies.currency
+        }, data)).$promise;
+    };
+
+
+    $scope.updateChart = function (chartRange, product) {
+
+        if ($scope.chartTimeout) {
+            clearTimeout($scope.chartTimeout);
+        }
+
+        $scope.chartTimeout = setTimeout(function () {
+            $scope.getIndexChartResource({chartRange: chartRange || $cookies.chartRange, product: product || $cookies.product}).then(function (indexChartResource) {
+                if (indexChartResource.ok) {
+                    angular.extend($scope, indexChartResource.payload);
+
+                    $scope.fillCookies(indexChartResource.payload);
+                    $scope.fillChart();
+                }
+            });
+
+        }, 300);
+    };
+
+    $scope.updatePrices = function (dynRange) {
+
+        if ($scope.priceTimeout) {
+            clearTimeout($scope.priceTimeout);
+        }
+        $scope.priceTimeout = setTimeout(function () {
+            $scope.getIndexPriceResource({dynRange: dynRange || $cookies.dynRange}).then(function (indexPriceResource) {
+                if (indexPriceResource.ok) {
+                    angular.extend($scope, indexPriceResource.payload);
+                    $scope.fillCookies(indexPriceResource.payload);
+
+                    $scope.fillPrices();
+                }
+            });
+        }, 300);
+    };
+
+    $scope.updateShopPrices = function (shopDate, product) {
+        if ($scope.shopTimeout) {
+            clearTimeout($scope.shopTimeout);
+        }
+        $scope.shopTimeout = setTimeout(function () {
+
+            $scope.getIndexShopResource({shopDate: $filter("date")(shopDate, 'dd.MM.yyyy') || $cookies.shopDate, product: product || $cookies.product}).then(function (indexShopResource) {
+                if (indexShopResource.ok) {
+                    angular.extend($scope, indexShopResource.payload);
+                    $scope.fillCookies(indexShopResource.payload);
+
+                    $scope.fillShopPrices();
+                }
+            });
+        }, 300);
+    };
+
     $scope.fillCookies = function (payload) {
         if (payload.product) {
             $cookies.product = payload.product.id + "";
@@ -18,6 +98,9 @@ function IndexCtrl($scope, $cookies, indexResource, IndexResource, IndexChartRes
         }
         if (payload.dynRange) {
             $cookies.dynRange = payload.dynRange + "";
+        }
+        if (payload.shopDate) {
+            $cookies.shopDate = $filter("date")(new Date(payload.shopDate), 'dd.MM.yyyy');
         }
     };
 
@@ -36,59 +119,75 @@ function IndexCtrl($scope, $cookies, indexResource, IndexResource, IndexChartRes
         };
     };
 
-    $scope.getIndexChartResource = function (data) {
-        return IndexChartResource.get(angular.extend({
-            product: $cookies.product,
-            chartData: $cookies.chartData,
-            chartRange: $cookies.chartRange,
-            currency: $cookies.currency
-        }, data)).$promise;
+
+    $scope.fillPrices = function () {
     };
 
+    $scope.fillShopPrices = function () {
+        if ($scope.shopDate) {
+            $scope.shopDate = new Date($scope.shopDate);
+        }
+        $scope.dateMax = new Date();
+
+        var shopColumnDefs = [
+            {field: 'shop', displayName: 'Магазин', cellTemplate: 'resources/template/shopNameCellTemplate.html', width:'25%'}
+        ];
+        angular.forEach($scope.colors, function (value) {
+            shopColumnDefs.push({field: 'id' + value.id, displayName: value.name});
+        });
+
+        $scope.safeApply(function () {
+            $scope.shopPricesColumns = shopColumnDefs;
+        });
+    };
+
+    //datepicker settings
+    $scope.dateOptions = {
+        'year-format': "'yy'",
+        'starting-day': 1
+    };
+
+
+    $scope.selectedProduct = [];
+
+    //prices grid options
+    $scope.gridPriceOptions = {
+        data: 'prices',
+        groups: ['vendor'],
+        multiSelect: false,
+        plugins: [new ngGridFlexibleHeightPlugin()],
+        selectedItems: $scope.selectedProduct,
+        groupsCollapsedByDefault: false,
+        columnDefs: [
+            {field: 'vendor', displayName: '', width: 0},
+            {field: 'product', displayName: 'Наименование', width:"25%"},
+            {field: 'color', displayName: 'Цвет'},
+            {field: 'retail', displayName: 'Розница', cellTemplate:"resources/template/priceCellTemplate.html"},
+            {field: 'opt', displayName: 'Опт', cellTemplate:"resources/template/priceCellTemplate.html"},
+            {field: 'world', displayName: 'Мир', cellTemplate:"resources/template/priceCellTemplate.html"}
+        ]
+    };
+
+    //shop prices grid options
+    $scope.gridShopOptions = {
+        data: 'yandexPrices',
+        plugins: [new ngGridFlexibleHeightPlugin({minHeight: 200})],
+        columnDefs: 'shopPricesColumns'
+    };
+
+
+    //on index resource load
     if (indexResource.ok) {
         angular.extend($scope, indexResource.payload);
 
         $scope.fillCookies(indexResource.payload);
         $scope.fillChart();
-
-        $scope.gridPriceOptions = {
-            data: 'prices',
-            groups: ['vendor'],
-            multiSelect: false,
-            plugins: [new ngGridFlexibleHeightPlugin()],
-            columnDefs: [
-                {field: 'vendor', displayName: '', width: 0},
-                {field: 'product', displayName: 'Наименование'},
-                {field: 'color', displayName: 'Цвет'},
-                {field: 'retail', displayName: 'Розница'},
-                {field: 'opt', displayName: 'Опт'},
-                {field: 'world', displayName: 'Мир'}
-            ]
-        };
-
-        var shopColumnDefs = [
-            {field: 'shop', displayName: 'Магазин'}
-        ];
-        angular.forEach($scope.colors, function (value) {
-            shopColumnDefs.push({field: value});
-        });
-
-        $scope.gridShopOptions = {
-            data: 'yandexPrices',
-            plugins: [new ngGridFlexibleHeightPlugin({minHeight: 200})],
-            columnDefs: shopColumnDefs
-        };
+        $scope.fillPrices();
+        $scope.fillShopPrices();
 
         $scope.$watch("chartRange", function (newValue, oldValue) {
             if (newValue != oldValue) {
-                $scope.getIndexChartResource({chartRange: newValue}).then(function (indexChartResource) {
-                    if (indexChartResource.ok) {
-                            angular.extend($scope, indexChartResource.payload);
-
-                            $scope.fillCookies(indexChartResource.payload);
-                            $scope.fillChart();
-                    }
-                });
+                $scope.updateChart(newValue);
             }
 
         });
@@ -106,6 +205,24 @@ function IndexCtrl($scope, $cookies, indexResource, IndexResource, IndexChartRes
             }
         });
 
+        $scope.$watch(function () {
+                return $scope.selectedProduct.length > 0 ? $scope.selectedProduct[0].id : 0;
+            },
+            function (newVlaue, oldValue) {
+                if (newVlaue > 0 && newVlaue != oldValue) {
+                    $scope.updateShopPrices(null, newVlaue);
+                    $scope.updateChart(null, newVlaue);
+                }
+            });
+
+        $scope.$on("ngGridEventData", function () {
+            angular.forEach($scope.prices, function (price, index) {
+                if (price.id == $scope.product.id) {
+                    $scope.gridPriceOptions.selectItem(index, true);
+                }
+            });
+        });
+
     }
 }
 
@@ -121,7 +238,8 @@ function getIndexResource(IndexResource, $cookies, data) {
         chartData: $cookies.chartData,
         chartRange: $cookies.chartRange,
         currency: $cookies.currency,
-        dynRange: $cookies.dynRange
+        dynRange: $cookies.dynRange,
+        shopDate: $cookies.shopDate
     }, data)).$promise;
 }
 

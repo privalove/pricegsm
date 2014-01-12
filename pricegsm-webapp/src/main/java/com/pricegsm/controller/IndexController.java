@@ -1,15 +1,14 @@
 package com.pricegsm.controller;
 
+import com.pricegsm.domain.*;
 import com.pricegsm.domain.Currency;
-import com.pricegsm.domain.Product;
-import com.pricegsm.domain.WorldPrice;
-import com.pricegsm.domain.YandexPrice;
 import com.pricegsm.service.ProductService;
 import com.pricegsm.service.WorldPriceService;
 import com.pricegsm.service.YandexPriceService;
 import com.pricegsm.util.Utils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -49,7 +48,7 @@ public class IndexController {
             @RequestParam(value = "product", defaultValue = "1") long productId,
             @RequestParam(defaultValue = "1") int currency,
             @RequestParam(defaultValue = "7") int dynRange,
-            @RequestParam(required = false) Date shopDate,
+            @RequestParam(required = false) @DateTimeFormat(pattern="dd.MM.yyyy") Date shopDate,
             @RequestParam(defaultValue = "retail") String chartData,
             @RequestParam(defaultValue = "7") int chartRange) {
 
@@ -66,12 +65,13 @@ public class IndexController {
                 .payload("shopDate", shopDate)
                 .payload("chartData", chartData)
                 .payload("chartRange", chartRange)
+                .payload("product", selected)
+                .payload("vendor", selected.getVendor())
 
                 .payload("prices", fetchPrices(dynRange, currency))
                 .payload("colors", fetchColors(selected))
                 .payload("yandexPrices", fetchYandexPrices(selected, shopDate, currency))
-                .payload("chart", fetchChart(selected, currency, chartData, chartRange))
-                .payload("product", selected);
+                .payload("chart", fetchChart(selected, currency, chartData, chartRange));
     }
 
     @RequestMapping(value = "/index/chart.json", method = RequestMethod.GET, produces = "application/json")
@@ -88,12 +88,55 @@ public class IndexController {
                 .payload("currency", Math.min(currency, Currency.RUB))
                 .payload("chartData", chartData)
                 .payload("chartRange", chartRange)
+                .payload("product", selected)
+                .payload("vendor", selected.getVendor())
 
-                .payload("chart", fetchChart(selected, currency, chartData, chartRange))
-                .payload("product", selected);
+                .payload("chart", fetchChart(selected, currency, chartData, chartRange));
     }
 
-    private List<String> fetchColors(Product selected) {
+    @RequestMapping(value = "/index/price.json", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public OperationResult price(
+            @RequestParam(value = "product", defaultValue = "1") long productId,
+            @RequestParam(defaultValue = "7") int dynRange,
+            @RequestParam(defaultValue = "1") int currency) {
+
+        Product selected = productService.load(productId);
+
+        return OperationResult.ok()
+                .payload("currency", Math.min(currency, Currency.RUB))
+                .payload("dynRange", dynRange)
+                .payload("product", selected)
+                .payload("vendor", selected.getVendor())
+
+                .payload("prices", fetchPrices(dynRange, currency));
+    }
+
+    @RequestMapping(value = "/index/shop.json", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public OperationResult shop(
+            @RequestParam(value = "product", defaultValue = "1") long productId,
+            @RequestParam(defaultValue = "1") int currency,
+            @RequestParam(required = false) @DateTimeFormat(pattern="dd.MM.yyyy") Date shopDate) {
+
+        Product selected = productService.load(productId);
+
+        if (shopDate == null) {
+            shopDate = yandexPriceService.findLastDate(productId);
+        }
+
+        return OperationResult.ok()
+                .payload("currency", Math.min(currency, Currency.RUB))
+                .payload("shopDate", shopDate)
+                .payload("product", selected)
+                .payload("vendor", selected.getVendor())
+
+                .payload("colors", fetchColors(selected))
+                .payload("yandexPrices", fetchYandexPrices(selected, shopDate, currency));
+    }
+
+
+    private List<Color> fetchColors(Product selected) {
         return productService.findColors(selected.getYandexId());
     }
 
@@ -148,7 +191,7 @@ public class IndexController {
                 unique.put(price.getShop(), map);
             }
 
-            String name = price.getProduct().getColor().getName();
+            String name = "id" + price.getProduct().getColor().getId();
             map.put(name, getPrice(price, currency));
         }
 

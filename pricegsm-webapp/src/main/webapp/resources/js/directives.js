@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('pg.directives', [])
-        .run(["$rootScope", function($rootScope){
+        .run(["$rootScope", "$templateCache", function ($rootScope, $templateCache) {
             /**
              * Safe Apply from https://coderwall.com/p/ngisma
              */
@@ -16,24 +16,34 @@
                     this.$apply(fn);
                 }
             };
+
+            $rootScope.positive = function(value) {
+                return value > 0;
+            }
+
+            $rootScope.negative = function(value) {
+                return value < 0;
+            }
+
         }])
         .directive('pgChart', function ($filter) {
             return {
                 scope: {
-                    pgChart:"=",
-                    chartDetails:"="
+                    pgChart: "=",
+                    chartDetails: "="
                 },
-                link: function($scope, element, ctrl) {
+                link: function ($scope, element, ctrl) {
                     var chartContainer = element.find(".pg-chart-container");
 
-                    $scope.$watch(function(){
-                       return $filter("json")($scope.pgChart) + $filter("json")($scope.chartDetails);
-                    }, function() {
+                    $scope.$watch(function () {
+                        return $filter("json")($scope.pgChart) + $filter("json")($scope.chartDetails);
+                    }, function () {
                         $.plot(chartContainer, $scope.pgChart, $scope.chartDetails);
                     });
                 }
             }
         })
+
     ;
 
 })();

@@ -1,6 +1,7 @@
 package com.pricegsm.service;
 
 import com.pricegsm.dao.ProductDao;
+import com.pricegsm.domain.Color;
 import com.pricegsm.domain.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class ProductService
         return postLoad(getDao().findByYandexId(yandexId));
     }
 
-    public List<String> findColors(String yandexId) {
+    public List<Color> findColors(String yandexId) {
         return getDao().findColors(yandexId);
     }
 }

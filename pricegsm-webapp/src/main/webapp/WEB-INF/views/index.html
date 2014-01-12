@@ -1,22 +1,31 @@
-<div class="row">
+<div class="row" xmlns:th="http://www.thymeleaf.org">
     <div class="col-sm-12">
         <div class="page-header">
-                <h1>Главная страница
-                    <small>статистика продаж</small>
-                </h1>
+            <h1><span th:text="#{page.main}">Главная страница</span>
+                <small><span th:text="#{page.main.small}">статистика продаж</span> {{vendor.shortName }} {{product.name}}</small>
+            </h1>
         </div>
         <div class="btn-group">
-            <button type="button" class="btn btn-primary" ng-model="currency" btn-radio="1">UDS</button>
-            <button type="button" class="btn btn-primary" ng-model="currency" btn-radio="2">EUR</button>
-            <button type="button" class="btn btn-primary" ng-model="currency" btn-radio="3">RUB</button>
+            <button type="button" class="btn btn-primary" ng-model="currency" btn-radio="1" th:text="#{currency.USD}">USD</button>
+            <button type="button" class="btn btn-primary" ng-model="currency" btn-radio="2" th:text="#{currency.EUR}">EUR</button>
+            <button type="button" class="btn btn-primary" ng-model="currency" btn-radio="3" th:text="#{currency.RUB}">RUB</button>
         </div>
     </div>
 </div>
-<div class="row">
+<div class="row"  xmlns:th="http://www.thymeleaf.org">
     <div class="col-md-7">
         <div class="panel panel-default">
             <div class="panel-heading">
-
+                <i class="fa fa-list-alt fa-lg"></i>
+                <span th:span="#{page.main.dyn}">Динамику показывать за</span>
+                <select ng-model="dynRange" ng-change="updatePrices(dynRange)">
+                    <option>1</option>
+                    <option>3</option>
+                    <option>7</option>
+                    <option>14</option>
+                    <option>30</option>
+                </select>
+                <span th:span="#{page.main.day}">дней</span>
             </div>
             <div class="panel-body">
                 <div class="gridStyle" ng-grid="gridPriceOptions"></div>
@@ -28,7 +37,14 @@
             <div class="col-md-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-
+                        <i class="fa fa-truck fa-lg"></i>
+                        <span th:text="#{page.main.date}">На дату</span>
+                        <input type="text" class="pg-shop-datepicker"
+                               ng-model="shopDate" datepicker-popup="dd.MM.yyyy" show-button-bar="false" ng-change="updateShopPrices(shopDate)"
+                               datepicker-options="dateOptions" max="{{dateMax}}"/>
+                        <div class="panel-tools">
+                            {{vendor.shortName }} {{product.name}}
+                        </div>
                     </div>
                     <div class="panel-body">
                         <div class="gridStyle" ng-grid="gridShopOptions"></div>
@@ -47,7 +63,10 @@
                             <option>90</option>
                             <option>365</option>
                         </select>
-                        <span>дней</span>
+                        <span th:span="#{page.main.day}">дней</span>
+                        <div class="panel-tools">
+                            {{vendor.shortName }} {{product.name}}
+                        </div>
                     </div>
                     <div class="panel-body" pg-chart="chartDatas" data-chart-details="chartDetails">
                         <div class="pg-chart-container"></div>

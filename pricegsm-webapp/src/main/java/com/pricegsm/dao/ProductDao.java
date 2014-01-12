@@ -1,5 +1,6 @@
 package com.pricegsm.dao;
 
+import com.pricegsm.domain.Color;
 import com.pricegsm.domain.Product;
 import org.springframework.stereotype.Repository;
 
@@ -22,9 +23,9 @@ public class ProductDao
                 .getResultList();
     }
 
-    public List<String> findColors(String yandexId) {
+    public List<Color> findColors(String yandexId) {
         return getEntityManager()
-                .createQuery("select distinct c.name from Product p inner join p.color c where p.yandexId = :yandexId order by c.name")
+                .createQuery("select distinct c from Product p inner join p.color c where p.yandexId = :yandexId order by c.name")
                 .setParameter("yandexId", yandexId)
                 .getResultList();
     }
