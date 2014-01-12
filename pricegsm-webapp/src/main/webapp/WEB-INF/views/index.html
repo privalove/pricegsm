@@ -5,7 +5,11 @@
                 <small><span th:text="#{page.main.small}">статистика продаж</span> {{vendor.shortName }} {{product.name}}</small>
             </h1>
         </div>
-        <div class="btn-group">
+    </div>
+</div>
+<div class="row" xmlns:th="http://www.thymeleaf.org">
+    <div class="col-sm-12">
+        <div class="core-box btn-group">
             <button type="button" class="btn btn-primary" ng-model="currency" btn-radio="1" th:text="#{currency.USD}">USD</button>
             <button type="button" class="btn btn-primary" ng-model="currency" btn-radio="2" th:text="#{currency.EUR}">EUR</button>
             <button type="button" class="btn btn-primary" ng-model="currency" btn-radio="3" th:text="#{currency.RUB}">RUB</button>
@@ -69,7 +73,7 @@
                         </div>
                     </div>
                     <div class="panel-body" pg-chart="chartDatas" data-chart-details="chartDetails">
-                        <div class="pg-chart-container"></div>
+                        <div class="pg-chart-container flot-small-container"></div>
                     </div>
                 </div>
             </div>

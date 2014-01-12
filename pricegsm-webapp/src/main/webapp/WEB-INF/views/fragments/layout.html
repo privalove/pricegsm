@@ -20,6 +20,8 @@
           th:href="@{/resources/components/bootstrap/dist/css/bootstrap.min.css}"/>
     <link rel="stylesheet" type="text/css" href="../../../resources/components/font-awesome/css/font-awesome.min.css"
           th:href="@{/resources/components/font-awesome/css/font-awesome.min.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../../resources/components/perfect-scrollbar/src/perfect-scrollbar.css"
+          th:href="@{/resources/components/perfect-scrollbar/src/perfect-scrollbar.css}"/>
     <link rel="stylesheet" type="text/css" href="../../../resources/assets/common/fonts/style.css"
           th:href="@{/resources/assets/common/fonts/style.css}"/>
     <link rel="stylesheet" type="text/css" href="../../../resources/components/angular-grid/ng-grid.min.css"
@@ -44,101 +46,102 @@
 </head>
 <!-- end: HEAD -->
 <!-- start: BODY -->
-<body ng-controller="AppCtrl">
+<body class="page-full-width" ng-controller="AppCtrl">
 <!-- start: HEADER -->
-<nav class="navbar navbar-fixed-top" role="navigation">
+<div class="navbar navbar-inverse navbar-fixed-top">
     <!-- start: TOP NAVIGATION CONTAINER -->
     <div class="container">
         <div class="navbar-header">
             <!-- start: RESPONSIVE MENU TOGGLER -->
-            <button data-target="#main-menu" data-toggle="collapse" class="navbar-toggle" type="button">
+            <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggle" type="button">
                 <span class="clip-list-2"></span>
             </button>
             <!-- end: RESPONSIVE MENU TOGGLER -->
             <!-- start: LOGO -->
-            <a class="navbar-brand" href="#" th:href="@{/}">
+            <a class="navbar-brand" href="#" th:href="@{/#/}">
                 PRICE<i class="clip-clip"></i>GSM
             </a>
             <!-- end: LOGO -->
         </div>
-        <div class="collapse navbar-collapse" id="main-menu">
-            <!-- start: TOP NAVIGATION MENU -->
-            <ul class="main-navigation-menu nav navbar-nav">
-                <!-- start: TO-DO DROPDOWN -->
+        <div class="navbar-tools">
+        <!-- start: TOP NAVIGATION MENU -->
+        <ul class="nav navbar-right">
+        <!-- start: USER DROPDOWN -->
+        <li class="dropdown current-user">
+            <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" data-close-others="true" href="#">
+                <span class="username">Пользователь системы</span>
+                <i class="clip-chevron-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a href="#" th:href="#{/#/profile}">
+                        <i class="clip-user-2"></i>
+                        <span th:text="#{page.profile}">
+                            Профиль
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" th:href="@{/logout}">
+                        <i class="clip-exit"></i>
+                        <span th:text="#{page.logout}">Выход</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <!-- end: USER DROPDOWN -->
+        </ul>
+        <!-- end: TOP NAVIGATION MENU -->
+        </div>
+        <div class="horizontal-menu navbar-collapse collapse">
+            <ul class="nav navbar-nav">
                 <li>
                     <a href="#/">
                         <i class="clip-home-3"></i>
-                        <span class="title" th:text="#{page.main}">Главная</span>
+                        <span th:text="#{page.main}">Главная</span>
                     </a>
                 </li>
                 <li>
                     <a href="#/marketplace">
                         <i class="clip-globe"></i>
-                        <span class="title" th:text="#{page.marketplace}">Площадка</span>
+                        <span th:text="#{page.marketplace}">Площадка</span>
                     </a>
                 </li>
                 <li>
                     <a href="#/order">
                         <i class="clip-download-3"></i>
-                        <span class="title" th:text="#{page.order}">Заказы</span>
+                        <span th:text="#{page.order}">Заказы</span>
                     </a>
                 </li>
                 <li>
                     <a href="#/sales">
                         <i class="clip-upload-3"></i>
-                        <span class="title" th:text="#{page.sales}">Продажи</span>
+                        <span th:text="#{page.sales}">Продажи</span>
                     </a>
                 </li>
                 <li>
                     <a href="#/price_list">
                         <i class="clip-list-4"></i>
-                        <span class="title" th:text="#{page.priceList}">Прайс-Лист</span>
+                        <span th:text="#{page.priceList}">Прайс-Лист</span>
 
                     </a>
                 </li>
                 <li>
                     <a href="#/partner">
                         <i class="clip-users-3"></i>
-                        <span class="title" th:text="#{page.partner}">Контрагенты</span>
+                        <span th:text="#{page.partner}">Контрагенты</span>
 
                     </a>
                 </li>
             </ul>
-            <!-- end: MESSAGE DROPDOWN -->
-            <!-- start: USER DROPDOWN -->
-            <ul class="main-navigation-menu nav navbar-nav navbar-right">
-                <li>
-                    <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" data-close-others="true"
-                       href="#">
-                        <i class="clip-user-3"></i>
-                        <span>Пользователь системы</span>
-                        <i class="clip-chevron-down"></i>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a href="#/profile" th:text="#{page.profile}">
-                                Профиль
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#" th:href="@{/logout}">
-                                <i class="clip-exit"></i>
-                                <span th:text="#{page.logout}">Выход</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-            <!-- end: USER DROPDOWN -->
-            <!-- end: TOP NAVIGATION MENU -->
         </div>
+        <!-- end: HORIZONTAL MENU -->
     </div>
     <!-- end: TOP NAVIGATION CONTAINER -->
-</nav>
+</div>
 <!-- end: HEADER -->
 <!-- start: MAIN CONTAINER -->
-<div class="main-container">
+<div id="top" class="main-container">
     <!-- start: PAGE -->
     <div class="main-content">
         <div class="container ng-view">
@@ -167,6 +170,8 @@
         th:src="@{/resources/components/jquery/jquery.min.js}"></script>
 <script src="../../../resources/components/jquery-ui/ui/minified/jquery-ui.min.js"
         th:src="@{/resources/components/jquery-ui/ui/minified/jquery-ui.min.js}"></script>
+<script src="../../../resources/components/jquery-mousewheel/jquery.mousewheel.js"
+        th:src="@{/resources/components/jquery-mousewheel/jquery.mousewheel.js}"></script>
 <script src="../../../resources/components/bootstrap/dist/js/bootstrap.min.js"
         th:src="@{/resources/components/bootstrap/dist/js/bootstrap.min.js}"></script>
 <script src="../../../resources/components/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js"
@@ -181,6 +186,8 @@
         th:src="@{/resources/components/flot/jquery.flot.stack.min.js}"></script>
 <script src="../../../resources/components/flot/jquery.flot.time.min.js"
         th:src="@{/resources/components/flot/jquery.flot.time.min.js}"></script>
+<script src="../../../resources/components/perfect-scrollbar/src/perfect-scrollbar.js"
+        th:src="@{/resources/components/perfect-scrollbar/src/perfect-scrollbar.js}"></script>
 
 <script src="../../../resources/components/angular/angular.min.js"
         th:src="@{/resources/components/angular/angular.min.js}"></script>
@@ -199,12 +206,20 @@
 <script src="../../../resources/components/angular-grid/plugins/ng-grid-flexible-height.js"
         th:src="@{/resources/components/angular-grid/plugins/ng-grid-flexible-height.js}"></script>
 
+<!-- main js -->
+<script src="../../../resources/js/main.js"
+        th:src="@{/resources/js/main.js}"></script>
+
 <!-- angular files -->
 <script src="../../../resources/js/services.js" th:src="@{/resources/js/services.js}"></script>
 <script src="../../../resources/js/directives.js" th:src="@{/resources/js/directives.js}"></script>
 <script src="../../../resources/js/controllers.js" th:src="@{/resources/js/controllers.js}"></script>
 <script src="../../../resources/js/app.js" th:src="@{/resources/js/app.js}"></script>
-
+<script>
+    $(function(){
+            Main.init();
+    })
+</script>
 </body>
 <!-- end: BODY -->
 </html>
