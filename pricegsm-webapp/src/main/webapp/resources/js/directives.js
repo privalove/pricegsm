@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('pg.directives', [])
-        .run(["$rootScope", "$templateCache", function ($rootScope, $templateCache) {
+        .run(["$rootScope", "$templateCache", "$route", function ($rootScope, $route, $templateCache) {
             /**
              * Safe Apply from https://coderwall.com/p/ngisma
              */
@@ -16,15 +16,6 @@
                     this.$apply(fn);
                 }
             };
-
-            $rootScope.positive = function(value) {
-                return value > 0;
-            }
-
-            $rootScope.negative = function(value) {
-                return value < 0;
-            }
-
         }])
         .directive('pgChart', function ($filter) {
             return {

@@ -1,5 +1,6 @@
 package com.pricegsm.controller;
 
+import com.pricegsm.config.PricegsmMessageSource;
 import com.pricegsm.domain.*;
 import com.pricegsm.domain.Currency;
 import com.pricegsm.service.ProductService;
@@ -10,6 +11,7 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,8 +35,14 @@ public class IndexController {
     @Autowired
     private WorldPriceService worldPriceService;
 
+    @Autowired
+    private PricegsmMessageSource messageSource;
+
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String layout() {
+    public String layout(Locale locale, Model model) {
+
+        model.addAttribute("i18n", messageSource.getProperties(locale));
+
         return "fragments/layout";
     }
 

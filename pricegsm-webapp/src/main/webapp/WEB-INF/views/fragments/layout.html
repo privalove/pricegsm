@@ -2,7 +2,7 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org"  ng-app="pricegsm">
 <!-- start: HEAD -->
 <head>
-    <title>Pricegsm :: Главная страница</title>
+    <title ng-bind="title">Pricegsm :: Главная страница</title>
     <!-- start: META -->
     <meta charset="utf-8"/>
     <!--[if IE]>
@@ -163,10 +163,34 @@
     </div>
 </div>
 <!-- end: FOOTER -->
-<script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
     R = {
-        base : "/pricegsm"
-    }
+        base : /*[[@{/}]]*/ "/pricegsm/",
+        i18n: [[${i18n}]],
+        get: function(key, args) {
+            var msg;
+            if ($.isArray(key)) {
+                for (var i = 0, l = key.length; i < l; i++) {
+                    if (msg = R.i18n[key[i]]) break;
+                }
+            } else {
+                msg = R.i18n[key];
+            }
+
+            if (msg) {
+                if (args) {
+                    for (var name in args) {
+                        msg = msg.replace('{' + name + '}', args[name]);
+                    }
+                }
+                return msg;
+            } else {
+                return key;
+            }
+        }
+    };
+    /*]]>*/
 </script>
 <script src="../../../resources/components/jquery/jquery.min.js"
         th:src="@{/resources/components/jquery/jquery.min.js}"></script>

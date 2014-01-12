@@ -208,13 +208,6 @@ function IndexCtrl($scope, $timeout, $cookies, $filter, indexResource, IndexReso
         $scope.fillPrices();
         $scope.fillShopPrices();
 
-        $scope.$watch("chartRange", function (newValue, oldValue) {
-            if (newValue != oldValue) {
-                $scope.updateChart(newValue);
-            }
-
-        });
-
         $scope.$watch("currency", function (newValue, oldValue) {
             if (newValue != oldValue) {
                 $scope.updateIndexPage(newValue);

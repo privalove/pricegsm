@@ -61,7 +61,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <i class="clip-stats"></i>
-                        <select ng-model="chartRange">
+                        <select ng-model="chartRange" ng-change="updateChart(chartRange)">
                             <option>7</option>
                             <option>30</option>
                             <option>90</option>

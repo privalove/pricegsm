@@ -35,6 +35,8 @@ import org.thymeleaf.templateresolver.TemplateResolver;
 import com.pricegsm.Application;
 
 import java.util.List;
+import java.util.Locale;
+import java.util.Properties;
 
 @Configuration
 @ComponentScan(basePackageClasses = Application.class, includeFilters = @Filter(Controller.class), useDefaultFilters = false)
@@ -46,6 +48,15 @@ class WebMvcConfig extends WebMvcConfigurationSupport {
     private static final String RESOURCES_HANDLER = "/resources/";
     private static final String RESOURCES_LOCATION = RESOURCES_HANDLER + "**";
 
+    public static class PricegsmMessageSourceImpl
+            extends ReloadableResourceBundleMessageSource
+            implements PricegsmMessageSource {
+        @Override
+        public Properties getProperties(Locale locale) {
+            return getMergedProperties(locale).getProperties();
+        }
+    }
+
     @Override
     public RequestMappingHandlerMapping requestMappingHandlerMapping() {
         RequestMappingHandlerMapping requestMappingHandlerMapping = super.requestMappingHandlerMapping();
@@ -55,8 +66,8 @@ class WebMvcConfig extends WebMvcConfigurationSupport {
     }
 
     @Bean(name = "messageSource")
-    public MessageSource messageSource() {
-        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+    public PricegsmMessageSource messageSource() {
+        PricegsmMessageSourceImpl messageSource = new PricegsmMessageSourceImpl();
         messageSource.setBasename(MESSAGE_SOURCE);
         messageSource.setCacheSeconds(5);
         messageSource.setDefaultEncoding("UTF-8");
