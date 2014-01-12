@@ -12,7 +12,9 @@ import org.slf4j.LoggerFactory;
 import javax.xml.transform.TransformerException;
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,14 +23,18 @@ import java.util.Map;
  */
 public class YandexMarketParser {
 
-    public static final String template = "http://market.yandex.ru/offers.xml?modelid={0}&hid={1}&grhow=shop&how=aprice&np=1";
+    public static final String template = "http://market.yandex.ru/offers.xml?modelid={0}&hid={1}&grhow=shop&how=aprice&np=1&page={2}";
 
     public static final String template2 = "http://market.yandex.ru/offers.xml?modelid={0}&hid={1}&how=aprice&np=1&hideduplicate=0&fesh={2}";
 
+    public static final int MAX_RESULT = 10;
+
+    public static final int PAGES = 2;
+
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    protected HtmlPage getFirstPage(long yandexId, long yandexTypeId, WebClient webClient) throws IOException {
-        return webClient.getPage(new MessageFormat(template).format(new Object[]{String.valueOf(yandexId), String.valueOf(yandexTypeId)}));
+    protected HtmlPage getFirstPage(long yandexId, long yandexTypeId, int page, WebClient webClient) throws IOException {
+        return webClient.getPage(new MessageFormat(template).format(new Object[]{String.valueOf(yandexId), String.valueOf(yandexTypeId), page}));
     }
 
     protected HtmlPage getSecondPage(long yandexId, long yandexTypeId, long shopId, WebClient webClient) throws IOException {
@@ -43,8 +49,6 @@ public class YandexMarketParser {
 
         HtmlPage page;
         try {
-            page = getFirstPage(yandexId, yandexTypeId, webClient);
-
 
             String colorPattern = "";
 
@@ -57,7 +61,20 @@ public class YandexMarketParser {
             }
             colorPattern = colorPattern.toLowerCase();
 
-            JSONObject shops = UrlFetchUtil.processPage(page.asXml(), "/template/yandex.xsl");
+            List<Long> shopIds = new ArrayList<>();
+
+            for (int pageNumber = 1; pageNumber <= PAGES; pageNumber++) {
+                page = getFirstPage(yandexId, yandexTypeId, pageNumber, webClient);
+
+
+                JSONObject shops = UrlFetchUtil.processPage(page.asXml(), "/template/yandex.xsl");
+                JSONArray _shopIds = shops.getJSONObject("result").getJSONArray("link");
+
+                for (int i = 0; i < _shopIds.length(); i++) {
+                    shopIds.add(_shopIds.getLong(i));
+                }
+            }
+
             JSONObject result = new JSONObject();
             JSONObject data = new JSONObject();
             JSONArray offers = new JSONArray();
@@ -66,10 +83,12 @@ public class YandexMarketParser {
             result.put("result", data);
 
 
-            JSONArray shopIds = shops.getJSONObject("result").getJSONArray("link");
+            int position = 0;
+            int realPosition = 0;
 
-            for (int i = 0; i < shopIds.length(); i++) {
-                page = getSecondPage(yandexId, yandexTypeId, shopIds.getLong(i), webClient);
+            for (int i = 0; i < shopIds.size(); i++) {
+                long shopId = shopIds.get(i);
+                page = getSecondPage(yandexId, yandexTypeId, shopId, webClient);
 
                 Map<String, Object> params = new HashMap<>();
                 params.put("colorPattern", colorPattern);
@@ -78,9 +97,22 @@ public class YandexMarketParser {
                 JSONObject offer = UrlFetchUtil.processPage(page.asXml(), "/template/yandex2.xsl", params);
                 JSONArray shopOffers = offer.getJSONArray("offer");
 
+
                 for (int j = 0; j < shopOffers.length(); j++) {
                     JSONObject shopOffer = shopOffers.getJSONObject(j);
                     if (shopOffer.getString("color").length() > 0) {
+
+                        if (position < shopOffer.getInt("position")) {
+                            realPosition += 1;
+                        }
+
+                        if (realPosition >= MAX_RESULT) {
+                            break;
+                        }
+
+                        position = shopOffer.getInt("position");
+                        shopOffer.put("position", realPosition);
+
                         offers.put(shopOffer);
                     }
                 }

@@ -22,7 +22,7 @@ public class YandexMarketParserTest {
 
         parser = new YandexMarketParser(){
             @Override
-            protected HtmlPage getFirstPage(long yandexId, long yandexTypeId, WebClient webClient) throws IOException {
+            protected HtmlPage getFirstPage(long yandexId, long yandexTypeId, int page, WebClient webClient) throws IOException {
                 MockWebConnection connection = new MockWebConnection();
                 String content = "";
                 InputStream resourceAsStream = null;
