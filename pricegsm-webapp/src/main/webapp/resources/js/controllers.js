@@ -103,7 +103,7 @@ function IndexCtrl($scope, $timeout, $cookies, $filter, indexResource, IndexReso
                 $scope.currencyDisabled = false;
             });
 
-        }, 300);
+        });
     };
 
 
