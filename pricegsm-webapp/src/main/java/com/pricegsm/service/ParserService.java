@@ -103,7 +103,7 @@ public class ParserService {
                                     try {
                                         yandexPriceService.save(yandexPrice);
                                     } catch (Exception e) {
-                                        logger.warn(Throwables.getRootCause(e).getMessage(), e);
+                                        logger.warn(Throwables.getRootCause(e).getMessage());
                                     }
                                 }
                             }
@@ -120,7 +120,37 @@ public class ParserService {
 
     }
 
-    //every day at 10:00, 14:00, 18:00
+    /**
+     * Scheduled every day at 10:00, 14:00, 18:00
+     * <p/>
+     * <pre>
+     * {"result": {
+     *      "error": 0,
+     *      "data": {
+     *          "USD_RUB_2": {
+     *              "date": "2014-01-14 14:08",
+     *              "time": 1389697732251,
+     *              "value": 33.28
+     *          },
+     *          "USD_RUB": {
+     *              "date": "2014-01-14 14:08",
+     *              "time": 1389697732251,
+     *              "value": 33.287
+     *          },
+     *          "EUR_RUB": {
+     *              "date": "2014-01-14 14:07",
+     *              "time": 1389697672251,
+     *              "value": 45.5005
+     *          },
+     *          "EUR_USD": {
+     *              "date": "2014-01-14 13:59",
+     *              "time": 1389697192251,
+     *              "value": 1.3673
+     *          }
+     *      }
+     * }}
+     * </pre>
+     */
     @Scheduled(cron = "0 56,57,58 9,13,17 * * ?")
     public void readExchanges() throws IOException {
 
@@ -145,12 +175,13 @@ public class ParserService {
             if (error == 0) {
                 JSONObject data = result.getJSONObject("data");
 
+                JSONObject usdRub = data.has("USD_RUB") ? data.getJSONObject("USD_RUB") : data.getJSONObject("USD_RUB_2");
 
-                Date date = new Date(data.getJSONObject("USD_RUB").getLong("time"));
+                Date date = new Date(usdRub.getLong("time"));
 
                 if (last == null || date.after(last.getDate())) {
 
-                    double usdRate = data.getJSONObject("USD_RUB").getDouble("value");
+                    double usdRate = usdRub.getDouble("value");
                     double eurRate = data.getJSONObject("EUR_RUB").getDouble("value");
                     double uerUsdRate = data.getJSONObject("EUR_USD").getDouble("value");
                     exchangeService.save(new Exchange(usd, rub, date, new BigDecimal(usdRate)));

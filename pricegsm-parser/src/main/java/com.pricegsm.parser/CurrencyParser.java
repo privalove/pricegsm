@@ -22,7 +22,7 @@ public class CurrencyParser {
 
     public static final Map<String, String> MAPPING = new HashMap<String, String>() {{
         put("USD000000TOD", "USD_RUB");
-        //put("BKTRUB000TOM", "USD_RUB");
+        put("BKTRUB000TOM", "USD_RUB_2");
         put("EUR_RUB__TOD", "EUR_RUB");
         put("EURUSD000TOD", "EUR_USD");
     }};
