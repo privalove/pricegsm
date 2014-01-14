@@ -2,3 +2,15 @@
     margin-top: -6px;
     width: 82px;
 }
+
+.pg-id-column {
+    width: 60px;
+}
+
+.pg-active-column {
+    width: 80px;
+}
+
+.pg-actions-column {
+    width: 100px;
+}

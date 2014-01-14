@@ -694,12 +694,12 @@ var Main = function () {
             runGoTop();
             //runModuleTools();
             //runDropdownEnduring();
-            //runTooltips();
+            runTooltips();
             //runPopovers();
             //runPanelScroll();
             //runShowTab();
             //runAccordionFeatures();
-            //runCustomCheck();
+            runCustomCheck();
             //runColorPalette();
             //runSaveSetting();
             //runCustomSetting();

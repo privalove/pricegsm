@@ -30,6 +30,8 @@
           th:href="@{/resources/components/angular-grid/ng-grid.min.css}"/>
     <link rel="stylesheet" type="text/css" href="../../../resources/components/angular-loading-bar/build/loading-bar.min.css"
           th:href="@{/resources/components/angular-loading-bar/build/loading-bar.min.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../../resources/components/iCheck/skins/all.css"
+          th:href="@{/resources/components/iCheck/skins/all.css}"/>
 
     <link rel="stylesheet" type="text/css" href="../../../resources/assets/common/css/main.css"
           th:href="@{/resources/assets/common/css/main.css}"/>
@@ -99,15 +101,15 @@
                 </li>
                 <li>
                     <a href="javascript:void(0)" class="dropdown-toggle" data-close-others="true" data-hover="dropdown" data-toggle="dropdown">
-                        <span class="selected"></span>
                         Справочники <i class="fa fa-angle-down"></i>
                     </a>
-                </li>
-                <li>
-                    <a th:href="@{/admin/color}">
-                        <i class="clip-download-3"></i>
-                        <span>Цвета</span>
-                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a th:href="@{/admin/color}">
+                                <span th:text="#{page.color}">Цвета</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </div>
@@ -156,6 +158,8 @@
         th:src="@{/resources/components/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js}"></script>
 <script src="../../../resources/components/perfect-scrollbar/src/perfect-scrollbar.js"
         th:src="@{/resources/components/perfect-scrollbar/src/perfect-scrollbar.js}"></script>
+<script src="../../../resources/components/iCheck/icheck.min.js"
+        th:src="@{/resources/components/iCheck/icheck.min.js}"></script>
 
 <!-- main js -->
 <script src="../../../resources/js/main.js"
