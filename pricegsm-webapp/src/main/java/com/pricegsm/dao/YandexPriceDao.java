@@ -34,6 +34,8 @@ public class YandexPriceDao
         try {
             return (YandexPrice) getEntityManager()
                     .createQuery("select y from YandexPrice y where y.product.id = :productId order by y.date desc, y.priceRub asc")
+                            //skip min price for statistic
+                    .setFirstResult(1)
                     .setMaxResults(1)
                     .setParameter("productId", productId)
                     .getSingleResult();
@@ -46,6 +48,8 @@ public class YandexPriceDao
         try {
             return (YandexPrice) getEntityManager()
                     .createQuery("select y from YandexPrice y where y.product.id = :productId and y.date <= :date order by y.date desc, y.priceRub asc")
+                            //skip min price for statistic
+                    .setFirstResult(1)
                     .setMaxResults(1)
                     .setParameter("productId", productId)
                     .setParameter("date", date)
@@ -69,17 +73,22 @@ public class YandexPriceDao
 
         switch (currency) {
             case (int) Currency.EUR:
-                price = "priceEur";
+                price = "price_eur";
                 break;
             case (int) Currency.USD:
-                price = "priceUsd";
+                price = "price_usd";
                 break;
             default:
-                price = "priceRub";
+                price = "price_rub";
         }
 
         return getEntityManager()
-                .createQuery("select y.date, min(y." + price + ") from YandexPrice y where y.product.id =:productId and y.date >= :from and y.date <= :to group by y.date order by y.date")
+                //skip min price for statistic
+                .createNativeQuery("select sell_date, price from "
+                        + " (select y.sell_date as sell_date, y." + price + " as price, rank() over (partition by y.sell_date order by y.sell_date, y." + price + " asc) as rank from yandex_price y "
+                        + "      where y.product_id =:productId and y.sell_date >= :from and y.sell_date <= :to) x "
+                        + " where rank = 2")
+
                 .setParameter("productId", productId)
                 .setParameter("from", from)
                 .setParameter("to", to)
