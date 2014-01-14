@@ -23,7 +23,7 @@ import java.util.Map;
  */
 public class YandexMarketParser {
 
-    public static final String template = "http://market.yandex.ru/offers.xml?modelid={0}&hid={1}&grhow=shop&how=aprice&np=1&page={2}";
+    public static final String template = "http://market.yandex.ru/offers.xml?modelid={0}&hid={1}&grhow=shop&how=aprice&np=1&page={2}&onstock=1";
 
     public static final String template2 = "http://market.yandex.ru/offers.xml?modelid={0}&hid={1}&how=aprice&np=1&hideduplicate=0&fesh={2}";
 

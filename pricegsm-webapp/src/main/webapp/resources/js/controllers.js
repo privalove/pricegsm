@@ -154,6 +154,7 @@ function IndexCtrl($scope, $timeout, $cookies, $filter, indexResource, IndexReso
         $scope.dateMax = new Date();
 
         var shopColumnDefs = [
+            {field: 'position', displayName: "#", width:"5%"},
             {field: 'shop', displayName: 'Магазин', cellTemplate: 'resources/template/shopNameCellTemplate.html', width: '25%'}
         ];
         angular.forEach($scope.colors, function (value) {

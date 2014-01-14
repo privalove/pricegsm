@@ -56,7 +56,7 @@ public class IndexController {
             @RequestParam(value = "product", defaultValue = "1") long productId,
             @RequestParam(defaultValue = "1") int currency,
             @RequestParam(defaultValue = "7") int dynRange,
-            @RequestParam(required = false) @DateTimeFormat(pattern="dd.MM.yyyy") Date shopDate,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "dd.MM.yyyy") Date shopDate,
             @RequestParam(defaultValue = "retail") String chartData,
             @RequestParam(defaultValue = "7") int chartRange) {
 
@@ -127,7 +127,7 @@ public class IndexController {
     public OperationResult shop(
             @RequestParam(value = "product", defaultValue = "1") long productId,
             @RequestParam(defaultValue = "1") int currency,
-            @RequestParam(required = false) @DateTimeFormat(pattern="dd.MM.yyyy") Date shopDate) {
+            @RequestParam(required = false) @DateTimeFormat(pattern = "dd.MM.yyyy") Date shopDate) {
 
         Product selected = productService.load(productId);
 
@@ -157,7 +157,7 @@ public class IndexController {
         Map<String, Object> result = new HashMap<>();
 
         Date to = DateUtils.addDays(Utils.today(), 1);
-        Date from =  DateUtils.addDays(to, -chartRange);
+        Date from = DateUtils.addDays(to, -chartRange);
 
         List<Product> products = productService.findByYandexId(selected.getYandexId());
 
@@ -165,7 +165,8 @@ public class IndexController {
 
         for (Product product : products) {
             switch (chartData) {
-                default: data.put(product.getColor().getName(), yandexPriceService.getChartData(product.getId(), currency, from, to));
+                default:
+                    data.put(product.getColor().getName(), yandexPriceService.getChartData(product.getId(), currency, from, to));
             }
         }
 
@@ -194,12 +195,15 @@ public class IndexController {
 
         Map<String, Map<String, Object>> unique = new HashMap<>();
 
-        for (YandexPrice price : prices) {
+        int position = 0;
+        for (int i = 0; i < prices.size(); i++) {
+            YandexPrice price = prices.get(i);
             Map<String, Object> map = unique.get(price.getShop());
             if (map == null) {
                 map = new HashMap<>();
                 map.put("shop", price.getShop());
                 map.put("link", price.getLink());
+                map.put("position", ++position);
                 result.add(map);
                 unique.put(price.getShop(), map);
             }
