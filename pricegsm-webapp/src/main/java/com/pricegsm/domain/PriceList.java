@@ -6,16 +6,19 @@ import com.pricegsm.jackson.GlobalEntityDeserializer;
 import com.pricegsm.jackson.GlobalEntitySerializer;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "pricelist")
 public class PriceList
         extends GlobalEntity
         implements Activable {
+
+    List<PriceListPosition> positions = new ArrayList<>();
 
     private int version;
 
@@ -25,17 +28,9 @@ public class PriceList
 
     private Date sellToDate;
 
-    private BigDecimal price = BigDecimal.ZERO;
-
-    private Product product;
-
     private User user;
 
     private Currency currency;
-
-    private int amount = 1;
-
-    private int moq = 1;
 
     private String description;
 
@@ -46,6 +41,16 @@ public class PriceList
     @Override
     public long getId() {
         return super.getId();
+    }
+
+    @Valid
+    @OneToMany(mappedBy = "priceList", cascade = CascadeType.ALL, orphanRemoval = true)
+    public List<PriceListPosition> getPositions() {
+        return positions;
+    }
+
+    public void setPositions(List<PriceListPosition> positions) {
+        this.positions = positions;
     }
 
     @Basic
@@ -82,31 +87,6 @@ public class PriceList
         this.sellToDate = sellToDate;
     }
 
-    @Min(0)
-    @NotNull
-    @Basic
-    @Column(name = "price", nullable = false)
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    @JsonSerialize(using = GlobalEntitySerializer.class)
-    @JsonDeserialize(using = GlobalEntityDeserializer.class)
-    @NotNull
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
     @JsonSerialize(using = GlobalEntitySerializer.class)
     @JsonDeserialize(using = GlobalEntityDeserializer.class)
     @NotNull
@@ -131,33 +111,6 @@ public class PriceList
 
     public void setCurrency(Currency currency) {
         this.currency = currency;
-    }
-
-    @Min(1)
-    @NotNull
-    @Basic
-    @Column(name = "amount", nullable = false)
-    public int getAmount() {
-        return amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
-
-    /**
-     * Minimal Order Quantity
-     */
-    @Min(1)
-    @NotNull
-    @Basic
-    @Column(name = "min_order_quantity", nullable = false)
-    public int getMoq() {
-        return moq;
-    }
-
-    public void setMoq(int moq) {
-        this.moq = moq;
     }
 
     @Lob
