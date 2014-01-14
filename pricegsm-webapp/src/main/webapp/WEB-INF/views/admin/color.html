@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/layout_admin"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{page.color.title}">Pricegsm :: Цвета</title>
+</head>
+<body>
+<div class="container" layout:fragment="content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="page-header">
+                <h1>
+                    <span th:text="#{page.color}">Цвета</span>
+                </h1>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 core-box">
+            <a href="#" class="btn btn-primary" th:href="@{/admin/color/0}" th:text="#{button.add}">Добавить</a>
+        </div>
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="clip-eyedropper"></i>
+                    <span th:text="#{colors}">Цвета</span>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-hover" id="sample-table-1">
+                        <thead>
+                        <tr>
+                            <th class="center" th:text="#{color.id}">#</th>
+                            <th th:text="#{color.active}">Активен</th>
+                            <th th:text="#{color.name}">Цвет</th>
+                            <th th:text="#{color.yandexColor}">Яндекс цвет</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="color : ${colors}">
+                            <td class="center" th:text="${color.id}">1</td>
+                            <td  th:text="${color.active}">false</td>
+                            <td  th:text="${color.name}">Black</td>
+                            <td  th:text="${color.yandexColor}">black</td>
+                            <td class="center">
+                                <div>
+                                    <a th:href="@{/admin/color/}+${color.id}" href="#" class="btn btn-xs btn-teal tooltips"
+                                       data-placement="top" th:title="#{button.edit}" title="Редактировать">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                </div>
+
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

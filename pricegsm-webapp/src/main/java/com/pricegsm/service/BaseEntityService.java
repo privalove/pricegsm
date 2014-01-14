@@ -2,6 +2,7 @@ package com.pricegsm.service;
 
 import com.pricegsm.dao.BaseEntityDao;
 import com.pricegsm.domain.BaseEntity;
+import com.pricegsm.securiry.PrincipalHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public abstract class BaseEntityService<E extends BaseEntity, K extends Serializ
 
     @Autowired
     protected ApplicationContext context;
+
+    @Autowired
+    protected PrincipalHolder principalHolder;
 
     protected abstract BaseEntityDao<E, K> getDao();
 

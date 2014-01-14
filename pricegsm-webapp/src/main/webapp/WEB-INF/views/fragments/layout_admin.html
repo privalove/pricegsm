@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ru"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<!-- start: HEAD -->
+<head>
+    <title>Pricegsm :: Админка</title>
+    <!-- start: META -->
+    <meta charset="utf-8"/>
+    <!--[if IE]>
+    <meta http-equiv='X-UA-Compatible' content="IE=edge,chrome=1"/>
+    <![endif]-->
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta content="" name="description"/>
+    <meta content="" name="author"/>
+    <!-- end: META -->
+    <!-- start: MAIN CSS -->
+    <link rel="stylesheet" type="text/css" href="../../../resources/components/bootstrap/dist/css/bootstrap.min.css"
+          th:href="@{/resources/components/bootstrap/dist/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../../resources/components/font-awesome/css/font-awesome.min.css"
+          th:href="@{/resources/components/font-awesome/css/font-awesome.min.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../../resources/components/perfect-scrollbar/src/perfect-scrollbar.css"
+          th:href="@{/resources/components/perfect-scrollbar/src/perfect-scrollbar.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../../resources/assets/common/fonts/style.css"
+          th:href="@{/resources/assets/common/fonts/style.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../../resources/components/angular-grid/ng-grid.min.css"
+          th:href="@{/resources/components/angular-grid/ng-grid.min.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../../resources/components/angular-loading-bar/build/loading-bar.min.css"
+          th:href="@{/resources/components/angular-loading-bar/build/loading-bar.min.css}"/>
+
+    <link rel="stylesheet" type="text/css" href="../../../resources/assets/common/css/main.css"
+          th:href="@{/resources/assets/common/css/main.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../../resources/assets/common/css/main-responsive.css"
+          th:href="@{/resources/assets/common/css/main-responsive.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../../resources/assets/common/css/common.css"
+          th:href="@{/resources/assets/common/css/common.css}"/>
+
+    <link rel="stylesheet" type="text/css" href="../../../resources/assets/default/css/theme.css"
+          th:href="@{/resources/assets/default/css/theme.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../../resources/assets/default/css/custom.css"
+          th:href="@{/resources/assets/default/css/custom.css}"/>
+
+    <link rel="stylesheet" type="text/css" href="../../../resources/assets/common/css/print.css"
+          th:href="@{/resources/assets/common/css/print.css}" media="print"/>
+
+    <link rel="shortcut icon" href="../../../favicon.ico" th:href="@{/favicon.ico}"/>
+</head>
+<!-- end: HEAD -->
+<!-- start: BODY -->
+<body class="page-full-width" ng-controller="AppCtrl">
+<!-- start: HEADER -->
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <!-- start: TOP NAVIGATION CONTAINER -->
+    <div class="container">
+        <div class="navbar-header">
+            <!-- start: RESPONSIVE MENU TOGGLER -->
+            <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggle" type="button">
+                <span class="clip-list-2"></span>
+            </button>
+            <!-- end: RESPONSIVE MENU TOGGLER -->
+            <!-- start: LOGO -->
+            <a class="navbar-brand" href="#" th:href="@{/admin/color}">
+                PRICE<i class="clip-clip"></i>GSM
+            </a>
+            <!-- end: LOGO -->
+        </div>
+        <div class="navbar-tools">
+        <!-- start: TOP NAVIGATION MENU -->
+        <ul class="nav navbar-right">
+        <!-- start: USER DROPDOWN -->
+        <li class="dropdown current-user">
+            <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" data-close-others="true" href="#">
+                <span class="username">Пользователь системы</span>
+                <i class="clip-chevron-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a href="#" th:href="@{/logout}">
+                        <i class="clip-exit"></i>
+                        <span th:text="#{page.logout}">Выход</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <!-- end: USER DROPDOWN -->
+        </ul>
+        <!-- end: TOP NAVIGATION MENU -->
+        </div>
+        <div class="horizontal-menu navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a th:href="@{/admin/color}">
+                        <i class="clip-home-3"></i>
+                        <span th:text="#{page.main}">Главная</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)" class="dropdown-toggle" data-close-others="true" data-hover="dropdown" data-toggle="dropdown">
+                        <span class="selected"></span>
+                        Справочники <i class="fa fa-angle-down"></i>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/admin/color}">
+                        <i class="clip-download-3"></i>
+                        <span>Цвета</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <!-- end: HORIZONTAL MENU -->
+    </div>
+    <!-- end: TOP NAVIGATION CONTAINER -->
+</div>
+<!-- end: HEADER -->
+<!-- start: MAIN CONTAINER -->
+<div id="top" class="main-container">
+    <!-- start: PAGE -->
+    <div class="main-content">
+        <div class="container" layout:fragment="content">
+
+        </div>
+    </div>
+    <!-- end: PAGE -->
+</div>
+<!-- end: MAIN CONTAINER -->
+<!-- start: FOOTER -->
+<div class="footer clearfix">
+    <div class="footer-inner">
+        2014 &copy; pricegsm.com
+    </div>
+    <div class="footer-items">
+        <span class="go-top"><i class="clip-chevron-up"></i></span>
+    </div>
+</div>
+<!-- end: FOOTER -->
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    R = {
+        base : /*[[@{/}]]*/ "/pricegsm/"
+    };
+    /*]]>*/
+</script>
+<script src="../../../resources/components/jquery/jquery.min.js"
+        th:src="@{/resources/components/jquery/jquery.min.js}"></script>
+<script src="../../../resources/components/jquery-ui/ui/minified/jquery-ui.min.js"
+        th:src="@{/resources/components/jquery-ui/ui/minified/jquery-ui.min.js}"></script>
+<script src="../../../resources/components/jquery-mousewheel/jquery.mousewheel.js"
+        th:src="@{/resources/components/jquery-mousewheel/jquery.mousewheel.js}"></script>
+<script src="../../../resources/components/bootstrap/dist/js/bootstrap.min.js"
+        th:src="@{/resources/components/bootstrap/dist/js/bootstrap.min.js}"></script>
+<script src="../../../resources/components/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js"
+        th:src="@{/resources/components/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js}"></script>
+<script src="../../../resources/components/perfect-scrollbar/src/perfect-scrollbar.js"
+        th:src="@{/resources/components/perfect-scrollbar/src/perfect-scrollbar.js}"></script>
+
+<!-- main js -->
+<script src="../../../resources/js/main.js"
+        th:src="@{/resources/js/main.js}"></script>
+
+<script>
+    $(function(){
+            Main.init();
+    })
+</script>
+</body>
+<!-- end: BODY -->
+</html>

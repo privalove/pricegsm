@@ -278,12 +278,18 @@ SalesCtrl.resolve = {
 
 };
 
-function PriceListCtrl($scope) {
+function PriceListCtrl($scope, priceListResource) {
+    if (priceListResource.ok) {
+        angular.extend($scope, priceListResource.payload);
 
+
+    }
 }
 
 PriceListCtrl.resolve = {
-
+    priceListResource: function(PriceListResource) {
+        return PriceListResource.get().$promise;
+    }
 };
 
 function PartnerCtrl($scope) {
