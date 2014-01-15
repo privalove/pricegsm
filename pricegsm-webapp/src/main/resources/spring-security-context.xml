@@ -9,7 +9,7 @@ http://www.springframework.org/schema/security/spring-security-3.2.xsd">
     <security:http pattern="/resources/**" security="none"/>
     <security:http pattern="/favicon.ico" security="none"/>
 
-    <security:http name="defaultHttp" auto-config="true" disable-url-rewriting="true" use-expressions="true">
+    <security:http auto-config="true" disable-url-rewriting="true" use-expressions="true">
 		<security:form-login login-page="/signin" authentication-failure-url="/signin?error=1"/>
 		<security:logout logout-url="/logout" />
 		<security:remember-me
@@ -22,6 +22,7 @@ http://www.springframework.org/schema/security/spring-security-3.2.xsd">
 		<security:intercept-url pattern="/signup" access="permitAll" />
 		<security:intercept-url pattern="/yandex" access="permitAll" />
 		<security:intercept-url pattern="/exchange" access="permitAll" />
+		<security:intercept-url pattern="/generalError" access="permitAll" />
         <security:intercept-url pattern="/admin" access="hasAnyRole('ADMIN_ROLE')" />
         <security:intercept-url pattern="/admin/**" access="hasAnyRole('ADMIN_ROLE')" />
 		<security:intercept-url pattern="/**" access="isAuthenticated()" />

@@ -52,7 +52,12 @@ class CustomErrorController {
 		if (throwable != null) {
 			return Throwables.getRootCause(throwable).getMessage();
 		}
+
+        if (statusCode != null) {
 		HttpStatus httpStatus = HttpStatus.valueOf(statusCode);
 		return httpStatus.getReasonPhrase();
+        }
+
+        return "UNKNOWN";
 	}
 }

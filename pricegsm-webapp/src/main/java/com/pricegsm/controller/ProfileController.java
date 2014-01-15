@@ -32,6 +32,7 @@ public class ProfileController {
 
     @RequestMapping({"/signin"})
     public String login() {
+
         if (principalHolder.isAuthorized()) {
             return "redirect:/";
         } else {

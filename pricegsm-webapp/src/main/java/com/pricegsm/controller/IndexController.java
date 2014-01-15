@@ -42,7 +42,7 @@ public class IndexController {
     @Autowired
     private PrincipalHolder principalHolder;
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = {"/", ""}, method = RequestMethod.GET)
     public String layout(Locale locale, Model model) {
 
         if (principalHolder.isAdmin()) {
