@@ -17,6 +17,14 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <th:block th:if="${message != null}">
+                <div th:replace="fragments/alert :: alert (type=${#strings.toLowerCase(message.type)}, message=#{${message.message}})">
+                    &nbsp;</div>
+            </th:block>
+        </div>
+    </div>
 </div>
 </body>
 </html>
