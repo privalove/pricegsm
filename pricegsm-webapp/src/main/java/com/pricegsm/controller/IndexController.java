@@ -3,6 +3,7 @@ package com.pricegsm.controller;
 import com.pricegsm.config.PricegsmMessageSource;
 import com.pricegsm.domain.*;
 import com.pricegsm.domain.Currency;
+import com.pricegsm.securiry.PrincipalHolder;
 import com.pricegsm.service.ProductService;
 import com.pricegsm.service.WorldPriceService;
 import com.pricegsm.service.YandexPriceService;
@@ -38,8 +39,15 @@ public class IndexController {
     @Autowired
     private PricegsmMessageSource messageSource;
 
+    @Autowired
+    private PrincipalHolder principalHolder;
+
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String layout(Locale locale, Model model) {
+
+        if (principalHolder.isAdmin()) {
+            return "redirect:/admin";
+        }
 
         model.addAttribute("i18n", messageSource.getProperties(locale));
 
