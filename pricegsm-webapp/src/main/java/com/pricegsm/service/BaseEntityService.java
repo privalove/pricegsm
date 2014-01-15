@@ -106,9 +106,11 @@ public abstract class BaseEntityService<E extends BaseEntity, K extends Serializ
         boolean isSave = true;
         if (persisted != null) {
             merge(persisted, entity);
+            entity = getDao().merge(entity);
             isSave = false;
+        } else {
+            getDao().persist(entity);
         }
-        getDao().saveOrUpdate(entity);
         return new SaveResult<>(entity, isSave);
     }
 

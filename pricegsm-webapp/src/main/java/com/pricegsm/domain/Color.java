@@ -20,6 +20,8 @@ public class Color
 
     private String yandexColor;
 
+    private String code;
+
     private boolean active = true;
 
     @Id
@@ -75,5 +77,20 @@ public class Color
 
     public void setYandexColor(String yandexColor) {
         this.yandexColor = yandexColor;
+    }
+
+
+    /**
+     * Rgb code #FFFFFF
+     */
+    @Size(max = 255)
+    @Basic
+    @Column(name = "code")
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

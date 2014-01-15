@@ -28,6 +28,11 @@
                     <span th:text="#{colors}">Цвета</span>
                 </div>
                 <div class="panel-body">
+                    <th:block th:if="${message != null}">
+                        <div th:replace="fragments/alert :: alert (type=${#strings.toLowerCase(message.type)}, message=#{${message.message}(#{color})})">
+                            &nbsp;</div>
+                    </th:block>
+
                     <table class="table table-hover" id="sample-table-1">
                         <thead>
                         <tr>
@@ -35,6 +40,7 @@
                             <th class="pg-active-column center" th:text="#{color.active}">Активен</th>
                             <th th:text="#{color.name}">Цвет</th>
                             <th th:text="#{color.yandexColor}">Яндекс цвет</th>
+                            <th th:text="#{color.code}">RGB</th>
                             <th class="pg-actions-column"></th>
                         </tr>
                         </thead>
@@ -49,6 +55,10 @@
                             </td>
                             <td th:text="${color.name}">Black</td>
                             <td th:text="${color.yandexColor}">black</td>
+                            <td>
+                                <i class="clip-circle-2" th:style="'color:'+${color.code}" th:if="${color.code}"></i>
+                                <span th:text="${color.code}">#000000</span>
+                            </td>
                             <td class="pg-actions-column center">
                                 <div>
                                     <a th:href="@{'/admin/color/'+${color.id}}" href="#"
@@ -56,9 +66,10 @@
                                        data-placement="top" th:title="#{button.edit}" title="Редактировать">
                                         <i class="fa fa-edit"></i>
                                     </a>
-                                    <a th:href="@{'/admin/color/'+${color.id} + '/delete'}" href="#"
-                                       class="btn btn-xs btn-bricky tooltips"
-                                       data-placement="top" th:title="#{button.delete}" title="Удалить">
+                                    <a href="#delete-modal" class="btn btn-xs btn-bricky tooltips" title="Удалить"
+                                       data-toggle="modal" data-placement="top"
+                                       th:title="#{button.delete}"
+                                       th:attr="data-delete-action=@{'/admin/color/'+${color.id} + '/delete'}">
                                         <i class="fa fa-times"></i>
                                     </a>
                                 </div>
@@ -72,6 +83,7 @@
             </div>
         </div>
     </div>
+    <div th:replace="fragments/delete_modal :: delete_modal">&nbsp;</div>
 
 </div>
 </body>

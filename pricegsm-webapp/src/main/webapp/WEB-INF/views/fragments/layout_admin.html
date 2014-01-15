@@ -32,6 +32,8 @@
           th:href="@{/resources/components/angular-loading-bar/build/loading-bar.min.css}"/>
     <link rel="stylesheet" type="text/css" href="../../../resources/components/iCheck/skins/all.css"
           th:href="@{/resources/components/iCheck/skins/all.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../../resources/components/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css"
+          th:href="@{/resources/components/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css}"/>
 
     <link rel="stylesheet" type="text/css" href="../../../resources/assets/common/css/main.css"
           th:href="@{/resources/assets/common/css/main.css}"/>
@@ -160,14 +162,20 @@
         th:src="@{/resources/components/perfect-scrollbar/src/perfect-scrollbar.js}"></script>
 <script src="../../../resources/components/iCheck/icheck.min.js"
         th:src="@{/resources/components/iCheck/icheck.min.js}"></script>
+<script src="../../../resources/components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js"
+        th:src="@{/resources/components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js}"></script>
 
 <!-- main js -->
 <script src="../../../resources/js/main.js"
         th:src="@{/resources/js/main.js}"></script>
-
+<script src="../../../resources/js/form-elements.js"
+        th:src="@{/resources/js/form-elements.js}"></script>
+<script src="../../../resources/js/admin.js"
+        th:src="@{/resources/js/admin.js}"></script>
 <script>
     $(function(){
             Main.init();
+            FormElements.init();
     })
 </script>
 </body>

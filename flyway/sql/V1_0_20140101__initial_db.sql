@@ -128,6 +128,7 @@ CREATE TABLE "color" (
   "id"           BIGINT       NOT NULL,
   "name"         VARCHAR(255) NOT NULL,
   "yandex_color" VARCHAR(255),
+  "code" VARCHAR(255),
   "active"       BOOLEAN      NOT NULL DEFAULT TRUE,
   "description"  TEXT,
 

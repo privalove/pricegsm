@@ -19,7 +19,6 @@
     "angular-grid": "~2.0.7",
     "font-awesome": "4.0.3",
     "css3-magic": "*",
-    "perfect-scrollbar": "~0.4.6",
-    "iCheck": "1.0.1"
+    "perfect-scrollbar": "~0.4.6"
   }
 }

@@ -27,24 +27,89 @@
                 <div class="panel-body">
                     <form class="form-horizontal"
                           th:action="@{'/admin/color/'+ ${color.id}}" th:object="${color}" method="post">
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label" for="name" th:text="#{color.name}">
-                                Цвет
-                            </label>
-                            <div class="col-sm-9">
-                                <input type="text" id="name" placeholder="Цвет" class="form-control"
-                                       th:placeholder="#{color.name}" th:field="*{name}"/>
+
+                        <div class="form-group col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-6 text-left pg-button-separator">
+                                    <a th:href="@{/admin/color}" type="button" class="btn btn-standard">
+                                        <i class="fa fa-chevron-circle-left fa-lg"></i> <span th:text="#{button.back}">Назад</span>
+                                    </a>
+                                </div>
+
+                                <div class="col-sm-6 text-right pg-button-separator">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fa fa-save fa-lg"></i> <span th:text="#{button.save}">Сохранить</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group">
+
+                        <div class="form-group" th:classappend="${#fields.hasErrors('name')}? 'has-error'">
+                            <label class="col-xs-2 control-label" for="name" th:text="#{color.name}">
+                                Цвет
+                            </label>
+
+                            <div class="col-xs-7">
+                                <input type="text" id="name" class="form-control"
+                                       th:field="*{name}"/>
+                                <span class="help-block" th:if="${#fields.hasErrors('name')}"
+                                      th:errors="*{name}">Ошибка</span>
+                            </div>
+
+                            <div class="col-xs-2">
+                                <label class="checkbox-inline" for="active">
+                                    <input type="checkbox" id="active" class="teal"
+                                           th:field="*{active}"/>
+                                    <span th:text="#{color.active}"></span>
+                                </label>
+                            </div>
+
+                        </div>
+                        <div class="form-group" th:classappend="${#fields.hasErrors('yandexColor')}? 'has-error'">
                             <label class="col-sm-2 control-label" for="yandexColor" th:text="#{color.yandexColor}">
                                 Яндекс Цвет
                             </label>
+
                             <div class="col-sm-9">
-                                <input type="text" id="yandexColor" placeholder="Яндекс Цвет" class="form-control"
-                                       th:placeholder="#{color.yandexColor}" th:field="*{yandexColor}"/>
+                                <input type="text" id="yandexColor" class="form-control"
+                                       th:field="*{yandexColor}"/>
+                                <span class="help-block" th:if="${#fields.hasErrors('yandexColor')}"
+                                      th:errors="*{yandexColor}">Ошибка</span>
                             </div>
                         </div>
+                        <div class="form-group" th:classappend="${#fields.hasErrors('code')}? 'has-error'">
+                            <label class="col-sm-2 control-label" for="code" th:text="#{color.code}">
+                                Код
+                            </label>
+
+                            <div class="col-sm-9">
+                                <div class="input-group colorpicker-component" data-color="#000000"
+                                     data-color-format="hex">
+                                    <input type="text" id="code" readonly="readonly" class="form-control"
+                                           th:field="*{code}"/>
+                                    <span class="input-group-addon"><i style="background-color: #000000"></i></span>
+                                </div>
+                                <span class="help-block" th:if="${#fields.hasErrors('code')}"
+                                      th:errors="*{code}">Ошибка</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-6 text-left pg-button-separator">
+                                    <a th:href="@{/admin/color}" type="button" class="btn btn-standard">
+                                        <i class="fa fa-chevron-circle-left fa-lg"></i> <span th:text="#{button.back}">Назад</span>
+                                    </a>
+                                </div>
+
+                                <div class="col-sm-6 text-right pg-button-separator">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fa fa-save fa-lg"></i> <span th:text="#{button.save}">Сохранить</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
                         <input type="hidden" th:field="*{id}"/>
                     </form>
                 </div>

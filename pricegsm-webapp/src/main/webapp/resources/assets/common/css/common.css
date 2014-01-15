@@ -14,3 +14,13 @@
 .pg-actions-column {
     width: 100px;
 }
+
+@media (max-width: 768px) {
+
+    .pg-button-separator {
+        padding-top: 5px;
+        padding-bottom: 5px;
+        display: inline-block;
+    }
+
+}
