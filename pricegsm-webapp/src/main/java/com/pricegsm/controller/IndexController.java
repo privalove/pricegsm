@@ -11,6 +11,7 @@ import com.pricegsm.util.Utils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -58,7 +59,7 @@ public class IndexController {
     public void index() {
     }
 
-    @RequestMapping(value = "/index.json", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/index.json", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public OperationResult index(
             @RequestParam(value = "product", defaultValue = "1") long productId,
@@ -92,7 +93,7 @@ public class IndexController {
                 .payload("chart", fetchChart(selected, currency, chartData, chartRange));
     }
 
-    @RequestMapping(value = "/index/chart.json", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/index/chart.json", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public OperationResult chart(
             @RequestParam(value = "product", defaultValue = "1") long productId,
@@ -112,7 +113,7 @@ public class IndexController {
                 .payload("chart", fetchChart(selected, currency, chartData, chartRange));
     }
 
-    @RequestMapping(value = "/index/price.json", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/index/price.json", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public OperationResult price(
             @RequestParam(value = "product", defaultValue = "1") long productId,
@@ -130,7 +131,7 @@ public class IndexController {
                 .payload("prices", fetchPrices(dynRange, currency));
     }
 
-    @RequestMapping(value = "/index/shop.json", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/index/shop.json", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public OperationResult shop(
             @RequestParam(value = "product", defaultValue = "1") long productId,

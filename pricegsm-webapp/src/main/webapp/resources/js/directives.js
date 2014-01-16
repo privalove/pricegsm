@@ -34,7 +34,175 @@
                 }
             }
         })
+    /**
+     * Set text of element by eval content of directive.
+     *
+     * <button ng-text="R.get('button.close') + ' ' + R.get('restaurant')" >Close Restaurant</button>
+     */
+        .directive('ngText', [
+            function () {
+                return {
+                    restrict: "A",
+                    link: function ($scope, element, attrs) {
+                        element.html($scope.$eval(attrs.ngText));
+                    }
+                };
+            }])
+    /**
+     * Set text of element by i18n key.
+     *
+     * <button gf-text="button.close">Close</button>
+     */
+        .directive('gfText', [
+            function () {
+                return {
+                    restrict: "A",
+                    link: function ($scope, element, attrs) {
+                        element.html(R.get(attrs.gfText));
+                    }
+                };
+            }])
+    /**
+     * gf-valid="entityMetadata"
+     * data-valid-options={form:'.form-group'}
+     */
+        .directive('gfValid', function ($compile, formHelper) {
 
+            function isUndefined(value) {
+                return typeof value == 'undefined';
+            }
+
+            function isEmpty(value) {
+                return isUndefined(value) || value === '' || value === null || value !== value
+                    || ($.isArray(value) && value.length <= 0);
+            }
+
+            var standardValidations = {
+                pattern: function (ctrl, regexp) {
+                    return function (value) {
+                        if (isEmpty(value) || new RegExp(regexp).test(value)) {
+                            ctrl.$setValidity('pattern', true);
+                            return value;
+                        } else {
+                            ctrl.$setValidity('pattern', false);
+                            return undefined;
+                        }
+                    }
+                },
+                minlength: function (ctrl, minlength) {
+                    return function (value) {
+                        if (!isEmpty(value) && value.length < minlength) {
+                            ctrl.$setValidity('minlength', false);
+                            return undefined;
+                        } else {
+                            ctrl.$setValidity('minlength', true);
+                            return value;
+                        }
+                    }
+                },
+                maxlength: function (ctrl, maxlength) {
+                    return function (value) {
+                        if (!isEmpty(value) && value.length > maxlength) {
+                            ctrl.$setValidity('maxlength', false);
+                            return undefined;
+                        } else {
+                            ctrl.$setValidity('maxlength', true);
+                            return value;
+                        }
+                    }
+                },
+                min: function (ctrl, min) {
+                    return function (value) {
+                        if (!isEmpty(value) && value < min) {
+                            ctrl.$setValidity('min', false);
+                            return undefined;
+                        } else {
+                            ctrl.$setValidity('min', true);
+                            return value;
+                        }
+                    }
+                },
+                max: function (ctrl, max) {
+                    return function (value) {
+                        if (!isEmpty(value) && value > max) {
+                            ctrl.$setValidity('max', false);
+                            return undefined;
+                        } else {
+                            ctrl.$setValidity('max', true);
+                            return value;
+                        }
+                    }
+                },
+                required: function (ctrl) {
+                    return function (value) {
+                        if (isEmpty(value)) {
+                            ctrl.$setValidity('required', false);
+                            return undefined;
+                        } else {
+                            ctrl.$setValidity('required', true);
+                            return value;
+                        }
+                    }
+                }
+            };
+
+
+            var config = {
+                form: '.form-group'
+            };
+
+
+            return {
+                restrict: 'A',
+                require: "ngModel",
+                link: function (scope, iElement, attrs, controller) {
+                    var opts = angular.extend(config, scope.$eval(attrs.validOptions) || {});
+                    var subForm = iElement.parents(opts.form);
+                    var name = iElement.attr("name");
+                    var metadata = scope.$eval(attrs.gfValid);
+                    var validations = metadata.columns[name].validations;
+
+                    angular.forEach(validations, function (validation, index) {
+                        angular.forEach(validation.keys, function(value, key){
+                            controller.$parsers.push(standardValidations[key](controller, value));
+                            controller.$formatters.push(standardValidations[key](controller, value));
+                        });
+
+                        var elId = name + validation.name + "Error";
+                        var el = iElement.find("#" + elId);
+                        var messageValue = R.get(validation.message, validation.args);
+                        if (el.length == 0) {
+                            el = $("<small id='" + elId + "' class='help-block pg-error-message'></small>");
+                            iElement.after(el);
+
+
+                        }
+                        el.html("<i class='fa fa-times-circle fa-lg'></i>" + messageValue);
+
+                        scope.$watch(function () {
+                            return (controller.$submitted || controller.$dirty) && (controller.$error[validation.keys[0]] || controller.$error[validation.keys[1]]);
+                        }, function () {
+                            if ((controller.$submitted || controller.$dirty) && (controller.$error[validation.keys[0]] || controller.$error[validation.keys[1]])) {
+                                el.show();
+                            } else {
+                                el.hide();
+                            }
+                        });
+
+                    });
+
+                    scope.$watch(function () {
+                        return (controller.$submitted || controller.$dirty) && !controller.$valid;
+                    }, function () {
+                        subForm.toggleClass("has-error", (controller.$submitted || controller.$dirty) && !controller.$valid);
+                    });
+
+                    scope.$on("pg-submitted", function () {
+                        controller.$submitted = true;
+                    });
+                }
+            }
+        })
     ;
 
 })();

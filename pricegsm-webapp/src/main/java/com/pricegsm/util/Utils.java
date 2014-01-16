@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.util.CollectionUtils;
 
+import java.beans.PropertyDescriptor;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -170,4 +171,18 @@ public final class Utils {
         }
     }
 
+    public static boolean isAccessible(PropertyDescriptor descriptor) {
+        return descriptor.getWriteMethod() != null && descriptor.getReadMethod() != null;
+    }
+
+    /**
+     * Removes braces {} in the begin and at the end of the validation message.
+     */
+    public static String adaptValidationMessage(String message) {
+        if (!isEmpty(message) && message.startsWith("{") && message.endsWith("}")) {
+            return message.substring(1, message.length() - 1);
+        } else {
+            return message;
+        }
+    }
 }

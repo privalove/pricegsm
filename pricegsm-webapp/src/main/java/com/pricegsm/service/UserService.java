@@ -1,5 +1,6 @@
 package com.pricegsm.service;
 
+import com.pricegsm.controller.ProfileForm;
 import com.pricegsm.dao.RegionDao;
 import com.pricegsm.dao.UserDao;
 import com.pricegsm.domain.Region;
@@ -7,6 +8,7 @@ import com.pricegsm.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -54,5 +56,12 @@ public class UserService
         user.setRegion(regionDao.load(Region.MOSCOW));
         user.setToken(UUID.randomUUID().toString().replaceAll("-", ""));
         return user;
+    }
+
+    @Transactional
+    public User updateProfile(ProfileForm profilerForm) {
+        User user = getDao().load(principalHolder.getCurrentUser().getId());
+        profilerForm.fill(user);
+        return getDao().merge(user);
     }
 }

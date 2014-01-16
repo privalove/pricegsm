@@ -2,6 +2,7 @@ package com.pricegsm.controller;
 
 import com.pricegsm.service.PriceListService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,7 +21,7 @@ public class PriceListController {
         return "price_list";
     }
 
-    @RequestMapping(value = "/price_list.json", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/price_list.json", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public OperationResult priceListResource() {
         return OperationResult.ok()
                 .payload("priceLists", priceListService.findAllForCurrentUser());

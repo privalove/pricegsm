@@ -1,10 +1,14 @@
 package com.pricegsm.controller;
 
 import com.pricegsm.domain.User;
+import com.pricegsm.jackson.GlobalEntityListWrapper;
 import com.pricegsm.securiry.PrincipalHolder;
+import com.pricegsm.service.RegionService;
 import com.pricegsm.service.UserService;
+import com.pricegsm.util.EntityMetadata;
 import com.pricegsm.validation.PasswordValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,6 +33,9 @@ public class ProfileController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RegionService regionService;
 
     @RequestMapping({"/signin"})
     public String login() {
@@ -64,22 +71,31 @@ public class ProfileController {
         return "profile";
     }
 
-    @RequestMapping(value = "/profile.json", method = RequestMethod.GET)
+    @RequestMapping(value = "/profile.json", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public OperationResult currentUser() {
-        return OperationResult.ok().payload("user", principalHolder.getCurrentUser());
+        return OperationResult.ok()
+                .payload("profile", new ProfileForm((User) principalHolder.getCurrentUser()))
+                .payload("regions", new GlobalEntityListWrapper(regionService.findActive()));
     }
+
+    @RequestMapping(value = "/profile/metadata.json", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public EntityMetadata metadata() {
+        return EntityMetadata.from(ProfileForm.class);
+    }
+
 
     @RequestMapping(value = "/profile.json", method = RequestMethod.PUT)
     @ResponseBody
-    public OperationResult updateProfile(@RequestBody @Valid User user, BindingResult result) {
+    public OperationResult updateProfile(@RequestBody @Valid ProfileForm profilerForm, BindingResult result) {
 
         if (result.hasErrors()) {
             return OperationResult.validation()
                     .payload("user", principalHolder.getCurrentUser());
         }
-        user.setId(principalHolder.getCurrentUser().getId());
-        userService.save(user);
+
+        User user = userService.updateProfile(profilerForm);
 
         //refresh principal
         Authentication authentication = new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities());
