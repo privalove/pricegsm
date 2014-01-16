@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/layout_admin"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{page.product.title}">Pricegsm :: Продукт</title>
+</head>
+<body>
+<div class="container" layout:fragment="content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="page-header">
+                <h1>
+                    <span th:text="#{page.product}">Продукт</span>
+                </h1>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 core-box">
+            <a href="#" class="btn btn-primary" th:href="@{/admin/product/0}" th:text="#{button.add}">Добавить</a>
+        </div>
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="clip-eyedropper"></i>
+                    <span th:text="#{products}">Продукты</span>
+                </div>
+                <div class="panel-body">
+                    <th:block th:if="${message != null}">
+                        <div th:replace="fragments/alert :: alert (type=${#strings.toLowerCase(message.type)}, message=#{${message.message}(#{product})})">
+                            &nbsp;</div>
+                    </th:block>
+
+                    <table class="table table-hover" id="sample-table-1">
+                        <thead>
+                        <tr>
+                            <th class="pg-id-column center" th:text="#{product.id}">#</th>
+                            <th class="pg-active-column center" th:text="#{product.active}">Активен</th>
+                            <th th:text="#{product.vendor}">Производитель</th>
+                            <th th:text="#{product.name}">Наименование</th>
+                            <th th:text="#{product.color}">Цвет</th>
+                            <th th:text="#{product.yandexId}">yandex Id</th>
+                            <th th:text="#{product.yandexTypeId}">yandex Type Id</th>
+                            <th class="pg-actions-column"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="product : ${products}">
+                            <td class="pg-id-column center" th:text="${product.id}">1</td>
+                            <td class="pg-active-column center">
+                                <label>
+                                    <input type="radio" th:checked="${product.active}" disabled="disabled"
+                                           class="square-black"/>
+                                </label>
+                            </td>
+                            <td th:text="${product.vendor.name}">Apple Mobile</td>
+                            <td th:text="${product.name}">Iphone 5S</td>
+                            <td>
+                                <i class="clip-circle-2" th:style="'color:'+${product.color.code}" th:if="${product.color.code}"></i>
+                                <span th:text="${product.color.name}">Space Gray</span>
+                            </td>
+                            <td th:text="${product.yandexId}">12345678</td>
+                            <td th:text="${product.yandexTypeId}">12345</td>
+                            <td class="pg-actions-column center">
+                                <div>
+                                    <a th:href="@{'/admin/product/'+${product.id}}" href="#"
+                                       class="btn btn-xs btn-teal tooltips"
+                                       data-placement="top" th:title="#{button.edit}" title="Редактировать">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                    <a href="#delete-modal" class="btn btn-xs btn-bricky tooltips" title="Удалить"
+                                       data-toggle="modal" data-placement="top"
+                                       th:title="#{button.delete}"
+                                       th:attr="data-delete-action=@{'/admin/product/'+${product.id} + '/delete'}">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </div>
+
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="fragments/delete_modal :: delete_modal">&nbsp;</div>
+
+</div>
+</body>
+</html>

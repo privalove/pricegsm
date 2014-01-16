@@ -5,6 +5,8 @@ import com.pricegsm.domain.Color;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ColorService
         extends GlobalEntityService<Color> {
@@ -15,5 +17,9 @@ public class ColorService
     @Override
     protected ColorDao getDao() {
         return dao;
+    }
+
+    public List<Color> findActive() {
+        return getDao().findActive();
     }
 }

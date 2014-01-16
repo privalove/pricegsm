@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -145,7 +146,7 @@ class WebMvcConfig extends WebMvcConfigurationSupport {
     @Override
     protected void addFormatters(FormatterRegistry registry) {
         //fetch entity by id
-        registry.addConverterFactory(new IdToGlobalEntityConverterFactory());
+        registry.addConverterFactory(new IdToGlobalEntityConverterFactory((ConversionService)registry));
     }
 
     @Override

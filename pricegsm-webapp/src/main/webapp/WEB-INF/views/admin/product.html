@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/layout_admin"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{page.product.title}">Pricegsm :: Продукт</title>
+</head>
+<body>
+<div class="container" layout:fragment="content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="page-header">
+                <h1>
+                    <span th:text="#{page.product}">Продукт</span>
+                </h1>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="clip-eyedropper"></i>
+                    <span th:text="#{products}">Продукты</span>
+                </div>
+                <div class="panel-body">
+                    <form class="form-horizontal"
+                          th:action="@{'/admin/product/'+ ${product.id}}" th:object="${product}" method="post">
+
+                        <div class="form-group col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-6 text-left pg-button-separator">
+                                    <a th:href="@{/admin/product}" type="button" class="btn btn-standard">
+                                        <i class="fa fa-chevron-circle-left fa-lg"></i> <span th:text="#{button.back}">Назад</span>
+                                    </a>
+                                </div>
+
+                                <div class="col-sm-6 text-right pg-button-separator">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fa fa-save fa-lg"></i> <span th:text="#{button.save}">Сохранить</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group" th:classappend="${#fields.hasErrors('vendor')}? 'has-error'">
+                            <label class="col-sm-2 control-label" for="vendor" th:text="#{product.vendor}">
+                                Производитель
+                            </label>
+
+                            <div class="col-sm-9">
+                                <select id="vendor" class="form-control" th:field="*{vendor}">
+                                    <option value="0" th:text="#{option.select}"></option>
+                                    <option th:each="v : ${vendors}"
+                                            th:value="${v.id}"
+                                            th:text="${v.name}">Apple Mobile</option>
+                                </select>
+                                <span class="help-block" th:if="${#fields.hasErrors('vendor')}"
+                                      th:errors="*{vendor}">Ошибка</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group" th:classappend="${#fields.hasErrors('name')}? 'has-error'">
+                            <label class="col-xs-2 control-label" for="name" th:text="#{product.name}">
+                                Наименование
+                            </label>
+
+                            <div class="col-xs-7">
+                                <input type="text" id="name" class="form-control"
+                                       th:field="*{name}"/>
+                                <span class="help-block" th:if="${#fields.hasErrors('name')}"
+                                      th:errors="*{name}">Ошибка</span>
+                            </div>
+
+                            <div class="col-xs-2">
+                                <label class="checkbox-inline" for="active">
+                                    <input type="checkbox" id="active" class="teal"
+                                           th:field="*{active}"/>
+                                    <span th:text="#{product.active}"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group" th:classappend="${#fields.hasErrors('color')}? 'has-error'">
+                            <label class="col-sm-2 control-label" for="color" th:text="#{product.color}">
+                                Цвет
+                            </label>
+
+                            <div class="col-sm-9">
+                                <select id="color" class="form-control" th:field="*{color}">
+                                    <option value="0" th:text="#{option.select}"></option>
+                                    <option th:each="o : ${colors}"
+                                            th:value="${o.id}"
+                                            th:text="${o.name}">Gray Space</option>
+                                </select>
+                                <span class="help-block" th:if="${#fields.hasErrors('color')}"
+                                      th:errors="*{color}">Ошибка</span>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group" th:classappend="${#fields.hasErrors('yandexId')}? 'has-error'">
+                            <label class="col-sm-2 control-label" for="yandexId" th:text="#{product.yandexId}">
+                                yandex Id
+                            </label>
+
+                            <div class="col-sm-9">
+                                <input type="text" id="yandexId" class="form-control"
+                                       th:field="*{yandexId}"/>
+                                <span class="help-block" th:if="${#fields.hasErrors('yandexId')}"
+                                      th:errors="*{yandexId}">Ошибка</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group" th:classappend="${#fields.hasErrors('yandexTypeId')}? 'has-error'">
+                            <label class="col-sm-2 control-label" for="yandexTypeId" th:text="#{product.yandexTypeId}">
+                                yandex Type Id
+                            </label>
+
+                            <div class="col-sm-9">
+                                <input type="text" id="yandexTypeId" class="form-control"
+                                       th:field="*{yandexTypeId}"/>
+                                <span class="help-block" th:if="${#fields.hasErrors('yandexTypeId')}"
+                                      th:errors="*{yandexTypeId}">Ошибка</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-6 text-left pg-button-separator">
+                                    <a th:href="@{/admin/product}" type="button" class="btn btn-standard">
+                                        <i class="fa fa-chevron-circle-left fa-lg"></i> <span th:text="#{button.back}">Назад</span>
+                                    </a>
+                                </div>
+
+                                <div class="col-sm-6 text-right pg-button-separator">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fa fa-save fa-lg"></i> <span th:text="#{button.save}">Сохранить</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <input type="hidden" th:field="*{id}"/>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

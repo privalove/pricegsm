@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="fragments/layout_admin"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{page.vendor.title}">Pricegsm :: Производитель</title>
+</head>
+<body>
+<div class="container" layout:fragment="content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="page-header">
+                <h1>
+                    <span th:text="#{page.vendor}">Производитель</span>
+                </h1>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="clip-eyedropper"></i>
+                    <span th:text="#{vendors}">Производители</span>
+                </div>
+                <div class="panel-body">
+                    <form class="form-horizontal"
+                          th:action="@{'/admin/vendor/'+ ${vendor.id}}" th:object="${vendor}" method="post">
+
+                        <div class="form-group col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-6 text-left pg-button-separator">
+                                    <a th:href="@{/admin/vendor}" type="button" class="btn btn-standard">
+                                        <i class="fa fa-chevron-circle-left fa-lg"></i> <span th:text="#{button.back}">Назад</span>
+                                    </a>
+                                </div>
+
+                                <div class="col-sm-6 text-right pg-button-separator">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fa fa-save fa-lg"></i> <span th:text="#{button.save}">Сохранить</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group" th:classappend="${#fields.hasErrors('name')}? 'has-error'">
+                            <label class="col-xs-2 control-label" for="name" th:text="#{vendor.name}">
+                                Наименование
+                            </label>
+
+                            <div class="col-xs-7">
+                                <input type="text" id="name" class="form-control"
+                                       th:field="*{name}"/>
+                                <span class="help-block" th:if="${#fields.hasErrors('name')}"
+                                      th:errors="*{name}">Ошибка</span>
+                            </div>
+
+                            <div class="col-xs-2">
+                                <label class="checkbox-inline" for="active">
+                                    <input type="checkbox" id="active" class="teal"
+                                           th:field="*{active}"/>
+                                    <span th:text="#{vendor.active}"></span>
+                                </label>
+                            </div>
+
+                        </div>
+                        <div class="form-group" th:classappend="${#fields.hasErrors('shortName')}? 'has-error'">
+                            <label class="col-sm-2 control-label" for="shortName" th:text="#{vendor.shortName}">
+                                Короткое Имя
+                            </label>
+
+                            <div class="col-sm-9">
+                                <input type="text" id="shortName" class="form-control"
+                                       th:field="*{shortName}"/>
+                                <span class="help-block" th:if="${#fields.hasErrors('shortName')}"
+                                      th:errors="*{shortName}">Ошибка</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-6 text-left pg-button-separator">
+                                    <a th:href="@{/admin/vendor}" type="button" class="btn btn-standard">
+                                        <i class="fa fa-chevron-circle-left fa-lg"></i> <span th:text="#{button.back}">Назад</span>
+                                    </a>
+                                </div>
+
+                                <div class="col-sm-6 text-right pg-button-separator">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fa fa-save fa-lg"></i> <span th:text="#{button.save}">Сохранить</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <input type="hidden" th:field="*{id}"/>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

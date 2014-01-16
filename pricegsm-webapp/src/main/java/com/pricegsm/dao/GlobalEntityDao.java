@@ -35,7 +35,7 @@ public class GlobalEntityDao<E extends GlobalEntity>
     public List<E> findActive() throws UnsupportedOperationException {
         if (Activable.class.isAssignableFrom(getType())) {
             return getEntityManager()
-                    .createQuery("select from " + getEntityName() + " o where o.active = true " + getOrderBy("o"))
+                    .createQuery("select o from " + getEntityName() + " o where o.active = true " + getOrderBy("o"))
                     .getResultList();
         } else {
             throw new UnsupportedOperationException(getEntityName() + " is not Activable");

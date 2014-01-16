@@ -128,7 +128,7 @@ CREATE TABLE "color" (
   "id"           BIGINT       NOT NULL,
   "name"         VARCHAR(255) NOT NULL,
   "yandex_color" VARCHAR(255),
-  "code" VARCHAR(255),
+  "code"         VARCHAR(255),
   "active"       BOOLEAN      NOT NULL DEFAULT TRUE,
   "description"  TEXT,
 
@@ -187,12 +187,13 @@ CREATE TABLE "product" (
   "color_id"       BIGINT       NOT NULL,
   "active"         BOOLEAN      NOT NULL DEFAULT TRUE,
   "description"    TEXT,
+  "show_in_stat"   BOOLEAN      NOT NULL DEFAULT TRUE,
 
   "modified_by"    BIGINT       NOT NULL DEFAULT 0,
   "modified"       TIMESTAMP WITH TIME ZONE,
   CONSTRAINT "product_pkey" PRIMARY KEY ("id"),
-  CONSTRAINT "product_to_vendor_fkey" FOREIGN KEY ("vendor_id") REFERENCES "vendor" ("id") ON DELETE CASCADE,
-  CONSTRAINT "product_to_color_fkey" FOREIGN KEY ("color_id") REFERENCES "color" ("id") ON DELETE CASCADE
+  CONSTRAINT "product_to_vendor_fkey" FOREIGN KEY ("vendor_id") REFERENCES "vendor" ("id"),
+  CONSTRAINT "product_to_color_fkey" FOREIGN KEY ("color_id") REFERENCES "color" ("id")
 );
 ALTER TABLE "product" OWNER TO pricegsmowner;
 

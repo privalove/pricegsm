@@ -113,8 +113,18 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li>
+                            <a th:href="@{/admin/vendor}">
+                                <span th:text="#{page.vendor}">Производитель</span>
+                            </a>
+                        </li>
+                        <li>
                             <a th:href="@{/admin/color}">
                                 <span th:text="#{page.color}">Цвета</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a th:href="@{/admin/product}">
+                                <span th:text="#{page.product}">Продукты</span>
                             </a>
                         </li>
                     </ul>
@@ -139,8 +149,8 @@
 <!-- end: MAIN CONTAINER -->
 <!-- start: FOOTER -->
 <div class="footer clearfix">
-    <div class="footer-inner">
-        2014 &copy; pricegsm.com
+    <div class="footer-inner" th:include="fragments/footer :: footer">
+        2014 Static footer
     </div>
     <div class="footer-items">
         <span class="go-top"><i class="clip-chevron-up"></i></span>
