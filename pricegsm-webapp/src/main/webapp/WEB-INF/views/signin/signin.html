@@ -1,61 +1,126 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-
+<html lang="ru" class="no-js" xmlns:th="http://www.thymeleaf.org" >
+<!-- start: HEAD -->
 <head>
-    <title th:text="#{page.signin.title}">Pricegsm :: Вход в систему</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link href="../../../resources/components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" media="screen" th:href="@{/resources/components/bootstrap/dist/css/bootstrap.min.css}"/>
-    <link href="../../../resources/components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" media="screen" th:href="@{/resources/components/bootstrap/dist/css/bootstrap-theme.min.css}"/>
-    <link href="../../../resources/assets/common/fonts/style.css" rel="stylesheet" media="screen" th:href="@{/resources/assets/common/fonts/style.css}" />
-    <link href="../../../resources/assets/common/css/main.css" rel="stylesheet" media="screen" th:href="@{/resources/assets/common/css/main.css}" />
-    <link href="../../../resources/assets/common/css/main-responsive.css" rel="stylesheet" media="screen" th:href="@{/resources/assets/common/css/main-responsive.css}" />
-    <link href="../../../resources/assets/common/css/common.css" rel="stylesheet" media="screen" th:href="@{/resources/assets/common/css/common.css}" />
-    <link href="../../../resources/assets/default/css/custom.css" rel="stylesheet" media="screen" th:href="@{/resources/assets/default/css/custom.css}" />
+    <title th:text="#{page.signin.title}">Clip-One - Responsive Admin Template</title>
+    <!-- start: META -->
+    <meta charset="utf-8" />
+    <!--[if IE]>
+    <meta http-equiv='X-UA-Compatible' content="IE=edge,chrome=1" />
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+    <!-- end: META -->
+    <!-- start: MAIN CSS -->
+    <link rel="stylesheet" type="text/css" href="../../../resources/components/bootstrap/dist/css/bootstrap.min.css"
+          th:href="@{/resources/components/bootstrap/dist/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../../resources/components/font-awesome/css/font-awesome.min.css"
+          th:href="@{/resources/components/font-awesome/css/font-awesome.min.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../../resources/components/perfect-scrollbar/src/perfect-scrollbar.css"
+          th:href="@{/resources/components/perfect-scrollbar/src/perfect-scrollbar.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../../resources/assets/common/fonts/style.css"
+          th:href="@{/resources/assets/common/fonts/style.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../../resources/components/angular-grid/ng-grid.min.css"
+          th:href="@{/resources/components/angular-grid/ng-grid.min.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../../resources/components/angular-loading-bar/build/loading-bar.min.css"
+          th:href="@{/resources/components/angular-loading-bar/build/loading-bar.min.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../../resources/components/iCheck/skins/all.css"
+          th:href="@{/resources/components/iCheck/skins/all.css}"/>
 
-    <script src="../../../resources/components/jquery/jquery.min.js" th:src="@{/resources/components/jquery/jquery.min.js}"></script>
-    <script src="../../../resources/components/bootstrap/dist/js/bootstrap.min.js" th:src="@{/resources/components/bootstrap/dist/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" type="text/css" href="../../../resources/assets/common/css/main.css"
+          th:href="@{/resources/assets/common/css/main.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../../resources/assets/common/css/main-responsive.css"
+          th:href="@{/resources/assets/common/css/main-responsive.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../../resources/assets/common/css/common.css"
+          th:href="@{/resources/assets/common/css/common.css}"/>
+
+    <link rel="stylesheet" type="text/css" href="../../../resources/assets/default/css/theme.css"
+          th:href="@{/resources/assets/default/css/theme.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../../resources/assets/default/css/custom.css"
+          th:href="@{/resources/assets/default/css/custom.css}"/>
+
+    <link rel="stylesheet" type="text/css" href="../../../resources/assets/common/css/print.css"
+          th:href="@{/resources/assets/common/css/print.css}" media="print"/>
+
+    <link rel="shortcut icon" href="../../../favicon.ico" th:href="@{/favicon.ico}"/>
+    <!-- end: MAIN CSS -->
+    <!-- start: CSS REQUIRED FOR THIS PAGE ONLY -->
+    <!-- end: CSS REQUIRED FOR THIS PAGE ONLY -->
 </head>
+<!-- end: HEAD -->
+<!-- start: BODY -->
+<body class="login example2">
+<div class="main-login col-sm-4 col-sm-offset-4">
+    <div class="logo">PRICE<i class="clip-clip"></i>GSM
+    </div>
+    <!-- start: LOGIN BOX -->
+    <div class="box-login">
+        <h3 th:text="#{page.signin.welcome}">Sign in to your account</h3>
+        <p th:text="#{page.signin.help}">
+            Please enter your name and password to log in.
+        </p>
+        <form class="form-login" action="index.html" method="post" th:action="@{/j_spring_security_check}">
 
-<body>
+            <th:block th:if="${param.error != null}">
+                <div class="errorHandler alert alert-danger" th:replace="fragments/alert :: alert (type='danger', message=#{alert.wrongPassword})">Внимание</div>
+            </th:block>
 
-<form class="form-narrow form-horizontal" action="/j_spring_security_check" method="post" th:action="@{/j_spring_security_check}">
-    <th:block th:if="${param.error != null}">
-        <div th:replace="fragments/alert :: alert (type='danger', message=#{alert.wrongPassword})">Внимание</div>
-    </th:block>
-    <fieldset>
-        <legend th:text="#{page.signin.welcome}">Пожалуйста, войдите в систему</legend>
-        <div class="form-group">
-            <label for="inputEmail" class="col-lg-2 control-label" th:text="#{signin.login}">Почтовый ящик</label>
-            <div class="col-lg-10">
-                <input type="text" class="form-control" id="inputEmail" placeholder="Почтовый ящик" name="j_username" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="inputPassword" class="col-lg-2 control-label" th:text="#{signin.password}">Пароль</label>
-            <div class="col-lg-10">
-                <input type="password" class="form-control" id="inputPassword" th:placeholder="#{signin.password}" placeholder="Парол" name="j_password" />
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-lg-offset-2 col-lg-10">
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" name="_spring_security_remember_me" /> <span th:text="#{signin.rememberme}">Запомнить меня на две недели</span>
-                    </label>
+            <fieldset>
+                <div class="form-group">
+							<span class="input-icon">
+								<input type="text" class="form-control" name="j_username" th:placeholder="#{signin.login}" placeholder="Username"/>
+								<i class="fa fa-user"></i> </span>
                 </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-lg-offset-2 col-lg-10">
-                <button type="submit" class="btn btn-default" th:text="#{signin.submit}">Войти</button>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-lg-offset-2 col-lg-10">
-                <p><span th:text="#{page.signin.signup}">В первый раз тут?</span> <a href="signup" th:href="@{/signup}" th:text="#{signup.submit}">Зарегистрироваться</a></p>
-            </div>
-        </div>
-    </fieldset>
-</form>
+                <div class="form-group form-actions">
+							<span class="input-icon">
+								<input type="password" class="form-control password" name="j_password" th:placeholder="#{signin.password}" placeholder="Password"/>
+								<i class="fa fa-lock"></i>
+								</span>
+                </div>
+                <div class="form-actions">
+                    <label for="remember" class="checkbox-inline">
+                        <input type="checkbox" class="grey remember" id="remember" name="_spring_security_remember_me"/>
+                        <span th:text="#{signin.rememberme}">Запомнить меня</span>
+                    </label>
+                    <button type="submit" class="btn btn-bricky pull-right">
+                        <span th:text="#{signin.submit}">Login</span> <i class="fa fa-arrow-circle-right"></i>
+                    </button>
+                </div>
+                <div class="new-account">
+                    <span th:text="#{page.signin.signup}">В первый раз тут?</span>
+                    <a href="#" class="register" th:href="@{/signup}" th:text="#{signup.submit}">
+                        Create an account
+                    </a>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <!-- end: LOGIN BOX -->
+    <!-- start: COPYRIGHT -->
+    <div class="copyright" th:include="fragments/footer :: footer">
+        2014 &copy; clip-one by cliptheme.
+    </div>
+    <!-- end: COPYRIGHT -->
+    <script src="../../../resources/components/jquery/jquery.min.js"
+            th:src="@{/resources/components/jquery/jquery.min.js}"></script>
+    <script src="../../../resources/components/bootstrap/dist/js/bootstrap.min.js"
+            th:src="@{/resources/components/bootstrap/dist/js/bootstrap.min.js}"></script>
+    <script src="../../../resources/components/iCheck/icheck.min.js"
+            th:src="@{/resources/components/iCheck/icheck.min.js}"></script>
+    <script src="../../../resources/components/perfect-scrollbar/src/perfect-scrollbar.js"
+            th:src="@{/resources/components/perfect-scrollbar/src/perfect-scrollbar.js}"></script>
+
+    <script src="../../../resources/js/main.js"
+            th:src="@{/resources/js/main.js}"></script>
+    <script>
+        $(function(){
+            Main.init();
+        })
+    </script>
+</div>
 </body>
+<!-- end: BODY -->
 </html>

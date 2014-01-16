@@ -1,3 +1,7 @@
+body.login .box-forgot, body.login .box-register {
+    display: block !important;
+}
+
 .pg-shop-datepicker  {
     margin-top: -6px;
     width: 82px;

@@ -17,19 +17,19 @@ body {
 	background: #ffffff;
 }
 body.bg_style_1 {
-	background: url("../../images/bg.png") rgba(0, 0, 0, 0) !important;
+	background: url("../images/bg.png") rgba(0, 0, 0, 0) !important;
 }
 body.bg_style_2 {
-	background: url("../../images/bg_2.png") rgba(0, 0, 0, 0) !important;
+	background: url("../images/bg_2.png") rgba(0, 0, 0, 0) !important;
 }
 body.bg_style_3 {
-	background: url("../../images/bg_3.png") rgba(0, 0, 0, 0) !important;
+	background: url("../images/bg_3.png") rgba(0, 0, 0, 0) !important;
 }
 body.bg_style_4 {
-	background: url("../../images/bg_4.png") rgba(0, 0, 0, 0) !important;
+	background: url("../images/bg_4.png") rgba(0, 0, 0, 0) !important;
 }
 body.bg_style_5 {
-	background: url("../../images/bg_5.png") rgba(0, 0, 0, 0) !important;
+	background: url("../images/bg_5.png") rgba(0, 0, 0, 0) !important;
 }
 a, a:focus, a:hover, a:active {
 	outline: 0 !important;
@@ -2900,11 +2900,11 @@ body.login {
 	color: #7F7F7F;
 }
 body.login.example1 {
-	background-image: url("../../images/bg.png");
+	background-image: url("../images/bg.png");
 	background-color: rgba(0, 0, 0, 0);
 }
 body.login.example2 {
-	background-image: url("../../images/bg_2.png");
+	background-image: url("../images/bg_2.png");
 	background-color: rgba(255, 255, 255, 0);
 }
 body.login .main-login {
@@ -3754,7 +3754,7 @@ div.timeline_element.purple div.timeline_title {
 	background-color: #ffffff !important;
 }
 .timer-area {
-	background-image: url("../../images/bg.png");
+	background-image: url("../images/bg.png");
 	background-color: rgba(0, 0, 0, 0);
 	margin-bottom: 4em;
 	padding-top: 2em;
@@ -3770,7 +3770,7 @@ ul#countdown {
 }
 ul#countdown li {
 	display: inline-block;
-	background: transparent url('../../images/timer-piece.png') no-repeat left top;
+	background: transparent url('../images/timer-piece.png') no-repeat left top;
 	width: 104px;
 	margin-bottom: 4em;
 	text-align: center;

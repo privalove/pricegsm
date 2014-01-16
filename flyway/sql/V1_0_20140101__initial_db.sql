@@ -73,7 +73,7 @@ CREATE TABLE "base_user" (
 );
 ALTER TABLE "base_user" OWNER TO pricegsmowner;
 
-CREATE SEQUENCE "base_user_seq" START 3;
+CREATE SEQUENCE "base_user_seq" START 4;
 ALTER TABLE "base_user_seq" OWNER TO pricegsmowner;
 
 INSERT INTO base_user (id, name, email, password) VALUES (1, 'Администратор', 'admin@pricegsm.com', '8e56be82bda733fa92b4430a8bcaf6f866e01e80d2934341b4c2a5fe02e4d48cf9ebe3d516a70d27');
