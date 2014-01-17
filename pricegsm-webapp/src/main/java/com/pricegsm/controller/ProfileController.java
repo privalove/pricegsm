@@ -79,17 +79,12 @@ public class ProfileController {
         return new ProfileForm((User) principalHolder.getCurrentUser());
     }
 
-    @RequestMapping(value = "/profile/metadata.json", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public EntityMetadata metadata() {
-        return EntityMetadata.from(ProfileForm.class);
-    }
-
     @RequestMapping(value = "/profile/context.json", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public OperationResult context() {
         return OperationResult.ok()
-                .payload("regions", new GlobalEntityListWrapper(regionService.findActive()));
+                .payload("regions", new GlobalEntityListWrapper(regionService.findActive()))
+                .payload("metadata", EntityMetadata.from(ProfileForm.class));
     }
 
 

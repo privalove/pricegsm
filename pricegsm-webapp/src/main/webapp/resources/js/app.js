@@ -3,7 +3,7 @@
 
     angular.module('pricegsm', ['ngRoute', 'ngCookies', 'ngAnimate', 'ngGrid', 'ui.bootstrap', 'angular-loading-bar',
             'pg.services', 'pg.directives'])
-        .config(['$routeProvider', function ($routeProvider) {
+        .config(['$routeProvider', "$httpProvider", function ($routeProvider, $httpProvider) {
             $routeProvider
                 .when('/', {templateUrl: R.base + 'index', controller: IndexCtrl, resolve: IndexCtrl.resolve, title: 'page.main.title' })
                 .when('/marketplace', {templateUrl: R.base + 'marketplace', controller: MarketplaceCtrl, resolve: MarketplaceCtrl.resolve, title: 'page.marketplace.title'})
@@ -14,12 +14,38 @@
                 .when('/profile', {templateUrl: R.base + 'profile', controller: ProfileCtrl, resolve: ProfileCtrl.resolve, title: 'page.profile.title'})
 
                 .otherwise({redirectTo: '/'});
+
+            $httpProvider.responseInterceptors.push(["$q", function($q) {
+
+                function success(response) {
+                    return response;
+                }
+
+                function error(response) {
+                    var status = response.status;
+
+                    if (status == 401) {
+                        window.location = R.base;
+                        return;
+                    }
+
+                    // otherwise
+                    return $q.reject(response);
+
+                }
+
+                return function (promise) {
+                    return promise.then(success, error);
+                }
+
+            }]);
+
+
         }])
         .run(["$rootScope", "$route", function($rootScope, $route) {
             $rootScope.$on("$routeChangeSuccess", function(){
                 //Change page title, based on Route information
                 $rootScope.title = R.get($route.current.title);
             });
-        }
-        ])
+        }])
 })();

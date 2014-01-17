@@ -8,7 +8,6 @@
         "IndexShopResource" : "index/shop.json",
 
         "Profile" : "profile.json",
-        "ProfileMetadata" : "profile/metadata.json",
         "ProfileContext" : "profile/context.json",
         "ChangePassword" : "profile/changePassword",
 
@@ -16,14 +15,14 @@
     };
 
         angular.module('pg.services', ['ngResource'])
-            .config(function ($provide) {
+            .config(["$provide", function ($provide) {
                 angular.forEach(RESOURCES, function (jsonLocation, name) {
-                    $provide.factory(name, function ($resource) {
+                    $provide.factory(name, ["$resource", function ($resource) {
                         return $resource(R.base + jsonLocation);
-                    })
+                    }])
                 });
-            })
-            .factory('notifyManager', function($interpolate) {
+            }])
+            .factory('notifyManager', [function() {
                 var settings = {
                     styling: 'bootstrap',
                     type: 'success',
@@ -53,7 +52,7 @@
                     }
 
                 };
-            })
+            }])
 ;
 
 

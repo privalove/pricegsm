@@ -236,11 +236,13 @@ function IndexCtrl($scope, $timeout, $cookies, $filter, indexResource, IndexReso
     }
 }
 
+IndexCtrl.$inject = ["$scope", "$timeout", "$cookies", "$filter", "indexResource", "IndexResource", "IndexChartResource", "IndexPriceResource", "IndexShopResource"];
+
 IndexCtrl.resolve = {
-    indexResource: function (IndexResource, $cookies) {
+    indexResource: ["IndexResource", "$cookies", function (IndexResource, $cookies) {
         //reset shop date to today on enter index page
         return getIndexResource(IndexResource, $cookies, {shopDate: null});
-    }
+    }]
 };
 
 function getIndexResource(IndexResource, $cookies, data) {
@@ -258,6 +260,8 @@ function MarketplaceCtrl($scope) {
 
 }
 
+MarketplaceCtrl.$inject = ["$scope"];
+
 MarketplaceCtrl.resolve = {
 
 };
@@ -266,6 +270,8 @@ function OrderCtrl($scope) {
 
 }
 
+OrderCtrl.$inject = ["$scope"];
+
 OrderCtrl.resolve = {
 
 };
@@ -273,6 +279,8 @@ OrderCtrl.resolve = {
 function SalesCtrl($scope) {
 
 }
+
+SalesCtrl.$inject = ["$scope"];
 
 SalesCtrl.resolve = {
 
@@ -286,23 +294,25 @@ function PriceListCtrl($scope, priceListResource) {
     }
 }
 
+PriceListCtrl.$inject = ["$scope", "priceListResource"];
+
 PriceListCtrl.resolve = {
-    priceListResource: function (PriceListResource) {
+    priceListResource: ["PriceListResource", function (PriceListResource) {
         return PriceListResource.get().$promise;
-    }
+    }]
 };
 
 function PartnerCtrl($scope) {
 
 }
 
+PartnerCtrl.$inject = ["$scope"];
+
 PartnerCtrl.resolve = {
 
 };
 
-function UserChangePasswordCtrl($scope, $modalInstance, notifyManager, $route, ChangePassword) {
-    var routeParams = $route.current.params;
-
+function UserChangePasswordCtrl($scope, $modalInstance, notifyManager, ChangePassword) {
     $scope.changePasswordForm = new ChangePassword({});
 
     $scope.ok = function () {
@@ -328,7 +338,9 @@ function UserChangePasswordCtrl($scope, $modalInstance, notifyManager, $route, C
     };
 }
 
-function ProfileCtrl($scope, $location, $modal, notifyManager, profileForm, context, metadata, Profile) {
+UserChangePasswordCtrl.$inject = ["$scope", "$modalInstance", "notifyManager", "ChangePassword"];
+
+function ProfileCtrl($scope, $location, $modal, notifyManager, profileForm, context, Profile) {
 
     $scope.changePassword = function () {
         $modal.open({
@@ -357,20 +369,18 @@ function ProfileCtrl($scope, $location, $modal, notifyManager, profileForm, cont
 
     if (context.ok) {
         $scope.profileForm = profileForm;
-        $scope.metadata = metadata;
 
         angular.extend($scope, context.payload);
     }
 }
 
+ProfileCtrl.$inject = ["$scope", "$location", "$modal", "notifyManager", "profileForm", "context", "Profile"];
+
 ProfileCtrl.resolve = {
-    metadata: function (ProfileMetadata) {
-        return ProfileMetadata.get().$promise;
-    },
-    context: function (ProfileContext) {
+    context: ["ProfileContext", function (ProfileContext) {
         return ProfileContext.get().$promise;
-    },
-    profileForm: function (Profile) {
+    }],
+    profileForm: ["Profile", function (Profile) {
         return Profile.get().$promise;
-    }
+    }]
 };

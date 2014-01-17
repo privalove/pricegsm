@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('pg.directives', [])
-        .run(["$rootScope", "$templateCache", "$route", function ($rootScope, $route, $templateCache) {
+        .run(["$rootScope", function ($rootScope) {
             /**
              * Safe Apply from https://coderwall.com/p/ngisma
              */
@@ -17,7 +17,7 @@
                 }
             };
         }])
-        .directive('pgChart', function ($filter) {
+        .directive('pgChart', ["$filter", function ($filter) {
             return {
                 scope: {
                     pgChart: "=",
@@ -33,40 +33,38 @@
                     });
                 }
             }
-        })
+        }])
     /**
      * Set text of element by eval content of directive.
      *
      * <button ng-text="R.get('button.close') + ' ' + R.get('restaurant')" >Close Restaurant</button>
      */
-        .directive('ngText', [
-            function () {
-                return {
-                    restrict: "A",
-                    link: function ($scope, element, attrs) {
-                        element.html($scope.$eval(attrs.ngText));
-                    }
-                };
-            }])
+        .directive('ngText', [function () {
+            return {
+                restrict: "A",
+                link: function ($scope, element, attrs) {
+                    element.html($scope.$eval(attrs.ngText));
+                }
+            };
+        }])
     /**
      * Set text of element by i18n key.
      *
      * <button pg-text="button.close">Close</button>
      */
-        .directive('pgText', [
-            function () {
-                return {
-                    restrict: "A",
-                    link: function ($scope, element, attrs) {
-                        element.html(R.get(attrs.pgText));
-                    }
-                };
-            }])
+        .directive('pgText', [function () {
+            return {
+                restrict: "A",
+                link: function ($scope, element, attrs) {
+                    element.html(R.get(attrs.pgText));
+                }
+            };
+        }])
     /**
      * pg-valid="entityMetadata"
      * data-valid-options={form:'.form-group'}
      */
-        .directive('pgValid', function () {
+        .directive('pgValid', [function () {
 
             function isUndefined(value) {
                 return typeof value == 'undefined';
@@ -163,7 +161,7 @@
                     var validations = metadata.columns[name].validations;
 
                     angular.forEach(validations, function (validation, index) {
-                        angular.forEach(validation.keys, function(value, key){
+                        angular.forEach(validation.keys, function (value, key) {
                             controller.$parsers.push(standardValidations[key](controller, value));
                             controller.$formatters.push(standardValidations[key](controller, value));
                         });
@@ -179,10 +177,10 @@
                         }
                         el.html("<i class='fa fa-times-circle fa-lg'></i>" + messageValue);
 
-                        var isValid = function(controller, keys) {
+                        var isValid = function (controller, keys) {
                             var error = false;
 
-                            angular.forEach(keys, function(value, key){
+                            angular.forEach(keys, function (value, key) {
                                 error = error || controller.$error[key];
                             });
 
@@ -212,8 +210,8 @@
                     });
                 }
             }
-        })
-        .directive('pgPasswordConfirm', function () {
+        }])
+        .directive('pgPasswordConfirm', [function () {
             return {
                 require: "ngModel",
                 link: function ($scope, element, attrs, ctrl) {
@@ -226,7 +224,7 @@
                         });
                 }
             };
-        })
+        }])
 
     ;
 
