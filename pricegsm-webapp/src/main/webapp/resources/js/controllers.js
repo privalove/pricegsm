@@ -83,7 +83,7 @@ function IndexCtrl($scope, $timeout, $cookies, $filter, indexResource, IndexReso
         }, 300);
     };
 
-    $scope.updateIndexPage = function(currency) {
+    $scope.updateIndexPage = function (currency) {
         if ($scope.indexTimeout) {
             $timeout.cancel($scope.indexTimeout);
         }
@@ -154,7 +154,7 @@ function IndexCtrl($scope, $timeout, $cookies, $filter, indexResource, IndexReso
         $scope.dateMax = new Date();
 
         var shopColumnDefs = [
-            {field: 'position', displayName: "#", width:"5%"},
+            {field: 'position', displayName: "#", width: "5%"},
             {field: 'shop', displayName: 'Магазин', cellTemplate: 'resources/template/shopNameCellTemplate.html', width: '25%'}
         ];
         angular.forEach($scope.colors, function (value) {
@@ -287,7 +287,7 @@ function PriceListCtrl($scope, priceListResource) {
 }
 
 PriceListCtrl.resolve = {
-    priceListResource: function(PriceListResource) {
+    priceListResource: function (PriceListResource) {
         return PriceListResource.get().$promise;
     }
 };
@@ -300,10 +300,41 @@ PartnerCtrl.resolve = {
 
 };
 
-function ProfileCtrl($scope) {
+function ProfileCtrl($scope, $location, notifyManager, profileForm, context, metadata, Profile) {
+    $scope.updateProfile = function() {
+        if ($scope.profileFormForm.$valid) {
+            profileForm.$save(function(data){
+                if (data.ok) {
+                    notifyManager.success(R.get('alert.profileUpdated'));
+                    $location.url("/");
+                } else {
+                    if (data.payload && data.payload.profile){
+                        $scope.profileForm = new Profile(data.payload.profile);
+                    }
+                }
+            })
 
+        } else {
+            $scope.$broadcast("pg-submitted");
+        }
+    };
+
+    if (context.ok) {
+        $scope.profileForm = profileForm;
+        $scope.metadata = metadata;
+
+        angular.extend($scope, context.payload);
+    }
 }
 
 ProfileCtrl.resolve = {
-
+    metadata: function (ProfileMetadata) {
+        return ProfileMetadata.get().$promise;
+    },
+    context: function (ProfileContext) {
+        return ProfileContext.get().$promise;
+    },
+    profileForm: function (Profile) {
+        return Profile.get().$promise;
+    }
 };

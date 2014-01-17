@@ -1,0 +1,112 @@
+<th:block xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="page-header">
+                <h1>
+                    <span th:text="#{page.profile}">Профиль</span>
+                </h1>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="clip-eyedropper"></i>
+                    <span th:text="#{profileForm}">Редактирование профиля</span>
+                </div>
+                <div class="panel-body">
+
+                    <form name="profileFormForm" class="form-horizontal" ng-submit="updateProfile()" novalidate="novalidate">
+
+                        <div class="form-group col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-6 text-left pg-button-separator">
+                                    <a href="#/" type="button" class="btn btn-standard">
+                                        <i class="fa fa-chevron-circle-left fa-lg"></i> <span th:text="#{button.back}">Назад</span>
+                                    </a>
+                                </div>
+
+                                <div class="col-sm-6 text-right pg-button-separator">
+                                    <a href="#change-password-modal" data-toggle="modal" type="submit" role="button"
+                                       class="btn btn-success">
+                                        <i class="fa fa-key fa-lg"></i> <span th:text="#{button.changePassword}">Изменить Пароль</span>
+                                    </a>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fa fa-save fa-lg"></i> <span th:text="#{button.save}">Сохранить</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-xs-2 control-label" for="name">
+                                <span th:text="#{profileForm.name}">Имя</span> *
+                            </label>
+
+                            <div class="col-xs-9">
+                                <input type="text" id="name" name="name" class="form-control"
+                                       ng-model="profileForm.name" pg-valid="metadata"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-xs-2 control-label" for="phone">
+                                <span th:text="#{profileForm.phone}">Phone</span>
+                            </label>
+
+                            <div class="col-xs-9">
+                                <input type="text" id="phone" name="phone" class="form-control"
+                                       ng-model="profileForm.phone" pg-valid="metadata"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-xs-2 control-label" for="website">
+                                <span th:text="#{profileForm.website}">Website</span>
+                            </label>
+
+                            <div class="col-xs-9">
+                                <input type="text" id="website" name="website" class="form-control"
+                                       ng-model="profileForm.website" pg-valid="metadata"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-xs-2 control-label" for="region">
+                                <span th:text="#{profileForm.region}">Region</span>
+                            </label>
+
+                            <div class="col-xs-9">
+                                <select id="region" name="region" class="form-control"
+                                       ng-options="o.id as o.name for o in regions"
+                                       ng-model="profileForm.region.id" pg-valid="metadata"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-6 text-left pg-button-separator">
+                                    <a ng-href="#/" type="button" class="btn btn-standard">
+                                        <i class="fa fa-chevron-circle-left fa-lg"></i> <span th:text="#{button.back}">Назад</span>
+                                    </a>
+                                </div>
+
+                                <div class="col-sm-6 text-right pg-button-separator">
+                                    <a href="#change-password-modal" data-toggle="modal" type="submit" role="button"
+                                       class="btn btn-success">
+                                        <i class="fa fa-key fa-lg"></i> <span th:text="#{button.changePassword}">Изменить Пароль</span>
+                                    </a>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fa fa-save fa-lg"></i> <span th:text="#{button.save}">Сохранить</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</th:block>

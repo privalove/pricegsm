@@ -73,10 +73,8 @@ public class ProfileController {
 
     @RequestMapping(value = "/profile.json", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public OperationResult currentUser() {
-        return OperationResult.ok()
-                .payload("profile", new ProfileForm((User) principalHolder.getCurrentUser()))
-                .payload("regions", new GlobalEntityListWrapper(regionService.findActive()));
+    public ProfileForm currentUser() {
+        return new ProfileForm((User) principalHolder.getCurrentUser());
     }
 
     @RequestMapping(value = "/profile/metadata.json", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -85,14 +83,21 @@ public class ProfileController {
         return EntityMetadata.from(ProfileForm.class);
     }
 
+    @RequestMapping(value = "/profile/context.json", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public OperationResult context() {
+        return OperationResult.ok()
+                .payload("regions", new GlobalEntityListWrapper(regionService.findActive()));
+    }
 
-    @RequestMapping(value = "/profile.json", method = RequestMethod.PUT)
+
+    @RequestMapping(value = "/profile.json", method = RequestMethod.POST)
     @ResponseBody
     public OperationResult updateProfile(@RequestBody @Valid ProfileForm profilerForm, BindingResult result) {
 
         if (result.hasErrors()) {
             return OperationResult.validation()
-                    .payload("user", principalHolder.getCurrentUser());
+                    .payload("profile", new ProfileForm((User) principalHolder.getCurrentUser()));
         }
 
         User user = userService.updateProfile(profilerForm);
@@ -102,7 +107,7 @@ public class ProfileController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         return OperationResult.ok()
-                .payload("user", principalHolder.getCurrentUser());
+                .payload("profile", new ProfileForm((User) principalHolder.getCurrentUser()));
     }
 
 }

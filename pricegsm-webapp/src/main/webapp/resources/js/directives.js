@@ -51,22 +51,22 @@
     /**
      * Set text of element by i18n key.
      *
-     * <button gf-text="button.close">Close</button>
+     * <button pg-text="button.close">Close</button>
      */
-        .directive('gfText', [
+        .directive('pgText', [
             function () {
                 return {
                     restrict: "A",
                     link: function ($scope, element, attrs) {
-                        element.html(R.get(attrs.gfText));
+                        element.html(R.get(attrs.pgText));
                     }
                 };
             }])
     /**
-     * gf-valid="entityMetadata"
+     * pg-valid="entityMetadata"
      * data-valid-options={form:'.form-group'}
      */
-        .directive('gfValid', function ($compile, formHelper) {
+        .directive('pgValid', function () {
 
             function isUndefined(value) {
                 return typeof value == 'undefined';
@@ -159,7 +159,7 @@
                     var opts = angular.extend(config, scope.$eval(attrs.validOptions) || {});
                     var subForm = iElement.parents(opts.form);
                     var name = iElement.attr("name");
-                    var metadata = scope.$eval(attrs.gfValid);
+                    var metadata = scope.$eval(attrs.pgValid);
                     var validations = metadata.columns[name].validations;
 
                     angular.forEach(validations, function (validation, index) {
@@ -179,10 +179,20 @@
                         }
                         el.html("<i class='fa fa-times-circle fa-lg'></i>" + messageValue);
 
+                        var isValid = function(controller, keys) {
+                            var error = false;
+
+                            angular.forEach(keys, function(value, key){
+                                error = error || controller.$error[key];
+                            });
+
+                            return !error;
+                        };
+
                         scope.$watch(function () {
-                            return (controller.$submitted || controller.$dirty) && (controller.$error[validation.keys[0]] || controller.$error[validation.keys[1]]);
+                            return (controller.$submitted || controller.$dirty) && !isValid(controller, validation.keys);
                         }, function () {
-                            if ((controller.$submitted || controller.$dirty) && (controller.$error[validation.keys[0]] || controller.$error[validation.keys[1]])) {
+                            if ((controller.$submitted || controller.$dirty) && !isValid(controller, validation.keys)) {
                                 el.show();
                             } else {
                                 el.hide();
