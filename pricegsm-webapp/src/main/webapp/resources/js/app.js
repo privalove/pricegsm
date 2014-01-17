@@ -15,6 +15,7 @@
 
                 .otherwise({redirectTo: '/'});
 
+            //redirect on ajax response error
             $httpProvider.responseInterceptors.push(["$q", function($q) {
 
                 function success(response) {

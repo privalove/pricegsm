@@ -211,7 +211,6 @@ public class IndexController {
             if (map == null) {
                 map = new HashMap<>();
                 map.put("shop", price.getShop());
-                map.put("link", price.getLink());
                 map.put("position", ++position);
                 result.add(map);
                 unique.put(price.getShop(), map);
@@ -219,6 +218,7 @@ public class IndexController {
 
             String name = "id" + price.getProduct().getColor().getId();
             map.put(name, getPrice(price, currency));
+            map.put(name + "Link", price.getLink());
         }
 
         return result;
@@ -242,6 +242,8 @@ public class IndexController {
         List<ProductPriceForm> result = new ArrayList<>();
 
         List<Product> products = productService.findActiveOrderByVendorAndName();
+
+        String previousProductName = "";
 
         for (Product product : products) {
 
@@ -268,8 +270,8 @@ public class IndexController {
                 }
             }
 
-            result.add(new ProductPriceForm(product, retail, retailDelta, BigDecimal.ZERO, BigDecimal.ZERO, world, worldDelta));
-
+            result.add(new ProductPriceForm(product, previousProductName, retail, retailDelta, BigDecimal.ZERO, BigDecimal.ZERO, world, worldDelta));
+            previousProductName = product.getName();
         }
 
         return result;

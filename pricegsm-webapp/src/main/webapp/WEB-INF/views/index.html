@@ -47,7 +47,7 @@
                                ng-model="shopDate" datepicker-popup="dd.MM.yyyy" show-button-bar="false" ng-change="updateShopPrices(shopDate)"
                                datepicker-options="dateOptions" max="{{dateMax}}"/>
                         <div class="panel-tools">
-                            {{vendor.shortName }} {{product.name}}
+                            <a ng-href="{{marketUrl()}}" target="_blank">{{vendor.shortName }} {{product.name}}</a>
                         </div>
                     </div>
                     <div class="panel-body">
@@ -69,7 +69,7 @@
                         </select>
                         <span th:span="#{page.main.day}">дней</span>
                         <div class="panel-tools">
-                            {{vendor.shortName }} {{product.name}}
+                            <a ng-href="{{marketUrl()}}" target="_blank">{{vendor.shortName }} {{product.name}}</a>
                         </div>
                     </div>
                     <div class="panel-body" pg-chart="chartDatas" data-chart-details="chartDetails">

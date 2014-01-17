@@ -4,6 +4,12 @@ function AppCtrl() {
 
 function IndexCtrl($scope, $timeout, $cookies, $filter, indexResource, IndexResource, IndexChartResource, IndexPriceResource, IndexShopResource) {
 
+    $scope.marketUrl = function () {
+        return "http://market.yandex.ru/offers.xml?modelid="
+            + $scope.product.yandexId + "&hid=" + $scope.product.yandexTypeId
+            + "&grhow=shop&how=aprice&np=1&onstock=1"
+    };
+
     $scope.getIndexChartResource = function (data) {
         return IndexChartResource.get(angular.extend({
             product: $cookies.product,
@@ -155,10 +161,10 @@ function IndexCtrl($scope, $timeout, $cookies, $filter, indexResource, IndexReso
 
         var shopColumnDefs = [
             {field: 'position', displayName: "#", width: "5%"},
-            {field: 'shop', displayName: 'Магазин', cellTemplate: 'resources/template/shopNameCellTemplate.html', width: '25%'}
+            {field: 'shop', displayName: 'Магазин', width: '25%'}
         ];
         angular.forEach($scope.colors, function (value) {
-            shopColumnDefs.push({field: 'id' + value.id, displayName: value.name});
+            shopColumnDefs.push({field: 'id' + value.id, displayName: value.name, cellTemplate: 'resources/template/shopNameCellTemplate.html'});
         });
 
         $scope.safeApply(function () {
@@ -183,6 +189,7 @@ function IndexCtrl($scope, $timeout, $cookies, $filter, indexResource, IndexReso
         plugins: [new ngGridFlexibleHeightPlugin()],
         selectedItems: $scope.selectedProduct,
         groupsCollapsedByDefault: false,
+        enableSorting: false,
         columnDefs: [
             {field: 'vendor', displayName: '', width: 0},
             {field: 'product', displayName: 'Наименование', width: "25%"},

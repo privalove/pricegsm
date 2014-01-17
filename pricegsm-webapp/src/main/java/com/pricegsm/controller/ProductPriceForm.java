@@ -1,6 +1,7 @@
 package com.pricegsm.controller;
 
 import com.pricegsm.domain.Product;
+import com.pricegsm.util.Utils;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -31,8 +32,8 @@ public class ProductPriceForm
     public ProductPriceForm() {
     }
 
-    public ProductPriceForm(Product product, BigDecimal retail, BigDecimal retailDelta, BigDecimal opt, BigDecimal optDelta, BigDecimal world, BigDecimal worldDelta) {
-        this.product = product.getName();
+    public ProductPriceForm(Product product, String previousProduct, BigDecimal retail, BigDecimal retailDelta, BigDecimal opt, BigDecimal optDelta, BigDecimal world, BigDecimal worldDelta) {
+        this.product = Utils.isEmpty(previousProduct) || !previousProduct.equals(product.getName()) ? product.getName() : "";
         this.id = product.getId();
         this.vendor = product.getVendor().getName();
         this.color = product.getColor().getName();
