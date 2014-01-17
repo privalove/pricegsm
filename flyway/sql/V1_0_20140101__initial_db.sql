@@ -78,7 +78,7 @@ ALTER TABLE "base_user_seq" OWNER TO pricegsmowner;
 
 INSERT INTO base_user (id, name, email, password) VALUES (1, 'Администратор', 'admin@pricegsm.com', '8e56be82bda733fa92b4430a8bcaf6f866e01e80d2934341b4c2a5fe02e4d48cf9ebe3d516a70d27');
 INSERT INTO base_user (id, name, email, password) VALUES (2, 'Поставщик', 'seller@pricegsm.com', '8e56be82bda733fa92b4430a8bcaf6f866e01e80d2934341b4c2a5fe02e4d48cf9ebe3d516a70d27');
-INSERT INTO base_user (id, name, email, password) VALUES (3, 'Покупатель', 'buyer@pricegsm.com', '147304244d17a96628240864b27db2fe8a097474ff830ada4cc3d495799325c7d6302697b8c529d6');
+INSERT INTO base_user (id, name, email, password) VALUES (3, 'Покупатель', 'buyer@pricegsm.com', '8e56be82bda733fa92b4430a8bcaf6f866e01e80d2934341b4c2a5fe02e4d48cf9ebe3d516a70d27');
 
 CREATE TABLE "pricegsm_user" (
   "id"                    BIGINT         NOT NULL,
