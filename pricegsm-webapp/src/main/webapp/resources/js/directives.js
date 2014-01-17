@@ -213,6 +213,21 @@
                 }
             }
         })
+        .directive('pgPasswordConfirm', function () {
+            return {
+                require: "ngModel",
+                link: function ($scope, element, attrs, ctrl) {
+                    $scope.$watch('password + ' + attrs.ngModel,
+                        function (value) {
+                            var password = $scope.$eval(attrs.pgPasswordConfirm);
+                            var confirmPassword = $scope.$eval(attrs.ngModel);
+                            var valid = password == confirmPassword;
+                            ctrl.$setValidity("passwordConfirm", valid);
+                        });
+                }
+            };
+        })
+
     ;
 
 })();
