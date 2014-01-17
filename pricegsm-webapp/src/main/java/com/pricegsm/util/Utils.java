@@ -2,12 +2,12 @@ package com.pricegsm.util;
 
 import com.google.common.base.Charsets;
 import com.google.common.primitives.Longs;
-import com.oracle.javafx.jmx.json.JSONException;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

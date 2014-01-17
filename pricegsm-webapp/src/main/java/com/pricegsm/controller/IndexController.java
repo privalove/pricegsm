@@ -189,10 +189,13 @@ public class IndexController {
     /**
      * [{
      * shop: "Price-Killers",
-     * link: "http://price-killers.ru/iphone-5s-16gb",
-     * Gold: 768,
-     * Space Gray: 771,
-     * Silver: 731
+     * id1: 768,
+     * id1Link: "http://price-killers.ru/iphone-5s-16gb",
+     * id2: 771,
+     * id2Link: "http://price-killers.ru/iphone-5s-16gb",
+     * id3: 731,
+     * id3Link: "http://price-killers.ru/iphone-5s-16gb",
+     * position: 1
      * }]
      */
     private List<Map<String, Object>> fetchYandexPrices(Product selected, Date shopDate, int currency) {

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration scan="true" scanPeriod="3 seconds">
+	<contextName>pricegsm-webapp</contextName>
+
+    <!-- general messages -->
+    <property name="LOG_FILE" value="${catalina.home}/logs/parser.log"/>
+    <property name="LOG_FILE_PATTERN" value="${catalina.home}/logs/parser.%d{yyyy-MM-dd}.log"/>
+    <property name="MAX_HISTORY" value="10"/>
+
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+            <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+                <level>${stdout.log.level}</level>
+            </filter>
+			<pattern>
+				%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{32} - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+    <appender name="FILE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+
+        <file>${LOG_FILE}</file>
+        <rollingPolicy
+                class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_FILE_PATTERN}</fileNamePattern>
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>
+                %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{32} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <jmxConfigurator />
+
+    <logger name="com.pricegsm" level="${pricegsm.log.level}" />
+
+    <root level="${log.level}">
+		<appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE"/>
+	</root>
+
+</configuration>

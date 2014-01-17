@@ -2,7 +2,6 @@ package com.pricegsm.dao;
 
 import com.pricegsm.domain.BaseEntity;
 import com.pricegsm.util.ReflectionUtils;
-import com.sun.tools.internal.jxc.gen.config.Classes;
 import org.hibernate.jpa.HibernateEntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
