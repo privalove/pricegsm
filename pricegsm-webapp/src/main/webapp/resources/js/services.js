@@ -10,6 +10,7 @@
         "Profile" : "profile.json",
         "ProfileMetadata" : "profile/metadata.json",
         "ProfileContext" : "profile/context.json",
+        "ChangePassword" : "profile/changePassword",
 
         "PriceListResource": "price_list.json"
     };

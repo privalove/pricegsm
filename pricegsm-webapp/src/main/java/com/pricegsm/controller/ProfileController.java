@@ -5,6 +5,7 @@ import com.pricegsm.jackson.GlobalEntityListWrapper;
 import com.pricegsm.securiry.PrincipalHolder;
 import com.pricegsm.service.RegionService;
 import com.pricegsm.service.UserService;
+import com.pricegsm.support.web.MessageHelper;
 import com.pricegsm.util.EntityMetadata;
 import com.pricegsm.validation.PasswordValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 
@@ -109,5 +111,27 @@ public class ProfileController {
         return OperationResult.ok()
                 .payload("profile", new ProfileForm((User) principalHolder.getCurrentUser()));
     }
+
+    @RequestMapping(value = {"/profile/changePassword"}, method = RequestMethod.POST)
+    @ResponseBody
+    public OperationResult changePassword( @RequestBody @Valid ChangePasswordForm changePasswordForm, BindingResult result, RedirectAttributes ra) {
+        new PasswordValidator().validate(changePasswordForm, result);
+
+        if (result.hasErrors()) {
+            return OperationResult
+                    .validation()
+                    .message("alert.passwordError");
+        }
+
+        User user = userService.changePassword(changePasswordForm.getPassword());
+
+        //refresh principal
+        Authentication authentication = new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        return OperationResult.ok().message("alert.passwordChanged");
+
+    }
+
 
 }

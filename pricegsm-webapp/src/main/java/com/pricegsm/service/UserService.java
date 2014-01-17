@@ -64,4 +64,11 @@ public class UserService
         profilerForm.fill(user);
         return getDao().merge(user);
     }
+
+    @Transactional
+    public User changePassword(String password) {
+        User user = getDao().load(principalHolder.getCurrentUser().getId());
+        user.setPassword(encoder.encode(password));
+        return getDao().merge(user);
+    }
 }

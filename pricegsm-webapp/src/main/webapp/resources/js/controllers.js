@@ -300,15 +300,51 @@ PartnerCtrl.resolve = {
 
 };
 
-function ProfileCtrl($scope, $location, notifyManager, profileForm, context, metadata, Profile) {
-    $scope.updateProfile = function() {
+function UserChangePasswordCtrl($scope, $modalInstance, notifyManager, $route, ChangePassword) {
+    var routeParams = $route.current.params;
+
+    $scope.changePasswordForm = new ChangePassword({});
+
+    $scope.ok = function () {
+        $modalInstance.close();
+    };
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+    };
+
+    $scope.change = function (cpf) {
+        if (cpf.$valid) {
+            $scope.changePasswordForm.$save(
+                function (data) {
+                    if (data.ok) {
+                        notifyManager.success(R.get(data.message));
+                    } else {
+                        notifyManager.error(R.get(data.message));
+                    }
+                    $modalInstance.close();
+                });
+        }
+    };
+}
+
+function ProfileCtrl($scope, $location, $modal, notifyManager, profileForm, context, metadata, Profile) {
+
+    $scope.changePassword = function () {
+        $modal.open({
+            templateUrl: "resources/template/changePasswordTemplate.html",
+            controller: UserChangePasswordCtrl
+        });
+    };
+
+    $scope.updateProfile = function () {
         if ($scope.profileFormForm.$valid) {
-            profileForm.$save(function(data){
+            profileForm.$save(function (data) {
                 if (data.ok) {
                     notifyManager.success(R.get('alert.profileUpdated'));
                     $location.url("/");
                 } else {
-                    if (data.payload && data.payload.profile){
+                    if (data.payload && data.payload.profile) {
                         $scope.profileForm = new Profile(data.payload.profile);
                     }
                 }
