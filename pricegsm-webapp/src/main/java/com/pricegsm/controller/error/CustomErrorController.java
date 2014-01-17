@@ -38,7 +38,8 @@ class CustomErrorController {
 		String message = MessageFormat.format("{0} returned for {1} with message {2}", 
 			statusCode, requestUri, exceptionMessage
 		); 
-		
+		model.addAttribute("statusCode", statusCode);
+		model.addAttribute("exceptionMessage", exceptionMessage);
 		model.addAttribute("errorMessage", message);
 
         if (throwable != null) {

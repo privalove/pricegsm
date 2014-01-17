@@ -52,8 +52,8 @@ public class GlobalEntityDeserializer
         }
 
         ConversionService conversionService = getConversionService();
-        if (conversionService.canConvert(Long.class, getValueClass())) {
-            return (GlobalEntity) conversionService.convert(wrapper.getId(), getValueClass());
+        if (conversionService.canConvert(String.class, getValueClass())) {
+            return (GlobalEntity) conversionService.convert(String.valueOf(wrapper.getId()), getValueClass());
         }
 
         logger.error("Type " + getValueClass().getSimpleName() + " is not supported by conversion service");
