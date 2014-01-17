@@ -33,22 +33,22 @@ fi
 if [ ! -d bin ]; then
   mkdir bin
 fi
-if [ ! -f bin/flyway-commandline-2.1.jar ]; then
-  mvn org.apache.maven.plugins:maven-dependency-plugin:2.6:get -Dartifact=com.googlecode.flyway:flyway-commandline:2.1 -Ddest=bin/
+if [ ! -f bin/flyway-commandline-2.3.1.jar ]; then
+  mvn org.apache.maven.plugins:maven-dependency-plugin:2.6:get -Dartifact=com.googlecode.flyway:flyway-commandline:2.3.1 -Ddest=bin/
 fi
-if [ ! -f bin/flyway-core-2.1.jar ]; then
-  mvn org.apache.maven.plugins:maven-dependency-plugin:2.6:get -Dartifact=com.googlecode.flyway:flyway-core:2.1 -Ddest=bin/ -Dtransitive=false
+if [ ! -f bin/flyway-core-2.3.1.jar ]; then
+  mvn org.apache.maven.plugins:maven-dependency-plugin:2.6:get -Dartifact=com.googlecode.flyway:flyway-core:2.3.1 -Ddest=bin/ -Dtransitive=false
 fi
 
 if [ ! -d jars ]; then
   mkdir jars
 fi
-if [ ! -f jars/postgresql-9.1-901-1.jdbc4.jar ]; then
-  mvn org.apache.maven.plugins:maven-dependency-plugin:2.6:get -Dartifact=postgresql:postgresql:9.1-901-1.jdbc4 -Ddest=jars/
+if [ ! -f jars/postgresql-9.2-1004-jdbc4.jar ]; then
+  mvn org.apache.maven.plugins:maven-dependency-plugin:2.6:get -Dartifact=org.postgresql:postgresql:9.2-1004-jdbc4 -Ddest=jars/
 fi
 
 
-$JAVA_CMD -cp bin/flyway-commandline-2.1.jar:bin/flyway-core-2.1.jar:bin/spring-jdbc-2.5.6.jar:bin/commons-logging-1.1.1.jar:bin/spring-beans-2.5.6.jar:bin/spring-core-2.5.6.jar:bin/spring-context-2.5.6.jar:bin/aopalliance-1.0.jar:bin/spring-tx-2.5.6.jar:bin/log4j-1.2.16.jar com.googlecode.flyway.commandline.Main $@
+$JAVA_CMD -cp bin/flyway-commandline-2.3.1.jar:bin/flyway-core-2.3.1.jar com.googlecode.flyway.commandline.Main $@
 
 # Save the exit code
 JAVA_EXIT_CODE=$?

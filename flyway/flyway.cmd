@@ -35,21 +35,21 @@ if "%JAVA_HOME%"=="" (
 if not exist bin (
   mkdir bin
 )
-if not exist bin/flyway-commandline-2.1.jar (
-  call mvn org.apache.maven.plugins:maven-dependency-plugin:2.6:get -Dartifact=com.googlecode.flyway:flyway-commandline:2.1 -Ddest=bin/
+if not exist bin/flyway-commandline-2.3.1.jar (
+  call mvn org.apache.maven.plugins:maven-dependency-plugin:2.6:get -Dartifact=com.googlecode.flyway:flyway-commandline:2.3.1 -Ddest=bin/
 )
-if not exist bin/flyway-core-2.1.jar (
-  call mvn org.apache.maven.plugins:maven-dependency-plugin:2.6:get -Dartifact=com.googlecode.flyway:flyway-core:2.1 -Ddest=bin/ -Dtransitive=false
+if not exist bin/flyway-core-2.3.1.jar (
+  call mvn org.apache.maven.plugins:maven-dependency-plugin:2.6:get -Dartifact=com.googlecode.flyway:flyway-core:2.3.1 -Ddest=bin/ -Dtransitive=false
 )
 if not exist jars (
   mkdir jars
 )
-if not exist jars/postgresql-9.1-901-1.jdbc4.jar (
-  call mvn org.apache.maven.plugins:maven-dependency-plugin:2.6:get -Dartifact=postgresql:postgresql:9.1-901-1.jdbc4 -Ddest=jars/
+if not exist jars/postgresql-9.2-1004-jdbc4.jar (
+  call mvn org.apache.maven.plugins:maven-dependency-plugin:2.6:get -Dartifact=org.postgresql:postgresql:9.2-1004-jdbc4 -Ddest=jars/
 )
 
 
-%JAVA_CMD% -cp bin\flyway-commandline-2.1.jar;bin\flyway-core-2.1.jar;bin\spring-jdbc-2.5.6.jar;bin\commons-logging-1.1.1.jar;bin\spring-beans-2.5.6.jar;bin\spring-core-2.5.6.jar;bin\spring-context-2.5.6.jar;bin\aopalliance-1.0.jar;bin\spring-tx-2.5.6.jar;bin\log4j-1.2.16.jar com.googlecode.flyway.commandline.Main %*
+%JAVA_CMD% -cp bin\flyway-commandline-2.3.1.jar;bin\flyway-core-2.3.1.jar com.googlecode.flyway.commandline.Main %*
 
 @REM Save the exit code
 set JAVA_EXIT_CODE=%ERRORLEVEL%
