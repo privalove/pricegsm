@@ -78,7 +78,7 @@ function IndexCtrl($scope, $timeout, $cookies, $filter, indexResource, IndexReso
         }
         $scope.shopTimeout = setTimeout(function () {
 
-            $scope.getIndexShopResource({shopDate: $filter("date")(shopDate, 'dd.MM.yyyy') || $cookies.shopDate, product: product || $cookies.product}).then(function (indexShopResource) {
+            $scope.getIndexShopResource({shopDate: $filter("date")(shopDate, 'yyyy-MM-dd') || $cookies.shopDate, product: product || $cookies.product}).then(function (indexShopResource) {
                 if (indexShopResource.ok) {
                     angular.extend($scope, indexShopResource.payload);
                     $scope.fillCookies(indexShopResource.payload);
@@ -130,7 +130,7 @@ function IndexCtrl($scope, $timeout, $cookies, $filter, indexResource, IndexReso
             $cookies.dynRange = payload.dynRange + "";
         }
         if (payload.shopDate) {
-            $cookies.shopDate = $filter("date")(new Date(payload.shopDate), 'dd.MM.yyyy');
+            $cookies.shopDate = payload.shopDate;
         }
     };
 
@@ -154,9 +154,6 @@ function IndexCtrl($scope, $timeout, $cookies, $filter, indexResource, IndexReso
     };
 
     $scope.fillShopPrices = function () {
-        if ($scope.shopDate) {
-            $scope.shopDate = new Date($scope.shopDate);
-        }
         $scope.dateMax = new Date();
 
         var shopColumnDefs = [
@@ -204,6 +201,10 @@ function IndexCtrl($scope, $timeout, $cookies, $filter, indexResource, IndexReso
     $scope.gridShopOptions = {
         data: 'yandexPrices',
         plugins: [new ngGridFlexibleHeightPlugin({minHeight: 200})],
+        sortInfo: {
+            fields: ['position'],
+            directions: ['asc']
+        },
         columnDefs: 'shopPricesColumns'
     };
 

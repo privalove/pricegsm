@@ -12,22 +12,25 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 
-/**
- * Serialize to short form of global entity {id:,name:}
- */
-public class GlobalEntitySerializer
-        extends JsonSerializer<GlobalEntity> {
+public class DateWrapperSerializer
+        extends JsonSerializer<DateWrapper> {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
-    public void serialize(GlobalEntity value, JsonGenerator jgen, SerializerProvider provider)
+    public void serialize(DateWrapper value, JsonGenerator jgen, SerializerProvider provider)
             throws IOException, JsonProcessingException {
 
         try {
 
-            jgen.writeObject(new GlobalEntityWrapper(value.getId(), Utils.convert(value, getConversionService())));
+            if (value.getDate() != null) {
+                jgen.writeString(new SimpleDateFormat("yyyy-MM-dd").format(value.getDate()));
+            } else {
+                jgen.writeNull();
+            }
+
             return;
         } catch (UnsupportedOperationException uoe) {
             logger.warn("Unsupported operation for " + value, uoe);

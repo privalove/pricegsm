@@ -32,6 +32,9 @@
                 <span th:span="#{page.main.day}">дней</span>
             </div>
             <div class="panel-body">
+                <div th:replace="fragments/alert :: alert (type='info', message=#{alert.selectProduct})">
+                    &nbsp;</div>
+
                 <div class="gridStyle" ng-grid="gridPriceOptions"></div>
             </div>
         </div>
@@ -51,6 +54,9 @@
                         </div>
                     </div>
                     <div class="panel-body">
+                        <div th:replace="fragments/alert :: alert (type='info', message=#{alert.sortedTable})">
+                            &nbsp;</div>
+
                         <div class="gridStyle" ng-grid="gridShopOptions"></div>
                     </div>
                 </div>

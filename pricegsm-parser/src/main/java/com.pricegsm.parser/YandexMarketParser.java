@@ -3,6 +3,7 @@ package com.pricegsm.parser;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.google.common.base.Throwables;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -122,13 +123,16 @@ public class YandexMarketParser {
             return result.toString();
 
         } catch (JSONException e) {
-            logger.error("Error parsing json");
+            logger.error("Error parsing json {}", Throwables.getRootCause(e).getMessage());
+            logger.debug(Throwables.getRootCause(e).getMessage(), Throwables.getRootCause(e));
             return UrlFetchUtil.ERROR.format(new Object[]{"Error parsing json"});
         } catch (TransformerException e) {
-            logger.error("Error parsing xml");
+            logger.error("Error parsing xml {}", Throwables.getRootCause(e).getMessage());
+            logger.debug(Throwables.getRootCause(e).getMessage(), Throwables.getRootCause(e));
             return UrlFetchUtil.ERROR.format(new Object[]{"Error parsing xml"});
         } catch (Exception e) {
-            logger.error("Error fetching url");
+            logger.error("Error fetching url {}", Throwables.getRootCause(e).getMessage());
+            logger.debug(Throwables.getRootCause(e).getMessage(), Throwables.getRootCause(e));
             return UrlFetchUtil.ERROR.format(new Object[]{"Error fetching url"});
         }
     }

@@ -3,6 +3,7 @@ package com.pricegsm.controller;
 import com.pricegsm.config.PricegsmMessageSource;
 import com.pricegsm.domain.*;
 import com.pricegsm.domain.Currency;
+import com.pricegsm.jackson.DateWrapper;
 import com.pricegsm.securiry.PrincipalHolder;
 import com.pricegsm.service.ProductService;
 import com.pricegsm.service.WorldPriceService;
@@ -56,7 +57,9 @@ public class IndexController {
     }
 
     @RequestMapping(value = "/index", method = RequestMethod.GET)
-    public void index() {
+    public String index() {
+
+        return "index";
     }
 
     @RequestMapping(value = "/index.json", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -65,7 +68,7 @@ public class IndexController {
             @RequestParam(value = "product", defaultValue = "1") long productId,
             @RequestParam(defaultValue = "1") int currency,
             @RequestParam(defaultValue = "7") int dynRange,
-            @RequestParam(required = false) @DateTimeFormat(pattern = "dd.MM.yyyy") Date shopDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date shopDate,
             @RequestParam(defaultValue = "retail") String chartData,
             @RequestParam(defaultValue = "7") int chartRange) {
 
@@ -81,7 +84,7 @@ public class IndexController {
         return OperationResult.ok()
                 .payload("currency", Math.min(currency, Currency.RUB))
                 .payload("dynRange", dynRange)
-                .payload("shopDate", shopDate)
+                .payload("shopDate", new DateWrapper(shopDate))
                 .payload("chartData", chartData)
                 .payload("chartRange", chartRange)
                 .payload("product", selected)
@@ -136,7 +139,7 @@ public class IndexController {
     public OperationResult shop(
             @RequestParam(value = "product", defaultValue = "1") long productId,
             @RequestParam(defaultValue = "1") int currency,
-            @RequestParam(required = false) @DateTimeFormat(pattern = "dd.MM.yyyy") Date shopDate) {
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date shopDate) {
 
         Product selected = productService.load(productId);
 
@@ -149,7 +152,7 @@ public class IndexController {
 
         return OperationResult.ok()
                 .payload("currency", Math.min(currency, Currency.RUB))
-                .payload("shopDate", shopDate)
+                .payload("shopDate", new DateWrapper(shopDate))
                 .payload("product", selected)
                 .payload("vendor", selected.getVendor())
 

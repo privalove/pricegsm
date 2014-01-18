@@ -24,6 +24,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.web.servlet.LocaleContextResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -40,6 +41,7 @@ import com.pricegsm.Application;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
+import java.util.TimeZone;
 
 @Configuration
 @ComponentScan(basePackageClasses = Application.class, includeFilters = @Filter(Controller.class), useDefaultFilters = false)
@@ -129,8 +131,8 @@ class WebMvcConfig extends WebMvcConfigurationSupport {
     }
 
     @Bean
-    public LocaleResolver localeResolver() {
-        return new FixedLocaleResolver(new Locale("ru"));
+    public LocaleContextResolver localeResolver() {
+        return new FixedLocaleResolver(new Locale("ru", "RU"), TimeZone.getTimeZone("Europe/Moscow"));
     }
 
     @Override
