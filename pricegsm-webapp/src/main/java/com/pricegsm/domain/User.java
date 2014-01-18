@@ -340,7 +340,6 @@ public class User
     /**
      * Unique secret token for email confirmation or unsubscribe
      */
-    @NotBlank
     @JsonIgnore
     @Basic
     @Column(name = "token", nullable = false)

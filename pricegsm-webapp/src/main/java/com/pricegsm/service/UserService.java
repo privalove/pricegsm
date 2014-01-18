@@ -5,6 +5,7 @@ import com.pricegsm.dao.RegionDao;
 import com.pricegsm.dao.UserDao;
 import com.pricegsm.domain.Region;
 import com.pricegsm.domain.User;
+import com.pricegsm.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,9 @@ public class UserService
 
     @Override
     protected User preSave(User entity) {
-        entity.setPassword(encoder.encode(entity.getPassword()));
+        if (!Utils.isEmpty(entity.getPassword())) {
+            entity.setPassword(encoder.encode(entity.getPassword()));
+        }
 
         return super.preSave(entity);
     }

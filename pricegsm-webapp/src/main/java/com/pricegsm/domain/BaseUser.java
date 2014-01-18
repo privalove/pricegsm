@@ -49,7 +49,6 @@ public class BaseUser
         this.email = username;
     }
 
-    @NotBlank
     @Size(max = 255)
     @Basic
     @Column(name = "password", nullable = false)
