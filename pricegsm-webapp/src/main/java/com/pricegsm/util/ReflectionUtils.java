@@ -8,6 +8,9 @@ import java.util.Stack;
  */
 public final class ReflectionUtils {
 
+    private ReflectionUtils() {
+    }
+
     /**
      * Для некоторого класса (или интерфейса) определяет,
      * каким классом был параметризован один из его предков (реализующих классов) с generic-параметрами.

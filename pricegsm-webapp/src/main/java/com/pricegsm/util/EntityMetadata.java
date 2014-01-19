@@ -11,11 +11,14 @@ import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
 import java.util.*;
 
-public class EntityMetadata {
+public final class EntityMetadata {
 
     private String name;
 
     private Map<String, Column> columns = new HashMap<>();
+
+    private EntityMetadata() {
+    }
 
     public static EntityMetadata from(Class type) {
         String entityName = StringUtils.uncapitalize(type.getSimpleName());

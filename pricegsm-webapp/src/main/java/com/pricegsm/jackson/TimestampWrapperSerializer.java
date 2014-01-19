@@ -4,30 +4,31 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import com.pricegsm.domain.GlobalEntity;
 import com.pricegsm.util.ApplicationContextProvider;
-import com.pricegsm.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 
-/**
- * Serialize to short form of global entity {id:,name:}
- */
-public class GlobalEntitySerializer
-        extends JsonSerializer<GlobalEntity> {
+public class TimestampWrapperSerializer
+        extends JsonSerializer<DateWrapper> {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
-    public void serialize(GlobalEntity value, JsonGenerator jgen, SerializerProvider provider)
+    public void serialize(DateWrapper value, JsonGenerator jgen, SerializerProvider provider)
             throws IOException, JsonProcessingException {
 
         try {
 
-            jgen.writeObject(Wrappers.wrap(value));
+            if (value.getDate() != null) {
+                jgen.writeString(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(value.getDate()));
+            } else {
+                jgen.writeNull();
+            }
+
             return;
         } catch (UnsupportedOperationException uoe) {
             logger.warn("Unsupported operation for " + value, uoe);

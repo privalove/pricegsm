@@ -4,6 +4,7 @@ import com.pricegsm.config.PricegsmMessageSource;
 import com.pricegsm.domain.*;
 import com.pricegsm.domain.Currency;
 import com.pricegsm.jackson.DateWrapper;
+import com.pricegsm.jackson.Wrappers;
 import com.pricegsm.securiry.PrincipalHolder;
 import com.pricegsm.service.ProductService;
 import com.pricegsm.service.WorldPriceService;
@@ -84,7 +85,7 @@ public class IndexController {
         return OperationResult.ok()
                 .payload("currency", Math.min(currency, Currency.RUB))
                 .payload("dynRange", dynRange)
-                .payload("shopDate", new DateWrapper(shopDate))
+                .payload("shopDate", Wrappers.wrapDate(shopDate))
                 .payload("chartData", chartData)
                 .payload("chartRange", chartRange)
                 .payload("product", selected)
@@ -152,7 +153,7 @@ public class IndexController {
 
         return OperationResult.ok()
                 .payload("currency", Math.min(currency, Currency.RUB))
-                .payload("shopDate", new DateWrapper(shopDate))
+                .payload("shopDate", Wrappers.wrapDate(shopDate))
                 .payload("product", selected)
                 .payload("vendor", selected.getVendor())
 

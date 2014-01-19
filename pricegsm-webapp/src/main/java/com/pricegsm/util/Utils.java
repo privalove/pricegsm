@@ -31,6 +31,9 @@ public final class Utils {
 
     private static Logger logger = LoggerFactory.getLogger(Utils.class);
 
+    private Utils() {
+    }
+
     public static boolean isEmpty(String string) {
         return StringUtils.isBlank(string);
     }

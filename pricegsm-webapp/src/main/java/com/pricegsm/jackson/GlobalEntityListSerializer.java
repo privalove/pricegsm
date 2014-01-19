@@ -5,11 +5,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.pricegsm.domain.GlobalEntity;
-import com.pricegsm.util.ApplicationContextProvider;
-import com.pricegsm.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.convert.ConversionService;
 
 import java.io.IOException;
 
@@ -28,15 +25,11 @@ public class GlobalEntityListSerializer
         try {
             jgen.writeStartArray();
             for (GlobalEntity value : list.getList()) {
-                jgen.writeObject(new GlobalEntityWrapper(value.getId(), Utils.convert(value, getConversionService())));
+                jgen.writeObject(Wrappers.wrap(value));
             }
             jgen.writeEndArray();
         } catch (UnsupportedOperationException uoe) {
             logger.warn("Unsupported operation for " + list, uoe);
         }
-    }
-
-    private ConversionService getConversionService() {
-        return ApplicationContextProvider.getApplicationContext().getBean(ConversionService.class);
     }
 }

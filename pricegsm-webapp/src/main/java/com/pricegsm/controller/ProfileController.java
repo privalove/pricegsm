@@ -2,6 +2,7 @@ package com.pricegsm.controller;
 
 import com.pricegsm.domain.User;
 import com.pricegsm.jackson.GlobalEntityListWrapper;
+import com.pricegsm.jackson.Wrappers;
 import com.pricegsm.securiry.PrincipalHolder;
 import com.pricegsm.service.RegionService;
 import com.pricegsm.service.UserService;
@@ -83,7 +84,7 @@ public class ProfileController {
     @ResponseBody
     public OperationResult context() {
         return OperationResult.ok()
-                .payload("regions", new GlobalEntityListWrapper(regionService.findActive()))
+                .payload("regions", Wrappers.wrap(regionService.findActive()))
                 .payload("metadata", EntityMetadata.from(ProfileForm.class));
     }
 
