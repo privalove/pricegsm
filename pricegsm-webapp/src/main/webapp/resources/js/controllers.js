@@ -6,7 +6,7 @@ function IndexCtrl($scope, $timeout, $cookies, $filter, indexResource, IndexReso
 
     $scope.marketUrl = function () {
         return "http://market.yandex.ru/offers.xml?modelid="
-            + $scope.product.yandexId + "&hid=" + $scope.product.yandexTypeId
+            + $scope.product.yandexId + "&hid=" + $scope.product.type.yandexId
             + "&grhow=shop&how=aprice&np=1&onstock=1"
     };
 

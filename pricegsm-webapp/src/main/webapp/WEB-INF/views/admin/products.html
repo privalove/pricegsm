@@ -42,7 +42,7 @@
                             <th th:text="#{product.name}">Наименование</th>
                             <th th:text="#{product.color}">Цвет</th>
                             <th th:text="#{product.yandexId}">yandex Id</th>
-                            <th th:text="#{product.yandexTypeId}">yandex Type Id</th>
+                            <th th:text="#{product.type}">Категория</th>
                             <th class="pg-actions-column"></th>
                         </tr>
                         </thead>
@@ -62,7 +62,7 @@
                                 <span th:text="${product.color.name}">Space Gray</span>
                             </td>
                             <td th:text="${product.yandexId}">12345678</td>
-                            <td th:text="${product.yandexTypeId}">12345</td>
+                            <td th:text="${product.type.yandexId}">Мобильный телефон</td>
                             <td class="pg-actions-column center">
                                 <div>
                                     <a th:href="@{'/admin/product/'+${product.id}}" href="#"

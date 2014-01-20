@@ -2,9 +2,11 @@ package com.pricegsm.controller.admin;
 
 import com.pricegsm.domain.Color;
 import com.pricegsm.domain.Product;
+import com.pricegsm.domain.ProductType;
 import com.pricegsm.domain.Vendor;
 import com.pricegsm.service.ColorService;
 import com.pricegsm.service.ProductService;
+import com.pricegsm.service.ProductTypeService;
 import com.pricegsm.service.VendorService;
 import com.pricegsm.support.web.MessageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,9 @@ public class ProductController {
     @Autowired
     private ColorService colorService;
 
+    @Autowired
+    private ProductTypeService productTypeService;
+
     @ModelAttribute("colors")
     public List<Color> colors() {
         return colorService.findActive();
@@ -41,6 +46,11 @@ public class ProductController {
     @ModelAttribute("vendors")
     public List<Vendor> vendors() {
         return vendorService.findActive();
+    }
+
+    @ModelAttribute("type")
+    public List<ProductType> types() {
+        return productTypeService.findActive();
     }
 
     @RequestMapping(value = "/product", method = RequestMethod.GET)

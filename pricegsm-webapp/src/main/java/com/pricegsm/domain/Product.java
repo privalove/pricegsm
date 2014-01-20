@@ -20,7 +20,7 @@ public class Product
 
     private String yandexId;
 
-    private String yandexTypeId = "91491";
+    private ProductType type;
 
     private Vendor vendor;
 
@@ -63,18 +63,18 @@ public class Product
         this.yandexId = yandex_id;
     }
 
-    @Size(max = 255)
-    @Basic
-    @Column(name = "yandex_type_id", nullable = false)
-    public String getYandexTypeId() {
-        return yandexTypeId;
+    @JsonDeserialize(using = GlobalEntityDeserializer.class)
+    @NotNull
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "product_type_id", referencedColumnName = "id", nullable = false)
+    public ProductType getType() {
+        return type;
     }
 
-    public void setYandexTypeId(String yandexTypeId) {
-        this.yandexTypeId = yandexTypeId;
+    public void setType(ProductType type) {
+        this.type = type;
     }
 
-    @JsonSerialize(using = GlobalEntitySerializer.class)
     @JsonDeserialize(using = GlobalEntityDeserializer.class)
     @NotNull
     @ManyToOne(optional = false)
@@ -87,7 +87,6 @@ public class Product
         this.vendor = vendor;
     }
 
-    @JsonSerialize(using = GlobalEntitySerializer.class)
     @JsonDeserialize(using = GlobalEntityDeserializer.class)
     @NotNull
     @ManyToOne(optional = false)

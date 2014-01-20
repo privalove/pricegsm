@@ -61,6 +61,23 @@
                             </div>
                         </div>
 
+                        <div class="form-group" th:classappend="${#fields.hasErrors('type')}? 'has-error'">
+                            <label class="col-sm-2 control-label" for="type" th:text="#{product.type}">
+                                Категория
+                            </label>
+
+                            <div class="col-sm-9">
+                                <select id="type" class="form-control" th:field="*{type}">
+                                    <option value="0" th:text="#{option.select}"></option>
+                                    <option th:each="v : ${types}"
+                                            th:value="${v.id}"
+                                            th:text="${v.name}">Мобильный телефон</option>
+                                </select>
+                                <span class="help-block" th:if="${#fields.hasErrors('type')}"
+                                      th:errors="*{type}">Ошибка</span>
+                            </div>
+                        </div>
+
                         <div class="form-group" th:classappend="${#fields.hasErrors('name')}? 'has-error'">
                             <label class="col-xs-2 control-label" for="name" th:text="#{product.name}">
                                 Наименование
@@ -110,19 +127,6 @@
                                        th:field="*{yandexId}"/>
                                 <span class="help-block" th:if="${#fields.hasErrors('yandexId')}"
                                       th:errors="*{yandexId}">Ошибка</span>
-                            </div>
-                        </div>
-
-                        <div class="form-group" th:classappend="${#fields.hasErrors('yandexTypeId')}? 'has-error'">
-                            <label class="col-sm-2 control-label" for="yandexTypeId" th:text="#{product.yandexTypeId}">
-                                yandex Type Id
-                            </label>
-
-                            <div class="col-sm-9">
-                                <input type="text" id="yandexTypeId" class="form-control"
-                                       th:field="*{yandexTypeId}"/>
-                                <span class="help-block" th:if="${#fields.hasErrors('yandexTypeId')}"
-                                      th:errors="*{yandexTypeId}">Ошибка</span>
                             </div>
                         </div>
 
