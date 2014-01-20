@@ -38,7 +38,26 @@ public class ParserService {
     @Autowired
     private ProductService productService;
 
-
+    /**
+     * <pre>
+     * {"result": {
+     *      "offers": [{
+     *          "price": 22960,
+     *          "shop": "smarto-msk",
+     *          "link": "http://smarto-msk.ru?productId=123",
+     *          "position": 0,
+     *          "color": 1
+     *      }, {
+     *          "price": 23189,
+     *          "shop": "MobiAmo",
+     *          "link": "http://MobiAmo.com?productId=123",
+     *          "position": 0,
+     *          "color": 1
+     *      }],
+     *      "error":0
+     * }}
+     * </pre>
+     */
     @Scheduled(cron = "0 1,10,20 10,14,18 * * ?")
     public void readYandexData() throws IOException {
         List<Object[]> dates = yandexPriceService.findLast();
