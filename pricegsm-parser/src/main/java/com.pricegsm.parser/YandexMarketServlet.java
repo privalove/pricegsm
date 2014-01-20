@@ -5,6 +5,9 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author andreybugaev
@@ -30,7 +33,17 @@ public class YandexMarketServlet extends HttpServlet {
             //mobile phones
             yandexTypeId = 91491;
         }
-        String[] colors = req.getParameterValues("color");
+
+        Map<String, String> colors = new HashMap<>();
+        Enumeration<String> enumeration = req.getParameterNames();
+        while (enumeration.hasMoreElements()) {
+            String name = enumeration.nextElement();
+
+            if (name.startsWith("id")) {
+                colors.put(name.replaceAll("id", ""), req.getParameter(name));
+            }
+        }
+
         String content = parser.parse(yandexId, yandexTypeId, colors);
 
         //resp.setContentLength(content.length());

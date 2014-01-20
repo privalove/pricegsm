@@ -72,7 +72,7 @@ var FormElements = function () {
     };
     //function to initiate jquery.tagsinput
     var runTagsInput = function () {
-        $('#tags_1').tagsInput({
+        $('.tagsInput').tagsInput({
             width: 'auto'
         });
     };
@@ -101,7 +101,7 @@ var FormElements = function () {
             //runDateRangePicker();
             runColorPicker();
             //runColorPalette();
-            //runTagsInput();
+            runTagsInput();
             //runSummerNote();
             //runCKEditor();
         }

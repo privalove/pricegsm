@@ -39,7 +39,7 @@ public class YandexPrice
 
     private BigDecimal price;
 
-    private String color;
+    private long color;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -152,11 +152,11 @@ public class YandexPrice
     }
 
     @Transient
-    public String getColor() {
+    public long getColor() {
         return color;
     }
 
-    public void setColor(String color) {
+    public void setColor(long color) {
         this.color = color;
     }
 

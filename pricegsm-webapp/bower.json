@@ -21,7 +21,7 @@
         "font-awesome": "4.0.3",
         "css3-magic": "*",
         "perfect-scrollbar": "~0.4.6",
-        "pines-notify": "latest"
-
+        "pines-notify": "latest",
+        "jquery.tagsinput": "~1.3.2"
     }
 }

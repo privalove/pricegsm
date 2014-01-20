@@ -48,7 +48,7 @@ public class ProductController {
         return vendorService.findActive();
     }
 
-    @ModelAttribute("type")
+    @ModelAttribute("types")
     public List<ProductType> types() {
         return productTypeService.findActive();
     }

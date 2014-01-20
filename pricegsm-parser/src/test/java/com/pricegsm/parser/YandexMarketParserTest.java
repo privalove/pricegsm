@@ -8,6 +8,8 @@ import org.junit.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author andreybugaev
@@ -67,7 +69,13 @@ public class YandexMarketParserTest {
 
     @Test
     public void test() throws Exception {
-        String result = parser.parse(12345, 91491, "gray", "gold", "silver");
+
+        Map<String, String> map = new HashMap<>();
+        map.put("1", "gray");
+        map.put("2", "gold");
+        map.put("3", "silver");
+
+        String result = parser.parse(12345, 91491, map);
         Assert.assertTrue(result.contains("\"error\":0"));
         System.out.println(result);
     }

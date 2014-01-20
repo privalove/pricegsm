@@ -57,10 +57,10 @@ public class ParserService {
                 try {
 
                     if (date == null || date.before(yandexTime)) {
-                        String url = AppSettings.getParserUrl() + "/yandex?yandexId=" + yandexId;
+                        String url = AppSettings.getParserUrl() + "/yandex?yandexId=" + yandexId + "&yandexTypeId=" + colors.get(0).getType().getId();
 
                         for (Product color : colors) {
-                            url += "&color=" + color.getColor().getYandexColor();
+                            url += "&id" + color.getColor().getId() + "=" + color.getColor().getYandexColor();
                         }
 
                         logger.info("Fetch url: {}", url);
@@ -89,7 +89,7 @@ public class ParserService {
                                     yandexPrice.setPriceEur(yandexPrice.getPrice().divide(eur.getValue(), RoundingMode.HALF_UP));
 
                                     for (Product color : colors) {
-                                        if (yandexPrice.getColor().equalsIgnoreCase(color.getColor().getYandexColor())
+                                        if (yandexPrice.getColor() == color.getColor().getId()
                                                 && !set.contains(yandexPrice)) {
                                             yandexPrice.setProduct(color);
                                             set.add(yandexPrice);
