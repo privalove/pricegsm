@@ -61,7 +61,7 @@ public class ParserService {
      * }}
      * </pre>
      */
-    @Scheduled(cron = "0 1,10,20 10,14,18 * * ?")
+    @Scheduled(cron = "0 1,20,30 10,14,18 * * ?")
     public void readYandexData() throws IOException {
         List<Object[]> dates = yandexPriceService.findLast();
 
