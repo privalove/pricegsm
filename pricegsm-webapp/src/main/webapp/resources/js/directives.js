@@ -225,6 +225,18 @@
                 }
             };
         }])
+        .directive('pgPricecell', [function () {
+            return {
+                scope: {
+                    ngModel: "="
+                },
+                require: "ngModel",
+                templateUrl: "resources/template/priceCellTemplate.html",
+                link: function($scope, element, attrs) {
+                    $scope.field = attrs.pgPricecell;
+                }
+            }
+        }])
 
     ;
 

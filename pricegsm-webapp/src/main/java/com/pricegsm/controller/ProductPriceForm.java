@@ -9,13 +9,10 @@ import java.math.BigDecimal;
 public class ProductPriceForm
         implements Serializable {
 
-    private long id;
 
-    private String product;
+    private Product product;
 
-    private String color;
-
-    private String vendor;
+    private String name;
 
     private BigDecimal retail = BigDecimal.ZERO;
 
@@ -33,10 +30,8 @@ public class ProductPriceForm
     }
 
     public ProductPriceForm(Product product, String previousProduct, BigDecimal retail, BigDecimal retailDelta, BigDecimal opt, BigDecimal optDelta, BigDecimal world, BigDecimal worldDelta) {
-        this.product = Utils.isEmpty(previousProduct) || !previousProduct.equals(product.getName()) ? product.getName() : "";
-        this.id = product.getId();
-        this.vendor = product.getVendor().getName();
-        this.color = product.getColor().getName();
+        this.name = Utils.isEmpty(previousProduct) || !previousProduct.equals(product.getName()) ? product.getName() : "";
+        this.product = product;
         this.retail = retail;
         this.retailDelta = retailDelta;
         this.opt = opt;
@@ -45,36 +40,20 @@ public class ProductPriceForm
         this.worldDelta = worldDelta;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getProduct() {
+    public Product getProduct() {
         return product;
     }
 
-    public void setProduct(String product) {
+    public void setProduct(Product product) {
         this.product = product;
     }
 
-    public String getColor() {
-        return color;
+    public String getName() {
+        return name;
     }
 
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public String getVendor() {
-        return vendor;
-    }
-
-    public void setVendor(String vendor) {
-        this.vendor = vendor;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public BigDecimal getRetail() {

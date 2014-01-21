@@ -108,12 +108,6 @@ public class IndexController {
         Product selected = productService.load(productId);
 
         return OperationResult.ok()
-                .payload("currency", Math.min(currency, Currency.RUB))
-                .payload("chartData", chartData)
-                .payload("chartRange", chartRange)
-                .payload("product", selected)
-                .payload("vendor", selected.getVendor())
-
                 .payload("chart", fetchChart(selected, currency, chartData, chartRange));
     }
 
@@ -124,14 +118,7 @@ public class IndexController {
             @RequestParam(defaultValue = "7") int dynRange,
             @RequestParam(defaultValue = "1") int currency) {
 
-        Product selected = productService.load(productId);
-
         return OperationResult.ok()
-                .payload("currency", Math.min(currency, Currency.RUB))
-                .payload("dynRange", dynRange)
-                .payload("product", selected)
-                .payload("vendor", selected.getVendor())
-
                 .payload("prices", fetchPrices(dynRange, currency));
     }
 
@@ -152,11 +139,6 @@ public class IndexController {
         }
 
         return OperationResult.ok()
-                .payload("currency", Math.min(currency, Currency.RUB))
-                .payload("shopDate", Wrappers.wrapDate(shopDate))
-                .payload("product", selected)
-                .payload("vendor", selected.getVendor())
-
                 .payload("colors", fetchColors(selected))
                 .payload("yandexPrices", fetchYandexPrices(selected, shopDate, currency));
     }

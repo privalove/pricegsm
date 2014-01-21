@@ -37,78 +37,50 @@ function IndexCtrl($scope, $timeout, $cookies, $filter, indexResource, IndexReso
 
 
     $scope.updateChart = function (chartRange, product) {
+        $scope.getIndexChartResource({chartRange: chartRange || $cookies.chartRange, product: product || $cookies.product}).then(function (indexChartResource) {
+            if (indexChartResource.ok) {
+                angular.extend($scope, indexChartResource.payload);
 
-        if ($scope.chartTimeout) {
-            clearTimeout($scope.chartTimeout);
-        }
-
-        $scope.chartTimeout = setTimeout(function () {
-            $scope.getIndexChartResource({chartRange: chartRange || $cookies.chartRange, product: product || $cookies.product}).then(function (indexChartResource) {
-                if (indexChartResource.ok) {
-                    angular.extend($scope, indexChartResource.payload);
-
-                    $scope.fillCookies(indexChartResource.payload);
-                    $scope.fillChart();
-                }
-            });
-
-        }, 300);
+                $scope.fillCookies(indexChartResource.payload);
+                $scope.fillChart();
+            }
+        });
     };
 
     $scope.updatePrices = function (dynRange) {
+        $scope.getIndexPriceResource({dynRange: dynRange || $cookies.dynRange}).then(function (indexPriceResource) {
+            if (indexPriceResource.ok) {
+                angular.extend($scope, indexPriceResource.payload);
+                $scope.fillCookies(indexPriceResource.payload);
 
-        if ($scope.priceTimeout) {
-            clearTimeout($scope.priceTimeout);
-        }
-        $scope.priceTimeout = setTimeout(function () {
-            $scope.getIndexPriceResource({dynRange: dynRange || $cookies.dynRange}).then(function (indexPriceResource) {
-                if (indexPriceResource.ok) {
-                    angular.extend($scope, indexPriceResource.payload);
-                    $scope.fillCookies(indexPriceResource.payload);
-
-                    $scope.fillPrices();
-                }
-            });
-        }, 300);
+                $scope.fillPrices();
+            }
+        });
     };
 
     $scope.updateShopPrices = function (shopDate, product) {
-        if ($scope.shopTimeout) {
-            clearTimeout($scope.shopTimeout);
-        }
-        $scope.shopTimeout = setTimeout(function () {
+        $scope.getIndexShopResource({shopDate: $filter("date")(shopDate, 'yyyy-MM-dd') || $cookies.shopDate, product: product || $cookies.product}).then(function (indexShopResource) {
+            if (indexShopResource.ok) {
+                angular.extend($scope, indexShopResource.payload);
+                $scope.fillCookies(indexShopResource.payload);
 
-            $scope.getIndexShopResource({shopDate: $filter("date")(shopDate, 'yyyy-MM-dd') || $cookies.shopDate, product: product || $cookies.product}).then(function (indexShopResource) {
-                if (indexShopResource.ok) {
-                    angular.extend($scope, indexShopResource.payload);
-                    $scope.fillCookies(indexShopResource.payload);
-
-                    $scope.fillShopPrices();
-                }
-            });
-        }, 300);
+                $scope.fillShopPrices();
+            }
+        });
     };
 
     $scope.updateIndexPage = function (currency) {
-        if ($scope.indexTimeout) {
-            $timeout.cancel($scope.indexTimeout);
-        }
-
         $scope.currencyDisabled = true;
 
-        $scope.indexTimeout = $timeout(function () {
+        getIndexResource(IndexResource, $cookies, {currency: currency}).then(function (indexResource) {
+            if (indexResource.ok) {
+                angular.extend($scope, indexResource.payload);
 
-            getIndexResource(IndexResource, $cookies, {currency: currency}).then(function (indexResource) {
-                if (indexResource.ok) {
-                    angular.extend($scope, indexResource.payload);
+                $scope.fillCookies(indexResource.payload);
+                $scope.fillChart();
+            }
 
-                    $scope.fillCookies(indexResource.payload);
-                    $scope.fillChart();
-                }
-
-                $scope.currencyDisabled = false;
-            });
-
+            $scope.currencyDisabled = false;
         });
     };
 
@@ -223,23 +195,11 @@ function IndexCtrl($scope, $timeout, $cookies, $filter, indexResource, IndexReso
             }
         });
 
-        $scope.$watch(function () {
-                return $scope.selectedProduct.length > 0 ? $scope.selectedProduct[0].id : 0;
-            },
-            function (newVlaue, oldValue) {
-                if (newVlaue > 0 && newVlaue != oldValue) {
-                    $scope.updateShopPrices(null, newVlaue);
-                    $scope.updateChart(null, newVlaue);
-                }
-            });
-
-        $scope.$on("ngGridEventData", function () {
-            angular.forEach($scope.prices, function (price, index) {
-                if (price.id == $scope.product.id) {
-                    $scope.gridPriceOptions.selectItem(index, true);
-                }
-            });
-        });
+        $scope.updateProduct = function (product) {
+            $scope.product = product;
+            $scope.updateShopPrices(null, product.id);
+            $scope.updateChart(null, product.id);
+        };
 
     }
 }

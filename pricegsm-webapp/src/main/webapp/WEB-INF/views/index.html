@@ -2,7 +2,9 @@
     <div class="col-sm-12">
         <div class="page-header">
             <h1><span th:text="#{page.main}">Главная страница</span>
-                <small><span th:text="#{page.main.small}">статистика продаж</span> {{vendor.shortName }} {{product.name}}</small>
+                <small><span th:text="#{page.main.small}">статистика продаж</span> {{vendor.shortName }}
+                    {{product.name}}
+                </small>
             </h1>
         </div>
     </div>
@@ -10,13 +12,19 @@
 <div class="row" xmlns:th="http://www.thymeleaf.org">
     <div class="col-sm-12">
         <div class="core-box btn-group">
-            <button type="button" class="btn btn-primary" ng-model="currency" btn-radio="1" th:text="#{currency.USD}" ng-disabled="currencyDisabled">USD</button>
-            <button type="button" class="btn btn-primary" ng-model="currency" btn-radio="2" th:text="#{currency.EUR}" ng-disabled="currencyDisabled">EUR</button>
-            <button type="button" class="btn btn-primary" ng-model="currency" btn-radio="3" th:text="#{currency.RUB}" ng-disabled="currencyDisabled">RUB</button>
+            <button type="button" class="btn btn-default" ng-model="currency" btn-radio="1" th:text="#{currency.USD}"
+                    ng-disabled="currencyDisabled">USD
+            </button>
+            <button type="button" class="btn btn-default" ng-model="currency" btn-radio="2" th:text="#{currency.EUR}"
+                    ng-disabled="currencyDisabled">EUR
+            </button>
+            <button type="button" class="btn btn-default" ng-model="currency" btn-radio="3" th:text="#{currency.RUB}"
+                    ng-disabled="currencyDisabled">RUB
+            </button>
         </div>
     </div>
 </div>
-<div class="row"  xmlns:th="http://www.thymeleaf.org">
+<div class="row" xmlns:th="http://www.thymeleaf.org">
     <div class="col-md-7">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -35,7 +43,42 @@
                 <div th:replace="fragments/alert :: alert (type='info', message=#{alert.selectProduct})">
                     &nbsp;</div>
 
-                <div class="gridStyle" ng-grid="gridPriceOptions"></div>
+                <ul class="list-inline pg-vendors">
+                    <li ng-class="{'active':contains(product.vendor.id, [1,2])}">
+                        <a ng-click="showVendors(1,2)" class="btn btn-link btn-sm" role="button">Apple</a>
+                    </li>
+                    <li ng-class="{'active':contains(product.vendor.id, [5,6])}">
+                        <a ng-click="showVendors(5,6)" class="btn btn-link btn-sm" role="button">Samsung</a>
+                    </li>
+                    <li ng-class="{'active':contains(product.vendor.id, [7])}">
+                        <a ng-click="showVendors(7)" class="btn btn-link btn-sm" role="button">Nokia</a>
+                    </li>
+                    <li ng-class="{'active':contains(product.vendor.id, [8])}">
+                        <a ng-click="showVendors(8)" class="btn btn-link btn-sm" role="button">HTC</a>
+                    </li>
+                    <li ng-class="{'active':contains(product.vendor.id, [3,4])}">
+                        <a ng-click="showVendors(3,4)" class="btn btn-link btn-sm" role="button">Sony</a>
+                    </li>
+                </ul>
+
+                <table class="table table-hover table-condensed">
+                    <thead>
+                    <th>Наименование</th>
+                    <th>Цвет</th>
+                    <th>Розница</th>
+                    <th>Опт</th>
+                    <th>Мир</th>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="price in prices" ng-class="{'pg-highlight':price.product.id == product.id}" ng-click="updateProduct(price.product)">
+                        <td ng-text="price.name"></td>
+                        <td ng-text="price.product.color.name"></td>
+                        <td ng-model="price" pg-pricecell="retail"></td>
+                        <td ng-model="price" pg-pricecell="opt"></td>
+                        <td ng-model="price" pg-pricecell="world"></td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -47,10 +90,12 @@
                         <i class="fa fa-truck fa-lg"></i>
                         <span th:text="#{page.main.date}">На дату</span>
                         <input type="text" class="pg-shop-datepicker"
-                               ng-model="shopDate" datepicker-popup="dd.MM.yyyy" show-button-bar="false" ng-change="updateShopPrices(shopDate)"
+                               ng-model="shopDate" datepicker-popup="dd.MM.yyyy" show-button-bar="false"
+                               ng-change="updateShopPrices(shopDate)"
                                datepicker-options="dateOptions" max="{{dateMax}}"/>
+
                         <div class="panel-tools">
-                            <a ng-href="{{marketUrl()}}" target="_blank">{{vendor.shortName }} {{product.name}}</a>
+                            <a ng-href="{{marketUrl()}}" target="_blank">{{product.vendor.shortName }} {{product.name}}</a>
                         </div>
                     </div>
                     <div class="panel-body">
@@ -74,8 +119,9 @@
                             <option>365</option>
                         </select>
                         <span th:span="#{page.main.day}">дней</span>
+
                         <div class="panel-tools">
-                            <a ng-href="{{marketUrl()}}" target="_blank">{{vendor.shortName }} {{product.name}}</a>
+                            <a ng-href="{{marketUrl()}}" target="_blank">{{product.vendor.shortName }} {{product.name}}</a>
                         </div>
                     </div>
                     <div class="panel-body" pg-chart="chartDatas" data-chart-details="chartDetails">

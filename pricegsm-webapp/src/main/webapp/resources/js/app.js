@@ -48,5 +48,9 @@
                 //Change page title, based on Route information
                 $rootScope.title = R.get($route.current.title);
             });
+
+            $rootScope.contains = function(value, array) {
+                return $.inArray(value, array) >= 0;
+            }
         }])
 })();

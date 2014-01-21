@@ -1,14 +1,11 @@
-<div>
-    <div class='ngCellText'>
-        <div class="row">
-            <div class="col-xs-6">
-                {{row.getProperty(col.field)}}
-            </div>
-            <div class="col-xs-6" ng-if="row.getProperty(col.field + 'Delta') != 0">
-                <span class="label" ng-class="{'label-success':(row.getProperty(col.field + 'Delta') < 0), 'label-danger':(row.getProperty(col.field + 'Delta') > 0)}">
-                <span ng-if="row.getProperty(col.field + 'Delta') > 0">+</span>{{row.getProperty(col.field + 'Delta')}}
+<div class="row">
+    <div class="col-xs-6">
+        {{ngModel[field]}}
+    </div>
+    <div class="col-xs-6" ng-if="ngModel[field + 'Delta'] != 0">
+                <span class="label"
+                      ng-class="{'label-success':(ngModel[field + 'Delta'] < 0), 'label-danger':(ngModel[field + 'Delta'] > 0)}">
+                <span ng-if="ngModel[field + 'Delta'] > 0">+</span>{{ngModel[field + 'Delta']}}
                 </span>
-            </div>
-        </div>
     </div>
 </div>
