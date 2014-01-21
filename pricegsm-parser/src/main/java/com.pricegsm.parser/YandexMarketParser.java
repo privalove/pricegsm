@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.google.common.base.Throwables;
@@ -126,8 +127,13 @@ public class YandexMarketParser {
                                 shopOffer.setPosition(realPosition);
 
                                 if (!StringUtils.isEmpty(shopOffer.getLink())) {
-                                    HtmlPage shopPage = webClient.getPage(shopOffer.getLink());
-                                    shopOffer.setLink(shopPage.getPage().getUrl().toString());
+                                    try {
+                                        HtmlPage shopPage = webClient.getPage(shopOffer.getLink());
+                                        shopOffer.setLink(shopPage.getPage().getUrl().toString());
+                                    } catch (Exception e) {
+                                        logger.error("Error getting shop URL {}", Throwables.getRootCause(e).getMessage());
+                                        logger.debug(Throwables.getRootCause(e).getMessage(), Throwables.getRootCause(e));
+                                    }
                                 }
 
                                 offers.add(shopOffer);

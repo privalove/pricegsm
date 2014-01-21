@@ -5,6 +5,8 @@ import com.google.common.base.Throwables;
 import com.pricegsm.domain.*;
 import com.pricegsm.util.ApplicationContextProvider;
 import com.pricegsm.util.Utils;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -76,10 +79,10 @@ public class ParserService {
                 try {
 
                     if (date == null || date.before(yandexTime)) {
-                        String url = AppSettings.getParserUrl() + "/yandex?yandexId=" + yandexId + "&yandexTypeId=" + colors.get(0).getType().getId();
+                        String url = AppSettings.getParserUrl() + "/yandex?yandexId=" + yandexId + "&yandexTypeId=" + colors.get(0).getType().getYandexId();
 
                         for (Product color : colors) {
-                            url += "&id" + color.getColor().getId() + "=" + color.getColor().getYandexColor();
+                            url += "&id" + color.getColor().getId() + "=" + URLEncoder.encode(color.getColor().getYandexColor(), "UTF-8");
                         }
 
                         logger.info("Fetch url: {}", url);
