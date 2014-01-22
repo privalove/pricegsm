@@ -1,5 +1,6 @@
 package com.pricegsm.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.pricegsm.jackson.GlobalEntityDeserializer;
@@ -19,6 +20,8 @@ public class Product
     private String name;
 
     private String yandexId;
+
+    private String searchQuery;
 
     private ProductType type;
 
@@ -51,16 +54,27 @@ public class Product
         this.name = name;
     }
 
-    @NotBlank
+    @JsonIgnore
     @Size(max = 255)
     @Basic
-    @Column(name = "yandex_id", nullable = false)
+    @Column(name = "yandex_id")
     public String getYandexId() {
         return yandexId;
     }
 
     public void setYandexId(String yandex_id) {
         this.yandexId = yandex_id;
+    }
+
+    @Size(max = 255)
+    @Basic
+    @Column(name = "search_query")
+    public String getSearchQuery() {
+        return searchQuery;
+    }
+
+    public void setSearchQuery(String searchQuery) {
+        this.searchQuery = searchQuery;
     }
 
     @JsonDeserialize(using = GlobalEntityDeserializer.class)

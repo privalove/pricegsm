@@ -41,7 +41,7 @@
                             <th th:text="#{product.vendor}">Производитель</th>
                             <th th:text="#{product.name}">Наименование</th>
                             <th th:text="#{product.color}">Цвет</th>
-                            <th th:text="#{product.yandexId}">yandex Id</th>
+                            <th th:text="#{product.searchQuery}">Строка для поиска</th>
                             <th th:text="#{product.type}">Категория</th>
                             <th class="pg-actions-column"></th>
                         </tr>
@@ -56,12 +56,12 @@
                                 </label>
                             </td>
                             <td th:text="${product.vendor.name}">Apple Mobile</td>
-                            <td th:text="${product.name}">Iphone 5S</td>
+                            <td th:text="${product.name}">Iphone 5S 16Gb</td>
                             <td>
                                 <i class="clip-circle-2" th:style="'color:'+${product.color.code}" th:if="${product.color.code}"></i>
                                 <span th:text="${product.color.name}">Space Gray</span>
                             </td>
-                            <td th:text="${product.yandexId}">12345678</td>
+                            <td th:text="${product.searchQuery}">iphone 5s 16gb</td>
                             <td th:text="${product.type.name}">Мобильный телефон</td>
                             <td class="pg-actions-column center">
                                 <div>

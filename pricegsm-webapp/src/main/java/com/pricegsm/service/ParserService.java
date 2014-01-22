@@ -5,8 +5,6 @@ import com.google.common.base.Throwables;
 import com.pricegsm.domain.*;
 import com.pricegsm.util.ApplicationContextProvider;
 import com.pricegsm.util.Utils;
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -49,6 +47,93 @@ public class ParserService {
      *          "shop": "smarto-msk",
      *          "link": "http://smarto-msk.ru?productId=123",
      *          "position": 0,
+     *      }, {
+     *          "price": 23189,
+     *          "shop": "MobiAmo",
+     *          "link": "http://MobiAmo.com?productId=123",
+     *          "position": 0,
+     *      }],
+     *      "error":0
+     * }}
+     * </pre>
+     */
+    @Scheduled(cron = "0 1,20,30 10,14,18 * * ?")
+    public void readYandexData2() throws IOException {
+        List<Object[]> dates = yandexPriceService.findLastByColors();
+
+        if (!Utils.isEmpty(dates)) {
+
+            Date yandexTime = Utils.yandexTime();
+            Exchange usd = exchangeService.getLast(Currency.USD, Currency.RUB);
+            Exchange eur = exchangeService.getLast(Currency.EUR, Currency.RUB);
+
+            for (Object[] pair : dates) {
+                Long productId = (Long) pair[0];
+                Date date = (Date) pair[1];
+                Product product = productService.load(productId);
+
+                try {
+
+                    if (date == null || date.before(yandexTime)) {
+
+                        String query = "(" + product.getSearchQuery() + ")(" + product.getColor().getYandexColor().replaceAll(",", "|") + ")";
+
+                        String url = AppSettings.getParserUrl() + "/yandex2?query=" + URLEncoder.encode(query, "UTF-8") + "&yandexTypeId=" + product.getType().getYandexId();
+
+                        logger.info("Fetch url: {}", url);
+
+                        JSONObject response = Utils.readJsonFromUrl(url);
+                        JSONObject result = response.getJSONObject("result");
+
+                        if (result != null) {
+
+                            int error = result.getInt("error");
+
+                            if (error == 0) {
+                                JSONArray offers = result.getJSONArray("offers");
+
+
+                                YandexPrice[] prices = getObjectMapper().readValue(offers.toString(), YandexPrice[].class);
+
+                                for (YandexPrice yandexPrice : prices) {
+                                    yandexPrice.setDate(yandexTime);
+
+                                    yandexPrice.setPriceRub(yandexPrice.getPrice());
+                                    yandexPrice.setPriceUsd(yandexPrice.getPrice().divide(usd.getValue(), RoundingMode.HALF_UP));
+                                    yandexPrice.setPriceEur(yandexPrice.getPrice().divide(eur.getValue(), RoundingMode.HALF_UP));
+                                    yandexPrice.setProduct(product);
+
+                                }
+
+                                for (YandexPrice yandexPrice : prices) {
+                                    try {
+                                        yandexPriceService.save(yandexPrice);
+                                    } catch (Exception e) {
+                                        logger.warn(Throwables.getRootCause(e).getMessage());
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                } catch (Exception e) {
+                    logger.warn("Error parse yandex data for product {}: {}", productId, Throwables.getRootCause(e).getMessage());
+                    logger.debug(Throwables.getRootCause(e).getMessage(), Throwables.getRootCause(e));
+                }
+            }
+
+        }
+
+    }
+
+    /**
+     * <pre>
+     * {"result": {
+     *      "offers": [{
+     *          "price": 22960,
+     *          "shop": "smarto-msk",
+     *          "link": "http://smarto-msk.ru?productId=123",
+     *          "position": 0,
      *          "color": 1
      *      }, {
      *          "price": 23189,
@@ -61,7 +146,6 @@ public class ParserService {
      * }}
      * </pre>
      */
-    @Scheduled(cron = "0 1,20,30 10,14,18 * * ?")
     public void readYandexData() throws IOException {
         List<Object[]> dates = yandexPriceService.findLast();
 

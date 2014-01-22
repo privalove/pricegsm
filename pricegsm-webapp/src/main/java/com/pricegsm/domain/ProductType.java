@@ -1,5 +1,6 @@
 package com.pricegsm.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
@@ -38,6 +39,7 @@ public class ProductType
         this.name = name;
     }
 
+    @JsonIgnore
     @Basic
     @Column(name = "yandex_id", nullable = false)
     public long getYandexId() {

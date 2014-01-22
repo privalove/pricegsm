@@ -47,4 +47,12 @@ public class YandexPriceService
     public List<Object[]> findLast() {
         return getDao().findLast();
     }
+
+    /**
+     * @return List of pairs {Product ID, Date}
+     */
+    public List<Object[]> findLastByColors() {
+        return getDao().findLastByColors();
+    }
+
 }

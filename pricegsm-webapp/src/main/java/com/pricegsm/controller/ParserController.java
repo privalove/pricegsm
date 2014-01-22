@@ -14,7 +14,7 @@ public class ParserController {
 
     @RequestMapping(value = "/yandex", method = RequestMethod.GET)
     public void yandex() throws Exception {
-        parserService.readYandexData();
+        parserService.readYandexData2();
     }
 
     @RequestMapping(value = "/exchange", method = RequestMethod.GET)

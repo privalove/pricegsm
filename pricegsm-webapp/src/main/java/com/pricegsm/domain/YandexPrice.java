@@ -17,7 +17,10 @@ import java.util.Date;
  * Price from market yandex.
  */
 @Entity
-@Table(name = "yandex_price")
+@Table(name = "yandex_price",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "yandex_price_unique", columnNames = {"shop", "position", "product_id", "sell_date"})
+        })
 public class YandexPrice
         extends GlobalEntity {
 
