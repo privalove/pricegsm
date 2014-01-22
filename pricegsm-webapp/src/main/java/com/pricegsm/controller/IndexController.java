@@ -3,7 +3,6 @@ package com.pricegsm.controller;
 import com.pricegsm.config.PricegsmMessageSource;
 import com.pricegsm.domain.*;
 import com.pricegsm.domain.Currency;
-import com.pricegsm.jackson.DateWrapper;
 import com.pricegsm.jackson.Wrappers;
 import com.pricegsm.securiry.PrincipalHolder;
 import com.pricegsm.service.ProductService;
@@ -175,39 +174,21 @@ public class IndexController {
     /**
      * [{
      * shop: "Price-Killers",
-     * id1: 768,
-     * id1Link: "http://price-killers.ru/iphone-5s-16gb",
-     * id2: 771,
-     * id2Link: "http://price-killers.ru/iphone-5s-16gb",
-     * id3: 731,
-     * id3Link: "http://price-killers.ru/iphone-5s-16gb",
-     * position: 1
+     * price: 768,
+     * link: "http://price-killers.ru/iphone-5s-16gb"
      * }]
      */
     private List<Map<String, Object>> fetchYandexPrices(Product selected, Date shopDate, int currency) {
         List<Map<String, Object>> result = new ArrayList<>();
 
-        List<Product> products = productService.findByYandexId(selected.getYandexId());
+        List<YandexPrice> prices = yandexPriceService.findByDateForProduct(DateUtils.addDays(shopDate, 1), selected.getId());
 
-        List<YandexPrice> prices = yandexPriceService.findByDateForProducts(DateUtils.addDays(shopDate, 1), products);
-
-        Map<String, Map<String, Object>> unique = new HashMap<>();
-
-        int position = 0;
-        for (int i = 0; i < prices.size(); i++) {
-            YandexPrice price = prices.get(i);
-            Map<String, Object> map = unique.get(price.getShop());
-            if (map == null) {
-                map = new HashMap<>();
-                map.put("shop", price.getShop());
-                map.put("position", ++position);
-                result.add(map);
-                unique.put(price.getShop(), map);
-            }
-
-            String name = "id" + price.getProduct().getColor().getId();
-            map.put(name, getPrice(price, currency));
-            map.put(name + "Link", price.getLink());
+        for (YandexPrice price : prices) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("shop", price.getShop());
+            map.put("link", price.getLink());
+            map.put("price", getPrice(price, currency));
+            result.add(map);
         }
 
         return result;

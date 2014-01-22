@@ -127,26 +127,7 @@ function IndexCtrl($scope, $timeout, $cookies, $filter, indexResource, IndexReso
 
     $scope.fillShopPrices = function () {
         $scope.dateMax = new Date();
-
-        var shopColumnDefs = [
-            {field: 'position', displayName: "#", width: "5%"},
-            {field: 'shop', displayName: 'Магазин', width: '25%'}
-        ];
-        angular.forEach($scope.colors, function (value) {
-            shopColumnDefs.push({field: 'id' + value.id, displayName: value.name, cellTemplate: 'resources/template/shopNameCellTemplate.html'});
-        });
-
-        $scope.safeApply(function () {
-            $scope.shopPricesColumns = shopColumnDefs;
-        });
     };
-
-    //datepicker settings
-    $scope.dateOptions = {
-        'year-format': "'yy'",
-        'starting-day': 1
-    };
-
 
     $scope.selectedProduct = [];
 
@@ -172,12 +153,16 @@ function IndexCtrl($scope, $timeout, $cookies, $filter, indexResource, IndexReso
     //shop prices grid options
     $scope.gridShopOptions = {
         data: 'yandexPrices',
+        enableSorting: false,
         plugins: [new ngGridFlexibleHeightPlugin({minHeight: 200})],
         sortInfo: {
             fields: ['position'],
             directions: ['asc']
         },
-        columnDefs: 'shopPricesColumns'
+        columnDefs: [
+            {field: 'shop', displayName: 'Магазин', cellTemplate: 'resources/template/shopNameCellTemplate.html'},
+            {field: 'price', displayName: 'Цена'}
+        ]
     };
 
     //on index resource load

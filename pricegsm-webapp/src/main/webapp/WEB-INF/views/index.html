@@ -91,17 +91,13 @@
                         <span th:text="#{page.main.date}">На дату</span>
                         <input type="text" class="pg-shop-datepicker"
                                ng-model="shopDate" datepicker-popup="dd.MM.yyyy" show-button-bar="false"
-                               ng-change="updateShopPrices(shopDate)"
-                               datepicker-options="dateOptions" max="{{dateMax}}"/>
+                               ng-change="updateShopPrices(shopDate)" max="{{dateMax}}"/>
 
                         <div class="panel-tools">
                             <a ng-href="{{marketUrl()}}" target="_blank">{{product.vendor.shortName }} {{product.name}}</a>
                         </div>
                     </div>
                     <div class="panel-body">
-                        <div th:replace="fragments/alert :: alert (type='info', message=#{alert.sortedTable})">
-                            &nbsp;</div>
-
                         <div class="gridStyle" ng-grid="gridShopOptions"></div>
                     </div>
                 </div>

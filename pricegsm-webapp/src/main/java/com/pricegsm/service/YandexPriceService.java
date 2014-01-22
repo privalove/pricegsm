@@ -1,7 +1,6 @@
 package com.pricegsm.service;
 
 import com.pricegsm.dao.YandexPriceDao;
-import com.pricegsm.domain.Product;
 import com.pricegsm.domain.YandexPrice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,8 +32,8 @@ public class YandexPriceService
         return postLoad(getDao().findByDateMinPrice(productId, date));
     }
 
-    public List<YandexPrice> findByDateForProducts(Date date, List<Product> products) {
-        return postLoad(getDao().findByDateForProducts(date, products));
+    public List<YandexPrice> findByDateForProduct(Date date, long productId) {
+        return postLoad(getDao().findByDateForProduct(date, productId));
     }
 
     public List<Object[]> getChartData(long productId, int currency, Date from, Date to) {

@@ -69,11 +69,11 @@ public class YandexPriceDao
         }
     }
 
-    public List<YandexPrice> findByDateForProducts(Date date, List<Product> products) {
+    public List<YandexPrice> findByDateForProduct(Date date, long productId) {
         return getEntityManager()
-                .createQuery("select y from YandexPrice y where y.product in :products and y.date = (select max(date) from YandexPrice where date <= :date) order by y.position, y.shop")
+                .createQuery("select y from YandexPrice y where y.product.id = :product and y.date = (select max(date) from YandexPrice where date <= :date) order by y.priceRub")
                 .setParameter("date", date)
-                .setParameter("products", products)
+                .setParameter("product", productId)
                 .getResultList();
     }
 

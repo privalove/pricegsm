@@ -43,7 +43,7 @@
 
 
         }])
-        .run(["$rootScope", "$route", function($rootScope, $route) {
+        .run(["$rootScope", "$route", "datepickerConfig", function($rootScope, $route, datepickerConfig) {
             $rootScope.$on("$routeChangeSuccess", function(){
                 //Change page title, based on Route information
                 $rootScope.title = R.get($route.current.title);
@@ -51,6 +51,8 @@
 
             $rootScope.contains = function(value, array) {
                 return $.inArray(value, array) >= 0;
-            }
+            };
+
+            datepickerConfig.startingDay = 1;
         }])
 })();
