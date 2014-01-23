@@ -57,7 +57,7 @@ public class ParserService {
      * }}
      * </pre>
      */
-    @Scheduled(cron = "0 1,20,30 10,14,18 * * ?")
+    @Scheduled(cron = "0 15,35,55 10,14,18 * * ?")
     public void readYandexData2() throws IOException {
         List<Object[]> dates = yandexPriceService.findLastByColors();
 
@@ -76,7 +76,14 @@ public class ParserService {
 
                     if (date == null || date.before(yandexTime)) {
 
-                        String query = "(" + product.getSearchQuery() + ")(" + product.getColor().getYandexColor().replaceAll(",", "|") + ")";
+                        String search = "(" + product.getSearchQuery().replaceAll(",", "|") + ")";
+                        String color = !Utils.isEmpty(product.getColor().getYandexColor())
+                                ? "(" + product.getColor().getYandexColor().replaceAll(",", "|") + ")"
+                                : "";
+                        String exclude = !Utils.isEmpty(product.getExcludeQuery())
+                                ? "~(" + product.getExcludeQuery().replaceAll(",", "|") + ")"
+                                : "";
+                        String query = search + color + exclude;
 
                         String url = AppSettings.getParserUrl() + "/yandex2?query=" + URLEncoder.encode(query, "UTF-8") + "&yandexTypeId=" + product.getType().getYandexId();
 
@@ -257,7 +264,7 @@ public class ParserService {
      * }}
      * </pre>
      */
-    @Scheduled(cron = "0 56,57,58 9,13,17 * * ?")
+    @Scheduled(cron = "0 10,11,12 10,14,18 * * ?")
     public void readExchanges() throws IOException {
 
         Exchange last = exchangeService.getLast(Currency.USD, Currency.RUB);

@@ -2,9 +2,7 @@ package com.pricegsm.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.pricegsm.jackson.GlobalEntityDeserializer;
-import com.pricegsm.jackson.GlobalEntitySerializer;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
@@ -22,6 +20,8 @@ public class Product
     private String yandexId;
 
     private String searchQuery;
+
+    private String excludeQuery;
 
     private ProductType type;
 
@@ -75,6 +75,17 @@ public class Product
 
     public void setSearchQuery(String searchQuery) {
         this.searchQuery = searchQuery;
+    }
+
+    @Size(max = 255)
+    @Basic
+    @Column(name = "exclude_query")
+    public String getExcludeQuery() {
+        return excludeQuery;
+    }
+
+    public void setExcludeQuery(String excludeQuery) {
+        this.excludeQuery = excludeQuery;
     }
 
     @JsonDeserialize(using = GlobalEntityDeserializer.class)

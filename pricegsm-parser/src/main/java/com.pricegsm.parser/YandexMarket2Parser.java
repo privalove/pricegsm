@@ -22,7 +22,7 @@ import java.util.List;
 
 public class YandexMarket2Parser {
 
-    public static final String template = "http://market.yandex.ru/search.xml?hid={0}&text={1}&how=aprice&onstock=1";
+    public static final String template = "http://market.yandex.ru/search.xml?hid={0}&text={1}&how=aprice&nopreciser=1&onstock=1";
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 

@@ -196,7 +196,7 @@ CREATE TABLE "product" (
 );
 ALTER TABLE "product" OWNER TO pricegsmowner;
 
-CREATE SEQUENCE "product_seq" START 10;
+CREATE SEQUENCE "product_seq" START 20;
 ALTER TABLE "product_seq" OWNER TO pricegsmowner;
 
 INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (1, 'iPhone 5S 16Gb', '10495456', 1, 3);

@@ -123,10 +123,23 @@
                             </label>
 
                             <div class="col-sm-9">
-                                <input type="text" id="searchQuery" class="form-control"
+                                <input type="text" id="searchQuery" class="tagsInput form-control"
                                        th:field="*{searchQuery}"/>
                                 <span class="help-block" th:if="${#fields.hasErrors('searchQuery')}"
                                       th:errors="*{searchQuery}">Ошибка</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group" th:classappend="${#fields.hasErrors('excludeQuery')}? 'has-error'">
+                            <label class="col-sm-2 control-label" for="excludeQuery" th:text="#{product.excludeQuery}">
+                                Строка исключения
+                            </label>
+
+                            <div class="col-sm-9">
+                                <input type="text" id="excludeQuery" class="tagsInput2 form-control"
+                                       th:field="*{excludeQuery}"/>
+                                <span class="help-block" th:if="${#fields.hasErrors('excludeQuery')}"
+                                      th:errors="*{excludeQuery}">Ошибка</span>
                             </div>
                         </div>
 

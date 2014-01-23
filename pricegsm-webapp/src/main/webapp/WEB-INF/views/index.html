@@ -94,7 +94,7 @@
                                ng-change="updateShopPrices(shopDate)" max="{{dateMax}}"/>
 
                         <div class="panel-tools">
-                            <a ng-href="{{marketUrl()}}" target="_blank">{{product.vendor.shortName }} {{product.name}}</a>
+                            <a ng-href="{{marketUrl()}}" target="_blank">{{product.vendor.shortName }} {{product.name}} {{product.color.name}}</a>
                         </div>
                     </div>
                     <div class="panel-body">
@@ -117,7 +117,7 @@
                         <span th:span="#{page.main.day}">дней</span>
 
                         <div class="panel-tools">
-                            <a ng-href="{{marketUrl()}}" target="_blank">{{product.vendor.shortName }} {{product.name}}</a>
+                            <a ng-href="{{marketUrl()}}" target="_blank">{{product.vendor.shortName }} {{product.name}} {{product.color.name}}</a>
                         </div>
                     </div>
                     <div class="panel-body" pg-chart="chartDatas" data-chart-details="chartDetails">

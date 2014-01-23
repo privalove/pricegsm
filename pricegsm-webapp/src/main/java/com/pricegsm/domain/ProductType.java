@@ -39,7 +39,6 @@ public class ProductType
         this.name = name;
     }
 
-    @JsonIgnore
     @Basic
     @Column(name = "yandex_id", nullable = false)
     public long getYandexId() {

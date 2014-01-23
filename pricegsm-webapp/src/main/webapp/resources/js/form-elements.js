@@ -75,6 +75,9 @@ var FormElements = function () {
         $('.tagsInput').tagsInput({
             width: 'auto'
         });
+        $('.tagsInput2').tagsInput({
+            width: 'auto'
+        });
     };
     //function to initiate summernote
     var runSummerNote = function () {

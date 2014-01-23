@@ -5,9 +5,12 @@ function AppCtrl() {
 function IndexCtrl($scope, $timeout, $cookies, $filter, indexResource, IndexResource, IndexChartResource, IndexPriceResource, IndexShopResource) {
 
     $scope.marketUrl = function () {
-        return "http://market.yandex.ru/offers.xml?modelid="
-            + $scope.product.yandexId + "&hid=" + $scope.product.type.yandexId
-            + "&grhow=shop&how=aprice&np=1&onstock=1"
+
+        var exclude = $scope.product.excludeQuery ? "~(" + $scope.product.excludeQuery.replace(/,/g, "|") + ")" : "";
+
+        var query = "(" + $scope.product.searchQuery + ")(" + $scope.product.color.yandexColor.replace(/,/g, "|") + ")" + exclude;
+
+        return "http://market.yandex.ru/search.xml?hid=" + $scope.product.type.yandexId + "&text=" + encodeURIComponent(query) + "&nopreciser=1&how=aprice&np=1&onstock=1";
     };
 
     $scope.getIndexChartResource = function (data) {
