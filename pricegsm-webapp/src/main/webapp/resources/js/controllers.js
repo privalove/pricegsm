@@ -17,7 +17,7 @@ function IndexCtrl($scope, $cookieStore, $filter, indexResource, IndexResource, 
 
     $scope.getIndexChartResource = function (data) {
 
-        $cookieStore.put("chartData", data.chartData + "" || $cookieStore.get("chartData"));
+        $cookieStore.put("chartData", data.chartData || $cookieStore.get("chartData"));
         $cookieStore.put("product", data.product || $cookieStore.get("product"));
 
         return IndexChartResource.get({
@@ -147,10 +147,6 @@ function IndexCtrl($scope, $cookieStore, $filter, indexResource, IndexResource, 
         data: 'yandexPrices',
         enableSorting: false,
         plugins: [new ngGridFlexibleHeightPlugin({minHeight: 200})],
-        sortInfo: {
-            fields: ['position'],
-            directions: ['asc']
-        },
         columnDefs: [
             {field: 'shop', displayName: 'Магазин', cellTemplate: 'resources/template/shopNameCellTemplate.html'},
             {field: 'price', displayName: 'Цена'}

@@ -131,25 +131,32 @@ public final class Utils {
      * Midnight time 00:00
      */
     public static Date today() {
-        return DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH);
+        return today(new Date());
+    }
+
+    /**
+     * Midnight time 00:00
+     */
+    public static Date today(Date date) {
+        return DateUtils.truncate(date, Calendar.DAY_OF_MONTH);
     }
 
     /**
      * @return 10:00, 14:00, 18:00
      */
-    public static List<Date> yandexTimes() {
-        return Arrays.asList(DateUtils.addHours(today(), 10), DateUtils.addHours(today(), 14), DateUtils.addHours(today(), 18));
+    public static List<Date> yandexTimes(Date date) {
+        return Arrays.asList(DateUtils.addHours(today(date), 10), DateUtils.addHours(today(date), 14), DateUtils.addHours(today(date), 18));
     }
 
     /**
-     * @return Closest yandex time from {@link #yandexTimes()}
+     * @return Closest yandex time from {@link #yandexTimes(Date)}
      */
     public static Date yandexTime() {
         return yandexTime(null);
     }
 
     /**
-     * @return Closest yandex time from {@link #yandexTimes()}
+     * @return Closest yandex time from {@link #yandexTimes(Date)}
      */
     public static Date yandexTime(Date date) {
         if (date == null) {
@@ -157,7 +164,7 @@ public final class Utils {
         }
 
         final long time = date.getTime();
-        List<Date> dates = new ArrayList<>(yandexTimes());
+        List<Date> dates = new ArrayList<>(yandexTimes(date));
         Collections.sort(dates, new Comparator<Date>() {
             @Override
             public int compare(Date o1, Date o2) {
