@@ -1,7 +1,6 @@
 package com.pricegsm.dao;
 
 import com.pricegsm.domain.Currency;
-import com.pricegsm.domain.Product;
 import com.pricegsm.domain.YandexPrice;
 import org.springframework.stereotype.Repository;
 
@@ -40,11 +39,12 @@ public class YandexPriceDao
                 .getSingleResult();
     }
 
-    public Date findLastDate(long productId, Date date) {
+    public Date findLastDate(long productId, Date from, Date to) {
         return (Date) getEntityManager()
-                .createQuery("select max(y.date) from YandexPrice y where y.product.id = :productId and y.date <= :date")
+                .createQuery("select max(y.date) from YandexPrice y where y.product.id = :productId and y.date <= :to and y.date >= :from")
                 .setParameter("productId", productId)
-                .setParameter("date", date)
+                .setParameter("from", from)
+                .setParameter("to", to)
                 .getSingleResult();
     }
 
@@ -77,10 +77,11 @@ public class YandexPriceDao
         }
     }
 
-    public List<YandexPrice> findByDateForProduct(Date date, long productId) {
+    public List<YandexPrice> findByDateForProduct(long productId, Date from, Date to) {
         return getEntityManager()
-                .createQuery("select y from YandexPrice y where y.product.id = :product and y.date = (select max(date) from YandexPrice where date <= :date) order by y.priceRub")
-                .setParameter("date", date)
+                .createQuery("select y from YandexPrice y where y.product.id = :product and y.date = (select max(date) from YandexPrice where date <= :to and date >= :from) order by y.priceRub")
+                .setParameter("from", from)
+                .setParameter("to", to)
                 .setParameter("product", productId)
                 .getResultList();
     }

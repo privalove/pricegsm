@@ -24,8 +24,8 @@ public class YandexPriceService
         return getDao().findLastDate(productId);
     }
 
-    public Date findLastDate(long productId, Date date) {
-        return getDao().findLastDate(productId, date);
+    public Date findLastDate(long productId, Date from, Date to) {
+        return getDao().findLastDate(productId, from, to);
     }
 
     public YandexPrice findLastMinPrice(long productId) {
@@ -36,8 +36,8 @@ public class YandexPriceService
         return postLoad(getDao().findByDateMinPrice(productId, date));
     }
 
-    public List<YandexPrice> findByDateForProduct(Date date, long productId) {
-        return postLoad(getDao().findByDateForProduct(date, productId));
+    public List<YandexPrice> findByDateForProduct(long productId, Date from, Date to) {
+        return postLoad(getDao().findByDateForProduct(productId, from, to));
     }
 
     public List<Object[]> getChartData(long productId, int currency, Date from, Date to) {

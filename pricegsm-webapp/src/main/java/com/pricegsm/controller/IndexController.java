@@ -94,7 +94,7 @@ public class IndexController {
         if (shopDate == null) {
             shopDate = Utils.yandexTime(yandexPriceService.findLastDate(productId));
         } else {
-            shopDate = Utils.yandexTime(yandexPriceService.findLastDate(productId, DateUtils.addDays(shopDate, 1)));
+            shopDate = Utils.yandexTime(yandexPriceService.findLastDate(productId, Utils.today(shopDate), DateUtils.addDays(shopDate, 1)));
         }
 
 
@@ -134,15 +134,17 @@ public class IndexController {
 
         Product selected = productService.load(productId);
 
+        List<Map<String, Object>> list = fetchYandexPrices(selected, shopDate, currency);
+
         if (shopDate == null) {
             shopDate = Utils.yandexTime(yandexPriceService.findLastDate(productId));
         } else {
-            shopDate = Utils.yandexTime(yandexPriceService.findLastDate(productId, DateUtils.addDays(shopDate, 1)));
+            shopDate = Utils.yandexTime(yandexPriceService.findLastDate(productId, Utils.today(shopDate), DateUtils.addDays(shopDate, 1)));
         }
 
         return OperationResult.ok()
                 .payload("shopTime", shopDate)
-                .payload("yandexPrices", fetchYandexPrices(selected, shopDate, currency));
+                .payload("yandexPrices", list);
     }
 
     private Map<String, Object> fetchChart(Product selected, int currency, String chartData, int chartRange) {
@@ -179,7 +181,7 @@ public class IndexController {
     private List<Map<String, Object>> fetchYandexPrices(Product selected, Date shopDate, int currency) {
         List<Map<String, Object>> result = new ArrayList<>();
 
-        List<YandexPrice> prices = yandexPriceService.findByDateForProduct(DateUtils.addDays(shopDate, 1), selected.getId());
+        List<YandexPrice> prices = yandexPriceService.findByDateForProduct(selected.getId(), Utils.today(shopDate), DateUtils.addDays(shopDate, 1));
 
         for (YandexPrice price : prices) {
             Map<String, Object> map = new HashMap<>();
