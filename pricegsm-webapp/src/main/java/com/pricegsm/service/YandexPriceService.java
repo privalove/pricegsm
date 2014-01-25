@@ -24,6 +24,10 @@ public class YandexPriceService
         return getDao().findLastDate(productId);
     }
 
+    public Date findLastDate(long productId, Date date) {
+        return getDao().findLastDate(productId, date);
+    }
+
     public YandexPrice findLastMinPrice(long productId) {
         return postLoad(getDao().findLastMinPrice(productId));
     }

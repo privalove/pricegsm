@@ -42,6 +42,7 @@
     <jmxConfigurator />
 
     <logger name="com.pricegsm" level="${pricegsm.log.level}" />
+    <logger name="org.hibernate" level="WARN" />
 
     <root level="${log.level}">
 		<appender-ref ref="STDOUT" />

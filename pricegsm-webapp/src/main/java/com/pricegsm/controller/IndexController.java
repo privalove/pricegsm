@@ -65,86 +65,84 @@ public class IndexController {
     @RequestMapping(value = "/index.json", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public OperationResult index(
-            @RequestParam(value = "product", defaultValue = "1") long productId,
-            @RequestParam(defaultValue = "1") int currency,
-            @RequestParam(defaultValue = "7") int dynRange,
+            @RequestParam(value = "product") long productId,
+            @RequestParam int currency,
+            @RequestParam int dynRange,
+            @RequestParam int vendor,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date shopDate,
-            @RequestParam(defaultValue = "retail") String chartData,
-            @RequestParam(defaultValue = "7") int chartRange) {
+            @RequestParam String chartData) {
 
         Product selected = productService.load(productId);
+        List<ProductPriceForm> prices = fetchPrices(vendor, dynRange, currency);
+        OperationResult result = OperationResult.ok();
 
-        if (shopDate == null) {
-            shopDate = yandexPriceService.findLastDate(productId);
+        if (!Utils.isEmpty(prices)) {
+            boolean found = false;
+
+            for (ProductPriceForm price : prices) {
+                if (price.getProduct().equals(selected)) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                selected = prices.get(0).getProduct();
+            }
+
         }
         if (shopDate == null) {
-            shopDate = new Date();
+            shopDate = Utils.yandexTime(yandexPriceService.findLastDate(productId));
+        } else {
+            shopDate = Utils.yandexTime(yandexPriceService.findLastDate(productId, DateUtils.addDays(shopDate, 1)));
         }
 
-        return OperationResult.ok()
+
+        return result
                 .payload("currency", Math.min(currency, Currency.RUB))
                 .payload("dynRange", dynRange)
                 .payload("shopDate", Wrappers.wrapDate(shopDate))
                 .payload("chartData", chartData)
-                .payload("chartRange", chartRange)
                 .payload("product", selected)
-                .payload("vendor", selected.getVendor())
 
-                .payload("prices", fetchPrices(dynRange, currency))
-                .payload("colors", fetchColors(selected))
+                .payload("shopTime", shopDate)
+                .payload("prices", prices)
                 .payload("yandexPrices", fetchYandexPrices(selected, shopDate, currency))
-                .payload("chart", fetchChart(selected, currency, chartData, chartRange));
+                .payload("chart", fetchChart(selected, currency, chartData, dynRange));
     }
 
     @RequestMapping(value = "/index/chart.json", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public OperationResult chart(
-            @RequestParam(value = "product", defaultValue = "1") long productId,
-            @RequestParam(defaultValue = "1") int currency,
-            @RequestParam(defaultValue = "retail") String chartData,
-            @RequestParam(defaultValue = "7") int chartRange) {
+            @RequestParam(value = "product") long productId,
+            @RequestParam int currency,
+            @RequestParam String chartData,
+            @RequestParam int dynRange) {
 
         Product selected = productService.load(productId);
 
         return OperationResult.ok()
-                .payload("chart", fetchChart(selected, currency, chartData, chartRange));
-    }
-
-    @RequestMapping(value = "/index/price.json", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public OperationResult price(
-            @RequestParam(value = "product", defaultValue = "1") long productId,
-            @RequestParam(defaultValue = "7") int dynRange,
-            @RequestParam(defaultValue = "1") int currency) {
-
-        return OperationResult.ok()
-                .payload("prices", fetchPrices(dynRange, currency));
+                .payload("chart", fetchChart(selected, currency, chartData, dynRange));
     }
 
     @RequestMapping(value = "/index/shop.json", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public OperationResult shop(
-            @RequestParam(value = "product", defaultValue = "1") long productId,
-            @RequestParam(defaultValue = "1") int currency,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date shopDate) {
+            @RequestParam(value = "product") long productId,
+            @RequestParam int currency,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date shopDate) {
 
         Product selected = productService.load(productId);
 
         if (shopDate == null) {
-            shopDate = yandexPriceService.findLastDate(productId);
-        }
-        if (shopDate == null) {
-            shopDate = new Date();
+            shopDate = Utils.yandexTime(yandexPriceService.findLastDate(productId));
+        } else {
+            shopDate = Utils.yandexTime(yandexPriceService.findLastDate(productId, DateUtils.addDays(shopDate, 1)));
         }
 
         return OperationResult.ok()
-                .payload("colors", fetchColors(selected))
+                .payload("shopTime", shopDate)
                 .payload("yandexPrices", fetchYandexPrices(selected, shopDate, currency));
-    }
-
-
-    private List<Color> fetchColors(Product selected) {
-        return productService.findColors(selected.getYandexId());
     }
 
     private Map<String, Object> fetchChart(Product selected, int currency, String chartData, int chartRange) {
@@ -208,10 +206,10 @@ public class IndexController {
      * worldDelta: -20
      * }]
      */
-    private List<ProductPriceForm> fetchPrices(int dynRange, int currency) {
+    private List<ProductPriceForm> fetchPrices(int vendor, int dynRange, int currency) {
         List<ProductPriceForm> result = new ArrayList<>();
 
-        List<Product> products = productService.findActiveOrderByVendorAndName();
+        List<Product> products = productService.findActiveByVendorOrderByVendorAndName(vendor);
 
         String previousProductName = "";
 

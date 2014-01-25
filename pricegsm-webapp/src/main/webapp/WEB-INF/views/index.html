@@ -1,16 +1,5 @@
-<div class="row" xmlns:th="http://www.thymeleaf.org">
-    <div class="col-sm-12">
-        <div class="page-header">
-            <h1><span th:text="#{page.main}">Главная страница</span>
-                <small><span th:text="#{page.main.small}">статистика продаж</span> {{vendor.shortName }}
-                    {{product.name}}
-                </small>
-            </h1>
-        </div>
-    </div>
-</div>
-<div class="row" xmlns:th="http://www.thymeleaf.org">
-    <div class="col-sm-12">
+<div class="row" style="margin-top: 20px" xmlns:th="http://www.thymeleaf.org">
+    <div class="col-sm-3">
         <div class="core-box btn-group">
             <button type="button" class="btn btn-default" ng-model="currency" btn-radio="1" th:text="#{currency.USD}"
                     ng-disabled="currencyDisabled">USD
@@ -23,43 +12,46 @@
             </button>
         </div>
     </div>
+    <div class="col-sm-3">
+        <span th:text="#{page.main.dyn}">Динамику показывать за</span>
+        <select ng-model="dynRange" ng-change="updateIndexPage()">
+            <option>1</option>
+            <option>3</option>
+            <option>7</option>
+            <option>14</option>
+            <option>30</option>
+        </select>
+        <span th:text="#{page.main.day}">дней</span>
+    </div>
+    <div class="col-sm-6">
+        <ul class="list-inline pg-vendors">
+            <li ng-class="{'active': product.vendor.id == 1}">
+                <a ng-click="updateIndexPage(null, 1)" class="btn btn-link btn-sm" role="button">Apple</a>
+            </li>
+            <li ng-class="{'active':product.vendor.id == 5}">
+                <a ng-click="updateIndexPage(null, 5)" class="btn btn-link btn-sm" role="button">Samsung</a>
+            </li>
+            <li ng-class="{'active':product.vendor.id == 7}">
+                <a ng-click="updateIndexPage(null, 7)" class="btn btn-link btn-sm" role="button">Nokia</a>
+            </li>
+            <li ng-class="{'active':product.vendor.id == 8}">
+                <a ng-click="updateIndexPage(null, 8)" class="btn btn-link btn-sm" role="button">HTC</a>
+            </li>
+            <li ng-class="{'active':product.vendor.id == 3}">
+                <a ng-click="updateIndexPage(null, 3)" class="btn btn-link btn-sm" role="button">Sony</a>
+            </li>
+        </ul>
+    </div>
 </div>
 <div class="row" xmlns:th="http://www.thymeleaf.org">
     <div class="col-md-7">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <i class="fa fa-list-alt fa-lg"></i>
-                <span th:span="#{page.main.dyn}">Динамику показывать за</span>
-                <select ng-model="dynRange" ng-change="updatePrices(dynRange)">
-                    <option>1</option>
-                    <option>3</option>
-                    <option>7</option>
-                    <option>14</option>
-                    <option>30</option>
-                </select>
-                <span th:span="#{page.main.day}">дней</span>
+                <i class="fa fa-question fa-lg" th:attr="popover=#{alert.selectProduct}"
+                   popover-placement="right"
+                   popover-trigger="mouseenter"></i>
             </div>
             <div class="panel-body">
-                <div th:replace="fragments/alert :: alert (type='info', message=#{alert.selectProduct})">
-                    &nbsp;</div>
-
-                <ul class="list-inline pg-vendors">
-                    <li ng-class="{'active':contains(product.vendor.id, [1,2])}">
-                        <a ng-click="showVendors(1,2)" class="btn btn-link btn-sm" role="button">Apple</a>
-                    </li>
-                    <li ng-class="{'active':contains(product.vendor.id, [5,6])}">
-                        <a ng-click="showVendors(5,6)" class="btn btn-link btn-sm" role="button">Samsung</a>
-                    </li>
-                    <li ng-class="{'active':contains(product.vendor.id, [7])}">
-                        <a ng-click="showVendors(7)" class="btn btn-link btn-sm" role="button">Nokia</a>
-                    </li>
-                    <li ng-class="{'active':contains(product.vendor.id, [8])}">
-                        <a ng-click="showVendors(8)" class="btn btn-link btn-sm" role="button">HTC</a>
-                    </li>
-                    <li ng-class="{'active':contains(product.vendor.id, [3,4])}">
-                        <a ng-click="showVendors(3,4)" class="btn btn-link btn-sm" role="button">Sony</a>
-                    </li>
-                </ul>
 
                 <table class="table table-hover table-condensed">
                     <thead>
@@ -90,11 +82,11 @@
                         <i class="fa fa-truck fa-lg"></i>
                         <span th:text="#{page.main.date}">На дату</span>
                         <input type="text" class="pg-shop-datepicker"
-                               ng-model="shopDate" datepicker-popup="dd.MM.yyyy" show-button-bar="false"
-                               ng-change="updateShopPrices(shopDate)" max="{{dateMax}}"/>
-
+                               ng-model="shopDate" datepicker-popup=""
+                               ng-change="updateShopPrices(shopDate)" max="dateMax"/>
+                        <span ng-bind="shopTime | date:'HH:mm'">18:00</span>
                         <div class="panel-tools">
-                            <a ng-href="{{marketUrl()}}" target="_blank">{{product.vendor.shortName }} {{product.name}} {{product.color.name}}</a>
+                            <a ng-href="{{marketUrl()}}" target="_blank">{{product.vendor.name }} {{product.name}} {{product.color.name}}</a>
                         </div>
                     </div>
                     <div class="panel-body">
@@ -108,16 +100,8 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <i class="clip-stats"></i>
-                        <select ng-model="chartRange" ng-change="updateChart(chartRange)">
-                            <option>7</option>
-                            <option>30</option>
-                            <option>90</option>
-                            <option>365</option>
-                        </select>
-                        <span th:span="#{page.main.day}">дней</span>
-
                         <div class="panel-tools">
-                            <a ng-href="{{marketUrl()}}" target="_blank">{{product.vendor.shortName }} {{product.name}} {{product.color.name}}</a>
+                            <a ng-href="{{marketUrl()}}" target="_blank">{{product.vendor.name }} {{product.name}} {{product.color.name}}</a>
                         </div>
                     </div>
                     <div class="panel-body" pg-chart="chartDatas" data-chart-details="chartDetails">

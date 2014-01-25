@@ -4,7 +4,6 @@
     var RESOURCES = {
         "IndexResource" : "index.json",
         "IndexChartResource" : "index/chart.json",
-        "IndexPriceResource" : "index/price.json",
         "IndexShopResource" : "index/shop.json",
 
         "Profile" : "profile.json",

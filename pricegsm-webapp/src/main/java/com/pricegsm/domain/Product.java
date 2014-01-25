@@ -2,7 +2,9 @@ package com.pricegsm.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.pricegsm.jackson.GlobalEntityDeserializer;
+import com.pricegsm.jackson.GlobalEntitySerializer;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
@@ -100,6 +102,7 @@ public class Product
         this.type = type;
     }
 
+    @JsonSerialize(using = GlobalEntitySerializer.class)
     @JsonDeserialize(using = GlobalEntityDeserializer.class)
     @NotNull
     @ManyToOne(optional = false)

@@ -49,7 +49,7 @@
                                 Производитель
                             </label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-7">
                                 <select id="vendor" class="form-control" th:field="*{vendor}">
                                     <option value="0" th:text="#{option.select}"></option>
                                     <option th:each="v : ${vendors}"
@@ -59,6 +59,9 @@
                                 <span class="help-block" th:if="${#fields.hasErrors('vendor')}"
                                       th:errors="*{vendor}">Ошибка</span>
                             </div>
+                            <div class="col-sm-2">
+                                <a class="btn btn-green" th:href="@{/admin/vendor/0}"><i class="fa fa-plus"></i></a>
+                            </div>
                         </div>
 
                         <div class="form-group" th:classappend="${#fields.hasErrors('type')}? 'has-error'">
@@ -66,7 +69,7 @@
                                 Категория
                             </label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-7">
                                 <select id="type" class="form-control" th:field="*{type}">
                                     <option value="0" th:text="#{option.select}"></option>
                                     <option th:each="v : ${types}"
@@ -75,6 +78,9 @@
                                 </select>
                                 <span class="help-block" th:if="${#fields.hasErrors('type')}"
                                       th:errors="*{type}">Ошибка</span>
+                            </div>
+                            <div class="col-sm-2">
+                                <a class="btn btn-default"><i class="fa fa-plus"></i></a>
                             </div>
                         </div>
 
@@ -104,7 +110,7 @@
                                 Цвет
                             </label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-7">
                                 <select id="color" class="form-control" th:field="*{color}">
                                     <option value="0" th:text="#{option.select}"></option>
                                     <option th:each="o : ${colors}"
@@ -113,6 +119,9 @@
                                 </select>
                                 <span class="help-block" th:if="${#fields.hasErrors('color')}"
                                       th:errors="*{color}">Ошибка</span>
+                            </div>
+                            <div class="col-sm-2">
+                                <a class="btn btn-green" th:href="@{/admin/color/0}"><i class="fa fa-plus"></i></a>
                             </div>
                         </div>
 

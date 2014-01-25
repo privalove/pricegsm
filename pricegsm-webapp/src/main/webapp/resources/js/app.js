@@ -43,7 +43,7 @@
 
 
         }])
-        .run(["$rootScope", "$route", "datepickerConfig", function($rootScope, $route, datepickerConfig) {
+        .run(["$rootScope", "$route", "datepickerConfig", "datepickerPopupConfig", function($rootScope, $route, datepickerConfig, datepickerPopupConfig) {
             $rootScope.$on("$routeChangeSuccess", function(){
                 //Change page title, based on Route information
                 $rootScope.title = R.get($route.current.title);
@@ -54,5 +54,7 @@
             };
 
             datepickerConfig.startingDay = 1;
+            datepickerPopupConfig.showButtonBar = false;
+            datepickerPopupConfig.dateFormat = "dd.MM.yy";
         }])
 })();

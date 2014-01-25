@@ -1,8 +1,10 @@
-function AppCtrl() {
+function AppCtrl($scope) {
 
 }
 
-function IndexCtrl($scope, $timeout, $cookies, $filter, indexResource, IndexResource, IndexChartResource, IndexPriceResource, IndexShopResource) {
+AppCtrl.$inject = ["$scope"];
+
+function IndexCtrl($scope, $cookieStore, $filter, indexResource, IndexResource, IndexChartResource, IndexShopResource) {
 
     $scope.marketUrl = function () {
 
@@ -14,98 +16,85 @@ function IndexCtrl($scope, $timeout, $cookies, $filter, indexResource, IndexReso
     };
 
     $scope.getIndexChartResource = function (data) {
-        return IndexChartResource.get(angular.extend({
-            product: $cookies.product,
-            chartData: $cookies.chartData,
-            chartRange: $cookies.chartRange,
-            currency: $cookies.currency
-        }, data)).$promise;
-    };
 
-    $scope.getIndexPriceResource = function (data) {
-        return IndexPriceResource.get(angular.extend({
-            product: $cookies.product,
-            dynRange: $cookies.dynRange,
-            currency: $cookies.currency
-        }, data)).$promise;
+        $cookieStore.put("chartData", data.chartData + "" || $cookieStore.get("chartData"));
+        $cookieStore.put("product", data.product || $cookieStore.get("product"));
+
+        return IndexChartResource.get({
+            product: $cookieStore.get("product"),
+            chartData: $cookieStore.get("chartData"),
+            dynRange: $cookieStore.get("dynRange"),
+            currency: $cookieStore.get("currency")
+        }).$promise;
     };
 
     $scope.getIndexShopResource = function (data) {
-        return IndexShopResource.get(angular.extend({
-            product: $cookies.product,
-            shopDate: $cookies.shopDate,
-            currency: $cookies.currency
-        }, data)).$promise;
+
+        $cookieStore.put("shopDate", data.shopDate || $cookieStore.get("shopDate"));
+        $cookieStore.put("product", data.product || $cookieStore.get("product"));
+
+        return IndexShopResource.get({
+            product: $cookieStore.get("product"),
+            shopDate: $cookieStore.get("shopDate"),
+            currency: $cookieStore.get("currency")
+        }).$promise;
     };
 
-
-    $scope.updateChart = function (chartRange, product) {
-        $scope.getIndexChartResource({chartRange: chartRange || $cookies.chartRange, product: product || $cookies.product}).then(function (indexChartResource) {
-            if (indexChartResource.ok) {
-                angular.extend($scope, indexChartResource.payload);
-
-                $scope.fillCookies(indexChartResource.payload);
-                $scope.fillChart();
-            }
-        });
+    $scope.updateChart = function () {
+        $scope.getIndexChartResource({
+            dynRange: $scope.dynRange,
+            product: $scope.product.id})
+            .then(function (indexChartResource) {
+                if (indexChartResource.ok) {
+                    $scope.safeApply(function () {
+                        angular.extend($scope, indexChartResource.payload);
+                        $scope.fillChart();
+                    });
+                }
+            });
     };
 
-    $scope.updatePrices = function (dynRange) {
-        $scope.getIndexPriceResource({dynRange: dynRange || $cookies.dynRange}).then(function (indexPriceResource) {
-            if (indexPriceResource.ok) {
-                angular.extend($scope, indexPriceResource.payload);
-                $scope.fillCookies(indexPriceResource.payload);
-
-                $scope.fillPrices();
-            }
-        });
+    $scope.updateShopPrices = function () {
+        $scope.getIndexShopResource({
+            shopDate: $filter("date")($scope.shopDate, 'yyyy-MM-dd'),
+            product: $scope.product.id})
+            .then(function (indexShopResource) {
+                if (indexShopResource.ok) {
+                    $scope.safeApply(function () {
+                        angular.extend($scope, indexShopResource.payload);
+                        $scope.fillShopPrices();
+                    });
+                }
+            });
     };
 
-    $scope.updateShopPrices = function (shopDate, product) {
-        $scope.getIndexShopResource({shopDate: $filter("date")(shopDate, 'yyyy-MM-dd') || $cookies.shopDate, product: product || $cookies.product}).then(function (indexShopResource) {
-            if (indexShopResource.ok) {
-                angular.extend($scope, indexShopResource.payload);
-                $scope.fillCookies(indexShopResource.payload);
-
-                $scope.fillShopPrices();
-            }
-        });
-    };
-
-    $scope.updateIndexPage = function (currency) {
+    $scope.updateIndexPage = function (currency, vendor) {
         $scope.currencyDisabled = true;
 
-        getIndexResource(IndexResource, $cookies, {currency: currency}).then(function (indexResource) {
-            if (indexResource.ok) {
-                angular.extend($scope, indexResource.payload);
+        getIndexResource(IndexResource, $cookieStore, {
+            currency: currency,
+            dynRange: $scope.dynRange,
+            vendor: vendor})
+            .then(function (indexResource) {
+                if (indexResource.ok) {
+                    $scope.safeApply(function () {
+                        angular.extend($scope, indexResource.payload);
+                        $scope.fillCookies(indexResource.payload);
+                        $scope.fillChart();
+                    });
+                }
 
-                $scope.fillCookies(indexResource.payload);
-                $scope.fillChart();
-            }
-
-            $scope.currencyDisabled = false;
-        });
+                $scope.currencyDisabled = false;
+            });
     };
 
 
     $scope.fillCookies = function (payload) {
         if (payload.product) {
-            $cookies.product = payload.product.id + "";
+            $cookieStore.put("product", payload.product.id);
         }
-        if (payload.chartData) {
-            $cookies.chartData = payload.chartData;
-        }
-        if (payload.chartRange) {
-            $cookies.chartRange = payload.chartRange + "";
-        }
-        if (payload.currency) {
-            $cookies.currency = payload.currency + "";
-        }
-        if (payload.dynRange) {
-            $cookies.dynRange = payload.dynRange + "";
-        }
-        if (payload.shopDate) {
-            $cookies.shopDate = payload.shopDate;
+        if (payload.product) {
+            $cookieStore.put("vendor", payload.product.vendor.id);
         }
     };
 
@@ -185,31 +174,39 @@ function IndexCtrl($scope, $timeout, $cookies, $filter, indexResource, IndexReso
 
         $scope.updateProduct = function (product) {
             $scope.product = product;
-            $scope.updateShopPrices(null, product.id);
-            $scope.updateChart(null, product.id);
+            $scope.updateShopPrices();
+            $scope.updateChart();
         };
 
     }
 }
 
-IndexCtrl.$inject = ["$scope", "$timeout", "$cookies", "$filter", "indexResource", "IndexResource", "IndexChartResource", "IndexPriceResource", "IndexShopResource"];
+IndexCtrl.$inject = ["$scope", "$cookieStore", "$filter", "indexResource", "IndexResource", "IndexChartResource", "IndexShopResource"];
 
 IndexCtrl.resolve = {
-    indexResource: ["IndexResource", "$cookies", function (IndexResource, $cookies) {
+    indexResource: ["IndexResource", "$cookieStore", function (IndexResource, $cookieStore) {
         //reset shop date to today on enter index page
-        return getIndexResource(IndexResource, $cookies, {shopDate: null});
+        return getIndexResource(IndexResource, $cookieStore, {shopDate: null});
     }]
 };
 
-function getIndexResource(IndexResource, $cookies, data) {
-    return IndexResource.get(angular.extend({
-        product: $cookies.product,
-        chartData: $cookies.chartData,
-        chartRange: $cookies.chartRange,
-        currency: $cookies.currency,
-        dynRange: $cookies.dynRange,
-        shopDate: $cookies.shopDate
-    }, data)).$promise;
+function getIndexResource(IndexResource, $cookieStore, data) {
+
+    $cookieStore.put("product", data.product || $cookieStore.get("product") || 1);
+    $cookieStore.put("chartData", data.chartData || $cookieStore.get("chartData") || "retail");
+    $cookieStore.put("currency", data.currency || $cookieStore.get("currency") || 1);
+    $cookieStore.put("dynRange", data.dynRange || $cookieStore.get("dynRange") || 7);
+    $cookieStore.put("vendor", data.vendor || $cookieStore.get("vendor") || 1);
+    $cookieStore.put("shopDate", data.shopDate || $cookieStore.get("shopDate"));
+
+    return IndexResource.get({
+        product: $cookieStore.get("product"),
+        chartData: $cookieStore.get("chartData"),
+        currency: $cookieStore.get("currency"),
+        dynRange: $cookieStore.get("dynRange"),
+        shopDate: $cookieStore.get("shopDate"),
+        vendor: $cookieStore.get("vendor")
+    }).$promise;
 }
 
 function MarketplaceCtrl($scope) {

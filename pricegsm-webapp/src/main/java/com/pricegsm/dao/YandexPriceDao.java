@@ -40,6 +40,14 @@ public class YandexPriceDao
                 .getSingleResult();
     }
 
+    public Date findLastDate(long productId, Date date) {
+        return (Date) getEntityManager()
+                .createQuery("select max(y.date) from YandexPrice y where y.product.id = :productId and y.date <= :date")
+                .setParameter("productId", productId)
+                .setParameter("date", date)
+                .getSingleResult();
+    }
+
     public YandexPrice findLastMinPrice(long productId) {
         try {
             return (YandexPrice) getEntityManager()

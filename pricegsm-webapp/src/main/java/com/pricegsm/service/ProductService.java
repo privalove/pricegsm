@@ -20,8 +20,8 @@ public class ProductService
         return dao;
     }
 
-    public List<Product> findActiveOrderByVendorAndName() {
-        return postLoad(getDao().findActiveOrderByVendorAndName());
+    public List<Product> findActiveByVendorOrderByVendorAndName(long vendor) {
+        return postLoad(getDao().findActiveByVendorOrderByVendorAndName(vendor));
     }
 
     public List<Product> findByYandexId(String yandexId) {

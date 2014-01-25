@@ -13,12 +13,12 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 
 public class TimestampWrapperSerializer
-        extends JsonSerializer<DateWrapper> {
+        extends JsonSerializer<TimestampWrapper> {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
-    public void serialize(DateWrapper value, JsonGenerator jgen, SerializerProvider provider)
+    public void serialize(TimestampWrapper value, JsonGenerator jgen, SerializerProvider provider)
             throws IOException, JsonProcessingException {
 
         try {

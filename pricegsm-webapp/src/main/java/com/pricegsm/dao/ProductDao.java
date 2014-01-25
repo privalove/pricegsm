@@ -17,9 +17,10 @@ public class ProductDao
                 .getResultList();
     }
 
-    public List<Product> findActiveOrderByVendorAndName() {
+    public List<Product> findActiveByVendorOrderByVendorAndName(long vendor) {
         return getEntityManager()
-                .createQuery("select p from Product p inner join p.vendor v inner join p.color c where p.active = true order by  v.name, p.name, c.name")
+                .createQuery("select p from Product p inner join p.vendor v inner join p.color c where p.active = true and p.vendor.id = :vendor order by  v.name, p.name, c.name")
+                .setParameter("vendor", vendor)
                 .getResultList();
     }
 
