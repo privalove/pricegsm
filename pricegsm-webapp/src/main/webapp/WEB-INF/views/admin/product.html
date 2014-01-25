@@ -126,6 +126,19 @@
                         </div>
 
 
+                        <div class="form-group" th:classappend="${#fields.hasErrors('yandexId')}? 'has-error'">
+                            <label class="col-sm-2 control-label" for="yandexId" th:text="#{product.yandexId}">
+                                Yandex Id
+                            </label>
+
+                            <div class="col-sm-9">
+                                <input type="text" id="yandexId" class="form-control"
+                                       th:field="*{yandexId}"/>
+                                <span class="help-block" th:if="${#fields.hasErrors('yandexId')}"
+                                      th:errors="*{yandexId}">Ошибка</span>
+                            </div>
+                        </div>
+
                         <div class="form-group" th:classappend="${#fields.hasErrors('searchQuery')}? 'has-error'">
                             <label class="col-sm-2 control-label" for="searchQuery" th:text="#{product.searchQuery}">
                                 Строка для поиска

@@ -155,16 +155,25 @@ public class IndexController {
 
         List<Product> products = productService.findByYandexId(selected.getYandexId());
 
-        Map<String, Object> data = new HashMap<>();
+        List<Map<String, Object>> chart = new ArrayList<>();
 
         for (Product product : products) {
+
+
+            Map<String, Object> data = new HashMap<>();
+            chart.add(data);
+            data.put("label", product.getColor().getName());
+            data.put("color", product.getColor().getCode());
+            data.put("points", Collections.singletonMap("show", true));
+            data.put("lines", Collections.singletonMap("show", true));
+
             switch (chartData) {
                 default:
-                    data.put(product.getColor().getName(), yandexPriceService.getChartData(product.getId(), currency, from, to));
+                    data.put("data", yandexPriceService.getChartData(product.getId(), currency, from, to));
             }
         }
 
-        result.put("data", data);
+        result.put("data", chart);
         result.put("from", from);
         result.put("to", to);
 

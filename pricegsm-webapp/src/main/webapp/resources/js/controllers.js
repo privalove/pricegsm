@@ -99,15 +99,13 @@ function IndexCtrl($scope, $cookieStore, $filter, indexResource, IndexResource, 
     };
 
     $scope.fillChart = function () {
-        $scope.chartDatas = [];
-        angular.forEach($scope.chart.data, function (data, color) {
-            $scope.chartDatas.push({
-                data: data,
-                label: color
-            })
-        });
+        $scope.chartDatas = $scope.chart.data;
 
         $scope.chartDetails = {
+            grid: {
+                hoverable: true,
+                clickable: true
+            },
             legend: {show: true},
             xaxis: {show: true, mode: "time", min: $scope.chart.from, max: $scope.chart.to}
         };

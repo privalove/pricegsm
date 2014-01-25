@@ -1,5 +1,4 @@
 alter table product add column search_query varchar(255);
-alter table product alter column yandex_id drop NOT NULL;
 
 update product set search_query = 'iphone 5s 16gb' where id in (1,2,3);
 update product set search_query = 'iphone 5s 32gb' where id in (4,5,6);

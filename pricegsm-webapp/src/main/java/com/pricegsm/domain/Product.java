@@ -56,6 +56,7 @@ public class Product
         this.name = name;
     }
 
+    @NotBlank
     @JsonIgnore
     @Size(max = 255)
     @Basic
