@@ -1,13 +1,13 @@
 <div class="row" style="margin-top: 20px" xmlns:th="http://www.thymeleaf.org">
     <div class="col-sm-3">
         <div class="core-box btn-group">
-            <button type="button" class="btn btn-default" ng-model="currency" btn-radio="1" th:text="#{currency.USD}"
+            <button type="button" class="btn btn-default" ng-model="currency.id" btn-radio="1" th:text="#{currency.USD}"
                     ng-disabled="currencyDisabled">USD
             </button>
-            <button type="button" class="btn btn-default" ng-model="currency" btn-radio="2" th:text="#{currency.EUR}"
+            <button type="button" class="btn btn-default" ng-model="currency.id" btn-radio="2" th:text="#{currency.EUR}"
                     ng-disabled="currencyDisabled">EUR
             </button>
-            <button type="button" class="btn btn-default" ng-model="currency" btn-radio="3" th:text="#{currency.RUB}"
+            <button type="button" class="btn btn-default" ng-model="currency.id" btn-radio="3" th:text="#{currency.RUB}"
                     ng-disabled="currencyDisabled">RUB
             </button>
         </div>

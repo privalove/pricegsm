@@ -5,6 +5,7 @@ import com.pricegsm.domain.*;
 import com.pricegsm.domain.Currency;
 import com.pricegsm.jackson.Wrappers;
 import com.pricegsm.securiry.PrincipalHolder;
+import com.pricegsm.service.CurrencyService;
 import com.pricegsm.service.ProductService;
 import com.pricegsm.service.WorldPriceService;
 import com.pricegsm.service.YandexPriceService;
@@ -37,6 +38,9 @@ public class IndexController {
 
     @Autowired
     private WorldPriceService worldPriceService;
+
+    @Autowired
+    private CurrencyService currencyService;
 
     @Autowired
     private PricegsmMessageSource messageSource;
@@ -99,7 +103,7 @@ public class IndexController {
 
 
         return result
-                .payload("currency", Math.min(currency, Currency.RUB))
+                .payload("currency", currencyService.load(Math.min(currency, Currency.RUB)))
                 .payload("dynRange", dynRange)
                 .payload("shopDate", Wrappers.wrapDate(shopDate))
                 .payload("chartData", chartData)

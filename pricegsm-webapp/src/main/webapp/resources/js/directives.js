@@ -234,6 +234,7 @@
                 templateUrl: "resources/template/priceCellTemplate.html",
                 link: function($scope, element, attrs) {
                     $scope.field = attrs.pgPricecell;
+                    $scope.currency = $scope.$parent.$eval("currency");
                 }
             }
         }])

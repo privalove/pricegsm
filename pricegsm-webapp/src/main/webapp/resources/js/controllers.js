@@ -160,7 +160,7 @@ function IndexCtrl($scope, $cookieStore, $filter, indexResource, IndexResource, 
         $scope.fillPrices();
         $scope.fillShopPrices();
 
-        $scope.$watch("currency", function (newValue, oldValue) {
+        $scope.$watch("currency.id", function (newValue, oldValue) {
             if (newValue != oldValue) {
                 $scope.updateIndexPage(newValue);
             }
