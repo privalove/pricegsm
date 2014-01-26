@@ -141,15 +141,15 @@ ALTER TABLE "color" OWNER TO pricegsmowner;
 CREATE SEQUENCE "color_seq" START 10;
 ALTER TABLE "color_seq" OWNER TO pricegsmowner;
 
-INSERT INTO color (id, name, yandex_color, code) VALUES (9, 'Yellow', 'yellow,желтый', '#e8ed0a');
-INSERT INTO color (id, name, yandex_color, code) VALUES (2, 'White', 'white,белый', '#ffffff');
-INSERT INTO color (id, name, yandex_color, code) VALUES (3, 'Silver', 'silver,серебряный,серебро,белый,white', '#d8d8d8');
-INSERT INTO color (id, name, yandex_color, code) VALUES (4, 'Space Gray', 'gray,grey,серый,черный,black', '#726f6f');
-INSERT INTO color (id, name, yandex_color, code) VALUES (7, 'Pink', 'pink,розовый,красный', '#f74848');
-INSERT INTO color (id, name, yandex_color, code) VALUES (6, 'Green', 'green,зеленый', '#39af45');
-INSERT INTO color (id, name, yandex_color, code) VALUES (5, 'Gold', 'gold,золотой', '#d8ce71');
-INSERT INTO color (id, name, yandex_color, code) VALUES (8, 'Blue', 'blue,синий,голубой', '#385ab2');
-INSERT INTO color (id, name, yandex_color, code) VALUES (1, 'Black', 'black,черный', '#000000');
+INSERT INTO color (id, name, yandex_color, code) VALUES (9, 'Yellow', 'yellow', '#e8ed0a');
+INSERT INTO color (id, name, yandex_color, code) VALUES (2, 'White', 'white', '#ffffff');
+INSERT INTO color (id, name, yandex_color, code) VALUES (3, 'Silver', 'silver', '#d8d8d8');
+INSERT INTO color (id, name, yandex_color, code) VALUES (4, 'Space Gray', 'gray', '#726f6f');
+INSERT INTO color (id, name, yandex_color, code) VALUES (7, 'Pink', 'pink', '#f74848');
+INSERT INTO color (id, name, yandex_color, code) VALUES (6, 'Green', 'green', '#39af45');
+INSERT INTO color (id, name, yandex_color, code) VALUES (5, 'Gold', 'gold', '#d8ce71');
+INSERT INTO color (id, name, yandex_color, code) VALUES (8, 'Blue', 'blue', '#385ab2');
+INSERT INTO color (id, name, yandex_color, code) VALUES (1, 'Black', 'black', '#000000');
 
 CREATE TABLE "vendor" (
   "id"          BIGINT       NOT NULL,

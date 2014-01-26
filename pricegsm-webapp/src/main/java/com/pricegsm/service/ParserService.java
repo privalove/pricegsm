@@ -77,8 +77,8 @@ public class ParserService {
                     if (date == null || date.before(yandexTime)) {
 
                         String search = "(" + product.getSearchQuery().replaceAll(",", "|") + ")";
-                        String color = !Utils.isEmpty(product.getColor().getYandexColor())
-                                ? "(" + product.getColor().getYandexColor().replaceAll(",", "|") + ")"
+                        String color = !Utils.isEmpty(product.getColorQuery())
+                                ? "(" + product.getColorQuery().replaceAll(",", "|") + ")"
                                 : "";
                         String exclude = !Utils.isEmpty(product.getExcludeQuery())
                                 ? "~(" + product.getExcludeQuery().replaceAll(",", "|") + ")"
@@ -173,7 +173,7 @@ public class ParserService {
                         String url = AppSettings.getParserUrl() + "/yandex?yandexId=" + yandexId + "&yandexTypeId=" + colors.get(0).getType().getYandexId();
 
                         for (Product color : colors) {
-                            url += "&id" + color.getColor().getId() + "=" + URLEncoder.encode(color.getColor().getYandexColor(), "UTF-8");
+                            url += "&id" + color.getColor().getId() + "=" + URLEncoder.encode(color.getColorQuery(), "UTF-8");
                         }
 
                         logger.info("Fetch url: {}", url);

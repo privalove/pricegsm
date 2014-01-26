@@ -102,9 +102,9 @@ var FormElements = function () {
             //runDatePicker();
             //runTimePicker();
             //runDateRangePicker();
-            runColorPicker();
+            //runColorPicker();
             //runColorPalette();
-            runTagsInput();
+            //runTagsInput();
             //runSummerNote();
             //runCKEditor();
         }

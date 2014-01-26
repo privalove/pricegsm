@@ -158,10 +158,23 @@
                             </label>
 
                             <div class="col-sm-9">
-                                <input type="text" id="excludeQuery" class="tagsInput2 form-control"
+                                <input type="text" id="excludeQuery" class="tagsInput form-control"
                                        th:field="*{excludeQuery}"/>
                                 <span class="help-block" th:if="${#fields.hasErrors('excludeQuery')}"
                                       th:errors="*{excludeQuery}">Ошибка</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group" th:classappend="${#fields.hasErrors('colorQuery')}? 'has-error'">
+                            <label class="col-sm-2 control-label" for="colorQuery" th:text="#{product.colorQuery}">
+                                Строка цвета
+                            </label>
+
+                            <div class="col-sm-9">
+                                <input type="text" id="colorQuery" class="tagsInput form-control"
+                                       th:field="*{colorQuery}"/>
+                                <span class="help-block" th:if="${#fields.hasErrors('colorQuery')}"
+                                      th:errors="*{colorQuery}">Ошибка</span>
                             </div>
                         </div>
 
