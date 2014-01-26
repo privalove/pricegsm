@@ -25,6 +25,8 @@ public class Product
 
     private String excludeQuery;
 
+    private String colorQuery;
+
     private ProductType type;
 
     private Vendor vendor;
@@ -146,5 +148,16 @@ public class Product
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Size(max = 255)
+    @Basic
+    @Column(name = "colorQuery")
+    public String getColorQuery() {
+        return colorQuery;
+    }
+
+    public void setColorQuery(String colorQuery) {
+        this.colorQuery = colorQuery;
     }
 }
