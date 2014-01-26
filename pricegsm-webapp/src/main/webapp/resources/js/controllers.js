@@ -147,7 +147,7 @@ function IndexCtrl($scope, $cookieStore, $filter, indexResource, IndexResource, 
         plugins: [new ngGridFlexibleHeightPlugin({minHeight: 200})],
         columnDefs: [
             {field: 'shop', displayName: 'Магазин', cellTemplate: 'resources/template/shopNameCellTemplate.html'},
-            {field: 'price', displayName: 'Цена'}
+            {field: 'price', displayName: 'Цена', cellTemplate: 'resources/template/yandexPriceCellTemplate.html'}
         ]
     };
 

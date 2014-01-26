@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-xs-6">
-        {{ngModel[field]}} <span ng-if="ngModel[field]" ng-bind="currency.symbol">$</span>
+        {{ngModel[field]}} {{currency.symbol}}
     </div>
     <div class="col-xs-6" ng-if="ngModel[field + 'Delta'] != 0">
                 <span class="label"
