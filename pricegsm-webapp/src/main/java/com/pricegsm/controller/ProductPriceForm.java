@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 public class ProductPriceForm
         implements Serializable {
 
+    private String type;
 
     private Product product;
 
@@ -31,8 +32,9 @@ public class ProductPriceForm
     public ProductPriceForm() {
     }
 
-    public ProductPriceForm(Product product, String previousProduct, BigDecimal retail,  BigDecimal retailDelta, int count, BigDecimal opt, BigDecimal optDelta, BigDecimal world, BigDecimal worldDelta) {
+    public ProductPriceForm(Product product, String previousProduct, String previousType, BigDecimal retail,  BigDecimal retailDelta, int count, BigDecimal opt, BigDecimal optDelta, BigDecimal world, BigDecimal worldDelta) {
         this.name = Utils.isEmpty(previousProduct) || !previousProduct.equals(product.getName()) ? product.getName() : "";
+        this.type = Utils.isEmpty(previousType) || !previousType.equals(product.getType().getName()) ? product.getType().getName() : "";
         this.product = product;
         this.retail = retail;
         this.retailDelta = retailDelta;
@@ -113,5 +115,13 @@ public class ProductPriceForm
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

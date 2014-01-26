@@ -227,6 +227,7 @@ public class IndexController {
         List<Product> products = productService.findActiveByVendorOrderByVendorAndName(vendor);
 
         String previousProductName = "";
+        String previousType = "";
 
         for (Product product : products) {
 
@@ -256,8 +257,9 @@ public class IndexController {
                 }
             }
 
-            result.add(new ProductPriceForm(product, previousProductName, retail, retailDelta, count, BigDecimal.ZERO, BigDecimal.ZERO, world, worldDelta));
+            result.add(new ProductPriceForm(product, previousProductName, previousType, retail, retailDelta, count, BigDecimal.ZERO, BigDecimal.ZERO, world, worldDelta));
             previousProductName = product.getName();
+            previousType = product.getType().getName();
         }
 
         return result;
