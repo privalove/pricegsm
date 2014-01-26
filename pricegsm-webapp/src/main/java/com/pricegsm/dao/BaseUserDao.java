@@ -12,7 +12,7 @@ public class BaseUserDao
     public BaseUser loadByEmail(String email) {
         try {
             return (BaseUser) getEntityManager()
-                    .createQuery("select u from BaseUser u where u.email = :email")
+                    .createQuery("select u from BaseUser u where lower(u.email) = lower(:email)")
                     .setParameter("email", email)
                     .getSingleResult();
         } catch (NoResultException e) {
