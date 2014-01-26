@@ -239,11 +239,14 @@ public class IndexController {
             BigDecimal world = getPrice(worldPrice, currency);
             BigDecimal worldDelta = BigDecimal.ZERO;
 
+            int count = 0;
+
             if (yandexPrice != null) {
                 BigDecimal oldPrice = getPrice(yandexPriceService.findByDateMinPrice(product.getId(), DateUtils.addDays(yandexPrice.getDate(), -dynRange)), currency);
                 if (!oldPrice.equals(BigDecimal.ZERO)) {
                     retailDelta = retail.subtract(oldPrice);
                 }
+                count = yandexPrice.getCount();
             }
 
             if (worldPrice != null) {
@@ -253,7 +256,7 @@ public class IndexController {
                 }
             }
 
-            result.add(new ProductPriceForm(product, previousProductName, retail, retailDelta, BigDecimal.ZERO, BigDecimal.ZERO, world, worldDelta));
+            result.add(new ProductPriceForm(product, previousProductName, retail, retailDelta, count, BigDecimal.ZERO, BigDecimal.ZERO, world, worldDelta));
             previousProductName = product.getName();
         }
 

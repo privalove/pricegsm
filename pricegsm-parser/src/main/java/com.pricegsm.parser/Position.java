@@ -22,6 +22,8 @@ public class Position
 
     private String color;
 
+    private int count;
+
     public long getPrice() {
         return price;
     }
@@ -78,6 +80,13 @@ public class Position
         this.color = color;
     }
 
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
 
     @Override
     public String toString() {

@@ -60,14 +60,16 @@
                     <th>Розница</th>
                     <th>Опт</th>
                     <th>Мир</th>
+                    <th>Колич.</th>
                     </thead>
                     <tbody>
                     <tr ng-repeat="price in prices" ng-class="{'pg-highlight':price.product.id == product.id}" ng-click="updateProduct(price.product)">
-                        <td ng-text="price.name"></td>
-                        <td ng-text="price.product.color.name"></td>
+                        <td ng-text="price.name">Iphone 5S 16Gb</td>
+                        <td ng-text="price.product.color.name">Gold</td>
                         <td ng-model="price" pg-pricecell="retail"></td>
                         <td ng-model="price" pg-pricecell="opt"></td>
                         <td ng-model="price" pg-pricecell="world"></td>
+                        <td ng-text="price.count">128</td>
                     </tr>
                     </tbody>
                 </table>

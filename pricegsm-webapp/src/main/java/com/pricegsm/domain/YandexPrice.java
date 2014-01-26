@@ -44,6 +44,8 @@ public class YandexPrice
 
     private long color;
 
+    private int count;
+
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(generator = "YandexPrice")
@@ -143,6 +145,19 @@ public class YandexPrice
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    /**
+     * Count of offers on market yandex
+     */
+    @Basic
+    @Column(name = "count", nullable = false)
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
     @Transient

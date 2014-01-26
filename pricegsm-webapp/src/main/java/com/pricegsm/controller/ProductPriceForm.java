@@ -26,14 +26,17 @@ public class ProductPriceForm
 
     private BigDecimal worldDelta = BigDecimal.ZERO;
 
+    private int count;
+
     public ProductPriceForm() {
     }
 
-    public ProductPriceForm(Product product, String previousProduct, BigDecimal retail, BigDecimal retailDelta, BigDecimal opt, BigDecimal optDelta, BigDecimal world, BigDecimal worldDelta) {
+    public ProductPriceForm(Product product, String previousProduct, BigDecimal retail,  BigDecimal retailDelta, int count, BigDecimal opt, BigDecimal optDelta, BigDecimal world, BigDecimal worldDelta) {
         this.name = Utils.isEmpty(previousProduct) || !previousProduct.equals(product.getName()) ? product.getName() : "";
         this.product = product;
         this.retail = retail;
         this.retailDelta = retailDelta;
+        this.count = count;
         this.opt = opt;
         this.optDelta = optDelta;
         this.world = world;
@@ -102,5 +105,13 @@ public class ProductPriceForm
 
     public void setWorldDelta(BigDecimal worldDelta) {
         this.worldDelta = worldDelta;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 }

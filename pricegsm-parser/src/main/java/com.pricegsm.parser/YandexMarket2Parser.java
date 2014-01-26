@@ -8,6 +8,7 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.google.common.base.Throwables;
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -51,15 +52,23 @@ public class YandexMarket2Parser {
 
 
             JSONObject shops = UrlFetchUtil.processPage(page.asXml(), "/template/yandex3.xsl");
+            JSONArray offers = shops.getJSONObject("result").getJSONArray("offer");
+            int count = 0;
+
+            try {
+                count = shops.getJSONObject("result").getInt("count");
+            } catch (Exception e) {
+            }
 
             positions.addAll(
                     mapper.<Collection<? extends Position>>readValue(
-                            shops.getJSONArray("offer").toString(),
+                            offers.toString(),
                             new TypeReference<List<Position>>() {}));
 
             for (int i = 0; i < positions.size(); i++) {
                 Position shopOffer = positions.get(i);
                 shopOffer.setPosition(i);
+                shopOffer.setCount(count);
 
                 if (!StringUtils.isEmpty(shopOffer.getLink())) {
                     try {
