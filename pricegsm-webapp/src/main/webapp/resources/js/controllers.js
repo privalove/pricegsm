@@ -4,7 +4,7 @@ function AppCtrl($scope) {
 
 AppCtrl.$inject = ["$scope"];
 
-function IndexCtrl($scope, $cookieStore, $filter, indexResource, IndexResource, IndexChartResource, IndexShopResource) {
+function IndexCtrl($scope, $cookieStore, $filter, $locale, indexResource, IndexResource, IndexChartResource, IndexShopResource) {
 
     $scope.marketUrl = function () {
 
@@ -106,8 +106,22 @@ function IndexCtrl($scope, $cookieStore, $filter, indexResource, IndexResource, 
                 hoverable: true,
                 clickable: true
             },
-            legend: {show: true},
-            xaxis: {show: true, mode: "time", min: $scope.chart.from, max: $scope.chart.to}
+            legend: {
+                show: true,
+                position: "nw"
+            },
+            xaxis: {
+                show: true,
+                mode: "time",
+                min: $scope.chart.from,
+                max: $scope.chart.to,
+                monthNames: $locale.DATETIME_FORMATS.SHORTMONTH
+            },
+            yaxis: {
+                tickFormatter: function formatter(val) {
+                    return val + "&nbsp;" + $scope.currency.symbol;
+                }
+            }
         };
     };
 
@@ -175,7 +189,7 @@ function IndexCtrl($scope, $cookieStore, $filter, indexResource, IndexResource, 
     }
 }
 
-IndexCtrl.$inject = ["$scope", "$cookieStore", "$filter", "indexResource", "IndexResource", "IndexChartResource", "IndexShopResource"];
+IndexCtrl.$inject = ["$scope", "$cookieStore", "$filter", "$locale", "indexResource", "IndexResource", "IndexChartResource", "IndexShopResource"];
 
 IndexCtrl.resolve = {
     indexResource: ["IndexResource", "$cookieStore", function (IndexResource, $cookieStore) {
