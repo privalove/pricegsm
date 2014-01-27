@@ -25,3 +25,13 @@
 
 1. Выполнить команду maven <br/>
 `mvn clean package`
+
+Вход в систему
+--------------
+
+Клиент:
+seller@pricegsm.com 12345
+buyer@pricegsm.com 12345
+
+Админ:
+admin@pricegsm.com 12345
