@@ -30,8 +30,11 @@
 --------------
 
 Клиент:
+<br/>
 seller@pricegsm.com 12345
+<br/>
 buyer@pricegsm.com 12345
 
 Админ:
+<br/>
 admin@pricegsm.com 12345
