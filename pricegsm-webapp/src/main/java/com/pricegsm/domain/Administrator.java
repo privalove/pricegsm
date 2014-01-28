@@ -16,6 +16,16 @@ import java.util.Collection;
 public class Administrator
         extends BaseUser {
 
+    public Administrator() {
+    }
+
+    public Administrator(String name, String email, String password) {
+        setName(name);
+        setEmail(email);
+        setPassword(password);
+    }
+
+
     @Transient
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

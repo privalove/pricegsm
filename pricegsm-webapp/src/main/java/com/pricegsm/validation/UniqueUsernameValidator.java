@@ -2,6 +2,7 @@ package com.pricegsm.validation;
 
 import com.pricegsm.service.BaseUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -19,6 +20,12 @@ public class UniqueUsernameValidator
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
 
-        return userService.loadUserByUsername(value) == null;
+        try {
+            userService.loadUserByUsername(value);
+            return false;
+        } catch (UsernameNotFoundException e) {
+            return true;
+        }
+
     }
 }

@@ -22,6 +22,12 @@ public class BaseUserServiceImpl
     @Override
     public BaseUser loadUserByUsername(String username)
             throws UsernameNotFoundException {
-        return getDao().loadByEmail(username);
+        BaseUser baseUser = getDao().loadByEmail(username);
+
+        if (baseUser == null) {
+            throw new UsernameNotFoundException("user not found");
+        }
+
+        return baseUser;
     }
 }
