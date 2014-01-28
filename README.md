@@ -6,8 +6,9 @@
 
 1. Hibernate [docs](http://docs.jboss.org/hibernate/orm/4.3/manual/en-US/html/)
 2. Spring MVC [docs](http://docs.spring.io/spring/docs/current/spring-framework-reference/html/)
-2. Spring Security [docs](http://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/)
-3. Jackson [docs](http://wiki.fasterxml.com/JacksonDocumentation)
+3. Spring Security [docs](http://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/)
+4. Jackson [docs](http://wiki.fasterxml.com/JacksonDocumentation)
+5. Thymeleaf [docs](http://www.thymeleaf.org/documentation.html)
 
 ### Полезные утилиты ###
 
