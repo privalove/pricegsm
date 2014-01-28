@@ -26,6 +26,6 @@
 
 1. Jquery [docs](http://api.jquery.com/)
 2. Bootstrap [docs](http://getbootstrap.com/components/)
-3. AngularJS [docs](http://docs.angularjs.org/api/)
+3. <b>AngularJS</b> [docs](http://docs.angularjs.org/api/)
 4. Font Awesome [docs](http://fontawesome.io/icons/)
 5. Underscore [docs](http://underscorejs.org/)
