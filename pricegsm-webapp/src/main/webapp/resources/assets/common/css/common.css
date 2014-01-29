@@ -38,3 +38,11 @@ body.login .box-forgot, body.login .box-register {
     background-color: #c9dde1 !important;
 }
 
+.wrap-dd-menu ul.dropdown {
+    z-index: 1000;
+}
+
+.wrap-dd-menu {
+    width: auto;
+}
+

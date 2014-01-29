@@ -10,7 +10,8 @@
         "ProfileContext" : "profile/context.json",
         "ChangePassword" : "profile/changePassword",
 
-        "PriceListResource": "price_list.json"
+        "PriceListResource": "price_list.json",
+        "PriceList": "price_list/:priceListId.json"
     };
 
         angular.module('pg.services', ['ngResource'])

@@ -45,7 +45,10 @@ public class PriceListPosition
 
     @NotNull
     @ManyToOne(optional = false)
-    @JoinColumn(name = "pricelist_id", referencedColumnName = "id", nullable = false)
+    @JoinColumns({
+            @JoinColumn(name = "pricelist_user_id", referencedColumnName = "user_id", nullable = false),
+            @JoinColumn(name = "pricelist_position", referencedColumnName = "position", nullable = false)
+    })
     public PriceList getPriceList() {
         return priceList;
     }

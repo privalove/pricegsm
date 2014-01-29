@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('pricegsm', ['ngRoute', 'ngCookies', 'ngAnimate', 'ngGrid', 'ui.bootstrap', 'angular-loading-bar',
+    angular.module('pricegsm', ['ngRoute', 'ngCookies', 'ngAnimate', 'ngGrid', 'ui.bootstrap', 'angular-loading-bar', 'ngDropdowns',
             'pg.services', 'pg.directives'])
         .config(['$routeProvider', "$httpProvider", function ($routeProvider, $httpProvider) {
             $routeProvider

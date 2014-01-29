@@ -1,29 +1,75 @@
 <div class="row" xmlns:th="http://www.thymeleaf.org">
-    <div class="col-sm-12">
-        <div class="page-header">
-            <h1><span th:text="#{page.priceList}">Прайс-Лист</span>
-                <small></small>
-            </h1>
-        </div>
+    <div class="col-md-12">
+        <tabset>
+            <tab>
+                <tab-heading>
+                    <span th:text="#{page.priceList.current}">Tекущий</span> {{priceLists[0].sellFromDate | date:"dd
+                    MMM"}} - {{priceLists[0].sellToDate | date:"dd MMM"}}
+                </tab-heading>
+
+                <div class="row">
+                    <div class="col-md-2">
+                        <a href='' dropdown-menu="vendors" dropdown-model="vendor" dropdown-item-label="name">Производитель</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table role="table" class="table">
+                            <thead>
+                            <tr>
+                                <th>Наименование</th>
+                                <th style="width: 100px;">Цвет</th>
+                                <th style="width: 50px;">Цена</th>
+                                <th>МОК</th>
+                                <th>Примечание</th>
+                                <th>ост.</th>
+                                <th>не контр.</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <b>Apple</b>
+                                </td>
+                                <td colspan="2">
+                                    <a href='' dropdown-menu="vendors" dropdown-model="vendor" dropdown-item-label="name">добавить модель</a>
+                                </td>
+                                <td colspan="5">
+                                        <input type="checkbox"/> показать все
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </tab>
+            <tab ng-repeat="priceList in sortedPriceLists()">
+                <tab-heading>
+                    <span th:text="#{page.priceList.preOrder}">Предзаказ</span> {{priceList.sellFromDate | date:"dd
+                    MMM"}} - {{priceList.sellToDate | date:"dd MMM"}}
+                </tab-heading>
+
+                <div class="row">
+                    <div class="col-md-2">
+                        <a href='' dropdown-menu="vendors" dropdown-model="vendor" dropdown-item-label="name">Производитель</a>
+                    </div>
+                </div>
+
+            </tab>
+            <tab ng-show="priceLists.length &lt; 3" disabled="true">
+                <tab-heading>
+                    <a href="javascript:void(0)" ng-click="addPreOrder()">
+                        <i class="fa fa-plus"></i><span
+                            th:text="#{page.priceList.preOrder.create}">Создать предзаказ</span>
+                    </a>
+                </tab-heading>
+            </tab>
+            <tab>
+                <tab-heading>
+                    <span th:text="#{page.priceList.settings}">Условия работы</span>
+                </tab-heading>
+            </tab>
+        </tabset>
     </div>
 </div>
-<tabset>
-    <tab>
-        <tab-heading>
-            текущий 25 дек - 26 дек
-        </tab-heading>
-        Static content
-    </tab>
-    <tab>
-        <tab-heading>
-            предзаказ 31 дек - 4 янв
-        </tab-heading>
-        Static content
-    </tab>
-    <tab>
-        <tab-heading>
-            Условия работы
-        </tab-heading>
-        Static content
-    </tab>
-</tabset>

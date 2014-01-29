@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.pricegsm.jackson.GlobalEntityDeserializer;
 import com.pricegsm.jackson.GlobalEntitySerializer;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -14,8 +16,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "pricelist")
+@IdClass(PriceListPK.class)
 public class PriceList
-        extends GlobalEntity
+        extends BaseEntity
         implements Activable {
 
     List<PriceListPosition> positions = new ArrayList<>();
@@ -34,13 +37,30 @@ public class PriceList
 
     private String description;
 
+    private int position;
+
     @Id
-    @Column(name = "id", nullable = false)
-    @GeneratedValue(generator = "PriceList")
-    @SequenceGenerator(name = "PriceList", sequenceName = "pricelist_seq", allocationSize = 1)
-    @Override
-    public long getId() {
-        return super.getId();
+    @JsonSerialize(using = GlobalEntitySerializer.class)
+    @JsonDeserialize(using = GlobalEntityDeserializer.class)
+    @NotNull
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @Id
+    @Column(name = "position", nullable = false)
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 
     @Valid
@@ -91,19 +111,6 @@ public class PriceList
     @JsonDeserialize(using = GlobalEntityDeserializer.class)
     @NotNull
     @ManyToOne(optional = false)
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    @JsonSerialize(using = GlobalEntitySerializer.class)
-    @JsonDeserialize(using = GlobalEntityDeserializer.class)
-    @NotNull
-    @ManyToOne(optional = false)
     @JoinColumn(name = "currency_id", referencedColumnName = "id", nullable = false)
     public Currency getCurrency() {
         return currency;
@@ -134,5 +141,25 @@ public class PriceList
 
     public void setVersion(int version) {
         this.version = version;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PriceList that = (PriceList) o;
+        return new EqualsBuilder()
+                .append(getPosition(), that.getPosition())
+                .append(getUser(), that.getUser())
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .append(getPosition())
+                .append(getUser())
+                .toHashCode();
     }
 }

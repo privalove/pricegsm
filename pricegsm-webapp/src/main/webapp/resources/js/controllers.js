@@ -1,9 +1,10 @@
+AppCtrl.$inject = ["$scope"];
 function AppCtrl($scope) {
 
 }
 
-AppCtrl.$inject = ["$scope"];
 
+IndexCtrl.$inject = ["$scope", "$cookieStore", "$filter", "$locale", "indexResource", "IndexResource", "IndexChartResource", "IndexShopResource"];
 function IndexCtrl($scope, $cookieStore, $filter, $locale, indexResource, IndexResource, IndexChartResource, IndexShopResource) {
 
     $scope.marketUrl = function () {
@@ -189,8 +190,6 @@ function IndexCtrl($scope, $cookieStore, $filter, $locale, indexResource, IndexR
     }
 }
 
-IndexCtrl.$inject = ["$scope", "$cookieStore", "$filter", "$locale", "indexResource", "IndexResource", "IndexChartResource", "IndexShopResource"];
-
 IndexCtrl.resolve = {
     indexResource: ["IndexResource", "$cookieStore", function (IndexResource, $cookieStore) {
         //reset shop date to today on enter index page
@@ -217,45 +216,58 @@ function getIndexResource(IndexResource, $cookieStore, data) {
     }).$promise;
 }
 
+MarketplaceCtrl.$inject = ["$scope"];
 function MarketplaceCtrl($scope) {
 
 }
-
-MarketplaceCtrl.$inject = ["$scope"];
 
 MarketplaceCtrl.resolve = {
 
 };
 
+OrderCtrl.$inject = ["$scope"];
 function OrderCtrl($scope) {
 
 }
-
-OrderCtrl.$inject = ["$scope"];
 
 OrderCtrl.resolve = {
 
 };
 
+SalesCtrl.$inject = ["$scope"];
 function SalesCtrl($scope) {
 
 }
-
-SalesCtrl.$inject = ["$scope"];
 
 SalesCtrl.resolve = {
 
 };
 
-function PriceListCtrl($scope, priceListResource) {
+PriceListCtrl.$inject = ["$scope", "priceListResource", "PriceList"];
+function PriceListCtrl($scope, priceListResource, PriceList) {
     if (priceListResource.ok) {
         angular.extend($scope, priceListResource.payload);
 
+        var priceLists = [];
 
+        angular.forEach($scope.priceLists, function (priceList) {
+            priceLists.push(new PriceList(priceList));
+        });
+
+        $scope.priceLists = priceLists;
+
+
+        $scope.sortedPriceLists = function () {
+            return $scope.priceLists.slice(1);
+        };
+
+        $scope.addPreOrder = function () {
+            $scope.priceLists.push(new PriceList($scope.template));
+        };
+
+        $scope.vendor = {};
     }
 }
-
-PriceListCtrl.$inject = ["$scope", "priceListResource"];
 
 PriceListCtrl.resolve = {
     priceListResource: ["PriceListResource", function (PriceListResource) {
