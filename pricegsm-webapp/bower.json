@@ -24,6 +24,7 @@
     "perfect-scrollbar": "~0.4.6",
     "pines-notify": "latest",
     "jquery.tagsinput": "~1.3.2",
-    "angular-dropdowns": "*"
+    "angular-dropdowns": "*",
+    "angular-ui-utils": "unique-0.1.0"
   }
 }

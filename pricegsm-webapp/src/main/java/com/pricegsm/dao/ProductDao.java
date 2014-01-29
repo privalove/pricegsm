@@ -4,11 +4,16 @@ import com.pricegsm.domain.Color;
 import com.pricegsm.domain.Product;
 import org.springframework.stereotype.Repository;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Repository
 public class ProductDao
         extends GlobalEntityDao<Product> {
+
+    protected Iterable<String> getOrderByProperties() {
+        return Arrays.asList("vendor.id", "type.id", "name", "color.id");
+    }
 
     public List<Product> findByYandexId(String yandexId) {
         return getEntityManager()

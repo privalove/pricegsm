@@ -6,43 +6,176 @@
                     <span th:text="#{page.priceList.current}">Tекущий</span> {{priceLists[0].sellFromDate | date:"dd
                     MMM"}} - {{priceLists[0].sellToDate | date:"dd MMM"}}
                 </tab-heading>
-
-                <div class="row">
-                    <div class="col-md-2">
-                        <a href='' dropdown-menu="vendors" dropdown-model="vendor" dropdown-item-label="name">Производитель</a>
+                <form role="form" name="plForm">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <a href='' class="dropdown-toggle"
+                               th:text="#{page.priceList.addVendor}">Добавить производителя</a>
+                            <ul class="dropdown-menu">
+                                <li ng-repeat="vendor in vendors">
+                                    <a href=""
+                                       ng-text="vendor.name">Apple</a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <table role="table" class="table">
-                            <thead>
-                            <tr>
-                                <th>Наименование</th>
-                                <th style="width: 100px;">Цвет</th>
-                                <th style="width: 50px;">Цена</th>
-                                <th>МОК</th>
-                                <th>Примечание</th>
-                                <th>ост.</th>
-                                <th>не контр.</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>
-                                    <b>Apple</b>
-                                </td>
-                                <td colspan="2">
-                                    <a href='' dropdown-menu="vendors" dropdown-model="vendor" dropdown-item-label="name">добавить модель</a>
-                                </td>
-                                <td colspan="5">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table role="table" class="table pg-pricelist">
+                                <thead>
+                                <tr>
+                                    <th class="pg-active">
+                                        <i class="fa fa-question-circle"
+                                           th:attr="tooltip=#{priceListPosition.active.title}"
+                                           tooltip-placement="right"></i>
+                                        <span th:text="#{priceListPosition.active}"></span>
+                                    </th>
+                                    <th>
+                                        <i class="fa fa-question-circle"
+                                           th:attr="tooltip=#{priceListPosition.name.title}"></i>
+                                        <span th:text="#{priceListPosition.name}">Наименование</span>
+                                    </th>
+                                    <th class="pg-color">
+                                        <i class="fa fa-question-circle"
+                                           th:attr="tooltip=#{priceListPosition.color.title}"></i>
+                                        <span th:text="#{priceListPosition.color}">Цвет</span>
+                                    </th>
+                                    <th class="pg-price">
+                                        <i class="fa fa-question-circle"
+                                           th:attr="tooltip=#{priceListPosition.price.title}"></i>
+                                        <span th:text="#{priceListPosition.price}">Цена</span>
+                                    </th>
+                                    <th class="pg-specification">
+                                        <i class="fa fa-question-circle"
+                                           tooltip="Спецификация"
+                                           th:attr="tooltip=#{priceListPosition.specification.title}"></i>
+                                        <span th:text="#{priceListPosition.specification}">Спец.</span>
+                                    </th>
+                                    <th class="pg-moq">
+                                        <i class="fa fa-question-circle"
+                                           tooltip="Минимальный заказ"
+                                           th:attr="tooltip=#{priceListPosition.moq.title}"></i>
+                                        <span th:text="#{priceListPosition.moq}">МОК</span>
+                                    </th>
+                                    <th>
+                                        <i class="fa fa-question-circle"
+                                           th:attr="tooltip=#{priceListPosition.description.title}"></i>
+                                        <span th:text="#{priceListPosition.description}">Примечание</span>
+                                    </th>
+                                    <th class="pg-amount">
+                                        <i class="fa fa-question-circle"
+                                           th:attr="tooltip=#{priceListPosition.amount.title}"></i>
+                                        <span th:text="#{priceListPosition.amount}">Остаток</span>
+                                    </th>
+                                    <th class="pg-actions"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td colspan="2">
+                                        <b>Apple</b>
+                                    </td>
+                                    <td colspan="2">
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <a href='' class="dropdown-toggle">добавить модель</a>
+                                                <ul class="dropdown-menu">
+                                                    <li ng-repeat="product in productsByVendor(1)">
+                                                        <a href="" ng-click="addPosition(priceLists[0], product)">{{product.name}}</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td colspan="5">
                                         <input type="checkbox"/> показать все
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                                    </td>
+                                </tr>
+                                <tr ng-repeat="position in priceLists[0].positions" ng-form="" name="pForm">
+                                    <td>
+                                        <div class="form-group">
+                                            <input type="checkbox" ng-model="position.active"/>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <p class="form-control-static"
+                                               ng-bind="position.product.id + ' ' + position.product.name">
+                                                iPhone 5S 16Gb
+                                            </p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    <a href='' class="dropdown-toggle"
+                                                       ng-bind="position.product.color.name">White</a>
+                                                    <ul class="dropdown-menu">
+                                                        <li ng-repeat="product in products | filter:{yandexId:position.product.yandexId}">
+                                                            <a href="" ng-click="position.product = product"
+                                                               ng-text="product.color.name">Black</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group"  ng-class="{'has-error':!pForm.price.$valid}">
+                                            <input name="price" type="number" class="form-control" min="1" required=""
+                                                   ng-model="position.price"/>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <select class="form-control"
+                                                    ng-model="position.specification.id"
+                                                    ng-options="o.id as o.name for o in specifications">
+                                                <option value="">Нет</option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group" ng-class="{'has-error':!pForm.moq.$valid}">
+                                            <input type="number" name="moq" class="form-control" min="1" required=""
+                                                   ng-model="position.moq"/>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control"
+                                                   ng-model="position.description"/>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group"  ng-class="{'has-error':!pForm.amount.$valid}">
+                                            <input type="number" name="amount" class="form-control" min="0" required=""
+                                                   ng-model="position.amount"/>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <p>
+                                                <button type="button" class="btn btn-xs btn-success"
+                                                        ng-click="position.amount = 9999"
+                                                        tooltip="Не контролировать остаток">
+                                                    &infin;
+                                                </button>
+                                                <button type="button" class="btn btn-xs btn-danger"
+                                                        ng-click="priceLists[0].positions.splice($index, 1)"
+                                                        tooltip="Удалить позицию">
+                                                    <i class="fa fa-times"></i>
+                                                </button>
+                                            </p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
+                </form>
             </tab>
             <tab ng-repeat="priceList in sortedPriceLists()">
                 <tab-heading>

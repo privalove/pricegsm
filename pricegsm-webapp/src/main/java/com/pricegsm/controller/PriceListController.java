@@ -1,9 +1,11 @@
 package com.pricegsm.controller;
 
 import com.pricegsm.domain.PriceList;
-import com.pricegsm.domain.PriceListPK;
+import com.pricegsm.domain.PriceListPosition;
 import com.pricegsm.jackson.Wrappers;
 import com.pricegsm.service.PriceListService;
+import com.pricegsm.service.ProductService;
+import com.pricegsm.service.SpecificationService;
 import com.pricegsm.service.VendorService;
 import com.pricegsm.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,12 @@ public class PriceListController {
     @Autowired
     private VendorService vendorService;
 
+    @Autowired
+    private ProductService productService;
+
+    @Autowired
+    private SpecificationService specificationService;
+
     @RequestMapping(value = "/price_list", method = RequestMethod.GET)
     public String priceList() {
         return "price_list";
@@ -47,7 +55,10 @@ public class PriceListController {
         return OperationResult.ok()
                 .payload("priceLists", priceLists)
                 .payload("template", priceListService.getDefaultInstance())
-                .payload("vendors", Wrappers.wrap(vendorService.findActive()));
+                .payload("positionTemplate", new PriceListPosition())
+                .payload("vendors", Wrappers.wrap(vendorService.findActive()))
+                .payload("products", productService.findActive())
+                .payload("specifications", specificationService.findActive());
     }
 
 

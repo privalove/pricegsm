@@ -31,4 +31,8 @@ public class ProductService
     public List<Color> findColors(String yandexId) {
         return getDao().findColors(yandexId);
     }
+
+    public List<Product> findActive() {
+        return getDao().findActive();
+    }
 }

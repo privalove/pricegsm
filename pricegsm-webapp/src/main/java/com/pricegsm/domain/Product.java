@@ -1,6 +1,5 @@
 package com.pricegsm.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.pricegsm.jackson.GlobalEntityDeserializer;
@@ -59,7 +58,6 @@ public class Product
     }
 
     @NotBlank
-    @JsonIgnore
     @Size(max = 255)
     @Basic
     @Column(name = "yandex_id")

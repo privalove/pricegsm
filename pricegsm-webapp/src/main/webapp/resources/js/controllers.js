@@ -243,8 +243,8 @@ SalesCtrl.resolve = {
 
 };
 
-PriceListCtrl.$inject = ["$scope", "priceListResource", "PriceList"];
-function PriceListCtrl($scope, priceListResource, PriceList) {
+PriceListCtrl.$inject = ["$scope", "$filter", "priceListResource", "PriceList"];
+function PriceListCtrl($scope, $filter, priceListResource, PriceList) {
     if (priceListResource.ok) {
         angular.extend($scope, priceListResource.payload);
 
@@ -261,11 +261,35 @@ function PriceListCtrl($scope, priceListResource, PriceList) {
             return $scope.priceLists.slice(1);
         };
 
+        $scope.productsByVendor = {};
+
+        $scope.productsByVendor = function(vendor) {
+
+            if (!$scope.productsByVendor[vendor]) {
+                $scope.productsByVendor[vendor] = $filter("unique")(_.filter($scope.products, function(product) {return product.vendor.id == vendor}), "name");
+            }
+
+            return $scope.productsByVendor[vendor];
+        };
+
         $scope.addPreOrder = function () {
             $scope.priceLists.push(new PriceList($scope.template));
         };
 
+        $scope.addPosition = function(priceList, product) {
+
+            var position = angular.copy($scope.positionTemplate);
+            position.product = product;
+
+            priceList.positions.push(position);
+        };
+
         $scope.vendor = {};
+        $scope.product = {};
+
+        $scope.changeColor = function(position, product) {
+
+        }
     }
 }
 

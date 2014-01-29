@@ -1,5 +1,6 @@
 package com.pricegsm.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.pricegsm.jackson.GlobalEntityDeserializer;
@@ -43,7 +44,7 @@ public class PriceListPosition
         return super.getId();
     }
 
-    @NotNull
+    @JsonIgnore
     @ManyToOne(optional = false)
     @JoinColumns({
             @JoinColumn(name = "pricelist_user_id", referencedColumnName = "user_id", nullable = false),
@@ -104,7 +105,7 @@ public class PriceListPosition
         this.specification = specification;
     }
 
-    @Min(1)
+    @Min(0)
     @NotNull
     @Basic
     @Column(name = "amount", nullable = false)
