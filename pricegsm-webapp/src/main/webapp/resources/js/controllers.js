@@ -243,13 +243,28 @@ SalesCtrl.resolve = {
 
 };
 
-PriceListCtrl.$inject = ["$scope", "$filter", "priceListResource", "PriceList"];
-function PriceListCtrl($scope, $filter, priceListResource, PriceList) {
+PriceListCtrl.$inject = ["$scope", "$filter", "notifyManager", "priceListResource", "PriceList"];
+function PriceListCtrl($scope, $filter, notifyManager, priceListResource, PriceList) {
 
     $scope.fetchVendors = function (positions) {
         return  $filter("unique")(_.map(positions, function (position) {
             return position.product.vendor
         }), "id");
+    };
+
+    $scope.save = function(form, index) {
+        var priceList = $scope.priceLists[index];
+        priceList.position = index;
+
+        if (form.$valid) {
+            priceList.$save({priceListId: index}, function(data){
+                if (data.ok) {
+                    notifyManager.success("Прайс лист успешно сохранен");
+                }
+                $scope.priceLists[index] = new PriceList(data.payload.priceList);
+
+            })
+        }
     };
 
     if (priceListResource.ok) {

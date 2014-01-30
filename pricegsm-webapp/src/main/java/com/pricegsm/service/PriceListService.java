@@ -44,6 +44,10 @@ public class PriceListService
             priceList.setSellToDate(DateUtils.addDays(Utils.today(), 1));
         }
 
+        for (PriceListPosition position : entity.getPositions()) {
+            position.setPriceList(priceList);
+        }
+
         return priceList;
     }
 

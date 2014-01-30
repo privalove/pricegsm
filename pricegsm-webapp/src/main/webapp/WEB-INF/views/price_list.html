@@ -6,12 +6,12 @@
     <span th:text="#{page.priceList.current}">Tекущий</span> {{priceLists[0].sellFromDate | date:"dd
     MMM"}} - {{priceLists[0].sellToDate | date:"dd MMM"}}
 </tab-heading>
-<form role="form" name="plForm">
+<form role="form" name="plForm" novalidate="" ng-submit="save(plForm, 0)">
     <div class="row">
         <div class="col-sm-1">
             <button type="button" class="btn btn-success">{{priceLists[0].currency.code}}</button>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-11">
             <a href="" role="button" class="btn btn-default dropdown-toggle">
                 <span th:text="#{page.priceList.addVendor}">Добавить производителя</span>
                 <span class="caret"></span>
@@ -22,6 +22,11 @@
                        ng-text="vendor.name">Apple</a>
                 </li>
             </ul>
+
+            <button class="btn btn-warning" ng-disabled="!plForm.$valid">
+                <span th:text="#{button.save}">Сохранить</span>
+                <i class="fa fa-save"></i>
+            </button>
         </div>
     </div>
     <div class="row">
@@ -124,7 +129,7 @@
                     <td>
                         <div class="form-group">
                             <p class="form-control-static"
-                               ng-bind="position.product.id + ' ' + position.product.name">
+                               ng-bind="position.product.name">
                                 iPhone 5S 16Gb
                             </p>
                         </div>
@@ -171,8 +176,11 @@
                     </td>
                     <td>
                         <div class="form-group" ng-class="{'has-error':!pForm.moq.$valid}" ng-hide="position.fake">
-                            <input type="number" name="moq" class="form-control" min="1" required=""
-                                   ng-model="position.moq"/>
+                            <div class="input-group">
+                                <span class="input-group-addon">от</span>
+                                <input type="number" name="moq" class="form-control" min="1" required=""
+                                       ng-model="position.moq"/>
+                            </div>
                         </div>
                     </td>
                     <td>

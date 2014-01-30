@@ -64,7 +64,7 @@ public class PriceList
     }
 
     @Valid
-    @OneToMany(mappedBy = "priceList", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "priceList", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     public List<PriceListPosition> getPositions() {
         return positions;
     }
