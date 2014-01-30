@@ -263,6 +263,13 @@ function PriceListCtrl($scope, $filter, priceListResource, PriceList) {
 
         $scope.priceLists = priceLists;
 
+        $scope.fakePositions = _.object(_.map($scope.products, function (product) {
+            var fakePosition = {};
+
+            fakePosition[product.id] = {fake:true, product:product, productId:product.id};
+            return [product.id, {fake:true, product:product}];
+        }));
+
         $scope.selectedVendors = $scope.fetchVendors(priceLists[0].positions);
 
         $scope.showAll = {};
@@ -312,7 +319,7 @@ function PriceListCtrl($scope, $filter, priceListResource, PriceList) {
 
                 _.each(products, function(product){
                     if (!_.contains(ids, product.id)) {
-                        result.push({product: product, fake:true})
+                        result.push($scope.fakePositions[product.id]);
                     }
                 });
             }
