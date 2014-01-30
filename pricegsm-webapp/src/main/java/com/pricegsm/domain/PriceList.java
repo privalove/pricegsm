@@ -107,7 +107,6 @@ public class PriceList
         this.sellToDate = sellToDate;
     }
 
-    @JsonSerialize(using = GlobalEntitySerializer.class)
     @JsonDeserialize(using = GlobalEntityDeserializer.class)
     @NotNull
     @ManyToOne(optional = false)

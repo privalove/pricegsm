@@ -2,11 +2,9 @@ package com.pricegsm.service;
 
 import com.pricegsm.dao.CurrencyDao;
 import com.pricegsm.dao.PriceListDao;
+import com.pricegsm.dao.ProductDao;
 import com.pricegsm.dao.UserDao;
-import com.pricegsm.domain.Currency;
-import com.pricegsm.domain.PriceList;
-import com.pricegsm.domain.PriceListPK;
-import com.pricegsm.domain.User;
+import com.pricegsm.domain.*;
 import com.pricegsm.util.Utils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +24,9 @@ public class PriceListService
 
     @Autowired
     private CurrencyDao currencyDao;
+
+    @Autowired
+    private ProductDao productDao;
 
     @Override
     protected PriceListDao getDao() {
@@ -54,6 +55,9 @@ public class PriceListService
         result.setSellFromDate(Utils.today());
         result.setSellToDate(DateUtils.addDays(Utils.today(), 1));
         result.setCurrency(currencyDao.load(Currency.USD));
+
+        PriceListPosition position = new PriceListPosition(productDao.load(AppSettings.getPrimeProduct()), result);
+        result.getPositions().add(position);
 
         return result;
     }

@@ -9,4 +9,7 @@ public class AppSettings
         return "http://localhost:8080/parser";
     }
 
+    public static long getPrimeProduct() {
+        return 1L;
+    }
 }

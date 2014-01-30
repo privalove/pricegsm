@@ -26,8 +26,8 @@ table.pg-pricelist .pg-active {
     width: 50px;
 }
 
-table.pg-pricelist .pg-active {
-    width: 50px;
+table.pg-pricelist .pg-name {
+    width: 150px;
 }
 
 table.pg-pricelist .pg-color {
@@ -35,7 +35,7 @@ table.pg-pricelist .pg-color {
 }
 
 table.pg-pricelist .pg-price {
-    width: 100px;
+    width: 120px;
 }
 
 table.pg-pricelist .pg-specification {

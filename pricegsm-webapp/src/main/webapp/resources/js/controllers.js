@@ -245,6 +245,13 @@ SalesCtrl.resolve = {
 
 PriceListCtrl.$inject = ["$scope", "$filter", "priceListResource", "PriceList"];
 function PriceListCtrl($scope, $filter, priceListResource, PriceList) {
+
+    $scope.fetchVendors = function (positions) {
+        return  $filter("unique")(_.map(positions, function (position) {
+            return position.product.vendor
+        }), "id");
+    };
+
     if (priceListResource.ok) {
         angular.extend($scope, priceListResource.payload);
 
@@ -256,27 +263,71 @@ function PriceListCtrl($scope, $filter, priceListResource, PriceList) {
 
         $scope.priceLists = priceLists;
 
+        $scope.selectedVendors = $scope.fetchVendors(priceLists[0].positions);
 
-        $scope.sortedPriceLists = function () {
+        $scope.showAll = {};
+
+        $scope.preOrderPriceLists = function () {
             return $scope.priceLists.slice(1);
         };
 
-        $scope.productsByVendor = {};
+        $scope.freeVendors = function () {
+            var ids = _.map($scope.selectedVendors, function (vendor) {
+                return vendor.id;
+            });
 
-        $scope.productsByVendor = function(vendor) {
+            return _.filter($scope.vendors, function (vendor) {
+                return !_.contains(ids, vendor.id)
+            });
+        };
 
-            if (!$scope.productsByVendor[vendor]) {
-                $scope.productsByVendor[vendor] = $filter("unique")(_.filter($scope.products, function(product) {return product.vendor.id == vendor}), "name");
+        $scope.productsByVendor = function (vendor) {
+            return  $filter("unique")(_.filter($scope.products, function (product) {
+                return product.vendor.id == vendor
+            }), "name");
+        };
+
+        /**
+         * @param positions Price List positions.
+         * @param vendor Filtered vendor.
+         * @param showFake If true show missed products as fake positions.
+         * @returns {*}
+         */
+        $scope.filterByVendor = function (positions, vendor, showFake) {
+
+            var result = _.filter(positions, function (position) {
+                return position.product.vendor.id == vendor
+            });
+
+            //add missed products as fake positions
+            if (showFake) {
+
+                var ids = _.map(result, function (position) {
+                    return position.product.id;
+                });
+
+                var products = _.filter($scope.products, function (product) {
+                    return product.vendor.id == vendor
+                });
+
+                _.each(products, function(product){
+                    if (!_.contains(ids, product.id)) {
+                        result.push({product: product, fake:true})
+                    }
+                });
             }
 
-            return $scope.productsByVendor[vendor];
+            return _.sortBy(result, function (position) {
+                return position.product.name + position.product.color.name
+            });
         };
+
 
         $scope.addPreOrder = function () {
             $scope.priceLists.push(new PriceList($scope.template));
         };
 
-        $scope.addPosition = function(priceList, product) {
+        $scope.addPosition = function (priceList, product) {
 
             var position = angular.copy($scope.positionTemplate);
             position.product = product;
@@ -284,11 +335,8 @@ function PriceListCtrl($scope, $filter, priceListResource, PriceList) {
             priceList.positions.push(position);
         };
 
-        $scope.vendor = {};
-        $scope.product = {};
-
-        $scope.changeColor = function(position, product) {
-
+        $scope.addVendor = function (vendor) {
+            $scope.selectedVendors.push(vendor);
         }
     }
 }

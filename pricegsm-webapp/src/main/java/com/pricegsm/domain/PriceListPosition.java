@@ -35,6 +35,14 @@ public class PriceListPosition
 
     private String description;
 
+    public PriceListPosition() {
+    }
+
+    public PriceListPosition(Product product, PriceList priceList) {
+        this.product = product;
+        this.priceList = priceList;
+    }
+
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(generator = "PriceListPosition")
@@ -80,7 +88,6 @@ public class PriceListPosition
         this.price = price;
     }
 
-    @JsonSerialize(using = GlobalEntitySerializer.class)
     @JsonDeserialize(using = GlobalEntityDeserializer.class)
     @NotNull
     @ManyToOne(optional = false)
