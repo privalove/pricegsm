@@ -26,6 +26,15 @@
 1. Выполнить команду maven <br/>
 `mvn clean package`
 
+Настройка Tomcat
+----------------
+
+изменить файл **CATALINA_HOME/conf/server.xml**, добавив **URIEncoding="UTF-8"** в коннектор
+
+`<Connector port="8080" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="8443" URIEncoding="UTF-8"/>`
+
 Вход в систему
 --------------
 
@@ -38,3 +47,10 @@ buyer@pricegsm.com 12345
 Админ:
 <br/>
 admin@pricegsm.com 12345
+
+Запуск парсера вручную
+----------------------
+
+http://localhost:8080/exchange - текущие курсы валют.
+<br/>
+http://localhost:8080/yandex - парсер яндекс маркета.
