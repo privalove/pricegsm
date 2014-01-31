@@ -8,16 +8,21 @@
 </tab-heading>
 <form role="form" name="plForm" novalidate="" ng-submit="save(plForm, 0)">
     <div class="row">
-        <div class="col-sm-1">
-            <button type="button" class="btn btn-success">{{priceLists[0].currency.code}}</button>
+        <div class="col-md-2">
+                <toggle-switch
+                        knob-label="Опубликовать"
+                        on-label="Да"
+                        off-label="Нет"
+                        th:attr="on-label=#{on},off-label=#{off},knob-label=#{priceList.active}"
+                        model="priceLists[0].active"></toggle-switch>
         </div>
-        <div class="col-sm-11">
+        <div class="col-md-6">
             <a href="" role="button" class="btn btn-default dropdown-toggle">
                 <span th:text="#{page.priceList.addVendor}">Добавить производителя</span>
                 <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
-                <li ng-repeat="vendor in freeVendors()">
+                <li ng-repeat="vendor in freeVendors(0)">
                     <a href="" ng-click="addVendor(vendor)"
                        ng-text="vendor.name">Apple</a>
                 </li>
@@ -27,6 +32,26 @@
                 <span th:text="#{button.save}">Сохранить</span>
                 <i class="fa fa-save"></i>
             </button>
+        </div>
+        <div class="col-md-4">
+            <div class="input-group">
+                <a href="" role="button" class="btn btn-default dropdown-toggle input-group-addon">
+                    <span th:text="#{page.priceList.changeCurrency}"
+                          ng-show="nextCurrency[0].id == priceLists[0].currency.id">Сменить валюту</span>
+                    <span ng-bind="nextCurrency[0].code"
+                          ng-hide="nextCurrency[0].id == priceLists[0].currency.id">EUR</span>
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li ng-repeat="curr in currencies">
+                        <a href="" ng-click="setNextCurrency(curr, 0)"
+                           ng-text="curr.name">Доллар США</a>
+                    </li>
+                </ul>
+
+                <input type="text" class="form-control" ng-model="exchangeRate[0]" value="0.7" ng-show="nextCurrency[0].id != priceLists[0].currency.id"/>
+                <a role="button" class="input-group-addon btn btn-default" ng-show="nextCurrency[0].id != priceLists[0].currency.id" ng-click="changeCurrency(0)">Пересчитать</a>
+            </div>
         </div>
     </div>
     <div class="row">
@@ -81,11 +106,11 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat-start="vendor in selectedVendors">
+                <tr ng-repeat-start="vendor in selectedVendors[0]">
                     <td>
                         <button type="button" class="btn btn-xs btn-danger"
                                 ng-hide="filterByVendor(priceLists[0].positions, vendor.id, false).length > 0"
-                                ng-click="selectedVendors.splice($index, 1)"
+                                ng-click="selectedVendors[0].splice($index, 1)"
                                 tooltip="Удалить позицию" tooltip-placement="right">
                             <i class="fa fa-times"></i>
                         </button>

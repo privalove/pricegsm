@@ -25,6 +25,7 @@
     "pines-notify": "latest",
     "jquery.tagsinput": "~1.3.2",
     "angular-dropdowns": "*",
-    "angular-ui-utils": "unique-0.1.0"
+    "angular-ui-utils": "unique-0.1.0",
+    "angular-toggle-switch": "~0.2.5"
   }
 }

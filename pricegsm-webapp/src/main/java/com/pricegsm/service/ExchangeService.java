@@ -14,7 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class ExchangeService
@@ -29,7 +31,28 @@ public class ExchangeService
     }
 
     public Exchange getLast(long from, long to) {
-        return getDao().getLast(from, to);
+        return postLoad(getDao().getLast(from, to));
     }
+
+    public List<Exchange> findLast() {
+        List<Exchange> result = new ArrayList<>();
+
+        Exchange e = getDao().getLast(Currency.USD, Currency.RUB);
+        if (e != null) {
+            result.add(e);
+        }
+        e = getDao().getLast(Currency.EUR, Currency.RUB);
+        if (e != null) {
+            result.add(e);
+        }
+        e = getDao().getLast(Currency.EUR, Currency.USD);
+        if (e != null) {
+            result.add(e);
+        }
+
+
+        return postLoad(result);
+    }
+
 }
 

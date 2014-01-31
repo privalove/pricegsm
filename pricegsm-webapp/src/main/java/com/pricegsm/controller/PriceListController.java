@@ -3,10 +3,7 @@ package com.pricegsm.controller;
 import com.pricegsm.domain.PriceList;
 import com.pricegsm.domain.PriceListPosition;
 import com.pricegsm.jackson.Wrappers;
-import com.pricegsm.service.PriceListService;
-import com.pricegsm.service.ProductService;
-import com.pricegsm.service.SpecificationService;
-import com.pricegsm.service.VendorService;
+import com.pricegsm.service.*;
 import com.pricegsm.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -38,6 +35,12 @@ public class PriceListController {
     @Autowired
     private SpecificationService specificationService;
 
+    @Autowired
+    private CurrencyService currencyService;
+
+    @Autowired
+    private ExchangeService exchangeService;
+
     @RequestMapping(value = "/price_list", method = RequestMethod.GET)
     public String priceList() {
         return "price_list";
@@ -58,7 +61,9 @@ public class PriceListController {
                 .payload("positionTemplate", new PriceListPosition())
                 .payload("vendors", Wrappers.wrap(vendorService.findActive()))
                 .payload("products", productService.findActive())
-                .payload("specifications", specificationService.findActive());
+                .payload("specifications", specificationService.findActive())
+                .payload("currencies", currencyService.findAll())
+                .payload("exchanges", exchangeService.findLast());
     }
 
 

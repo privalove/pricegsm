@@ -252,12 +252,12 @@ function PriceListCtrl($scope, $filter, notifyManager, priceListResource, PriceL
         }), "id");
     };
 
-    $scope.save = function(form, index) {
+    $scope.save = function (form, index) {
         var priceList = $scope.priceLists[index];
         priceList.position = index;
 
         if (form.$valid) {
-            priceList.$save({priceListId: index}, function(data){
+            priceList.$save({priceListId: index}, function (data) {
                 if (data.ok) {
                     notifyManager.success("Прайс лист успешно сохранен");
                 }
@@ -281,20 +281,27 @@ function PriceListCtrl($scope, $filter, notifyManager, priceListResource, PriceL
         $scope.fakePositions = _.object(_.map($scope.products, function (product) {
             var fakePosition = {};
 
-            fakePosition[product.id] = {fake:true, product:product, productId:product.id};
-            return [product.id, {fake:true, product:product}];
+            fakePosition[product.id] = {fake: true, product: product, productId: product.id};
+            return [product.id, {fake: true, product: product}];
         }));
 
-        $scope.selectedVendors = $scope.fetchVendors(priceLists[0].positions);
+        $scope.selectedVendors = _.map($scope.priceLists, function(priceList){
+           return $scope.fetchVendors(priceList.positions);
+        });
 
         $scope.showAll = {};
+
+        $scope.nextCurrency = _.map($scope.priceLists, function (priceList) {
+            return priceList.currency
+        });
+        $scope.exchangeRate = [];
 
         $scope.preOrderPriceLists = function () {
             return $scope.priceLists.slice(1);
         };
 
-        $scope.freeVendors = function () {
-            var ids = _.map($scope.selectedVendors, function (vendor) {
+        $scope.freeVendors = function (index) {
+            var ids = _.map($scope.selectedVendors[index], function (vendor) {
                 return vendor.id;
             });
 
@@ -332,7 +339,7 @@ function PriceListCtrl($scope, $filter, notifyManager, priceListResource, PriceL
                     return product.vendor.id == vendor
                 });
 
-                _.each(products, function(product){
+                _.each(products, function (product) {
                     if (!_.contains(ids, product.id)) {
                         result.push($scope.fakePositions[product.id]);
                     }
@@ -359,6 +366,34 @@ function PriceListCtrl($scope, $filter, notifyManager, priceListResource, PriceL
 
         $scope.addVendor = function (vendor) {
             $scope.selectedVendors.push(vendor);
+        };
+
+        $scope.setNextCurrency = function (currency, index) {
+            if ($scope.priceLists[index].currency.id != currency.id) {
+                var exchangeRate = _.find($scope.exchanges, function (exchange) {
+                    return exchange.to.id == currency.id && exchange.from.id == $scope.priceLists[index].currency.id;
+                });
+
+                if (!exchangeRate) {
+                    exchangeRate = _.find($scope.exchanges, function (exchange) {
+                        return exchange.from.id == currency.id && exchange.to.id == $scope.priceLists[index].currency.id;
+                    });
+                    $scope.exchangeRate[index] = (1 / exchangeRate.value).toFixed(3);
+                } else {
+                    $scope.exchangeRate[index] = exchangeRate.value;
+                }
+
+            }
+
+            $scope.nextCurrency[index] = currency;
+        };
+
+        $scope.changeCurrency = function(index) {
+            _.each($scope.priceLists[index].positions, function(position) {
+                position.price = Math.round(position.price * $scope.exchangeRate[index]);
+            });
+
+            $scope.priceLists[index].currency = $scope.nextCurrency[index];
         }
     }
 }
