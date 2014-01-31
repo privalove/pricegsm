@@ -1,5 +1,6 @@
 package com.pricegsm.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -49,6 +50,7 @@ public class BaseUser
         this.email = username;
     }
 
+    @JsonIgnore
     @Size(max = 255)
     @Basic
     @Column(name = "password", nullable = false)

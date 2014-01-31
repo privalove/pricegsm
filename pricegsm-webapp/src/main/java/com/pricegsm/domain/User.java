@@ -53,7 +53,7 @@ public class User
 
     private boolean sellerDeliveryPaid;
 
-    private BigDecimal sellerDeliveryCost = BigDecimal.ZERO;
+    private BigDecimal sellerDeliveryCost = new BigDecimal(300);
 
     private String buyerDeliveryPlace;
 
