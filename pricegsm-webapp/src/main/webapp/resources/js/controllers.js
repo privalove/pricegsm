@@ -364,8 +364,8 @@ function PriceListCtrl($scope, $filter, notifyManager, priceListResource, PriceL
             priceList.positions.push(position);
         };
 
-        $scope.addVendor = function (vendor) {
-            $scope.selectedVendors.push(vendor);
+        $scope.addVendor = function (vendor, index) {
+            $scope.selectedVendors[index].push(vendor);
         };
 
         $scope.setNextCurrency = function (currency, index) {
