@@ -51,6 +51,6 @@ admin@pricegsm.com 12345
 Запуск парсера вручную
 ----------------------
 
-[http://localhost:8080/exchange](http://localhost:8080/exchange) - текущие курсы валют.
+[http://localhost:8080/pricegsm/exchange](http://localhost:8080/pricegsm/exchange) - текущие курсы валют.
 <br/>
-[http://localhost:8080/yandex](http://localhost:8080/yandex) - парсер яндекс маркета.
+[http://localhost:8080/pricegsm/yandex](http://localhost:8080/pricegsm/yandex) - парсер яндекс маркета.
