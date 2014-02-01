@@ -35,9 +35,22 @@
 `<Connector port="8080" protocol="HTTP/1.1"
                connectionTimeout="20000"
                redirectPort="8443" URIEncoding="UTF-8"/>`
+               
+Запуск Embedded Tomcat
+----------------------
+
+Выполнить две команды <br/>
+
+`mvn install flyway:migrate` - сборка проекта и обновление базы.
+<br/>
+`mvn tomcat7:run` - запуск встроенного томката.
 
 Вход в систему
 --------------
+
+Путь к приложению:
+<br/>
+[http://localhost:8080/pricegsm](http://localhost:8080/pricegsm)
 
 Клиент:
 <br/>
