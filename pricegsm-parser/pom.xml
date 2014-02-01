@@ -43,6 +43,7 @@
         <saxon.version>9.5.1-3</saxon.version>
         <jackson.version>2.3.0</jackson.version>
         <htmlunit.version>2.13</htmlunit.version>
+        <flyway.skip>true</flyway.skip>
     </properties>
 
     <build>

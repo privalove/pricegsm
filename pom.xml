@@ -11,10 +11,74 @@
 
     <properties>
         <main.basedir>${project.basedir}</main.basedir>
+        <tomcat7-plugin.version>2.2</tomcat7-plugin.version>
+        <flyway-plugin.version>2.3.1</flyway-plugin.version>
+        <postgresql.version>9.2-1004-jdbc4</postgresql.version>
     </properties>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>com.googlecode.flyway</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>${flyway-plugin.version}</version>
+                <configuration>
+                    <url>jdbc:postgresql://localhost:5432/pricegsm2</url>
+                    <user>pricegsmowner</user>
+                    <password>pricegsm5266</password>
+                    <outOfOrder>true</outOfOrder>
+                    <locations>
+                        <location>filesystem:${project.basedir}/flyway/sql</location>
+                    </locations>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.postgresql</groupId>
+                        <artifactId>postgresql</artifactId>
+                        <version>${postgresql.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>${tomcat7-plugin.version}</version>
+                <configuration>
+                   <!-- <serverXml>server.xml</serverXml>-->
+                    <webapps>
+                        <webapp>
+                            <contextPath>/parser</contextPath>
+                            <groupId>com.pricegsm</groupId>
+                            <artifactId>pricegsm-parser</artifactId>
+                            <version>1.0</version>
+                            <type>war</type>
+                            <asWebapp>true</asWebapp>
+                        </webapp>
+                        <webapp>
+                            <contextPath>/pricegsm</contextPath>
+                            <groupId>com.pricegsm</groupId>
+                            <artifactId>pricegsm-webapp</artifactId>
+                            <version>1.0</version>
+                            <type>war</type>
+                            <asWebapp>true</asWebapp>
+                        </webapp>
+                    </webapps>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.pricegsm</groupId>
+                        <artifactId>pricegsm-parser</artifactId>
+                        <version>1.0</version>
+                        <type>war</type>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.pricegsm</groupId>
+                        <artifactId>pricegsm-webapp</artifactId>
+                        <version>1.0</version>
+                        <type>war</type>
+                    </dependency>
+                </dependencies>
+            </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.1</version>
