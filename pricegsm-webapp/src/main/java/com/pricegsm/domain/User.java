@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.pricegsm.jackson.GlobalEntityDeserializer;
 import com.pricegsm.jackson.GlobalEntitySerializer;
-import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -25,13 +24,17 @@ import java.util.Date;
 public class User
         extends BaseUser {
 
+    public static final Date TIME_10_00 = new Date(10 * 60 * 60 * 1000);
+
+    public static final Date TIME_17_00 = new Date(17 * 60 * 60 * 1000);
+
     private String phone;
 
     private String website;
 
     private boolean sellerPickup;
 
-    private boolean sellerDelivery;
+    private boolean sellerDelivery = true;
 
     private boolean buyerDelivery;
 
@@ -39,27 +42,27 @@ public class User
 
     private String sellerPickupPlace;
 
-    private Date sellerDeliveryFrom;
+    private Date sellerDeliveryFrom = TIME_10_00;
 
-    private Date sellerDeliveryTo;
+    private Date sellerDeliveryTo = TIME_17_00;
 
-    private Date sellerPickupFrom;
+    private Date sellerPickupFrom = TIME_10_00;
 
-    private Date sellerPickupTo;
+    private Date sellerPickupTo = TIME_17_00;
 
     private boolean sellerDeliveryFree;
 
     private int sellerDeliveryMin = 1;
 
-    private boolean sellerDeliveryPaid;
+    private boolean sellerDeliveryPaid = true;
 
     private BigDecimal sellerDeliveryCost = new BigDecimal(300);
 
     private String buyerDeliveryPlace;
 
-    private Date buyerDeliveryFrom;
+    private Date buyerDeliveryFrom = TIME_10_00;
 
-    private Date buyerDeliveryTo;
+    private Date buyerDeliveryTo = TIME_17_00;
 
     private Region region;
 

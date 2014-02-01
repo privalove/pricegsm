@@ -6,6 +6,7 @@ import org.hibernate.cfg.Environment;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -32,6 +33,8 @@ class JpaConfig implements TransactionManagementConfigurer {
     private String password;
     @Value("${hibernate.dialect}")
     private String dialect;
+    @Value("${hibernate.default_schema}")
+    private String defaultSchema;
     @Value("${hibernate.hbm2ddl.auto}")
     private String hbm2ddlAuto;
 
@@ -55,6 +58,7 @@ class JpaConfig implements TransactionManagementConfigurer {
         Properties jpaProperties = new Properties();
         jpaProperties.put(Environment.DIALECT, dialect);
         jpaProperties.put(Environment.HBM2DDL_AUTO, hbm2ddlAuto);
+        jpaProperties.put(Environment.DEFAULT_SCHEMA, defaultSchema);
         entityManagerFactoryBean.setJpaProperties(jpaProperties);
 
         return entityManagerFactoryBean;

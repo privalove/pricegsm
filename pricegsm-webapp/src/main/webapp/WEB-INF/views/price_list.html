@@ -343,8 +343,18 @@
                             </div>
 
                             <div class="form-group">
+                                <label class="control-label col-sm-3" th:text="#{user.sellerPickupPlaceAddition}">Дополнительно</label>
+
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" th:placeholder="#{user.sellerPickupPlaceAddition.title}"
+                                           placeholder="Дополнительные условия самовывоза"
+                                           ng-model="user.sellerPickupPlaceAddition"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
                                 <label class="control-label col-sm-3" th:text="#{page.priceList.pickupTime}">Время
-                                    доставки</label>
+                                    самовывоза</label>
 
                                 <div class="col-sm-9">
                                     <label>с</label>

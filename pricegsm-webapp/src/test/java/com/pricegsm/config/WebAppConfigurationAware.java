@@ -1,10 +1,13 @@
 package com.pricegsm.config;
 
+import com.googlecode.flyway.test.junit.FlywayTestExecutionListener;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
@@ -16,7 +19,10 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("test")
 @WebAppConfiguration
-@ContextConfiguration(classes = {ApplicationConfig.class, EmbeddedDataSourceConfig.class, JpaConfig.class, SecurityConfig.class, WebMvcConfig.class})
+@ContextConfiguration(classes = {ApplicationConfig.class, FlywayConfig.class, JpaConfig.class, SecurityConfig.class, WebMvcConfig.class})
+@TestExecutionListeners({
+        DependencyInjectionTestExecutionListener.class,
+        FlywayTestExecutionListener.class })
 public abstract class WebAppConfigurationAware {
 
     @Inject

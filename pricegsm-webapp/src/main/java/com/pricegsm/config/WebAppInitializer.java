@@ -1,7 +1,6 @@
 package com.pricegsm.config;
 
 import org.springframework.core.annotation.Order;
-import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
@@ -19,7 +18,7 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class<?>[] {ApplicationConfig.class, DataSourceConfig.class, JpaConfig.class, SecurityConfig.class};
+        return new Class<?>[] {ApplicationConfig.class, JpaConfig.class, SecurityConfig.class};
     }
 
     @Override
