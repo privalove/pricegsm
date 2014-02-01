@@ -44,7 +44,7 @@
                 <artifactId>tomcat7-maven-plugin</artifactId>
                 <version>${tomcat7-plugin.version}</version>
                 <configuration>
-                   <!-- <serverXml>server.xml</serverXml>-->
+                    <uriEncoding>UTF-8</uriEncoding>
                     <webapps>
                         <webapp>
                             <contextPath>/parser</contextPath>
