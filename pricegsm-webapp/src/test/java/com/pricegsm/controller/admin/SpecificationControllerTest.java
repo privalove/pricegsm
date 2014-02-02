@@ -36,9 +36,6 @@ public class SpecificationControllerTest extends WebAppConfigurationAware {
     public void testNewSpecification() throws Exception {
         Specification specification = new Specification();
         specification.setId(0);
-        specification.setName(null);
-        specification.setActive(true);
-        specification.setDescription(null);
 
         mockMvc.perform(get("/admin/specification/0"))
                 .andExpect(model().attribute("specification", specification))
@@ -49,10 +46,6 @@ public class SpecificationControllerTest extends WebAppConfigurationAware {
     public void testEditSpecification() throws Exception {
         Specification specification = new Specification();
         specification.setId(102);
-        specification.setName("3 test specification");
-        specification.setActive(true);
-        specification.setDescription("3 test description");
-
 
         mockMvc.perform(get("/admin/specification/102"))
                 .andExpect(model().attribute("specification", specification))
