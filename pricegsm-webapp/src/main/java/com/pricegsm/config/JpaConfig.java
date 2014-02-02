@@ -1,16 +1,15 @@
 package com.pricegsm.config;
 
 import com.pricegsm.Application;
-import com.pricegsm.hibernate.Hibernate4JpaVendorAdapter;
 import org.hibernate.cfg.Environment;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.TransactionManagementConfigurer;
@@ -53,7 +52,7 @@ class JpaConfig implements TransactionManagementConfigurer {
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactoryBean.setDataSource(configureDataSource());
         entityManagerFactoryBean.setPackagesToScan("com.pricegsm");
-        entityManagerFactoryBean.setJpaVendorAdapter(new Hibernate4JpaVendorAdapter());
+        entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 
         Properties jpaProperties = new Properties();
         jpaProperties.put(Environment.DIALECT, dialect);
