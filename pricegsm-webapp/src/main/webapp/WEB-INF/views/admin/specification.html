@@ -71,8 +71,8 @@
                             </label>
 
                             <div class="col-sm-9">
-                                <input type="text" id="description" class="tagsInput form-control"
-                                       th:field="*{description}"/>
+                                <textarea id="description" class="form-control"
+                                       th:field="*{description}"></textarea>
                                 <span class="help-block" th:if="${#fields.hasErrors('description')}"
                                       th:errors="*{description}">Ошибка</span>
                             </div>
