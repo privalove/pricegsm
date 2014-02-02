@@ -48,7 +48,7 @@
         <logback.version>1.0.13</logback.version>
         <thymeleaf.version>2.1.2.RELEASE</thymeleaf.version>
         <jackson.version>2.3.0</jackson.version>
-        <hiberante.version>4.3.0.Final</hiberante.version>
+        <hiberante.version>4.3.1.Final</hiberante.version>
         <hibernate-validator.version>5.0.2.Final</hibernate-validator.version>
         <spring-data-jpa.version>1.4.3.RELEASE</spring-data-jpa.version>
         <validation-api.version>1.1.0.Final</validation-api.version>
