@@ -3,16 +3,14 @@ package com.pricegsm.controller.admin;
 import com.googlecode.flyway.test.annotation.FlywayTest;
 import com.pricegsm.config.WebAppConfigurationAware;
 import com.pricegsm.domain.Specification;
-import com.pricegsm.service.SpecificationService;
 import com.pricegsm.support.web.Message;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultMatcher;
 
+import static org.springframework.test.util.AssertionErrors.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.util.AssertionErrors.*;
 
 /**
  * User: o.logunov
@@ -21,9 +19,6 @@ import static org.springframework.test.util.AssertionErrors.*;
  */
 @FlywayTest
 public class SpecificationControllerTest extends WebAppConfigurationAware {
-
-    @Autowired
-    private SpecificationService specificationService;
 
     @Test
     public void testSpecification() throws Exception {
@@ -45,10 +40,8 @@ public class SpecificationControllerTest extends WebAppConfigurationAware {
         specification.setActive(true);
         specification.setDescription(null);
 
-        Specification defaultInstance = specificationService.getDefaultInstance();
-
         mockMvc.perform(get("/admin/specification/0"))
-                .andExpect(model().attribute("specification", defaultInstance))
+                .andExpect(model().attribute("specification", specification))
                 .andExpect(view().name("admin/specification"));
     }
 
