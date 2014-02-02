@@ -263,42 +263,50 @@
     <tab-heading>
         <span th:text="#{page.priceList.settings}">Условия работы</span>
     </tab-heading>
-    <form name="profileForm" role="form" class="form-horizontal">
+    <form name="userForm" role="form" ng-submit="updateWorkConditions(userForm)" class="form-horizontal" novalidate="">
         <div class="row">
+            <div class="col-md-12">
+                <button class="btn btn-warning" ng-disabled="!userForm.$valid">
+                    <span th:text="#{button.save}">Сохранить</span>
+                    <i class="fa fa-save"></i>
+                </button>
+            </div>
             <div class="col-md-12">
                 <fieldset>
                     <legend>Гарантия</legend>
-                    <div class="form-group">
-                        <label class="control-label col-xs-3">Бесплатная замена</label>
+                    <div class="form-group" ng-class="{'has-error':!userForm.sellerFreeReplacement.$valid}">
+                        <label class="control-label col-xs-3" th:text="#{user.sellerFreeReplacement}">Бесплатная замена</label>
 
                         <div class="col-xs-3">
                             <div class="input-group" style="width:100px">
-                                <input type="number" class="form-control"
-                                       min="0"
-                                       ng-model="user.warranty1"/>
+                                <input type="number" name="sellerFreeReplacement" class="form-control"
+                                       ng-model="user.sellerFreeReplacement" required="" min="0"/>
                                 <span class="input-group-addon">дн.</span>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label col-xs-3">Бесплатный ремонт</label>
+                    <div class="form-group" ng-class="{'has-error':!userForm.sellerFreeRepair.$valid}">
+                        <label class="control-label col-xs-3" th:text="#{user.sellerFreeRepair}">Бесплатный ремонт</label>
 
                         <div class="col-xs-3">
                             <div class="input-group" style="width:100px">
-                                <input type="number" class="form-control"
-                                       min="0"
-                                       ng-model="user.warranty2"/>
+                                <input type="number" name="sellerFreeRepair" class="form-control"
+                                       min="0" required=""
+                                       ng-model="user.sellerFreeRepair"/>
                                 <span class="input-group-addon">дн.</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="control-label col-sm-3">Дополнительно</label>
+                    <div class="form-group" ng-class="{'has-error':!userForm.sellerWarrantyAdditional.$valid}">
+                        <label class="control-label col-sm-3" th:text="#{user.sellerWarrantyAdditional}">Дополнительно</label>
 
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" placeholder="Дополнительные условия гарантии и работы"
-                                   ng-model="user.warranty3"/>
+                            <input type="text" name="sellerWarrantyAdditional" class="form-control"
+                                   placeholder="Дополнительные условия гарантии и работы"
+                                   th:placeholder="#{user.sellerWarrantyAdditional.title}"
+                                   ng-maxlength="255"
+                                   ng-model="user.sellerWarrantyAdditional"/>
                         </div>
                     </div>
 
@@ -411,7 +419,7 @@
                                 </div>
                                  
                             </div>
-                            <div class="form-group">
+                            <div class="form-group"  ng-class="{'has-error':!userForm.sellerDeliveryMin.$valid}">
                                 <div class="row">
                                     <label class="control-label col-xs-3">
                                         <span>Бесплатная доставка</span>
@@ -419,13 +427,18 @@
                                     </label>
 
                                     <div class="col-xs-9" ng-show="user.sellerDeliveryFree">
-                                        <span>Бесплатно от</span>
-                                        <input type="number" ng-model="user.sellerDeliveryMin" min="1" style="width:50px;"/>
-                                        <span>шт.</span>
+                                        <div class="input-group" style="width:250px">
+
+                                            <span class="input-group-addon">Бесплатно от</span>
+                                            <input type="number" name="sellerDeliveryMin" class="form-control"
+                                                   min="1" required=""
+                                                   ng-model="user.sellerDeliveryMin"/>
+                                            <span class="input-group-addon">шт.</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" ng-class="{'has-error':!userForm.sellerDeliveryCost.$valid}">
                                 <div class="row">
                                     <label class="control-label col-xs-3">
                                         <span>Платная доставка</span>
@@ -433,8 +446,12 @@
                                     </label>
 
                                     <div class="col-xs-9" ng-show="user.sellerDeliveryPaid">
-                                        <input type="number" ng-model="user.sellerDeliveryCost" min="0" style="width:80px;"/>
-                                        <span>руб. за доставку</span>
+                                        <div class="input-group" style="width:250px">
+                                        <input type="number" name="sellerDeliveryCost" class="form-control"
+                                               min="0" required=""
+                                               ng-model="user.sellerDeliveryCost"/>
+                                        <span class="input-group-addon">руб. за доставку</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

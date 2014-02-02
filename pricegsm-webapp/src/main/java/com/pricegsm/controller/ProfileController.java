@@ -98,7 +98,9 @@ public class ProfileController {
                     .payload("profile", new ProfileForm((User) principalHolder.getCurrentUser()));
         }
 
-        User user = userService.updateProfile(profilerForm);
+        userService.updateProfile(profilerForm);
+
+        User user =  userService.loadCurrentUser();
 
         //refresh principal
         Authentication authentication = new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities());
@@ -119,7 +121,9 @@ public class ProfileController {
                     .message("alert.passwordError");
         }
 
-        User user = userService.changePassword(changePasswordForm.getPassword());
+        userService.changePassword(changePasswordForm.getPassword());
+
+        User user = userService.loadCurrentUser();
 
         //refresh principal
         Authentication authentication = new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities());

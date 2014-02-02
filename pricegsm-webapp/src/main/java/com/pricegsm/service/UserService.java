@@ -1,6 +1,7 @@
 package com.pricegsm.service;
 
 import com.pricegsm.controller.ProfileForm;
+import com.pricegsm.controller.WorkConditionsForm;
 import com.pricegsm.dao.RegionDao;
 import com.pricegsm.dao.UserDao;
 import com.pricegsm.domain.Region;
@@ -50,6 +51,10 @@ public class UserService
         entity.setEmailValid(persisted.isEmailValid());
     }
 
+    public User loadCurrentUser() {
+        return postLoad(getDao().load(principalHolder.getCurrentUser().getId()));
+    }
+
     /**
      * Prepare default user settings before registration.
      */
@@ -62,16 +67,23 @@ public class UserService
     }
 
     @Transactional
-    public User updateProfile(ProfileForm profilerForm) {
+    public void updateProfile(ProfileForm profilerForm) {
         User user = getDao().load(principalHolder.getCurrentUser().getId());
         profilerForm.fill(user);
-        return getDao().merge(user);
+        getDao().merge(user);
     }
 
     @Transactional
-    public User changePassword(String password) {
+    public void changePassword(String password) {
         User user = getDao().load(principalHolder.getCurrentUser().getId());
         user.setPassword(encoder.encode(password));
-        return getDao().merge(user);
+        getDao().merge(user);
+    }
+
+    @Transactional
+    public void updateWorkConditions(WorkConditionsForm workConditions) {
+        User user = getDao().load(principalHolder.getCurrentUser().getId());
+        workConditions.fill(user);
+        getDao().merge(user);
     }
 }

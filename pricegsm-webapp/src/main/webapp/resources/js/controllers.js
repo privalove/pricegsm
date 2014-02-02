@@ -243,8 +243,8 @@ SalesCtrl.resolve = {
 
 };
 
-PriceListCtrl.$inject = ["$scope", "$filter", "notifyManager", "priceListResource", "PriceList"];
-function PriceListCtrl($scope, $filter, notifyManager, priceListResource, PriceList) {
+PriceListCtrl.$inject = ["$scope", "$filter", "notifyManager", "priceListResource", "PriceList", "WorkConditions"];
+function PriceListCtrl($scope, $filter, notifyManager, priceListResource, PriceList, WorkConditions) {
 
     $scope.fetchVendors = function (positions) {
         return  $filter("unique")(_.map(positions, function (position) {
@@ -295,6 +295,8 @@ function PriceListCtrl($scope, $filter, notifyManager, priceListResource, PriceL
             return priceList.currency
         });
         $scope.exchangeRate = [];
+
+        $scope.user = new WorkConditions($scope.user);
 
         $scope.preOrderPriceLists = function () {
             return $scope.priceLists.slice(1);
@@ -394,7 +396,18 @@ function PriceListCtrl($scope, $filter, notifyManager, priceListResource, PriceL
             });
 
             $scope.priceLists[index].currency = $scope.nextCurrency[index];
-        }
+        };
+
+        $scope.updateWorkConditions = function(form) {
+            if (form.$valid) {
+                $scope.user.$save(function(data){
+                    if (data.ok) {
+                        notifyManager.success("Условия работы успешно сохранены");
+                    }
+                    $scope.user = new WorkConditions(data.payload.user);
+                });
+            }
+        };
     }
 }
 
@@ -414,6 +427,7 @@ PartnerCtrl.resolve = {
 
 };
 
+UserChangePasswordCtrl.$inject = ["$scope", "$modalInstance", "notifyManager", "ChangePassword"];
 function UserChangePasswordCtrl($scope, $modalInstance, notifyManager, ChangePassword) {
     $scope.changePasswordForm = new ChangePassword({});
 
@@ -440,8 +454,7 @@ function UserChangePasswordCtrl($scope, $modalInstance, notifyManager, ChangePas
     };
 }
 
-UserChangePasswordCtrl.$inject = ["$scope", "$modalInstance", "notifyManager", "ChangePassword"];
-
+ProfileCtrl.$inject = ["$scope", "$location", "$modal", "notifyManager", "profileForm", "context", "Profile"];
 function ProfileCtrl($scope, $location, $modal, notifyManager, profileForm, context, Profile) {
 
     $scope.changePassword = function () {
@@ -475,8 +488,6 @@ function ProfileCtrl($scope, $location, $modal, notifyManager, profileForm, cont
         angular.extend($scope, context.payload);
     }
 }
-
-ProfileCtrl.$inject = ["$scope", "$location", "$modal", "notifyManager", "profileForm", "context", "Profile"];
 
 ProfileCtrl.resolve = {
     context: ["ProfileContext", function (ProfileContext) {

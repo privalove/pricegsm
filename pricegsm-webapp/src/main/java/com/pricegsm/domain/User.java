@@ -3,12 +3,14 @@ package com.pricegsm.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.DateSerializer;
 import com.pricegsm.jackson.GlobalEntityDeserializer;
 import com.pricegsm.jackson.GlobalEntitySerializer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -42,6 +44,8 @@ public class User
 
     private String sellerPickupPlace;
 
+    private String sellerPickupPlaceAddition;
+
     private Date sellerDeliveryFrom = TIME_10_00;
 
     private Date sellerDeliveryTo = TIME_17_00;
@@ -57,6 +61,12 @@ public class User
     private boolean sellerDeliveryPaid = true;
 
     private BigDecimal sellerDeliveryCost = new BigDecimal(300);
+
+    private int sellerFreeReplacement;
+
+    private int sellerFreeRepair;
+
+    private String sellerWarrantyAdditional;
 
     private String buyerDeliveryPlace;
 
@@ -165,6 +175,7 @@ public class User
     /**
      * Delivery possible from time.
      */
+    @JsonSerialize(using = DateSerializer.class)
     @Temporal(TemporalType.TIME)
     @Basic
     @Column(name = "seller_delivery_from")
@@ -179,6 +190,7 @@ public class User
     /**
      * Delivery possible to time.
      */
+    @JsonSerialize(using = DateSerializer.class)
     @Temporal(TemporalType.TIME)
     @Basic
     @Column(name = "seller_delivery_to")
@@ -193,6 +205,7 @@ public class User
     /**
      * Pickup possible from time.
      */
+    @JsonSerialize(using = DateSerializer.class)
     @Temporal(TemporalType.TIME)
     @Basic
     @Column(name = "seller_pickup_from")
@@ -207,6 +220,7 @@ public class User
     /**
      * Pickup possible to time.
      */
+    @JsonSerialize(using = DateSerializer.class)
     @Temporal(TemporalType.TIME)
     @Basic
     @Column(name = "seller_pickup_to")
@@ -270,6 +284,50 @@ public class User
         this.sellerDeliveryCost = seller_delivery_cost;
     }
 
+    @Min(0)
+    @Basic
+    @Column(name = "seller_free_replacement")
+    public int getSellerFreeReplacement() {
+        return sellerFreeReplacement;
+    }
+
+    public void setSellerFreeReplacement(int sellerFreeReplacement) {
+        this.sellerFreeReplacement = sellerFreeReplacement;
+    }
+
+    @Min(0)
+    @Basic
+    @Column(name = "seller_free_repair")
+    public int getSellerFreeRepair() {
+        return sellerFreeRepair;
+    }
+
+    public void setSellerFreeRepair(int sellerFreeRepair) {
+        this.sellerFreeRepair = sellerFreeRepair;
+    }
+
+    @Size(max = 255)
+    @Basic
+    @Column(name = "seller_warranty_additional")
+    public String getSellerWarrantyAdditional() {
+        return sellerWarrantyAdditional;
+    }
+
+    public void setSellerWarrantyAdditional(String sellerWarrantyAdditional) {
+        this.sellerWarrantyAdditional = sellerWarrantyAdditional;
+    }
+
+    @Size(max = 255)
+    @Basic
+    @Column(name = "seller_pickup_place_addition")
+    public String getSellerPickupPlaceAddition() {
+        return sellerPickupPlaceAddition;
+    }
+
+    public void setSellerPickupPlaceAddition(String sellerPickupPlaceAddition) {
+        this.sellerPickupPlaceAddition = sellerPickupPlaceAddition;
+    }
+
     /**
      * Default place for delivery.
      */
@@ -287,6 +345,7 @@ public class User
     /**
      * Default delivery time range from.
      */
+    @JsonSerialize(using = DateSerializer.class)
     @Temporal(TemporalType.TIME)
     @Basic
     @Column(name = "buyer_delivery_from")
@@ -301,6 +360,7 @@ public class User
     /**
      * Default delivery time range to.
      */
+    @JsonSerialize(using = DateSerializer.class)
     @Temporal(TemporalType.TIME)
     @Basic
     @Column(name = "buyer_delivery_to")

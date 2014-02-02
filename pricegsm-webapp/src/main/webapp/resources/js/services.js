@@ -11,7 +11,8 @@
         "ChangePassword" : "profile/changePassword",
 
         "PriceListResource": "price_list.json",
-        "PriceList": "price_list/:priceListId.json"
+        "PriceList": "price_list/:priceListId.json",
+        "WorkConditions": "price_list/work_conditions.json"
     };
 
         angular.module('pg.services', ['ngResource'])

@@ -1,15 +1,18 @@
 package com.pricegsm.controller;
 
-import com.pricegsm.domain.BaseUser;
 import com.pricegsm.domain.PriceList;
 import com.pricegsm.domain.PriceListPosition;
 import com.pricegsm.domain.User;
 import com.pricegsm.jackson.Wrappers;
 import com.pricegsm.securiry.PrincipalHolder;
 import com.pricegsm.service.*;
+import com.pricegsm.util.EntityMetadata;
 import com.pricegsm.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -48,6 +51,9 @@ public class PriceListController {
     private DeliveryPlaceService deliveryPlaceService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private PrincipalHolder principalHolder;
 
     @RequestMapping(value = "/price_list", method = RequestMethod.GET)
@@ -76,8 +82,32 @@ public class PriceListController {
                 .payload("currencies", currencyService.findAll())
                 .payload("exchanges", exchangeService.findLast())
                 .payload("deliveryPlaces", deliveryPlaceService.findActiveByRegion(user.getRegion().getId()))
-                .payload("user", user);
+                .payload("user", new WorkConditionsForm(user))
+                .payload("userMetadata", EntityMetadata.from(User.class));
 
+    }
+
+    @RequestMapping(value = "/price_list/work_conditions.json", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public OperationResult updateWorkConditions(@Valid @RequestBody WorkConditionsForm workConditions, BindingResult result) {
+
+        if (result.hasErrors()) {
+            return OperationResult
+                    .validation()
+                    .payload("user", new WorkConditionsForm((User)principalHolder.getCurrentUser()));
+        }
+
+        userService.updateWorkConditions(workConditions);
+
+        User user = userService.loadCurrentUser();
+
+        //refresh principal
+        Authentication authentication = new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+
+        return OperationResult.ok()
+                .payload("user", new WorkConditionsForm((User)principalHolder.getCurrentUser()));
     }
 
 
