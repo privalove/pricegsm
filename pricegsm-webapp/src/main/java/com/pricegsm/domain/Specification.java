@@ -1,5 +1,7 @@
 package com.pricegsm.domain;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
@@ -43,7 +45,7 @@ public class Specification
         this.name = name;
     }
 
-    @Lob
+    @Basic
     @Column(name = "description")
     public String getDescription() {
         return description;
@@ -61,5 +63,31 @@ public class Specification
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!super.equals(o)) {
+            return false;
+        }
+
+        Specification that = (Specification) o;
+
+        EqualsBuilder builder = new EqualsBuilder();
+        builder.append(isActive(), that.isActive())
+                .append(getName(), that.getName())
+                .append(getDescription(), that.getDescription());
+
+        return builder.isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .append(super.hashCode())
+                .append(getName())
+                .append(isActive())
+                .append(getDescription())
+                .toHashCode();
     }
 }
