@@ -34,11 +34,11 @@ pricegsm$ mvn clean package
 ----------------
 
 изменить файл **CATALINA_HOME/conf/server.xml**, добавив **URIEncoding="UTF-8"** в коннектор
-
-`<Connector port="8080" protocol="HTTP/1.1"
+```xml
+<Connector port="8080" protocol="HTTP/1.1"
                connectionTimeout="20000"
-               redirectPort="8443" URIEncoding="UTF-8"/>`
-               
+               redirectPort="8443" URIEncoding="UTF-8"/>
+```               
 Запуск Embedded Tomcat
 ----------------------
 
