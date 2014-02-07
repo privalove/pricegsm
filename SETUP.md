@@ -42,12 +42,13 @@ pricegsm$ mvn clean package
 Запуск Embedded Tomcat
 ----------------------
 
-Выполнить две команды <br/>
-
-`mvn install flyway:migrate` - сборка проекта и обновление базы.
+Выполнить две команды:
 <br/>
-`mvn tomcat7:run` - запуск встроенного томката.
-
+сборка проекта, обновление базы и запуск встроенного томката.
+```shell
+pricegsm$ mvn install flyway:migrate
+pricegsm$ mvn tomcat7:run
+```
 Вход в систему
 --------------
 
