@@ -15,18 +15,21 @@
 ----------------------
 1. Создать пользователя **pricegsmowner** с паролем **pricegsm5266** с правами **супервизора**
 2. Создать базу данных **pricegsm2**, назначить владельцем **pricegsmowner**.
-3. Инициализировать flyway, выполнив команду <br/>
-`flyway/flyway.sh init`
-<br/>
+3. Инициализировать flyway, выполнив команду
+```shell
+pricegsm$ flyway/flyway.sh init
+```
 4. Мигририровать данные из flyway <br/>
-`flyway/flyway.sh migrate`
-
+```shell
+pricegsm$ flyway/flyway.sh migrate
+```
 Сборка проекта
 --------------
 
 1. Выполнить команду maven <br/>
-`mvn clean package`
-
+```shell
+pricegsm$ mvn clean package
+```
 Настройка Tomcat
 ----------------
 
