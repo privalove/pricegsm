@@ -119,7 +119,7 @@ public class PriceList
         this.currency = currency;
     }
 
-    @Lob
+    @Basic
     @Column(name = "description")
     public String getDescription() {
         return description;

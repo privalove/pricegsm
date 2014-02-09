@@ -45,7 +45,7 @@ public class Color
         this.name = name;
     }
 
-    @Lob
+    @Basic
     @Column(name = "description")
     public String getDescription() {
         return description;

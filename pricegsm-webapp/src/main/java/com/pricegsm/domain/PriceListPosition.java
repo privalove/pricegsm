@@ -139,7 +139,7 @@ public class PriceListPosition
         this.moq = moq;
     }
 
-    @Lob
+    @Basic
     @Column(name = "description")
     public String getDescription() {
         return description;

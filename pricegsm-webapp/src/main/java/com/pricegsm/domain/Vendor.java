@@ -55,7 +55,7 @@ public class Vendor
         this.shortName = shortName;
     }
 
-    @Lob
+    @Basic
     @Column(name = "description")
     public String getDescription() {
         return description;

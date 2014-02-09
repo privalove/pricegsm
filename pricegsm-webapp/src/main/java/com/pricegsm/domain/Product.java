@@ -138,7 +138,7 @@ public class Product
         this.active = active;
     }
 
-    @Lob
+    @Basic
     @Column(name = "description")
     public String getDescription() {
         return description;
