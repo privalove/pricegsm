@@ -9,7 +9,7 @@ function IndexCtrl($scope, $cookieStore, $filter, $locale, indexResource, IndexR
 
     $scope.marketUrl = function () {
 
-        var exclude = $scope.product.excludeQuery ? "~(" + $scope.product.excludeQuery.replace(/,/g, "|") + ")" : "";
+        var exclude = $scope.product.excludeQuery ? "~~(" + $scope.product.excludeQuery.replace(/,/g, "|") + ")" : "";
 
         var query = "(" + $scope.product.searchQuery + ")(" + $scope.product.colorQuery.replace(/,/g, "|") + ")" + exclude;
 

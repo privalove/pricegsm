@@ -81,7 +81,7 @@ public class ParserService {
                                 ? "(" + product.getColorQuery().replaceAll(",", "|") + ")"
                                 : "";
                         String exclude = !Utils.isEmpty(product.getExcludeQuery())
-                                ? "~(" + product.getExcludeQuery().replaceAll(",", "|") + ")"
+                                ? "~~(" + product.getExcludeQuery().replaceAll(",", "|") + ")"
                                 : "";
                         String query = search + color + exclude;
 
