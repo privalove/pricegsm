@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<groups xmlns="http://www.isdc.ro/wro">
+
+    <!-- CSS URL Rewriting fails when using webjar resource locator:
+         https://github.com/alexo/wro4j/issues/127 -->
+    <group name="angular.all">
+        <js>/resources/js/services.js</js>
+        <js>/resources/js/directives.js</js>
+        <js>/resources/js/controllers.js</js>
+        <js>/resources/js/app.js</js>
+    </group>
+</groups>

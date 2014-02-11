@@ -263,10 +263,19 @@
         th:src="@{/resources/js/main.js}"></script>
 
 <!-- angular files -->
-<script src="../../../resources/js/services.js" th:src="@{/resources/js/services.js}"></script>
-<script src="../../../resources/js/directives.js" th:src="@{/resources/js/directives.js}"></script>
-<script src="../../../resources/js/controllers.js" th:src="@{/resources/js/controllers.js}"></script>
-<script src="../../../resources/js/app.js" th:src="@{/resources/js/app.js}"></script>
+<th:block th:switch="${profile}">
+    <th:block th:case="'development'">
+        <script src="../../../resources/js/services.js" th:src="@{/resources/js/services.js}"></script>
+        <script src="../../../resources/js/directives.js" th:src="@{/resources/js/directives.js}"></script>
+        <script src="../../../resources/js/controllers.js" th:src="@{/resources/js/controllers.js}"></script>
+        <script src="../../../resources/js/app.js" th:src="@{/resources/js/app.js}"></script>
+    </th:block>
+    <th:block th:case="*">
+        <script th:src="@{'/wro4j/v/' + ${application.assetsVersion} + '/angular.all.js'}"></script>
+    </th:block>
+
+</th:block>
+
 <script>
     $(function(){
             Main.init();

@@ -12,6 +12,7 @@ import com.pricegsm.service.YandexPriceService;
 import com.pricegsm.util.Utils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -48,6 +49,9 @@ public class IndexController {
     @Autowired
     private PrincipalHolder principalHolder;
 
+    @Value("${build.profile}")
+    private String profile;
+
     @RequestMapping(value = {"/", ""}, method = RequestMethod.GET)
     public String layout(Locale locale, Model model) {
 
@@ -56,6 +60,7 @@ public class IndexController {
         }
 
         model.addAttribute("i18n", messageSource.getProperties(locale));
+        model.addAttribute("profile", profile);
 
         return "fragments/layout";
     }
