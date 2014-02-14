@@ -6,9 +6,7 @@ import com.pricegsm.domain.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.AfterTransaction;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -40,26 +38,16 @@ public class UserDaoTest {
      */
     @Test
     @Transactional
-    @Rollback(false)
     public void testPersist() throws Exception {
         User user = new User("Persisted User", "persisted@pricegsm.com", "12345678");
         user.setToken(UUID.randomUUID().toString().replaceAll("-", ""));
 
         userDao.persist(user);
-    }
 
-    /**
-     * Method for verify @Transactional test
-     *
-     * Pay attention there is only one method is marked as @AfterTransaction in the test class.
-     * So you have to create separate class for each test of update database
-     */
-    @AfterTransaction
-    public void verifyPersist() throws Exception {
-        User user = userDao.loadByEmail("persisted@pricegsm.com");
+        user = userDao.loadByEmail("persisted@pricegsm.com");
 
         //this great asset set default message for condition.
         assertThat(user).isNotNull();
-    }
 
+    }
 }
