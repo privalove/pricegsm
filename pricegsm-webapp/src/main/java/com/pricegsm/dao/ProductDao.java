@@ -22,9 +22,16 @@ public class ProductDao
                 .getResultList();
     }
 
+    public List<Product> findByVendor(long vendor) {
+        return getEntityManager()
+                .createQuery("select p from Product p where p.vendor.id = :vendor")
+                .setParameter("vendor", vendor)
+                .getResultList();
+    }
+
     public List<Product> findActiveByVendorOrderByVendorAndName(long vendor) {
         return getEntityManager()
-                .createQuery("select p from Product p inner join p.vendor v inner join p.color c inner join p.type t where p.active = true and p.vendor.id = :vendor order by  t.name, v.name, p.name, c.name")
+                .createQuery("select p from Product p inner join p.color c inner join p.type t where p.active = true and p.vendor.id = :vendor order by  t.name, p.name, c.name")
                 .setParameter("vendor", vendor)
                 .getResultList();
     }
