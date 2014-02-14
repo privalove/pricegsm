@@ -82,6 +82,13 @@ public class User
 
     private boolean emailValid;
 
+    public User() {
+    }
+
+    public User(String name, String email, String password) {
+        super(name, email, password);
+    }
+
 
     @Size(max = 255)
     @Basic

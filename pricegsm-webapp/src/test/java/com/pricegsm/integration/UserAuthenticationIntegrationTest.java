@@ -1,13 +1,11 @@
 package com.pricegsm.integration;
 
 import com.googlecode.flyway.test.annotation.FlywayTest;
-import com.googlecode.flyway.test.junit.FlywayTestExecutionListener;
+import com.pricegsm.config.WebSecurityConfigurationAware;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
-import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultMatcher;
 
@@ -16,8 +14,6 @@ import javax.servlet.http.HttpSession;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-
-import com.pricegsm.config.WebSecurityConfigurationAware;
 
 @FlywayTest
 public class UserAuthenticationIntegrationTest extends WebSecurityConfigurationAware {

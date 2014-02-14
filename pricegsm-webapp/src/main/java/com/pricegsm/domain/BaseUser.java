@@ -27,6 +27,15 @@ public class BaseUser
 
     protected String password;
 
+    public BaseUser() {
+    }
+
+    public BaseUser(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(generator = "BaseUser")
