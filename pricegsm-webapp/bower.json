@@ -2,7 +2,7 @@
   "name": "pricegsm-webapp",
   "version": "1.0",
   "dependencies": {
-    "jquery": "2.0.3",
+    "jquery": "2.1.0",
     "jquery-mousewheel": "~3.1.9",
     "jquery-ui": "1.10.3",
     "underscore": "1.5.2",
