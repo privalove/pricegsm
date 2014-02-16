@@ -27,6 +27,14 @@
                     <i class="clip-eyedropper"></i>
                     <span th:text="#{products}">Продукты</span>
                 </div>
+                <div class="col-sm-3">
+                    <span th:text="#{page.vendor}">Производитель</span>
+                    <select onchange="document.location = this.options[this.selectedIndex].value">
+                        <option value="/pricegsm/admin/product/"></option>
+                        <option th:each="vendor : ${vendors}" th:text="${vendor.name}" th:selected="${vendorId} == ${vendor.id}"
+                                value="" th:attr="value='/pricegsm/admin/product/' + ${vendor.id} + '/vendor'"></option>
+                    </select>
+                </div>
                 <div class="panel-body">
                     <th:block th:if="${message != null}">
                         <div th:replace="fragments/alert :: alert (type=${#strings.toLowerCase(message.type)}, message=#{${message.message}(#{product})})">

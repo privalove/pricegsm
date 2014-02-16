@@ -20,6 +20,10 @@ public class ProductService
         return dao;
     }
 
+    public List<Product> findByVendor(long vendor) {
+        return postLoad(getDao().findByVendor(vendor));
+    }
+
     public List<Product> findActiveByVendorOrderByVendorAndName(long vendor) {
         return postLoad(getDao().findActiveByVendorOrderByVendorAndName(vendor));
     }

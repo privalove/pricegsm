@@ -100,4 +100,10 @@ public class ProductController {
         return "redirect:/admin/product";
     }
 
+    @RequestMapping(value = "/product/{vendorId}/vendor", method = RequestMethod.GET)
+    public String productsByVendor(@PathVariable long vendorId, Model model) {
+        model.addAttribute("products", productService.findByVendor(vendorId));
+        model.addAttribute("vendorId",vendorId);
+        return "admin/products";
+    }
 }
