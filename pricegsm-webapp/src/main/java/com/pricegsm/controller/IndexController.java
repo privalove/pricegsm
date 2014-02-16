@@ -1,8 +1,11 @@
 package com.pricegsm.controller;
 
+import com.pricegsm.config.Build;
 import com.pricegsm.config.PricegsmMessageSource;
-import com.pricegsm.domain.*;
 import com.pricegsm.domain.Currency;
+import com.pricegsm.domain.Product;
+import com.pricegsm.domain.WorldPrice;
+import com.pricegsm.domain.YandexPrice;
 import com.pricegsm.jackson.Wrappers;
 import com.pricegsm.securiry.PrincipalHolder;
 import com.pricegsm.service.CurrencyService;
@@ -12,7 +15,6 @@ import com.pricegsm.service.YandexPriceService;
 import com.pricegsm.util.Utils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -49,8 +51,8 @@ public class IndexController {
     @Autowired
     private PrincipalHolder principalHolder;
 
-    @Value("${build.profile}")
-    private String profile;
+    @Autowired
+    private Build build;
 
     @RequestMapping(value = {"/", ""}, method = RequestMethod.GET)
     public String layout(Locale locale, Model model) {
@@ -60,7 +62,7 @@ public class IndexController {
         }
 
         model.addAttribute("i18n", messageSource.getProperties(locale));
-        model.addAttribute("profile", profile);
+        model.addAttribute("profile", build.getProfile());
 
         return "fragments/layout";
     }
