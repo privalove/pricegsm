@@ -28,7 +28,7 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
-    
+
     @Autowired
     private VendorService vendorService;
 
@@ -56,24 +56,26 @@ public class ProductController {
     @RequestMapping(value = "/product", method = RequestMethod.GET)
     public String products(Model model) {
         model.addAttribute("products", productService.findAll());
+        model.addAttribute("vendorId", 0);
         return "admin/products";
     }
 
-    @RequestMapping(value = "/product/0", method = RequestMethod.GET)
-    public String newProduct(Model model) {
+    @RequestMapping(value = "/product/0/{vendorId}", method = RequestMethod.GET)
+    public String newProduct(@PathVariable long vendorId, Model model) {
         model.addAttribute("product", productService.getDefaultInstance());
-        
+        model.addAttribute("vendorId", vendorId);
         return "admin/product";
     }
 
-    @RequestMapping(value = "/product/{productId}", method = RequestMethod.GET)
-    public String editProduct(@PathVariable long productId, Model model) {
+    @RequestMapping(value = "/product/{productId}/{vendorId}", method = RequestMethod.GET)
+    public String editProduct(@PathVariable long productId, @PathVariable long vendorId, Model model) {
         model.addAttribute("product", productService.load(productId));
+        model.addAttribute("vendorId", vendorId);
         return "admin/product";
     }
 
-    @RequestMapping(value = "/product/{productId}", method = RequestMethod.POST)
-    public String saveProduct(@PathVariable long productId, @Valid Product product, BindingResult result, Model model, RedirectAttributes ra) {
+    @RequestMapping(value = "/product/{productId}/{vendorId}", method = RequestMethod.POST)
+    public String saveProduct(@PathVariable long productId, @PathVariable long vendorId, @Valid Product product, BindingResult result, Model model, RedirectAttributes ra) {
 
         if (result.hasErrors()) {
             return "admin/product";
@@ -81,7 +83,7 @@ public class ProductController {
 
         productService.save(product);
         MessageHelper.addSuccessAttribute(ra, "alert.saved");
-        return "redirect:/admin/product";
+        return vendorId == 0 ? "redirect:/admin/product" : "redirect:/admin/product/" + vendorId + "/vendor";
     }
 
     @RequestMapping(value = "/product/{productId}/delete", method = RequestMethod.DELETE)
@@ -103,7 +105,7 @@ public class ProductController {
     @RequestMapping(value = "/product/{vendorId}/vendor", method = RequestMethod.GET)
     public String productsByVendor(@PathVariable long vendorId, Model model) {
         model.addAttribute("products", productService.findByVendor(vendorId));
-        model.addAttribute("vendorId",vendorId);
+        model.addAttribute("vendorId", vendorId);
         return "admin/products";
     }
 }

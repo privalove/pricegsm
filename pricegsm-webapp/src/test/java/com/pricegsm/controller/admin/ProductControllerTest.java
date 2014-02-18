@@ -31,6 +31,7 @@ public class ProductControllerTest extends WebAppConfigurationAware {
                 .andExpect(notEmptyValuesOfAttributeMatcher("colors"))
                 .andExpect(notEmptyValuesOfAttributeMatcher("vendors"))
                 .andExpect(notEmptyValuesOfAttributeMatcher("products"))
+                .andExpect(model().attribute("vendorId", 0))
                 .andExpect(view().name("admin/products"));
     }
 
@@ -58,8 +59,9 @@ public class ProductControllerTest extends WebAppConfigurationAware {
         Product product = new Product();
         product.setId(0);
 
-        mockMvc.perform(get("/admin/product/0"))
+        mockMvc.perform(get("/admin/product/0/4"))
                 .andExpect(model().attribute("product", product))
+                .andExpect(model().attribute("vendorId", 4L))
                 .andExpect(view().name("admin/product"));
     }
 
@@ -68,14 +70,15 @@ public class ProductControllerTest extends WebAppConfigurationAware {
         Product product = new Product();
         product.setId(102);
 
-        mockMvc.perform(get("/admin/product/102"))
+        mockMvc.perform(get("/admin/product/102/4"))
                 .andExpect(model().attribute("product", product))
+                .andExpect(model().attribute("vendorId", 4L))
                 .andExpect(view().name("admin/product"));
     }
 
     @Test
     public void testSaveProductNew() throws Exception {
-        mockMvc.perform(post("/admin/product/0")
+        mockMvc.perform(post("/admin/product/0/0")
                 .param("id", "0")
                 .param("active", "true")
                 .param("name", "product")
@@ -91,7 +94,7 @@ public class ProductControllerTest extends WebAppConfigurationAware {
     public void testSaveProductUpdate() throws Exception {
 
         // Update all fields
-        mockMvc.perform(post("/admin/product/101")
+        mockMvc.perform(post("/admin/product/101/0")
                 .param("id", "101")
                 .param("name", "new product")
                 .param("color", "7")
@@ -102,10 +105,24 @@ public class ProductControllerTest extends WebAppConfigurationAware {
                 .andExpect(flash().attribute("message", new Message("alert.saved", Message.Type.SUCCESS, new Object[0])));
     }
 
+    @Test
+    public void testSaveFilterSettingDuringUpdate() throws Exception {
+
+        mockMvc.perform(post("/admin/product/101/10")
+                .param("id", "101")
+                .param("name", "new product")
+                .param("color", "7")
+                .param("yandexId", "45495457")
+                .param("vendor", "8")
+                .param("type", "3"))
+                .andExpect(view().name("redirect:/admin/product/10/vendor"))
+                .andExpect(flash().attribute("message", new Message("alert.saved", Message.Type.SUCCESS, new Object[0])));
+    }
+
 
     @Test
     public void testSaveProductWithError() throws Exception {
-        mockMvc.perform(post("/admin/product/1000").param("aaa", "aaa"))
+        mockMvc.perform(post("/admin/product/1000/0").param("aaa", "aaa"))
                 .andExpect(view().name("admin/product"));
     }
 
