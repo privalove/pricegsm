@@ -96,4 +96,14 @@ public class ProductDaoTest {
 
         assertThat(products).isEqualTo(Arrays.asList(expectedColor, expectedColor1));
     }
+
+    @Test
+    public void testDeleteProductsByYandexId() {
+        // Given
+        assertThat(productDao.findByYandexId("10495462").size()).isEqualTo(2);
+        // When
+        productDao.deleteProductsByYandexId("10495462");
+        // Then
+        assertThat(productDao.findByYandexId("10495462").size()).isEqualTo(0);
+    }
 }

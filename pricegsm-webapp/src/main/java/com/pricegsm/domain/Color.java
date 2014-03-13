@@ -24,6 +24,13 @@ public class Color
 
     private boolean active = true;
 
+    public Color() {
+    }
+
+    public Color(long id) {
+        super(id);
+    }
+
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(generator = "Color")

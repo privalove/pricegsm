@@ -22,6 +22,13 @@ public class Vendor
 
     private boolean active = true;
 
+    public Vendor() {
+    }
+
+    public Vendor(long id) {
+        super(id);
+    }
+
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(generator = "Vendor")

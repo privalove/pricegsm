@@ -16,6 +16,13 @@ public class GlobalEntity
 
     protected long id;
 
+    public GlobalEntity() {
+    }
+
+    public GlobalEntity(long id) {
+        this.id = id;
+    }
+
     /**
      * Simple Primary Key
      */

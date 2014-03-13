@@ -4,6 +4,7 @@ import com.pricegsm.domain.Color;
 import com.pricegsm.domain.Product;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
 
@@ -41,5 +42,13 @@ public class ProductDao
                 .createQuery("select distinct c from Product p inner join p.color c where p.yandexId = :yandexId order by c.name")
                 .setParameter("yandexId", yandexId)
                 .getResultList();
+    }
+
+    @Transactional
+    public void deleteProductsByYandexId(String yandexId) {
+        getEntityManager()
+                .createQuery("delete from Product p where p.yandexId = :yandexId")
+                .setParameter("yandexId", yandexId)
+                .executeUpdate();
     }
 }

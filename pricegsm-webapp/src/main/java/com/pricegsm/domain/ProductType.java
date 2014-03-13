@@ -18,6 +18,13 @@ public class ProductType
 
     private boolean active = true;
 
+    public ProductType() {
+    }
+
+    public ProductType(long id) {
+        super(id);
+    }
+
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(generator = "ProductType")
