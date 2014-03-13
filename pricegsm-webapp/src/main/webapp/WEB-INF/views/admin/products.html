@@ -43,19 +43,17 @@
                     <table class="table table-hover" id="sample-table-1">
                         <thead>
                         <tr>
-                            <th class="pg-id-column center" th:text="#{product.id}">#</th>
+                            <th th:text="#{product.yandexId}">Яндекс ИД</th>
                             <th class="pg-active-column center" th:text="#{product.active}">Активен</th>
                             <th th:text="#{product.vendor}">Производитель</th>
                             <th th:text="#{product.name}">Наименование</th>
-                            <th th:text="#{product.color}">Цвет</th>
-                            <th th:text="#{product.yandexId}">Яндекс ИД</th>
                             <th th:text="#{product.type}">Категория</th>
                             <th class="pg-actions-column"></th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="product : ${products}">
-                            <td class="pg-id-column center" th:text="${product.id}">1</td>
+                            <td th:text="${product.yandexId}">iphone 5s 16gb</td>
                             <td class="pg-active-column center">
                                 <label>
                                     <input type="radio" th:checked="${product.active}" disabled="disabled"
@@ -71,14 +69,6 @@
                             </td>
                             <td th:text="${product.name}">Iphone 5S 16Gb</td>
                             <td>
-                                <a class="btn btn-default btn-block" th:href="@{'/admin/color/' + ${product.color.id}}">
-                                    <i class="clip-circle-2" th:style="'color:'+${product.color.code}"
-                                       th:if="${product.color.code}"></i>
-                                    <span th:text="${product.color.name}">Space Gray</span>
-                                </a>
-                            </td>
-                            <td th:text="${product.yandexId}">iphone 5s 16gb</td>
-                            <td>
                                 <a class="btn btn-default btn-block"
                                    th:text="${product.type.name}">
                                     Мобильный телефон
@@ -86,7 +76,7 @@
                             </td>
                             <td class="pg-actions-column center">
                                 <div>
-                                    <a th:href="@{'/admin/product/'+${product.id} +'/' + ${vendorId}}" href="#"
+                                    <a th:href="@{'/admin/product/'+${product.yandexId} +'/' + ${vendorId}}" href="#"
                                        class="btn btn-xs btn-teal tooltips"
                                        data-placement="top" th:title="#{button.edit}" title="Редактировать">
                                         <i class="fa fa-edit"></i>
@@ -94,7 +84,7 @@
                                     <a href="#delete-modal" class="btn btn-xs btn-bricky tooltips" title="Удалить"
                                        data-toggle="modal" data-placement="top"
                                        th:title="#{button.delete}"
-                                       th:attr="data-delete-action=@{'/admin/product/'+${product.id} + '/delete'}">
+                                       th:attr="data-delete-action=@{'/admin/product/'+${product.yandexId} + '/'+ ${vendorId} +'/delete'}">
                                         <i class="fa fa-times"></i>
                                     </a>
                                 </div>
