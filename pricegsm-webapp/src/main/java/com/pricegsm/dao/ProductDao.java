@@ -4,6 +4,7 @@ import com.pricegsm.domain.Color;
 import com.pricegsm.domain.Product;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,9 +23,16 @@ public class ProductDao
                 .getResultList();
     }
 
+    public List<Product> findByVendor(long vendor) {
+        return getEntityManager()
+                .createQuery("select p from Product p where p.vendor.id = :vendor")
+                .setParameter("vendor", vendor)
+                .getResultList();
+    }
+
     public List<Product> findActiveByVendorOrderByVendorAndName(long vendor) {
         return getEntityManager()
-                .createQuery("select p from Product p inner join p.vendor v inner join p.color c inner join p.type t where p.active = true and p.vendor.id = :vendor order by  t.name, v.name, p.name, c.name")
+                .createQuery("select p from Product p inner join p.color c inner join p.type t where p.active = true and p.vendor.id = :vendor order by  t.name, p.name, c.name")
                 .setParameter("vendor", vendor)
                 .getResultList();
     }
@@ -34,5 +42,13 @@ public class ProductDao
                 .createQuery("select distinct c from Product p inner join p.color c where p.yandexId = :yandexId order by c.name")
                 .setParameter("yandexId", yandexId)
                 .getResultList();
+    }
+
+    @Transactional
+    public void deleteProductsByYandexId(String yandexId) {
+        getEntityManager()
+                .createQuery("delete from Product p where p.yandexId = :yandexId")
+                .setParameter("yandexId", yandexId)
+                .executeUpdate();
     }
 }

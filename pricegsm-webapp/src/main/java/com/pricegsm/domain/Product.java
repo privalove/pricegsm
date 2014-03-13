@@ -36,6 +36,27 @@ public class Product
 
     private String description;
 
+    public Product() {
+    }
+
+    public Product(
+            long id, String name, String yandexId, String searchQuery,
+            String excludeQuery, String colorQuery, ProductType type,
+            Vendor vendor, Color color, boolean active, String description) {
+
+        super(id);
+        this.name = name;
+        this.yandexId = yandexId;
+        this.searchQuery = searchQuery;
+        this.excludeQuery = excludeQuery;
+        this.colorQuery = colorQuery;
+        this.type = type;
+        this.vendor = vendor;
+        this.color = color;
+        this.active = active;
+        this.description = description;
+    }
+
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(generator = "Product")

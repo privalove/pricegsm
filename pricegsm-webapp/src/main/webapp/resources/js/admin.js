@@ -31,3 +31,7 @@
 
 
 })();
+
+function filterByVendor(location) {
+    document.location = location
+}
