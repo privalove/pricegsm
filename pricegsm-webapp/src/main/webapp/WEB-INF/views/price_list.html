@@ -70,7 +70,7 @@
                            th:attr="tooltip=#{priceListPosition.name.title}"></i>
                         <span th:text="#{priceListPosition.name}">Наименование</span>
                     </th>
-                    <th class="pg-color">
+                    <th colspan="2" class="pg-color">
                         <i class="fa fa-question-circle"
                            th:attr="tooltip=#{priceListPosition.color.title}"></i>
                         <span th:text="#{priceListPosition.color}">Цвет</span>
@@ -161,8 +161,8 @@
                     </td>
                     <td>
                         <div class="form-group" ng-hide="position.fake">
-                            <div class="row">
-                                <div class="col-xs-6">
+                            <div>
+                                <div th:attr="tooltip=#{priceListPosition.add.product.color}">
                                     <button ng-click="addPositionNextColor(priceLists[0], position.product.name, position.product.color.id)" type="button"
                                             class="btn btn-green btn-xs"><i class="fa fa-plus"></i></button>
                                 </div>
@@ -172,7 +172,7 @@
                     <td>
                         <div class="form-group" ng-hide="position.fake">
                             <div class="row">
-                                <div class="col-xs-12">
+                                <div>
                                     <a href='' class="dropdown-toggle btn btn-default btn-md">
                                         <span ng-bind="position.product.color.name">White</span>
                                         <span class="caret"></span>
