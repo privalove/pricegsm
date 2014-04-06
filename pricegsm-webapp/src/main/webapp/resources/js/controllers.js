@@ -455,6 +455,33 @@ function PriceListCtrl($scope, $filter, notifyManager, priceListResource, PriceL
             priceList.positions.push(position);
         };
 
+
+
+        $scope.addPositionNextColor = function (priceList, currentProductName, currentProductColorId) {
+
+            var productList = $filter("unique")(_.filter($scope.products, function (product) {
+                return product.name == currentProductName;
+            }), "color");
+
+             var indexNewElement = 0;
+
+            for (var i=0; i<productList.length; i++) {
+                if (currentProductColorId == productList[i].color.id) {
+                    if (i == productList.length - 1) {
+                        indexNewElement = 0;
+                        break;
+                    } else {
+                        indexNewElement = i+1;
+                        break;
+                    }
+                }
+            }
+            var position = angular.copy($scope.positionTemplate);
+            position.product = productList[indexNewElement];
+
+            priceList.positions.push(position);
+        };
+
         $scope.addVendor = function (vendor, index) {
             $scope.selectedVendors[index].push(vendor);
         };
