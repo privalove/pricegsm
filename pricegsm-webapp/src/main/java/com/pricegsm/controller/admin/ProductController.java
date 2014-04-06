@@ -16,7 +16,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping(value = "/admin")
-public class ProductController {
+public class    ProductController {
 
     @Autowired
     private ProductService productService;

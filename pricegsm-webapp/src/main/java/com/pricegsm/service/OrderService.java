@@ -5,6 +5,8 @@ import com.pricegsm.domain.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class OrderService
         extends GlobalEntityService<Order> {
@@ -15,5 +17,9 @@ public class OrderService
     @Override
     protected OrderDao getDao() {
         return dao;
+    }
+
+    public List<Order> findByBuyer(long buyerId) {
+        return getDao().findByBuyer(buyerId);
     }
 }

@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" ng-init="positions = {}">
     <div class="col-md-7">
         <!-- marketplace -->
 
@@ -13,11 +13,12 @@
                         <span>Заказы</span>
                     </div>
                     <div class="panel-body">
-                        <div class="row">
+                        <div class="row"
+                             ng-repeat-start="order in orders">
                             <div class="col-sm-12">
                                 <div class="row">
                                     <div class="col-xs-6">
-                                        <h4>Leader</h4>
+                                        <h4>{{order.seller.name}}</h4>
                                     </div>
                                     <div class="col-xs-6 text-right">
                                         <span>21 декабря, суббота</span>
@@ -41,14 +42,17 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>Iphone 5s 16Gb</td>
-                                        <td>Gold</td>
-                                        <td>USA</td>
-                                        <td>unsealed</td>
-                                        <td><input type="number" class="form-control" value="1" style="width:50px" min="1"/></td>
-                                        <td>625</td>
-                                        <td>625</td>
+                                    <tr ng-repeat="position in order.orderPositions">
+                                        <td>{{position.product.name}}</td>
+                                        <td>{{position.product.color.name}}</td>
+                                        <td>{{position.specification.name}}</td>
+                                        <td>{{position.description}}</td>
+                                        <td>
+                                            <input type="number" class="form-control" style="width:50px"
+                                                   ng-model="position.amount" min="0"
+                                                    ng-change="positions[position.pricelistPosition] = position.amount"/></td>
+                                        <td>{{position.price}}</td>
+                                        <td>{{position.price*position.amount}}</td>
                                         <td>
                                             <button type="button" class="btn btn-xs btn-danger" tooltip="Удалить">
                                                 <i class="fa fa-times"></i>
@@ -72,13 +76,14 @@
                                                 <span>Обновить</span>
                                             </button>
                                         </th>
-                                        <th colspan="2"><span>Итого:</span> <span>4725</span></th>
+                                        <th colspan="2"><span>Итого:</span> <span>{{calcTotal(order)}}</span></th>
                                         <th></th>
                                     </tr>
                                     </tfoot>
                                 </table>
                             </div>
                         </div>
+                        <div ng-repeat-end=""></div>
                     </div>
                 </div>
             </div>
@@ -95,9 +100,10 @@
                         <span>Площадка</span>
                     </div>
                     <div class="panel-body">
-                        <div class="row">
+                        <div
+                                ng-repeat-start="pricelist in pricelists" class="row">
                                 <div class="col-xs-6">
-                                    <h4>Leader</h4>
+                                    <h4>{{pricelist.user.name}}</h4>
                                 </div>
                                 <div class="col-xs-6 text-right">
                                     <span>21 декабря, суббота</span>
@@ -119,14 +125,20 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>Iphone 5s 16Gb</td>
-                                        <td>Gold</td>
-                                        <td>USA</td>
-                                        <td>unsealed</td>
-                                        <td style="color:red">1</td>
-                                        <td>625</td>
-                                        <td>10</td>
+                                    <tr  ng-repeat="position in pricelist.positions">
+                                        <td>{{position.product.name}}</td>
+                                        <td>{{position.product.color.name}}</td>
+                                        <td>{{position.specification.name}}</td>
+                                        <td>{{position.description}}</td>
+                                        <td style="color:red">
+                                            <input  type="number" class="form-control" style="width: 40px"
+                                                    ng-init="positions[position.id] = findOrDefaultOrderPosition(pricelist.user, position).amount"
+                                                    ng-model="positions[position.id]"
+                                                    ng-change="updateAmount(pricelist.user, position, positions[position.id])"
+                                                    min="0"/>
+                                        </td>
+                                        <td>{{position.price}}</td>
+                                        <td>{{position.moq}}</td>
                                         <td>
                                             <button type="button" class="btn btn-xs btn-danger" tooltip="Удалить">
                                                 <i class="fa fa-times"></i>
@@ -137,6 +149,7 @@
                                 </table>
                             </div>
                         </div>
+                        <div ng-repeat-end=""></div>
                     </div>
                 </div>
             </div>

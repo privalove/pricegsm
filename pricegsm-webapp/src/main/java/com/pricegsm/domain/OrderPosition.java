@@ -28,6 +28,8 @@ public class OrderPosition
 
     private Currency currency;
 
+    private long priceListPosition;
+
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(generator = "PriceList")
@@ -123,5 +125,15 @@ public class OrderPosition
 
     public void setCurrency(Currency currency) {
         this.currency = currency;
+    }
+
+    @Basic
+    @Column(name = "price_list_position")
+    public long getPriceListPosition() {
+        return priceListPosition;
+    }
+
+    public void setPriceListPosition(long priceListPosition) {
+        this.priceListPosition = priceListPosition;
     }
 }

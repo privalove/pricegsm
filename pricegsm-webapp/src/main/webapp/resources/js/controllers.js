@@ -216,13 +216,102 @@ function getIndexResource(IndexResource, $cookieStore, data) {
     }).$promise;
 }
 
-MarketplaceCtrl.$inject = ["$scope"];
-function MarketplaceCtrl($scope) {
+MarketplaceCtrl.$inject = ["$scope", "pricelists", "orders", "Order"];
+function MarketplaceCtrl($scope, pricelists, orders, Order) {
 
+    $scope.findOrDefaultOrderPosition = function(seller, pricelistPosition) {
+        var result;
+
+        var order = _.find($scope.orders, function(order) {
+            return order.seller.id == seller.id;
+        });
+
+        if (order != null) {
+            result = _.find(order.orderPositions, function(position) {
+                return position.priceListPosition == pricelistPosition.id;
+            });
+        }
+
+        if (result == null) {
+            result = {
+                amount:0
+            }
+        }
+
+        return result;
+    };
+
+
+    $scope.findOrCreateOrderPosition = function(seller, pricelistPosition) {
+        var result;
+
+        var order = _.find($scope.orders, function(order) {
+            return order.seller.id == seller.id;
+        });
+
+        if (order != null) {
+            result = _.find(order.orderPositions, function(position) {
+                return position.pricelistPosition == pricelistPosition.id;
+            });
+        }
+
+
+        if (order == null) {
+            order = {
+                seller:seller,
+                orderPositions: []
+            };
+
+            $scope.orders.push(order);
+        }
+
+        if (result == null) {
+            result = {
+                order: order,
+                pricelistPosition:pricelistPosition.id,
+                product: pricelistPosition.product,
+                price: pricelistPosition.price,
+                specification: pricelistPosition.specification,
+                amount:0
+            };
+            order.orderPositions.push(result);
+        }
+
+        return result;
+
+    };
+
+    if (pricelists.ok) {
+        $scope.pricelists = pricelists.payload.pricelists;
+
+        $scope.updateAmount = function(seller, position, amount) {
+            $scope.findOrCreateOrderPosition(seller, position).amount = amount;
+        };
+
+        $scope.calcTotal = function(order) {
+
+            return _.reduce(
+                _.map(order.orderPositions, function (position) {
+                    return position.amount * position.price
+                }),
+                function (memo, num) {
+                    return memo + num
+                }, 0)
+        }
+    }
+
+    if (orders.ok) {
+        $scope.orders = orders.payload.orders;
+    }
 }
 
 MarketplaceCtrl.resolve = {
-
+    "pricelists": ["PriceLists", function(PriceLists) {
+        return PriceLists.get().$promise;
+    }],
+    "orders": ["Orders", function(Orders) {
+        return Orders.get().$promise;
+    }]
 };
 
 OrderCtrl.$inject = ["$scope"];

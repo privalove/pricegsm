@@ -12,7 +12,11 @@
 
         "PriceListResource": "price_list.json",
         "PriceList": "price_list/:priceListId.json",
-        "WorkConditions": "price_list/work_conditions.json"
+        "WorkConditions": "price_list/work_conditions.json",
+
+        "PriceLists": "marketplace/pricelists.json",
+        "Orders": "marketplace/orders.json",
+        "Order": "marketplace/order.json"
     };
 
         angular.module('pg.services', ['ngResource'])
