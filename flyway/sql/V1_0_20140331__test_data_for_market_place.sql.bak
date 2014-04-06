@@ -1,3 +1,7 @@
+delete from pricelist_position where pricelist_user_id >= 999;
+delete from pricelist where user_id >= 999;
+delete from pricegsm_user where id >= 999;
+delete from base_user where id >= 999;
 
 INSERT INTO base_user (id, name, email, password) VALUES (999, 'Продавец 1', 'marketplace1@pricegsm.com', '8e56be82bda733fa92b4430a8bcaf6f866e01e80d2934341b4c2a5fe02e4d48cf9ebe3d516a70d27');
 INSERT INTO base_user (id, name, email, password) VALUES (1000, 'Продавец 2', 'marketplace2@pricegsm.com', '8e56be82bda733fa92b4430a8bcaf6f866e01e80d2934341b4c2a5fe02e4d48cf9ebe3d516a70d27');
