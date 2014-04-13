@@ -314,13 +314,17 @@ MarketplaceCtrl.resolve = {
     }]
 };
 
-OrderCtrl.$inject = ["$scope"];
-function OrderCtrl($scope) {
-
+OrderCtrl.$inject = ["$scope", "orders"];
+function OrderCtrl($scope, orders) {
+    if (orders.ok) {
+        $scope.orders = orders.payload.orders;
+    }
 }
 
 OrderCtrl.resolve = {
-
+    "orders": ["OrdersOrderPage", function(Orders) {
+        return Orders.get().$promise;
+    }]
 };
 
 SalesCtrl.$inject = ["$scope"];
