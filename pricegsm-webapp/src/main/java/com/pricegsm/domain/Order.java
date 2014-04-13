@@ -74,7 +74,7 @@ public class Order
     }
 
     @Valid
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @OrderColumn(name = "position")
     public List<OrderPosition> getOrderPositions() {
         return orderPositions;

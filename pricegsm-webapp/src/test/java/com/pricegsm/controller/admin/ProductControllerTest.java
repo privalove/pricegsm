@@ -239,7 +239,7 @@ public class ProductControllerTest extends WebAppConfigurationAware {
 
     @Test
     public void testDeleteProduct() throws Exception {
-        mockMvc.perform(delete("/admin/product/104954561/10/delete"))
+        mockMvc.perform(delete("/admin/product/10495456/10/delete"))
                 .andExpect(view().name("redirect:/admin/product/10/vendor"))
                 .andExpect(flash().attribute("message", new Message("alert.deleted", Message.Type.SUCCESS, new Object[0])));
     }

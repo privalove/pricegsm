@@ -1,5 +1,5 @@
 -- data for Integration tests
-INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (100, 'product 1', '104954561', 1, 3);
+INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (100, 'product 1', '10495456', 1, 3);
 INSERT INTO product (id, name, yandex_id, vendor_id, color_id) VALUES (101, 'product 2', '10495457', 1, 4);
 
 INSERT INTO vendor (id, name, short_name) VALUES (100, 'vendor', 'App');
