@@ -26,8 +26,6 @@ public class OrderPosition
 
     private int version;
 
-    private Currency currency;
-
     private long priceListPosition;
 
     @Id
@@ -52,8 +50,6 @@ public class OrderPosition
         this.order = order;
     }
 
-    @JsonSerialize(using = GlobalEntitySerializer.class)
-    @JsonDeserialize(using = GlobalEntityDeserializer.class)
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
@@ -112,19 +108,6 @@ public class OrderPosition
 
     public void setVersion(int version) {
         this.version = version;
-    }
-
-    @JsonSerialize(using = GlobalEntitySerializer.class)
-    @JsonDeserialize(using = GlobalEntityDeserializer.class)
-    @NotNull
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "currency_id", referencedColumnName = "id", nullable = false)
-    public Currency getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
     }
 
     @Basic

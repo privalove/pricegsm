@@ -13,9 +13,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "order")
@@ -26,7 +24,7 @@ public class Order
         PREPARE, SENT, CANCELED, CONFIRMED, DECLINED
     }
 
-    private List<OrderPosition> orderPositions = new ArrayList<>();
+    private Set<OrderPosition> orderPositions = new HashSet<>();
 
     private User buyer;
 
@@ -64,6 +62,8 @@ public class Order
 
     private int totalAmount;
 
+    private Currency currency;
+
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(generator = "Order")
@@ -76,11 +76,11 @@ public class Order
     @Valid
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @OrderColumn(name = "position")
-    public List<OrderPosition> getOrderPositions() {
+    public Set<OrderPosition> getOrderPositions() {
         return orderPositions;
     }
 
-    public void setOrderPositions(List<OrderPosition> orderPositions) {
+    public void setOrderPositions(Set<OrderPosition> orderPositions) {
         this.orderPositions = orderPositions;
     }
 
@@ -284,5 +284,16 @@ public class Order
 
     public void setTotalAmount(int totalAmount) {
         this.totalAmount = totalAmount;
+    }
+
+    @NotNull
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "currency_id", referencedColumnName = "id", nullable = false)
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
     }
 }

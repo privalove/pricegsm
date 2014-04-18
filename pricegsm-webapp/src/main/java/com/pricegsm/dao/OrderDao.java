@@ -9,8 +9,9 @@ import java.util.List;
 public class OrderDao
         extends GlobalEntityDao<Order> {
     public List<Order> findByBuyer(long buyerId) {
-        return getEntityManager().createQuery("select o from Order o where o.buyer.id = :buyer")
-                .setParameter("buyer",buyerId)
+        List buyer = getEntityManager().createQuery("select o from Order o where o.buyer.id = :buyer")
+                .setParameter("buyer", buyerId)
                 .getResultList();
+        return buyer;
     }
 }

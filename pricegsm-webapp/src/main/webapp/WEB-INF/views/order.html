@@ -30,6 +30,7 @@
                                 <th>контрагент</th>
                                 <th>сумма</th>
                                 <th>валюта</th>
+                                <th>кол-во</th>
                                 <th>логистика</th>
                                 <th>дата отгр.</th>
                                 <th>статус</th>
@@ -37,11 +38,11 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="order in orders">
-                                <td>{{order.sendDate}}</td>
+                            <tr ng-repeat="order in orders" ng-click="orderDetails(order)">
+                                <td>{{order.sendDate|date:'dd-MM-yyyy'}}</td>
                                 <td>{{order.buyer.name}}</td>
                                 <td>{{order.totalPrice}}</td>
-                                <td>{{order.sendDate}}</td>
+                                <td>{{order.currency.code}}</td>
                                 <td>{{order.totalAmount}}</td>
                                 <td>{{order.delivery}}</td>
                                 <td>{{order.deliveryDate}}</td>

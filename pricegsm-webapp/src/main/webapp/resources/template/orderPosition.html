@@ -1,0 +1,42 @@
+<header class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="cancel()"><i class="fa fa-times-circle fa-lg"></i></button>
+    <h1 class="gf-modal-heading" pg-text="changePasswordForm">Change Password</h1>
+</header>
+
+<div class="row">
+    <div class="col-sm-12">
+        <table class="table table-hover table-condensed">
+            <thead>
+            <tr>
+                <th>Наименование</th>
+                <th>цвет</th>
+                <th>примичание</th>
+                <th>кол.</th>
+                <th>цена</th>
+                <th>сумма</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="orderPosition in order.orderPositions">
+                <td>{{orderPosition.product.name}}</td>
+                <td>{{orderPosition.product.color.name}}</td>
+                <td>{{orderPosition.product.description}}</td>
+                <td>{{orderPosition.amount}}</td>
+                <td>{{orderPosition.price}}</td>
+                <td>{{orderPosition.totalPrice}}</td>
+                <td>
+                    <button type="button" class="btn btn-xs btn-danger" tooltip="Удалить">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<footer class="modal-footer">
+    <button type="reset" class="btn btn-default" data-dismiss="modal" aria-hidden="true" ng-click="cancel()"><i class="fa fa-times-circle fa-lg"></i> <span pg-text="button.close"></span></button>
+    <button type="submit" class="btn btn-primary btn-warning" ng-click="change(cpf)" ng-disabled="!cpf.$valid"><i class="fa fa-check-circle fa-lg"></i> <span pg-text="button.confirm"></span></button>
+</footer>

@@ -314,11 +314,23 @@ MarketplaceCtrl.resolve = {
     }]
 };
 
-OrderCtrl.$inject = ["$scope", "orders"];
-function OrderCtrl($scope, orders) {
+OrderCtrl.$inject = ["$scope", "$modal", "orders"];
+function OrderCtrl($scope, $modal, orders) {
     if (orders.ok) {
         $scope.orders = orders.payload.orders;
     }
+
+    $scope.orderDetails = function (currentOrder) {
+        $modal.open({
+            templateUrl: "resources/template/orderPosition.html",
+            controller: OrderPositionCtrl,
+            resolve: {
+                currentOrder: function () {
+                    return currentOrder;
+                }
+            }
+        });
+    };
 }
 
 OrderCtrl.resolve = {
@@ -326,6 +338,15 @@ OrderCtrl.resolve = {
         return Orders.get().$promise;
     }]
 };
+
+OrderPositionCtrl.$inject = ["$scope","$modalInstance","currentOrder"];
+function OrderPositionCtrl($scope, $modalInstance, currentOrder){
+    $scope.order = currentOrder;
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+    };
+}
 
 SalesCtrl.$inject = ["$scope"];
 function SalesCtrl($scope) {
