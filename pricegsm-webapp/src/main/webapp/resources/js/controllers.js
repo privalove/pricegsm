@@ -314,8 +314,8 @@ MarketplaceCtrl.resolve = {
     }]
 };
 
-OrderCtrl.$inject = ["$scope", "$modal", "orders"];
-function OrderCtrl($scope, $modal, orders) {
+OrderCtrl.$inject = ["$scope", "$filter", "$modal", "orders"];
+function OrderCtrl($scope, $filter, $modal, orders) {
     if (orders.ok) {
         $scope.orders = orders.payload.orders;
     }
@@ -331,6 +331,14 @@ function OrderCtrl($scope, $modal, orders) {
             }
         });
     };
+    $scope.deliveryDates = $filter("unique")(_.map($scope.orders, function (order) {
+        return order.deliveryDate
+    }));
+
+
+    $scope.sellers = $filter("unique")(_.map($scope.orders, function (order) {
+            return order.seller
+        }), "id");
 }
 
 OrderCtrl.resolve = {
@@ -338,6 +346,22 @@ OrderCtrl.resolve = {
         return Orders.get().$promise;
     }]
 };
+
+angular.module('orderFilters', []).filter('sellerDeliveryDate', function() {
+    return function(orders, sellerId, deliveryDate) {
+
+        var resultOrders = [];
+
+        orders.forEach(function(order) {
+            if ((sellerId === undefined || sellerId == "" || order.seller.id == sellerId)
+                && (deliveryDate === undefined || deliveryDate == "" || order.deliveryDate == deliveryDate )) {
+                resultOrders.push(order);
+            }
+        });
+
+        return resultOrders;
+    };
+});
 
 OrderPositionCtrl.$inject = ["$scope","$modalInstance","currentOrder"];
 function OrderPositionCtrl($scope, $modalInstance, currentOrder){

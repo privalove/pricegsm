@@ -8,18 +8,17 @@
                    popover-trigger="mouseenter"></i>
                 <span>Заказы</span>
             </div>
-            <div class="panel-body"> jhvkvhgk
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="row">
-                            <div class="col-xs-6">
-                                <h4>{{order.seller.name}}</h4>
-                            </div>
-                            <div class="col-xs-6 text-right">
-                                <span>21 декабря, суббота</span>
-                            </div>
-                        </div>
-                    </div>
+            <div class="panel-body">
+                <div class="col-sm-3 margin-top-20">
+                    <select class="form-control" ng-model="seller">
+                        <option value="">ВСЁ</option>
+                        <option ng-repeat="seller in sellers" value="{{seller.id}}">{{seller.name}}</option>
+                    </select>
+                    <select class="form-control" ng-model="deliveryDate">
+                        <option value="">ВСЁ</option>
+                        <option ng-repeat="deliveryDate in deliveryDates">{{deliveryDate}}</option>
+                    </select>
+
                 </div>
                 <div class="row">
                     <div class="col-sm-12">
@@ -38,9 +37,9 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="order in orders" ng-click="orderDetails(order)">
+                            <tr ng-repeat="order in orders | sellerDeliveryDate:seller:deliveryDate" ng-click="orderDetails(order)">
                                 <td>{{order.sendDate|date:'dd-MM-yyyy'}}</td>
-                                <td>{{order.buyer.name}}</td>
+                                <td>{{order.seller.name}}</td>
                                 <td>{{order.totalPrice}}</td>
                                 <td>{{order.currency.code}}</td>
                                 <td>{{order.totalAmount}}</td>

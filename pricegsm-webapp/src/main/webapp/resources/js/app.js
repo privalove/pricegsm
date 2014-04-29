@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('pricegsm', ['ngRoute', 'ngCookies', 'ngAnimate', 'ngGrid', 'ui.bootstrap', 'ui.unique', 'angular-loading-bar', 'toggle-switch',
-            'pg.services', 'pg.directives'])
+            'pg.services', 'pg.directives','orderFilters'])
         .config(['$routeProvider', "$httpProvider", function ($routeProvider, $httpProvider) {
             $routeProvider
                 .when('/', {templateUrl: R.base + 'index', controller: IndexCtrl, resolve: IndexCtrl.resolve, title: 'page.main.title' })
