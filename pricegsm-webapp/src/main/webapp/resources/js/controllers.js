@@ -339,6 +339,23 @@ function OrderCtrl($scope, $filter, $modal, orders) {
     $scope.sellers = $filter("unique")(_.map($scope.orders, function (order) {
             return order.seller
         }), "id");
+
+    $scope.delivery = function(delivery, deliveryFree, pickup) {
+        if(delivery) {
+            return R.get('order.delivery.delivery');
+        }
+
+        if(deliveryFree) {
+            return R.get('order.delivery.deliveryFree');
+        }
+
+        if(pickup) {
+            return R.get('order.delivery.pickup');
+        }
+    }
+
+    $scope.sendDateFormat = R.get('order.format.sendDate');
+    $scope.deliveryDateFormat = R.get('order.format.deliveryDate');
 }
 
 OrderCtrl.resolve = {
@@ -361,7 +378,30 @@ angular.module('orderFilters', []).filter('sellerDeliveryDate', function() {
 
         return resultOrders;
     };
-});
+})
+    .filter('statusFilter', function() {
+        return function(status) {
+            if (status == "PREPARE") {
+                return R.get('order.status.prepare');
+            }
+
+            if (status == "SENT") {
+                return R.get('order.status.sent');
+            }
+
+            if (status == "CANCELED") {
+                return R.get('order.status.canceled');
+            }
+
+            if (status == "CONFIRMED") {
+                return R.get('order.status.confirmed');
+            }
+
+            if (status == "DECLINED") {
+                return R.get('order.status.declined');
+            }
+        };
+    });
 
 OrderPositionCtrl.$inject = ["$scope","$modalInstance","currentOrder"];
 function OrderPositionCtrl($scope, $modalInstance, currentOrder){
