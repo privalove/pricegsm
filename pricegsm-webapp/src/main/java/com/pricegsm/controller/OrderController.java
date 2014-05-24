@@ -27,15 +27,12 @@ public class OrderController {
 
     @RequestMapping(value = "/order", method = RequestMethod.GET)
     public void order() {
-        long id = principalHolder.getCurrentUser().getId();
-        principalHolder.getCurrentUser().getId();
     }
 
     @RequestMapping(value = "/order/orders.json", method = RequestMethod.GET)
     @ResponseBody
     public OperationResult orders() {
-        List<Order> byBuyer = orderService.findByBuyer(principalHolder.getCurrentUser().getId());
-        return OperationResult.ok()
-                .payload("orders", byBuyer);
+        BaseUser currentUser = principalHolder.getCurrentUser();
+        return OperationResult.ok().payload("orders", orderService.findByBuyer(currentUser.getId()));
     }
 }

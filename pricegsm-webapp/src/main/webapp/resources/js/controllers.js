@@ -324,6 +324,7 @@ function OrderCtrl($scope, $filter, $modal, orders) {
         $modal.open({
             templateUrl: "resources/template/orderPosition.html",
             controller: OrderPositionCtrl,
+            size: "lg",
             resolve: {
                 currentOrder: function () {
                     return currentOrder;
@@ -410,6 +411,20 @@ function OrderPositionCtrl($scope, $modalInstance, currentOrder){
     $scope.cancel = function () {
         $modalInstance.dismiss('cancel');
     };
+
+    $scope.open = function($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+
+        $scope.opened = true;
+    };
+
+    $scope.dateOptions = {
+        formatYear: 'yy',
+        startingDay: 1
+    };
+
+    $scope.deliveryDateFormat = R.get('order.format.deliveryDate');
 }
 
 SalesCtrl.$inject = ["$scope"];

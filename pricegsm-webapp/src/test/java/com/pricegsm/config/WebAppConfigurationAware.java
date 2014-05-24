@@ -19,7 +19,9 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("test")
 @WebAppConfiguration
-@ContextConfiguration(classes = {ApplicationConfig.class, FlywayConfig.class, JpaConfig.class, SecurityConfig.class, WebMvcConfig.class})
+@ContextConfiguration(classes = {
+        ApplicationConfig.class, FlywayConfig.class, JpaConfig.class,
+        SecurityConfig.class, WebMvcConfig.class, TestPrincipalHolder.class})
 @TestExecutionListeners({
         DependencyInjectionTestExecutionListener.class,
         FlywayTestExecutionListener.class })
