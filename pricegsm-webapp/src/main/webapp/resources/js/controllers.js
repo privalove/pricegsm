@@ -357,6 +357,28 @@ function OrderCtrl($scope, $filter, $modal, orders) {
 
     $scope.sendDateFormat = R.get('order.format.sendDate');
     $scope.deliveryDateFormat = R.get('order.format.deliveryDate');
+
+    $scope.orderStatus = function(order) {
+        if (order.status == "PREPARE") {
+            return 1;
+        }
+
+        if (order.status == "SENT") {
+            return 2;
+        }
+
+        if (order.status == "CANCELED") {
+            return 3;
+        }
+
+        if (order.status == "CONFIRMED") {
+            return 4;
+        }
+
+        if (order.status == "DECLINED") {
+            return 5;
+        }
+    };
 }
 
 OrderCtrl.resolve = {

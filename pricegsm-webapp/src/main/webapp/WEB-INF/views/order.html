@@ -41,7 +41,7 @@
                             </thead>
                             <tbody>
                             <!--todo add sorting : status , deliveryDate-->
-                            <tr ng-repeat="order in orders | sellerDeliveryDate:seller:deliveryDate" ng-click="orderDetails(order)">
+                            <tr ng-repeat="order in orders | sellerDeliveryDate:seller:deliveryDate | orderBy : [orderStatus, order.deliveryDate]" ng-click="orderDetails(order)">
                                 <td>{{order.sendDate|date:sendDateFormat}}</td>
                                 <td>{{order.seller.name}}</td>
                                 <td>{{order.totalPrice}}</td>
