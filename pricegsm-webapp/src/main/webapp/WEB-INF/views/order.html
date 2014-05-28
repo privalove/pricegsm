@@ -40,13 +40,14 @@
                             </tr>
                             </thead>
                             <tbody>
+                            <!--todo add sorting : status , deliveryDate-->
                             <tr ng-repeat="order in orders | sellerDeliveryDate:seller:deliveryDate" ng-click="orderDetails(order)">
                                 <td>{{order.sendDate|date:sendDateFormat}}</td>
                                 <td>{{order.seller.name}}</td>
                                 <td>{{order.totalPrice}}</td>
                                 <td>{{order.currency.code}}</td>
                                 <td>{{order.totalAmount}}</td>
-                                <td>{{delivery(order.delivery, order.deliveryFree, order.pickup)}}</td>
+                                <td>{{order|deliveryFilter}}</td>
                                 <td>{{order.deliveryDate | date:deliveryDateFormat}}</td>
                                 <td>{{order.status | statusFilter}}</td>
                                 <td>

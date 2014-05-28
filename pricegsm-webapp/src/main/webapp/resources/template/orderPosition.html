@@ -6,116 +6,59 @@
 
 <div xmlns:th="http://www.thymeleaf.org">
     <div class="row">
-        <div class="col-sm-offset-2 col-sm-2" th:text="#{order.seller}">Поставщик:</div>
+        <div class="text-right col-sm-offset-1 col-sm-2" th:text="#{order.seller}">Поставщик:</div>
         <div class="col-sm-3">{{order.seller.name}}</div>
     </div>
-    <div class="row">
-        <div class="col-sm-offset-2 col-sm-2" th:text="#{order.buyer}">Покупатель:</div>
+    <div class="row form-group">
+        <div class="text-right col-sm-offset-1 col-sm-2" th:text="#{order.buyer}">Покупатель:</div>
         <div class="col-sm-3">{{order.buyer.name}}</div>
     </div>
-    <form>
-        <div class="row">
-            <div class="col-sm-3 radio-inline" th:text="#{order.contactData}">Контактные данные:</div>
-            <div class="col-sm-8">
-                <label class="radio-inline">
-                    <input name="pickupPlace" type="radio" ng-model="order.pickup"
-                           th:value="#{order.delivery.pickup}" value="order.delivery.pickup"/>
-                    <span pg-text="order.delivery.pickup"></span>
-                </label>
-                <label class="radio-inline">
-                    <input name="pickupPlace" type="radio" ng-model="order.delivery"
-                           th:value="#{order.delivery.pickup}" value="order.delivery.pickup"/>
-                    <span pg-text="order.delivery.delivery"></span>
-                </label>
-            </div>
+    <div class="row form-group">
+        <div class="text-right col-sm-3" th:text="#{order.contactData}">Контактные данные:</div>
+        <div class="col-sm-8"> {{order|deliveryFilter}}</div>
+    </div>
+    <div class="row form-group">
+        <div class="text-right col-sm-offset-1 col-sm-2" pg-text="order.name">Имя</div>
+        <div class="col-sm-2">{{order.contactName}}</div>
+        <div class="col-sm-2">{{order.place}}</div>
+    </div>
+
+    <div class="row form-group">
+        <div class="text-right control-label col-sm-offset-1 col-sm-2" pg-text="order.phoneNumber">Телефон</div>
+        <div class="col-sm-2">{{order.phone}}</div>
+        <div class="col-sm-1" pg-text="order.onDate">на дату</div>
+        <div class="col-sm-2">{{order.deliveryDate | date : deliveryDateFormat}}</div>
+        <div class="col-sm-4">
+            <p>с {{order.fromTime | date : 'hh:mm'}} до
+                {{order.toTime | date : 'hh:mm'}}</p>
         </div>
-        <div class="row">
-            <label class="radio-inline col-sm-offset-2 col-sm-1" pg-text="order.name">Имя</label>
-            <div class="col-sm-2">
-                <input type="text" class="form-control"
-                       placeholder={{order.contactName}}
-                       ng-model="order.contactName"/>
-            </div>
-            <div class="col-sm-2">
-                <input type="text" class="form-control"
-                       placeholder={{order.place}}
-                       ng-model="order.place"/>
-            </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-offset-1 col-sm-10">
+            <table class="table table-hover table-condensed">
+                <thead>
+                <tr>
+                    <th pg-text="priceListPosition.name">Наименование</th>
+                    <th pg-text="color">цвет</th>
+                    <th pg-text="note">примичание</th>
+                    <th pg-text="page.order.totalAmount">количество</th>
+                    <th pg-text="priceListPosition.price">цена</th>
+                    <th pg-text="page.order.totalPrice">сумма</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="orderPosition in order.orderPositions">
+                    <td>{{orderPosition.product.name}}</td>
+                    <td>{{orderPosition.product.color.name}}</td>
+                    <td>{{orderPosition.product.description}}</td>
+                    <td>{{orderPosition.amount}}</td>
+                    <td>{{orderPosition.price}}</td>
+                    <td>{{orderPosition.totalPrice}}</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
-
-        <div class="row">
-            <label class="radio-inline col-sm-offset-2 col-sm-1" pg-text="order.phoneNumber">Телефон</label>
-            <div class="col-sm-2">
-                <input type="text" class="form-control"
-                       placeholder={{order.phone}}
-                       ng-model="order.phone"/>
-            </div>
-            <label class="radio-inline col-sm-2" pg-text="order.onDate">на дату</label>
-
-                <div class="col-sm-2">
-                    <p class="input-group">
-                        <input type="text" class="form-control" datepicker-popup="{{deliveryDateFormat}}"
-                               ng-model="order.deliveryDate" is-open="opened" datepicker-options="dateOptions"
-                               ng-required="true" close-text="Close" required="required"/>
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-default" ng-click="open($event)">
-                                <i class="glyphicon glyphicon-calendar"></i>
-                            </button>
-                        </span>
-                    </p>
-                </div>
-                <div class="col-sm-4">
-                    <label>с</label>
-
-                    <div ng-model="user.sellerDeliveryFrom" style="display:inline-block;">
-                        <timepicker minute-step="30" show-meridian="false"></timepicker>
-                    </div>
-                    <label>до</label>
-
-                    <div ng-model="user.sellerDeliveryTo" style="display:inline-block;">
-                        <timepicker minute-step="30" show-meridian="false"></timepicker>
-                    </div>
-                </div>
-        </div>
-
-        <div class="row">
-            <div class="col-sm-12">
-                <table class="table table-hover table-condensed">
-                    <thead>
-                    <tr>
-                        <th th:text="#{priceListPosition.name}">Наименование</th>
-                        <th th:text="#{color}">цвет</th>
-                        <th th:text="#{note}">примичание</th>
-                        <th th:text="#{page.order.totalAmount}">количество</th>
-                        <th th:text="#{priceListPosition.price}">цена</th>
-                        <th th:text="#{page.order.totalPrice}">сумма</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="orderPosition in order.orderPositions">
-                        <td>{{orderPosition.product.name}}</td>
-                        <td>{{orderPosition.product.color.name}}</td>
-                        <td>{{orderPosition.product.description}}</td>
-                        <td>{{orderPosition.amount}}</td>
-                        <td>{{orderPosition.price}}</td>
-                        <td>{{orderPosition.totalPrice}}</td>
-                        <td>
-                            <button type="button" class="btn btn-xs btn-danger" tooltip="Удалить">
-                                <i class="fa fa-times"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </form>
+        <div class="col-sm-offset-1"></div>
+    </div>
 </div>
-
-<footer class="modal-footer">
-    <button type="reset" class="btn btn-default" data-dismiss="modal" aria-hidden="true" ng-click="cancel()"><i
-            class="fa fa-times-circle fa-lg"></i> <span pg-text="button.close"></span></button>
-    <button type="submit" class="btn btn-primary btn-warning" ng-click="change(cpf)" ng-disabled="!cpf.$valid"><i
-            class="fa fa-check-circle fa-lg"></i> <span pg-text="button.confirm"></span></button>
-</footer>

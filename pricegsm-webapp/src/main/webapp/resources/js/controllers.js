@@ -321,16 +321,30 @@ function OrderCtrl($scope, $filter, $modal, orders) {
     }
 
     $scope.orderDetails = function (currentOrder) {
-        $modal.open({
-            templateUrl: "resources/template/orderPosition.html",
-            controller: OrderPositionCtrl,
-            size: "lg",
-            resolve: {
-                currentOrder: function () {
-                    return currentOrder;
+        if (currentOrder.status == "PREPARE") {
+            $modal.open({
+                templateUrl: "resources/template/orderPositionPrepare.html",
+                controller: OrderPositionCtrl,
+                size: "lg",
+                resolve: {
+                    currentOrder: function () {
+                        return currentOrder;
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            $modal.open({
+                templateUrl: "resources/template/orderPosition.html",
+                controller: OrderPositionCtrl,
+                size: "lg",
+                resolve: {
+                    currentOrder: function () {
+                        return currentOrder;
+                    }
+                }
+            });
+        }
+
     };
     $scope.deliveryDates = $filter("unique")(_.map($scope.orders, function (order) {
         return order.deliveryDate
@@ -340,20 +354,6 @@ function OrderCtrl($scope, $filter, $modal, orders) {
     $scope.sellers = $filter("unique")(_.map($scope.orders, function (order) {
             return order.seller
         }), "id");
-
-    $scope.delivery = function(delivery, deliveryFree, pickup) {
-        if(delivery) {
-            return R.get('order.delivery.delivery');
-        }
-
-        if(deliveryFree) {
-            return R.get('order.delivery.deliveryFree');
-        }
-
-        if(pickup) {
-            return R.get('order.delivery.pickup');
-        }
-    }
 
     $scope.sendDateFormat = R.get('order.format.sendDate');
     $scope.deliveryDateFormat = R.get('order.format.deliveryDate');
@@ -402,6 +402,21 @@ angular.module('orderFilters', []).filter('sellerDeliveryDate', function() {
                 return R.get('order.status.declined');
             }
         };
+    })
+    .filter('deliveryFilter', function(){
+        return function(order) {
+            if(order.delivery) {
+                return R.get('order.delivery.delivery');
+            }
+
+            if(order.deliveryFree) {
+                return R.get('order.delivery.deliveryFree');
+            }
+
+            if(order.pickup) {
+                return R.get('order.delivery.pickup');
+            }
+        }
     });
 
 OrderPositionCtrl.$inject = ["$scope","$modalInstance","currentOrder"];
