@@ -85,3 +85,20 @@ table.pg-pricelist .pg-actions {
     margin-top: 20px;
 }
 
+.margin-top-34 {
+    margin-top: 34px;
+}
+
+.left-padding-0 {
+    padding-left: 0 !important;
+}
+
+.right-padding-5 {
+    padding-right: 5px !important;
+}
+
+.vertical-center label,
+.vertical-center div {
+    vertical-align: middle;
+}
+
