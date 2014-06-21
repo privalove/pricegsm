@@ -219,22 +219,22 @@ function getIndexResource(IndexResource, $cookieStore, data) {
 MarketplaceCtrl.$inject = ["$scope", "pricelists", "orders", "Order"];
 function MarketplaceCtrl($scope, pricelists, orders, Order) {
 
-    $scope.findOrDefaultOrderPosition = function(seller, pricelistPosition) {
+    $scope.findOrDefaultOrderPosition = function (seller, pricelistPosition) {
         var result;
 
-        var order = _.find($scope.orders, function(order) {
+        var order = _.find($scope.orders, function (order) {
             return order.seller.id == seller.id;
         });
 
         if (order != null) {
-            result = _.find(order.orderPositions, function(position) {
+            result = _.find(order.orderPositions, function (position) {
                 return position.priceListPosition == pricelistPosition.id;
             });
         }
 
         if (result == null) {
             result = {
-                amount:0
+                amount: 0
             }
         }
 
@@ -242,15 +242,15 @@ function MarketplaceCtrl($scope, pricelists, orders, Order) {
     };
 
 
-    $scope.findOrCreateOrderPosition = function(seller, pricelistPosition) {
+    $scope.findOrCreateOrderPosition = function (seller, pricelistPosition) {
         var result;
 
-        var order = _.find($scope.orders, function(order) {
+        var order = _.find($scope.orders, function (order) {
             return order.seller.id == seller.id;
         });
 
         if (order != null) {
-            result = _.find(order.orderPositions, function(position) {
+            result = _.find(order.orderPositions, function (position) {
                 return position.pricelistPosition == pricelistPosition.id;
             });
         }
@@ -258,7 +258,7 @@ function MarketplaceCtrl($scope, pricelists, orders, Order) {
 
         if (order == null) {
             order = {
-                seller:seller,
+                seller: seller,
                 orderPositions: []
             };
 
@@ -268,11 +268,11 @@ function MarketplaceCtrl($scope, pricelists, orders, Order) {
         if (result == null) {
             result = {
                 order: order,
-                pricelistPosition:pricelistPosition.id,
+                pricelistPosition: pricelistPosition.id,
                 product: pricelistPosition.product,
                 price: pricelistPosition.price,
                 specification: pricelistPosition.specification,
-                amount:0
+                amount: 0
             };
             order.orderPositions.push(result);
         }
@@ -284,11 +284,11 @@ function MarketplaceCtrl($scope, pricelists, orders, Order) {
     if (pricelists.ok) {
         $scope.pricelists = pricelists.payload.pricelists;
 
-        $scope.updateAmount = function(seller, position, amount) {
+        $scope.updateAmount = function (seller, position, amount) {
             $scope.findOrCreateOrderPosition(seller, position).amount = amount;
         };
 
-        $scope.calcTotal = function(order) {
+        $scope.calcTotal = function (order) {
 
             return _.reduce(
                 _.map(order.orderPositions, function (position) {
@@ -306,10 +306,10 @@ function MarketplaceCtrl($scope, pricelists, orders, Order) {
 }
 
 MarketplaceCtrl.resolve = {
-    "pricelists": ["PriceLists", function(PriceLists) {
+    "pricelists": ["PriceLists", function (PriceLists) {
         return PriceLists.get().$promise;
     }],
-    "orders": ["Orders", function(Orders) {
+    "orders": ["Orders", function (Orders) {
         return Orders.get().$promise;
     }]
 };
@@ -347,18 +347,18 @@ function OrderCtrl($scope, $filter, $modal, orders) {
 
     };
     $scope.deliveryDates = $filter("unique")(_.map($scope.orders, function (order) {
-        return order.deliveryDate
+        return order.deliveryDate;
     }));
 
 
     $scope.sellers = $filter("unique")(_.map($scope.orders, function (order) {
-            return order.seller
-        }), "id");
+        return order.seller;
+    }), "id");
 
     $scope.sendDateFormat = R.get('order.format.sendDate');
     $scope.deliveryDateFormat = R.get('order.format.deliveryDate');
 
-    $scope.orderStatus = function(order) {
+    $scope.orderStatus = function (order) {
         if (order.status == "PREPARE") {
             return 1;
         }
@@ -382,17 +382,132 @@ function OrderCtrl($scope, $filter, $modal, orders) {
 }
 
 OrderCtrl.resolve = {
-    "orders": ["OrdersOrderPage", function(Orders) {
+    "orders": ["OrdersOrderPage", function (Orders) {
         return Orders.get().$promise;
     }]
 };
 
-angular.module('orderFilters', []).filter('sellerDeliveryDate', function() {
-    return function(orders, sellerId, deliveryDate) {
+OrderPositionCtrl.$inject = ["$scope", "$modalInstance", "$resource", "currentOrder", ];
+function OrderPositionCtrl($scope, $modalInstance, $resource, currentOrder) {
+    $scope.order = angular.copy(currentOrder);
+
+    $scope.priceList;
+
+    $scope.findPriceListPosition = function (orderPosition) {
+        return _.find($scope.priceList.positions, function (priceListPosition) {
+            return orderPosition.priceListPosition == priceListPosition.id;
+        });
+    }
+
+    $scope.refreshOrderPositions = function (order) {
+
+        $scope.order.orderPositions = _.reject(order.orderPositions, function (orderPosition) {
+            var priceListPosition = $scope.findPriceListPosition(orderPosition);
+            return priceListPosition == undefined;
+        });
+
+        _.map(order.orderPositions, function (orderPosition) {
+            var priceListPosition = $scope.findPriceListPosition(orderPosition);
+            priceListPosition.selectedStyle = "success";
+
+            if (priceListPosition.amount < orderPosition.amount) {
+                orderPosition.amount = priceListPosition.amount;
+            }
+
+            if (priceListPosition.price != orderPosition.price) {
+                orderPosition.price = priceListPosition.price;
+            }
+
+            $scope.updatePriceListAmount(orderPosition);
+        });
+    };
+
+    $scope.loadPriceList = function (sellerId, position) {
+        var PriceList = $resource("order/:id/:position/pricelist.json", {id: '@id', position: '@position'});
+        PriceList.get({id: sellerId, position: position}, function (data) {
+            $scope.priceList = data.payload.priceList;
+            $scope.orderPositionTemplate = data.payload.orderPositionTemplate;
+            $scope.refreshOrderPositions($scope.order);
+            _.map($scope.priceList.positions, function (priceListPosition) {
+                priceListPosition.amount = 0;
+            });
+            _.map($scope.order.orderPositions, function (orderPosition) {
+                $scope.updatePriceListAmount(orderPosition);
+            });
+        });
+    };
+
+    $scope.refresh = function () {
+        $scope.loadPriceList($scope.order.seller.id, $scope.order.priceListPosition);
+    }
+
+    $scope.showPriceList = function () {
+        $scope.showHidePriceList = !$scope.showHidePriceList;
+        if ($scope.showHidePriceList) {
+            $scope.refresh();
+        }
+    }
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+    };
+
+
+    $scope.open = function ($event) {
+        $event.preventDefault();
+
+        $event.stopPropagation();
+        $scope.opened = true;
+    };
+
+    $scope.deliveryDateFormat = R.get('order.format.deliveryDate');
+
+    $scope.addOrderPosition = function (priceListPosition) {
+
+        var exitingOrderPosition = _.find($scope.order.orderPositions, function (orderPosition) {
+            return orderPosition.priceListPosition == priceListPosition.id;
+        });
+
+        if (exitingOrderPosition != undefined) {
+            return;
+        }
+
+        var position = angular.copy($scope.orderPositionTemplate);
+        position.product = priceListPosition.product;
+        position.priceListPosition = priceListPosition.id;
+
+        $scope.order.orderPositions.push(position);
+        $scope.refreshOrderPositions($scope.order);
+    }
+
+    $scope.updatePriceListAmount = function (orderPosition) {
+        var position = $scope.findPriceListPosition(orderPosition);
+        position.amount = orderPosition.amount;
+    }
+
+    $scope.save = function (form) {
+        var priceList = $scope.priceLists[index];
+        priceList.position = index;
+
+        if (form.$valid) {
+            priceList.$save({priceListId: index}, function (data) {
+                if (data.ok) {
+                    notifyManager.success("Прайс лист успешно сохранен");
+                }
+                $scope.priceLists[index] = new PriceList(data.payload.priceList);
+
+            })
+        }
+    };
+
+}
+
+angular.module('orderFilters', []).filter('sellerDeliveryDate', function () {
+    return function (orders, sellerId, deliveryDate) {
 
         var resultOrders = [];
 
-        orders.forEach(function(order) {
+        orders.forEach(function (order) {
             if ((sellerId === undefined || sellerId == "" || order.seller.id == sellerId)
                 && (deliveryDate === undefined || deliveryDate == "" || order.deliveryDate == deliveryDate )) {
                 resultOrders.push(order);
@@ -402,8 +517,8 @@ angular.module('orderFilters', []).filter('sellerDeliveryDate', function() {
         return resultOrders;
     };
 })
-    .filter('statusFilter', function() {
-        return function(status) {
+    .filter('statusFilter', function () {
+        return function (status) {
             if (status == "PREPARE") {
                 return R.get('order.status.prepare');
             }
@@ -425,44 +540,21 @@ angular.module('orderFilters', []).filter('sellerDeliveryDate', function() {
             }
         };
     })
-    .filter('deliveryFilter', function(){
-        return function(order) {
-            if(order.delivery) {
+    .filter('deliveryFilter', function () {
+        return function (order) {
+            if (order.delivery) {
                 return R.get('order.delivery.delivery');
             }
 
-            if(order.deliveryFree) {
+            if (order.deliveryFree) {
                 return R.get('order.delivery.deliveryFree');
             }
 
-            if(order.pickup) {
+            if (order.pickup) {
                 return R.get('order.delivery.pickup');
             }
         }
     });
-
-OrderPositionCtrl.$inject = ["$scope","$modalInstance","currentOrder"];
-function OrderPositionCtrl($scope, $modalInstance, currentOrder){
-    $scope.order = currentOrder;
-
-    $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
-    };
-
-    $scope.open = function($event) {
-        $event.preventDefault();
-        $event.stopPropagation();
-
-        $scope.opened = true;
-    };
-
-    $scope.dateOptions = {
-        formatYear: 'yy',
-        startingDay: 1
-    };
-
-    $scope.deliveryDateFormat = R.get('order.format.deliveryDate');
-}
 
 SalesCtrl.$inject = ["$scope"];
 function SalesCtrl($scope) {
@@ -515,8 +607,8 @@ function PriceListCtrl($scope, $filter, notifyManager, priceListResource, PriceL
             return [product.id, {fake: true, product: product}];
         }));
 
-        $scope.selectedVendors = _.map($scope.priceLists, function(priceList){
-           return $scope.fetchVendors(priceList.positions);
+        $scope.selectedVendors = _.map($scope.priceLists, function (priceList) {
+            return $scope.fetchVendors(priceList.positions);
         });
 
         $scope.showAll = {};
@@ -597,22 +689,21 @@ function PriceListCtrl($scope, $filter, notifyManager, priceListResource, PriceL
         };
 
 
-
         $scope.addPositionNextColor = function (priceList, currentProductName, currentProductColorId) {
 
             var productList = $filter("unique")(_.filter($scope.products, function (product) {
                 return product.name == currentProductName;
             }), "color");
 
-             var indexNewElement = 0;
+            var indexNewElement = 0;
 
-            for (var i=0; i<productList.length; i++) {
+            for (var i = 0; i < productList.length; i++) {
                 if (currentProductColorId == productList[i].color.id) {
                     if (i == productList.length - 1) {
                         indexNewElement = 0;
                         break;
                     } else {
-                        indexNewElement = i+1;
+                        indexNewElement = i + 1;
                         break;
                     }
                 }
@@ -647,17 +738,17 @@ function PriceListCtrl($scope, $filter, notifyManager, priceListResource, PriceL
             $scope.nextCurrency[index] = currency;
         };
 
-        $scope.changeCurrency = function(index) {
-            _.each($scope.priceLists[index].positions, function(position) {
+        $scope.changeCurrency = function (index) {
+            _.each($scope.priceLists[index].positions, function (position) {
                 position.price = Math.round(position.price * $scope.exchangeRate[index]);
             });
 
             $scope.priceLists[index].currency = $scope.nextCurrency[index];
         };
 
-        $scope.updateWorkConditions = function(form) {
+        $scope.updateWorkConditions = function (form) {
             if (form.$valid) {
-                $scope.user.$save(function(data){
+                $scope.user.$save(function (data) {
                     if (data.ok) {
                         notifyManager.success("Условия работы успешно сохранены");
                     }

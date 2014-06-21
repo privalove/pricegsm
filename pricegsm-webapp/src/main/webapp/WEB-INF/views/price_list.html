@@ -16,14 +16,14 @@
                         th:attr="on-label=#{on},off-label=#{off},knob-label=#{priceList.active}"
                         model="priceLists[0].active"></toggle-switch>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6 dropdown" is-open="status.isopen">
             <a href="" role="button" class="btn btn-default dropdown-toggle">
                 <span th:text="#{page.priceList.addVendor}">Добавить производителя</span>
                 <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
                 <li ng-repeat="vendor in freeVendors(0)">
-                    <a href="" ng-click="addVendor(vendor, 0)"
+                    <a  class="dropdown-toggle" href="" ng-click="addVendor(vendor, 0);!status.isopen"
                        ng-text="vendor.name">Apple</a>
                 </li>
             </ul>
@@ -34,7 +34,7 @@
             </button>
         </div>
         <div class="col-md-4">
-            <div class="input-group">
+            <div class="input-group dropdown">
                 <a href="" role="button" class="btn btn-default dropdown-toggle input-group-addon">
                     <span th:text="#{page.priceList.changeCurrency}"
                           ng-show="nextCurrency[0].id == priceLists[0].currency.id">Сменить валюту</span>
@@ -44,7 +44,7 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li ng-repeat="curr in currencies">
-                        <a href="" ng-click="setNextCurrency(curr, 0)"
+                        <a class="dropdown-toggle" href="" ng-click="setNextCurrency(curr, 0)"
                            ng-text="curr.name">Доллар США</a>
                     </li>
                 </ul>
@@ -120,11 +120,11 @@
                     </td>
                     <td colspan="2">
                         <div class="row">
-                            <div class="col-xs-12">
+                            <div class="col-xs-12 dropdown">
                                 <a href='' class="dropdown-toggle">добавить модель</a>
                                 <ul class="dropdown-menu">
                                     <li ng-repeat="product in productsByVendor(vendor.id)">
-                                        <a href=""
+                                        <a class="dropdown-toggle" href=""
                                            ng-click="addPosition(priceLists[0], product)">{{product.name}}</a>
                                     </li>
                                 </ul>
@@ -172,14 +172,14 @@
                     <td>
                         <div class="form-group" ng-hide="position.fake">
                             <div class="row">
-                                <div class="col-sm-12">
+                                <div class="col-sm-12 dropdown">
                                     <a href='' class="dropdown-toggle btn btn-default btn-md">
                                         <span ng-bind="position.product.color.name">White</span>
                                         <span class="caret"></span>
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li ng-repeat="product in products | filter:{yandexId:position.product.yandexId}">
-                                            <a href="" ng-click="position.product = product"
+                                            <a class="dropdown-toggle" href="" ng-click="position.product = product"
                                                ng-text="product.color.name">Black</a>
                                         </li>
                                     </ul>

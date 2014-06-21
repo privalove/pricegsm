@@ -3,6 +3,7 @@ package com.pricegsm.domain;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.DateSerializer;
 import com.pricegsm.jackson.GlobalEntityDeserializer;
 import com.pricegsm.jackson.GlobalEntitySerializer;
 import org.hibernate.validator.constraints.NotBlank;
@@ -29,6 +30,8 @@ public class Order
     private User buyer;
 
     private User seller;
+
+    private int priceListPosition;
 
     private Date sendDate;
 
@@ -104,6 +107,15 @@ public class Order
     @JoinColumn(name = "seller_id", referencedColumnName = "id", nullable = false)
     public User getSeller() {
         return seller;
+    }
+
+    @Column(name = "price_list_position", nullable = false)
+    public int getPriceListPosition() {
+        return priceListPosition;
+    }
+
+    public void setPriceListPosition(int position) {
+        this.priceListPosition = position;
     }
 
     public void setSeller(User seller) {
@@ -219,6 +231,7 @@ public class Order
         this.place = place;
     }
 
+    @JsonSerialize(using = DateSerializer.class)
     @Basic
     @Temporal(TemporalType.TIME)
     @Column(name = "from_time")
@@ -230,6 +243,7 @@ public class Order
         this.fromTime = fromTime;
     }
 
+    @JsonSerialize(using = DateSerializer.class)
     @Basic
     @Temporal(TemporalType.TIME)
     @Column(name = "to_time")

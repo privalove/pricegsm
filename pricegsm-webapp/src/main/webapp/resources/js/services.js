@@ -17,6 +17,7 @@
         "PriceLists": "marketplace/pricelists.json",
         "Orders": "marketplace/orders.json",
         "OrdersOrderPage": "order/orders.json",
+        "PriceListOrderPage": "order/:id/:position/pricelist.json",
         "Order": "marketplace/order.json"
     };
 

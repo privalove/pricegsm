@@ -53,7 +53,7 @@ public class PriceListService
 
     @Override
     public PriceList getDefaultInstance() {
-        PriceList result =  super.getDefaultInstance();
+        PriceList result = super.getDefaultInstance();
 
         result.setUser(getCurrentUser());
         result.setSellFromDate(Utils.today());
@@ -72,6 +72,11 @@ public class PriceListService
 
     public List<PriceList> findAllForCurrentUser() {
         return postLoad(getDao().findForUser(principalHolder.getCurrentUser().getId()));
+    }
+
+    //    todo test
+    public PriceList getPriceList(long userId, int position) {
+        return postLoad(getDao().load(new PriceListPK(userId, position)));
     }
 
     @Override
