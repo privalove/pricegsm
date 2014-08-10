@@ -13,21 +13,17 @@
         <div class="text-right col-sm-offset-1 col-sm-2 right-padding-5" th:text="#{order.buyer}">Покупатель:</div>
         <div class="col-sm-3 left-padding-0">{{order.buyer.name}}</div>
     </div>
-    <form class="form-horizontal" name="plForm" ng-submit="save()">
+    <form id="orderForm" class="form-horizontal" name="orderForm" ng-submit="save(orderForm)">
         <div class="row form-group">
             <div class="text-right col-sm-offset-1 col-sm-2 control-label right-padding-5"
-                 th:text="#{order.contactData}">Контактные
-                данные:
-            </div>
+                 th:text="#{order.contactData}">Контактные данные:</div>
             <div class="col-sm-offset-2 col-sm-3">
-                <label class="radio-inline">
-                    <input name="pickupPlace" type="radio" ng-model="order.pickup"
-                           th:value="#{order.delivery.pickup}" value="order.delivery.pickup"/>
+                <label class="radio-inline" ng-show="{{order.seller.sellerPickup}}">
+                    <input name="pickup" type="radio" ng-model="order.pickup" ng-value="true" ng-change="resetOtherDelivery('pickup')"/>
                     <span pg-text="order.delivery.pickup"></span>
                 </label>
-                <label class="radio-inline">
-                    <input name="pickupPlace" type="radio" ng-model="order.delivery"
-                           th:value="#{order.delivery.pickup}" value="order.delivery.pickup"/>
+                <label class="radio-inline" ng-show="{{order.seller.sellerDelivery}}">
+                    <input name="pickup" type="radio" ng-model="order.delivery" ng-value="true" ng-change="resetOtherDelivery('delivery')"/>
                     <span pg-text="order.delivery.delivery"></span>
                 </label>
             </div>
@@ -65,7 +61,7 @@
             <div class="col-sm-2 margin-top-34 left-padding-0">
                 <p class="input-group">
                     <input type="text" class="form-control" datepicker-popup="{{deliveryDateFormat}}"
-                           ng-model="$parent.order.deliveryDate" is-open="opened"
+                           ng-model="$parent.order.deliveryDate" is-open="$parent.opened"
                            ng-required="true" close-text="Close" required="required"
                            close-text="Close"/>
                         <span class="input-group-btn">
@@ -105,7 +101,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="orderPosition in order.orderPositions">
+                    <tr class="{{orderPosition.selectedStyle}}" ng-repeat="orderPosition in order.orderPositions">
                         <td>{{orderPosition.product.name}}</td>
                         <td>{{orderPosition.product.color.name}}</td>
                         <td>{{orderPosition.product.description}}</td>
@@ -116,12 +112,19 @@
                                    ng-model="orderPosition.amount"/>
                         </td>
                         <td>{{orderPosition.price}}</td>
-                        <td>{{orderPosition.price * orderPosition.amount}}</td>
+                        <td>{{getPositionTotalPrice(orderPosition)}}</td>
                         <td>
-                            <button type="button" class="btn btn-xs btn-danger" tooltip="Удалить">
+                            <button type="button" class="btn btn-xs btn-danger" tooltip="Удалить" ng-click="deleteOrderPosition(orderPosition)">
                                 <i class="fa fa-times"></i>
                             </button>
                         </td>
+                    </tr>
+                    <tr></tr>
+                    <tr>
+                        <th colspan="4"></th>
+                        <th colspan="1"><span>Итого:</span></th>
+                        <th colspan="1"><span>{{calcTotalPrice(order)}}</span></th>
+                        <th colspan="1"></th>
                     </tr>
                     </tbody>
                 </table>
@@ -136,8 +139,7 @@
                         btn-checkbox-true="1"
                         btn-checkbox-false="0"
                         ng-click="$parent.showPriceList()"
-                tooltip="Подбор из прайс-листа">
-                    <!--ng-click="$parent.showHidePriceList = !$parent.showHidePriceList"-->
+                        tooltip="Подбор из прайс-листа">
                     <span>Подбор из прайс-листа</span>
                 </button>
                 <button type="button" class="btn btn-default" tooltip="Обновить" ng-click="$parent.refresh()">
@@ -185,7 +187,17 @@
 
 <footer class="modal-footer">
 
-    <button type="submit" class="btn btn-success" ng-disabled="!plForm.$valid">
+    <button type="button" class="btn btn-default" ng-click="print()" ng-disabled="!formEnable(orderForm)">
+        <i class="fa fa-print"></i>
+        <span>Печать</span>
+    </button>
+
+    <button type="button" class="btn btn-default" ng-click="review(order)" ng-disabled="!formEnable(orderForm)">
+        <i class="fa fa-save"></i>
+        <span>Посмотреть</span>
+    </button>
+
+    <button type="submit" class="btn btn-success" form="orderForm" ng-disabled="!formEnable(orderForm)">
         <i class="fa fa-save"></i>
         <span>Отправить</span>
     </button>

@@ -781,6 +781,10 @@ angular.module('ui.bootstrap.dateparser', [])
 
     format = $locale.DATETIME_FORMATS[format] || format;
 
+    if (!format) {
+        return input;
+    }
+
     if ( !this.parsers[format] ) {
       this.parsers[format] = this.createParser(format);
     }

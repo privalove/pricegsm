@@ -6,7 +6,7 @@ alter table "order" add column price_list_position integer NOT NULL;
 
 INSERT INTO base_user (id, name, email, password) VALUES (100, 'Поставщик 2', 'seller2@pricegsm.com', '8e56be82bda733fa92b4430a8bcaf6f866e01e80d2934341b4c2a5fe02e4d48cf9ebe3d516a70d27');
 
-INSERT INTO pricegsm_user (id, region_id, token, email_valid) VALUES (100, 1, '4771044d44ef4242a0d84ae095f6f3d0', TRUE);
+INSERT INTO pricegsm_user (id, region_id, token, email_valid, seller_pickup, seller_delivery) VALUES (100, 1, '4771044d44ef4242a0d84ae095f6f3d0', TRUE, TRUE, TRUE);
 
 insert into pricelist (user_id, position, currency_id, sell_from_date, sell_to_date, version)
 values (100, 99, 1, '2014-03-01', '2015-03-01', 1);
@@ -46,7 +46,7 @@ VALUES (4, 3, 100, 99, 1, '2014-03-01', 'CANCELED', '+375291234567', 'ул. Ор
 
 INSERT INTO "order" (
 id, buyer_id, seller_id, price_list_position, currency_id, send_date, status, phone, place, contact_name, delivery, pickup, free_delivery, from_time, to_time, delivery_date, total_price, total_amount, version)
-VALUES (5, 3, 100, 99, 2, '2014-03-01', 'PREPARE', '+375291234567', 'ул. Орловская4', 'пётр петров', true,false,false, '10:00', '11:00', '2014-03-03', 5000, 200, 1);
+VALUES (5, 3, 100, 99, 2, '2014-03-01', 'PREPARE', '+375291234567', 'ул. Орловская4', 'пётр петров', false,false,false, '10:00', '11:00', '2014-03-03', 5000, 200, 1);
 
 INSERT INTO "order" (
 id, buyer_id, seller_id, price_list_position, currency_id, send_date, status, phone, place, contact_name, delivery, pickup, free_delivery, from_time, to_time, delivery_date, total_price, total_amount, version)
@@ -66,15 +66,15 @@ VALUES (9, 3, 100, 99, 1, '2014-03-01', 'CANCELED', '+375291234567', 'ул. Ор
 
 INSERT INTO "order" (
 id, buyer_id, seller_id, price_list_position, currency_id, send_date, status, phone, place, contact_name, delivery, pickup, free_delivery, from_time, to_time, delivery_date, total_price, total_amount, version)
-VALUES (10, 3, 100, 99, 2, '2014-03-01', 'PREPARE', '+375291234567', 'ул. Орловская4', 'пётр петров', true,false,false, '10:00', '11:00', '2014-02-03', 5000, 200, 1);
+VALUES (10, 3, 100, 99, 2, '2014-03-01', 'PREPARE', '+375291234567', 'ул. Орловская4', 'пётр петров', false,false,false, '10:00', '11:00', '2014-02-03', 5000, 200, 1);
 
 INSERT INTO "order" (
 id, buyer_id, seller_id, price_list_position, currency_id, send_date, status, phone, place, contact_name, delivery, pickup, free_delivery, from_time, to_time, delivery_date, total_price, total_amount, version)
-VALUES (11, 3, 2, 0, 2, '2014-03-01', 'PREPARE', '+375291234567', 'ул. Орловская1', 'пётр петров', false,true,false, '10:00', '11:00', '2014-02-01', 5000, 200, 1);
+VALUES (11, 3, 2, 0, 2, '2014-03-01', 'PREPARE', '+375291234567', 'ул. Орловская1', 'пётр петров', false,false,false, '10:00', '11:00', '2014-02-01', 5000, 200, 1);
 
 INSERT INTO "order" (
 id, buyer_id, seller_id, price_list_position, currency_id, send_date, status, phone, place, contact_name, delivery, pickup, free_delivery, from_time, to_time, delivery_date, total_price, total_amount, version)
-VALUES (12, 3, 2, 0, 3, '2014-03-01', 'PREPARE', '+375291234567', 'ул. Орловская2', 'пётр петров', false,false,true, '10:00', '11:00', '2014-02-03', 5000, 200, 1);
+VALUES (12, 3, 2, 0, 3, '2014-03-01', 'PREPARE', '+375291234567', 'ул. Орловская2', 'пётр петров', false,false,false, '10:00', '11:00', '2014-02-03', 5000, 200, 1);
 
 INSERT INTO "order_position" (id, order_id, "position", product_id, total_price, price, amount, price_list_position, version)
 VALUES (1, 1, 1, 4, 100, 20, 5, 110, 1);

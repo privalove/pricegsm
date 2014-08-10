@@ -314,15 +314,27 @@ MarketplaceCtrl.resolve = {
     }]
 };
 
-OrderCtrl.$inject = ["$scope", "$filter", "$modal", "orders"];
-function OrderCtrl($scope, $filter, $modal, orders) {
+OrderCtrl.$inject = ["$scope", "$filter", "$modal", "$resource", "orders", "notifyManager"];
+function OrderCtrl($scope, $filter, $modal, $resource, orders, notifyManager) {
     if (orders.ok) {
         $scope.orders = orders.payload.orders;
     }
 
+    function getOrderIndex(order) {
+        var actualIndex = null;
+        _.map($scope.orders, function (currentOrder, index) {
+            if (currentOrder.id == order.id) {
+                actualIndex = index;
+            }
+            return currentOrder;
+        });
+        return actualIndex;
+    }
+
     $scope.orderDetails = function (currentOrder) {
+        var orderModal;
         if (currentOrder.status == "PREPARE") {
-            $modal.open({
+            orderModal = $modal.open({
                 templateUrl: "resources/template/orderPositionPrepare.html",
                 controller: OrderPositionCtrl,
                 size: "lg",
@@ -333,7 +345,7 @@ function OrderCtrl($scope, $filter, $modal, orders) {
                 }
             });
         } else {
-            $modal.open({
+            orderModal = $modal.open({
                 templateUrl: "resources/template/orderPosition.html",
                 controller: OrderPositionCtrl,
                 size: "lg",
@@ -344,18 +356,55 @@ function OrderCtrl($scope, $filter, $modal, orders) {
                 }
             });
         }
+        orderModal.result.then(function (savedOrder) {
+            if (savedOrder.orderPositions.length != 0) {
+                saveOrder(savedOrder);
+            } else {
+                deleteOrder(savedOrder, getOrderIndex(savedOrder))
+            }
+        });
+    }
 
-    };
+    function saveOrder(savedOrder) {
+        var Order = $resource("order/:order/:orderId/order.json", {orderId: '@id'});
+        new Order(savedOrder).$save({orderId: savedOrder.id},function (data) {
+            if (data.ok) {
+                updateOrderList(data.payload.order);
+                notifyManager.success("Заказ успешно отправлен");
+            }
+        });
+    }
+
+    var updateOrderList = function (savedOrder) {
+        var actualIndex = getOrderIndex(savedOrder);
+        if (actualIndex != null) {
+            $scope.orders.splice(actualIndex, 1);
+            $scope.orders.push(savedOrder);
+        }
+    }
+
+    function deleteOrder(order, index) {
+        var DeleteOrder = $resource('order/:orderId/delete', {orderId: '@id'});
+        DeleteOrder.delete({orderId: order.id}, function () {
+            $scope.orders.splice(index, 1)
+            notifyManager.success("Заказ успешно удалён");
+        });
+    }
+
+    $scope.deleteOrder = function ($event, index, order) {
+        $event.stopPropagation();
+        deleteOrder(order, index);
+    }
+
     $scope.deliveryDates = $filter("unique")(_.map($scope.orders, function (order) {
         return order.deliveryDate;
     }));
 
-
     $scope.sellers = $filter("unique")(_.map($scope.orders, function (order) {
         return order.seller;
     }), "id");
-
     $scope.sendDateFormat = R.get('order.format.sendDate');
+
     $scope.deliveryDateFormat = R.get('order.format.deliveryDate');
 
     $scope.orderStatus = function (order) {
@@ -387,11 +436,11 @@ OrderCtrl.resolve = {
     }]
 };
 
-OrderPositionCtrl.$inject = ["$scope", "$modalInstance", "$resource", "currentOrder", ];
-function OrderPositionCtrl($scope, $modalInstance, $resource, currentOrder) {
+OrderPositionCtrl.$inject = ["$scope", "$modal", "$modalInstance", "$resource", "currentOrder"];
+function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, currentOrder) {
     $scope.order = angular.copy(currentOrder);
 
-    $scope.priceList;
+    $scope.priceList = null;
 
     $scope.findPriceListPosition = function (orderPosition) {
         return _.find($scope.priceList.positions, function (priceListPosition) {
@@ -417,6 +466,8 @@ function OrderPositionCtrl($scope, $modalInstance, $resource, currentOrder) {
             if (priceListPosition.price != orderPosition.price) {
                 orderPosition.price = priceListPosition.price;
             }
+
+            $scope.calcTotalPrice($scope.order);
 
             $scope.updatePriceListAmount(orderPosition);
         });
@@ -481,24 +532,110 @@ function OrderPositionCtrl($scope, $modalInstance, $resource, currentOrder) {
     }
 
     $scope.updatePriceListAmount = function (orderPosition) {
-        var position = $scope.findPriceListPosition(orderPosition);
-        position.amount = orderPosition.amount;
+        if ($scope.priceList != null) {
+            var position = $scope.findPriceListPosition(orderPosition);
+            position.amount = orderPosition.amount;
+        }
+        if (orderPosition.amount == 0) {
+            orderPosition.selectedStyle = "danger";
+
+        } else {
+            orderPosition.selectedStyle = "";
+        }
+    }
+
+    $scope.formEnable = function (orderForm) {
+        var exitingOrderPosition = _.find($scope.order.orderPositions, function (orderPosition) {
+            return orderPosition.amount == 0;
+        });
+        return exitingOrderPosition == undefined
+            && orderForm.$valid
+            && ($scope.order.delivery || $scope.order.deliveryFree || $scope.order.pickup);
+    }
+
+    $scope.resetOtherDelivery = function (selectedDeliveryType) {
+        if(selectedDeliveryType != "delivery"){
+            $scope.order.delivery = false;
+        }
+        if(selectedDeliveryType != "pickup"){
+            $scope.order.pickup = false;
+        }
+        $scope.order.deliveryFree = false;
+    }
+
+    $scope.getPositionTotalPrice = function (orderPosition) {
+        var amount = orderPosition.amount;
+        if (amount == undefined) {
+            return 0;
+        }
+        return  orderPosition.price * amount;
+    }
+
+    $scope.calcTotalPrice = function (order) {
+
+        return _.reduce(
+            _.map(order.orderPositions, function (position) {
+                return $scope.getPositionTotalPrice(position)
+            }),
+            function (memo, num) {
+                return memo + num
+            }, 0)
+    }
+
+    $scope.deleteOrderPosition = function (index) {
+        $scope.order.orderPositions.splice(index, 1);
+        if ($scope.priceList != null) {
+            $scope.refresh()
+        }
     }
 
     $scope.save = function (form) {
-        var priceList = $scope.priceLists[index];
-        priceList.position = index;
-
         if (form.$valid) {
-            priceList.$save({priceListId: index}, function (data) {
-                if (data.ok) {
-                    notifyManager.success("Прайс лист успешно сохранен");
-                }
-                $scope.priceLists[index] = new PriceList(data.payload.priceList);
-
-            })
+            $scope.refresh();
+            $scope.order.totalAmount = $scope.calcTotalAmount($scope.order);
+            $scope.order.status = "SENT";
+            $scope.order.totalPrice = $scope.calcTotalPrice($scope.order);
+            $scope.ok($scope.order);
         }
     };
+
+    $scope.review = function (order) {
+        $modal.open({
+            templateUrl: "resources/template/orderPosition.html",
+            controller: OrderPositionCtrl,
+            size: "lg",
+            resolve: {
+                currentOrder: function () {
+                    return order;
+                }
+            }
+        });
+    }
+
+    $scope.print = function () {
+        $scope.review($scope.order);
+        var printContents = document.getElementById("orderView").innerHTML;
+        var popupWin = window.open('', '_blank');
+        popupWin.document.open()
+        popupWin.document.write('<html><head><link href="/pricegsm/resources/components/bootstrap/dist/css/bootstrap.min.css" type="text/css" rel="stylesheet"></head><body onload="window.print()">' + printContents + '</html>');
+        popupWin.document.close();
+        $scope.cancel();
+    }
+
+    $scope.ok = function (resultOrder) {
+        $modalInstance.close(resultOrder);
+    }
+
+    $scope.calcTotalAmount = function (order) {
+
+        return _.reduce(
+            _.map(order.orderPositions, function (position) {
+                return position.amount;
+            }),
+            function (memo, num) {
+                return memo + num;
+            }, 0)
+    }
 
 }
 

@@ -51,7 +51,7 @@
                                 <td>{{order.status | statusFilter}}</td>
                                 <td>
                                     <button type="button" class="btn btn-xs btn-danger" tooltip="Удалить"
-                                            ng-click="orders.splice($index, 1)">
+                                            ng-click="deleteOrder($event, $index, order)">
                                         <i class="fa fa-times"></i>
                                     </button>
                                 </td>

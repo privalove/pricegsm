@@ -100,13 +100,16 @@ public class Order
         this.buyer = buyer;
     }
 
-    @JsonSerialize(using = GlobalEntitySerializer.class)
     @JsonDeserialize(using = GlobalEntityDeserializer.class)
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "seller_id", referencedColumnName = "id", nullable = false)
     public User getSeller() {
         return seller;
+    }
+
+    public void setSeller(User seller) {
+        this.seller = seller;
     }
 
     @Column(name = "price_list_position", nullable = false)
@@ -116,10 +119,6 @@ public class Order
 
     public void setPriceListPosition(int position) {
         this.priceListPosition = position;
-    }
-
-    public void setSeller(User seller) {
-        this.seller = seller;
     }
 
     @Basic

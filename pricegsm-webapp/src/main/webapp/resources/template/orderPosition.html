@@ -4,7 +4,7 @@
     <h1 class="gf-modal-heading" pg-text="orderPosition">Order</h1>
 </header>
 
-<div xmlns:th="http://www.thymeleaf.org">
+<div id="orderView" xmlns:th="http://www.thymeleaf.org">
     <div class="row">
         <div class="text-right col-sm-offset-1 col-sm-2 right-padding-5" th:text="#{order.seller}">Поставщик:</div>
         <div class="col-sm-3 left-padding-0">{{order.seller.name}}</div>
@@ -54,7 +54,12 @@
                     <td>{{orderPosition.product.description}}</td>
                     <td>{{orderPosition.amount}}</td>
                     <td>{{orderPosition.price}}</td>
-                    <td>{{orderPosition.totalPrice}}</td>
+                    <td>{{orderPosition.price * orderPosition.amount}}</td>
+                </tr>
+                <tr>
+                    <th colspan="4"></th>
+                    <th colspan="1"><span>Итого:</span></th>
+                    <th colspan="1"><span>{{calcTotalPrice(order)}}</span></th>
                 </tr>
                 </tbody>
             </table>
@@ -64,6 +69,10 @@
 </div>
 
 <footer class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="print()">
+        <i class="fa fa-print"></i>
+        <span>Печать</span>
+    </button>
     <button type="reset" class="btn btn-default" data-dismiss="modal" aria-hidden="true" ng-click="cancel()"><i
             class="fa fa-times-circle fa-lg"></i> <span pg-text="button.close"></span></button>
 </footer>

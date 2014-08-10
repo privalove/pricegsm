@@ -17,6 +17,8 @@ import org.springframework.stereotype.Component;
 public class TestPrincipalHolder extends AbstractPrincipalHolder {
     @Override
     public BaseUser getCurrentUser() {
-        return new User();
+        User user = new User();
+        user.setId(10001L);
+        return user;
     }
 }

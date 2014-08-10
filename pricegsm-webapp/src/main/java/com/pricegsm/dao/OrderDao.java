@@ -14,4 +14,12 @@ public class OrderDao
                 .getResultList();
         return buyer;
     }
+
+    public Order findByUserIdOrderId(long buyerId, long orderId) {
+        return (Order) getEntityManager().createQuery(
+                "select o from Order o where o.id = :id and o.buyer.id = :buyer")
+                .setParameter("id", orderId)
+                .setParameter("buyer", buyerId)
+                .getSingleResult();
+    }
 }

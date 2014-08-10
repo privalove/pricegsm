@@ -22,4 +22,8 @@ public class OrderService
     public List<Order> findByBuyer(long buyerId) {
         return getDao().findByBuyer(buyerId);
     }
+
+    public Order getCurrentUserOrderById(long buyerId, long orderId) {
+        return getDao().findByUserIdOrderId(buyerId, orderId);
+    }
 }
