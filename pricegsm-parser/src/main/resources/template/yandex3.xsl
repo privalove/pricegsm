@@ -3,15 +3,15 @@
 
     <xsl:template match="/">
         <result>
-        <xsl:apply-templates select="//div[@class='b-offers ']"/>
+        <xsl:apply-templates select="//div[@class='b-serp__item b-offers ']"/>
         <xsl:apply-templates select="//p[@class='search-stat']"/>
         </result>
     </xsl:template>
 
-    <xsl:template match="//div[@class='b-offers ']">
+    <xsl:template match="//div[@class='b-serp__item b-offers ']">
         <offer>
             <price>
-                <xsl:value-of select="replace(.//span[@class='b-prices__num']/text(), '[^0-9]' ,'')"/>
+                <xsl:value-of select="replace(.//span[@class='b-old-prices__num']/text(), '[^0-9]' ,'')"/>
             </price>
 
             <xsl:apply-templates select=".//div[@class='b-offers__feats']"/>
