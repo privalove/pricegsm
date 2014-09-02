@@ -77,7 +77,7 @@ public class Order
     }
 
     @Valid
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "order", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @OrderColumn(name = "position")
     public Set<OrderPosition> getOrderPositions() {
         return orderPositions;

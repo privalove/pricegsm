@@ -367,7 +367,7 @@ function OrderCtrl($scope, $filter, $modal, $resource, orders, notifyManager) {
 
     function saveOrder(savedOrder) {
         var Order = $resource("order/:order/:orderId/order.json", {orderId: '@id'});
-        new Order(savedOrder).$save({orderId: savedOrder.id},function (data) {
+        new Order(savedOrder).$save({orderId: savedOrder.id}, function (data) {
             if (data.ok) {
                 updateOrderList(data.payload.order);
                 notifyManager.success("Заказ успешно отправлен");
@@ -473,7 +473,7 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, currentOrd
         });
     };
 
-    $scope.loadPriceList = function (sellerId, position) {
+    $scope.loadPriceList = function (sellerId, position, callback) {
         var PriceList = $resource("order/:id/:position/pricelist.json", {id: '@id', position: '@position'});
         PriceList.get({id: sellerId, position: position}, function (data) {
             $scope.priceList = data.payload.priceList;
@@ -485,11 +485,14 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, currentOrd
             _.map($scope.order.orderPositions, function (orderPosition) {
                 $scope.updatePriceListAmount(orderPosition);
             });
+            if (callback != null && callback != undefined) {
+                callback();
+            }
         });
     };
 
-    $scope.refresh = function () {
-        $scope.loadPriceList($scope.order.seller.id, $scope.order.priceListPosition);
+    $scope.refresh = function (callback) {
+        $scope.loadPriceList($scope.order.seller.id, $scope.order.priceListPosition, callback);
     }
 
     $scope.showPriceList = function () {
@@ -524,6 +527,8 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, currentOrd
         }
 
         var position = angular.copy($scope.orderPositionTemplate);
+        position.order = {id: currentOrder.id, name: ""};
+        position.totalPrice = 0;
         position.product = priceListPosition.product;
         position.priceListPosition = priceListPosition.id;
 
@@ -542,6 +547,8 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, currentOrd
         } else {
             orderPosition.selectedStyle = "";
         }
+
+        orderPosition.totalPrice = $scope.getPositionTotalPrice(orderPosition);
     }
 
     $scope.formEnable = function (orderForm) {
@@ -554,10 +561,10 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, currentOrd
     }
 
     $scope.resetOtherDelivery = function (selectedDeliveryType) {
-        if(selectedDeliveryType != "delivery"){
+        if (selectedDeliveryType != "delivery") {
             $scope.order.delivery = false;
         }
-        if(selectedDeliveryType != "pickup"){
+        if (selectedDeliveryType != "pickup") {
             $scope.order.pickup = false;
         }
         $scope.order.deliveryFree = false;
@@ -589,13 +596,15 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, currentOrd
         }
     }
 
-    $scope.save = function (form) {
+    $scope.save = function (form, status) {
+
         if (form.$valid) {
-            $scope.refresh();
-            $scope.order.totalAmount = $scope.calcTotalAmount($scope.order);
-            $scope.order.status = "SENT";
-            $scope.order.totalPrice = $scope.calcTotalPrice($scope.order);
-            $scope.ok($scope.order);
+            $scope.refresh(function () {
+                $scope.order.totalAmount = $scope.calcTotalAmount($scope.order);
+                $scope.order.status = status;
+                $scope.order.totalPrice = $scope.calcTotalPrice($scope.order);
+                $scope.ok($scope.order);
+            });
         }
     };
 
