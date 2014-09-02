@@ -18,12 +18,12 @@
             <div class="text-right col-sm-offset-1 col-sm-2 control-label right-padding-5"
                  th:text="#{order.contactData}">Контактные данные:</div>
             <div class="col-sm-offset-2 col-sm-3">
-                <label class="radio-inline" ng-show="{{order.seller.sellerPickup}}">
-                    <input name="pickup" type="radio" ng-model="order.pickup" ng-value="true" ng-change="resetOtherDelivery('pickup')"/>
+                <label class="radio-inline" >
+                    <input ng-disabled="{{!order.seller.sellerPickup}}" name="pickup" type="radio" ng-model="order.pickup" ng-value="true" ng-change="resetOtherDelivery('pickup')"/>
                     <span pg-text="order.delivery.pickup"></span>
                 </label>
-                <label class="radio-inline" ng-show="{{order.seller.sellerDelivery}}">
-                    <input name="pickup" type="radio" ng-model="order.delivery" ng-value="true" ng-change="resetOtherDelivery('delivery')"/>
+                <label class="radio-inline" >
+                    <input ng-disabled="{{!order.seller.sellerDelivery}}" name="delivery" type="radio" ng-model="order.delivery" ng-value="true" ng-change="resetOtherDelivery('delivery')"/>
                     <span pg-text="order.delivery.delivery"></span>
                 </label>
             </div>
@@ -33,14 +33,11 @@
                    pg-text="order.name">Имя</label>
 
             <div class="col-sm-2  left-padding-0">
-                <input type="text" class="form-control"
-                       placeholder={{order.contactName}}
-                       ng-model="order.contactName"/>
+                <input type="text" class="form-control" placeholder={{order.contactName}} ng-model="order.contactName"/>
             </div>
             <div class="col-sm-2">
-                <input type="text" class="form-control"
-                       placeholder={{order.place}}
-                       ng-model="order.place"/>
+                <input ng-show="order.pickup" ng-disabled="true" type="text" class="form-control" placeholder={{order.seller.sellerPickupPlace}} ng-model="order.seller.sellerPickupPlace"/>
+                <input ng-show="order.delivery" ng-disabled="true" type="text" class="form-control" placeholder={{order.place}} ng-model="order.place"/>
             </div>
         </div>
 
@@ -71,6 +68,10 @@
                             </button>
                         </span>
                 </p>
+                <!--<select class="form-control" ng-model="deliveryDate">-->
+                    <!--<option value="" th:text="#{page.order.all}">все</option>-->
+                    <!--<option ng-repeat="deliveryDate in deliveryDates">{{deliveryDate}}</option>-->
+                <!--</select>-->
             </div>
             <div class="col-sm-4">
                 <label class="margin-top-5">с</label>
