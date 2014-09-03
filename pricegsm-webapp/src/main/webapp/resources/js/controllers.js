@@ -428,6 +428,10 @@ function OrderCtrl($scope, $filter, $modal, $resource, orders, notifyManager) {
             return 5;
         }
     };
+
+    $scope.deliveryDateOrder = function (order) {
+        return new Date(order.deliveryDate);
+    };
 }
 
 OrderCtrl.resolve = {
@@ -436,11 +440,31 @@ OrderCtrl.resolve = {
     }]
 };
 
-OrderPositionCtrl.$inject = ["$scope", "$modal", "$modalInstance", "$resource", "currentOrder"];
-function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, currentOrder) {
+OrderPositionCtrl.$inject = ["$scope", "$modal", "$modalInstance", "$resource", "$filter", "currentOrder"];
+function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, currentOrder) {
     $scope.order = angular.copy(currentOrder);
 
     $scope.priceList = null;
+
+    $scope.deliveryDateFormat = R.get('order.format.deliveryDate');
+
+    var today = new Date();
+    var todayString = $filter('date')(today, $scope.deliveryDateFormat);
+    var tomorrowString = $filter('date')(new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1), $scope.deliveryDateFormat);
+    var deliveryDate = new Date($scope.order.deliveryDate);
+    deliveryDate = new Date(deliveryDate.getFullYear(), deliveryDate.getMonth(), deliveryDate.getDate(), today.getHours(), today.getMinutes(), today.getSeconds(), today.getMilliseconds());
+    var deliveryDateString = $filter('date')(deliveryDate, $scope.deliveryDateFormat);
+    if (today >= deliveryDate) {
+        $scope.order.deliveryDate = todayString;
+    } else {
+        $scope.order.deliveryDate = deliveryDateString;
+    }
+    if (today.getHours() < 21) {
+        $scope.possibleDeliveryDates = [todayString, tomorrowString];
+    } else {
+        var afterTomorrowString = $filter('date')(new Date(today.getFullYear(), today.getMonth(), today.getDate() + 2), $scope.deliveryDateFormat);
+        $scope.possibleDeliveryDates = [today, tomorrowString, afterTomorrowString];
+    }
 
     $scope.findPriceListPosition = function (orderPosition) {
         return _.find($scope.priceList.positions, function (priceListPosition) {
@@ -513,8 +537,6 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, currentOrd
         $event.stopPropagation();
         $scope.opened = true;
     };
-
-    $scope.deliveryDateFormat = R.get('order.format.deliveryDate');
 
     $scope.addOrderPosition = function (priceListPosition) {
 

@@ -204,4 +204,13 @@ public class OrderControllerTest extends WebAppConfigurationAware {
     public void testDeleteOrder() throws Exception  {
         mockMvc.perform(delete("/order/1004/delete"));
     }
+
+    @Test
+    public void testDeleteOrderPosition() {
+        // Given
+//        todo
+        // When
+
+        // Then
+    }
 }

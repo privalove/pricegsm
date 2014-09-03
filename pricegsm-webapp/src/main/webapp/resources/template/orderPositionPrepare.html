@@ -56,22 +56,24 @@
             </label>
 
             <div class="col-sm-2 margin-top-34 left-padding-0">
-                <p class="input-group">
-                    <input type="text" class="form-control" datepicker-popup="{{deliveryDateFormat}}"
-                           ng-model="$parent.order.deliveryDate" is-open="$parent.opened"
-                           ng-required="true" close-text="Close" required="required"
-                           close-text="Close"/>
-                        <span class="input-group-btn">
-                            <button style="z-index: 100" type="button" class="btn btn-default"
-                                    ng-click="$parent.open($event)">
-                                <i class="glyphicon glyphicon-calendar"></i>
-                            </button>
-                        </span>
-                </p>
-                <!--<select class="form-control" ng-model="deliveryDate">-->
-                    <!--<option value="" th:text="#{page.order.all}">все</option>-->
-                    <!--<option ng-repeat="deliveryDate in deliveryDates">{{deliveryDate}}</option>-->
-                <!--</select>-->
+                <!--<p class="input-group">-->
+                    <!--<input type="text" class="form-control" datepicker-popup="{{deliveryDateFormat}}"-->
+                           <!--ng-model="$parent.order.deliveryDate" is-open="$parent.opened"-->
+                           <!--ng-required="true" close-text="Close" required="required"-->
+                           <!--close-text="Close"/>-->
+                        <!--<span class="input-group-btn">-->
+                            <!--<button style="z-index: 100" type="button" class="btn btn-default"-->
+                                    <!--ng-click="$parent.open($event)">-->
+                                <!--<i class="glyphicon glyphicon-calendar"></i>-->
+                            <!--</button>-->
+                        <!--</span>-->
+                <!--</p>-->
+                <select class="form-control" ng-model="order.deliveryDate"
+                        ng-options="deliveryDate for deliveryDate in possibleDeliveryDates">
+                    <!--<option ng-repeat="deliveryDate in possibleDeliveryDates">-->
+                        <!--{{deliveryDate | date:deliveryDateFormat}}-->
+                    <!--</option>-->
+                </select>
             </div>
             <div class="col-sm-4">
                 <label class="margin-top-5">с</label>

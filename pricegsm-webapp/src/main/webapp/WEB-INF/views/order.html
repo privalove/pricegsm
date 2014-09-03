@@ -19,7 +19,7 @@
                     <div class="col-sm-3">
                         <select class="form-control" ng-model="deliveryDate">
                             <option value="" th:text="#{page.order.all}">все</option>
-                            <option ng-repeat="deliveryDate in deliveryDates">{{deliveryDate}}</option>
+                            <option ng-repeat="deliveryDate in deliveryDates | orderBy : [deliveryDate]">{{deliveryDate}}</option>
                         </select>
                     </div>
                 </div>
@@ -40,7 +40,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="order in orders | sellerDeliveryDate:seller:deliveryDate | orderBy : [orderStatus, order.deliveryDate]" ng-click="orderDetails(order)">
+                            <tr ng-repeat="order in orders | sellerDeliveryDate:seller:deliveryDate | orderBy : [orderStatus, deliveryDateOrder]" ng-click="orderDetails(order)">
                                 <td>{{order.sendDate|date:sendDateFormat}}</td>
                                 <td>{{order.seller.name}}</td>
                                 <td>{{order.totalPrice}}</td>
