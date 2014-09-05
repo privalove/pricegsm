@@ -448,23 +448,39 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
 
     $scope.deliveryDateFormat = R.get('order.format.deliveryDate');
 
+    $scope.showSaveError = false;
+
     var baseDateFormat = "yyyy-MM-dd";
-    var today = new Date();
-    var todayString = $filter('date')(today, baseDateFormat);
-    var tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
-    var tomorrowString = $filter('date')(tomorrow, baseDateFormat);
-    var deliveryDate = new Date($scope.order.deliveryDate);
-    deliveryDate = new Date(deliveryDate.getFullYear(), deliveryDate.getMonth(), deliveryDate.getDate(), today.getHours(), today.getMinutes(), today.getSeconds(), today.getMilliseconds());
-    if (today >= deliveryDate) {
-        $scope.order.deliveryDate = todayString;
+
+    function compareDates(date1, date2) {
+        date1 = new Date(date1.getFullYear(), date1.getMonth(), date1.getDate());
+        date2 = new Date(date2.getFullYear(), date2.getMonth(), date2.getDate());
+        if (date1 > date2) {
+            return 1;
+        }
+        if (date1 == date2) {
+            return 0;
+        }
+        if (date1 < date2) {
+            return -1;
+        }
     }
-    if (today.getHours() < 21) {
-        $scope.possibleDeliveryDates = [todayString, tomorrowString];
-    } else {
-        var afterTomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 2);
-        var afterTomorrowString = $filter('date')(afterTomorrow, baseDateFormat);
-        $scope.possibleDeliveryDates = [todayString, tomorrowString, afterTomorrowString];
+    $scope.showPastDate = compareDates(new Date(), new Date($scope.order.deliveryDate)) > 0;
+
+    function getPossibleDeliveryDates() {
+        var today = new Date();
+        var todayString = $filter('date')(today, baseDateFormat);
+        var tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+        var tomorrowString = $filter('date')(tomorrow, baseDateFormat);
+        if (today.getHours() < 21) {
+            return [todayString, tomorrowString];
+        } else {
+            var afterTomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 2);
+            var afterTomorrowString = $filter('date')(afterTomorrow, baseDateFormat);
+            return [todayString, tomorrowString, afterTomorrowString];
+        }
     }
+    $scope.possibleDeliveryDates = getPossibleDeliveryDates();
 
     $scope.findPriceListPosition = function (orderPosition) {
         return _.find($scope.priceList.positions, function (priceListPosition) {
@@ -516,6 +532,14 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
     };
 
     $scope.refresh = function (callback) {
+        var today = new Date();
+
+        if(compareDates(today, new Date($scope.order.deliveryDate)) > 0) {
+            $scope.order.deliveryDate =  $filter('date')(today, baseDateFormat);
+            $scope.showPastDate = false;
+            $scope.showSaveError = false;
+        }
+
         $scope.loadPriceList($scope.order.seller.id, $scope.order.priceListPosition, callback);
     }
 
@@ -529,7 +553,6 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
     $scope.cancel = function () {
         $modalInstance.dismiss('cancel');
     };
-
 
     $scope.open = function ($event) {
         $event.preventDefault();
@@ -619,7 +642,10 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
     }
 
     $scope.save = function (form, status) {
-
+        if(compareDates(new Date(), new Date($scope.order.deliveryDate)) > 0) {
+            $scope.showSaveError = true;
+            return;
+        }
         if (form.$valid) {
             $scope.refresh(function () {
                 $scope.order.totalAmount = $scope.calcTotalAmount($scope.order);
