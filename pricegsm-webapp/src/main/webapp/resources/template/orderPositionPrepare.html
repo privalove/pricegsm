@@ -38,6 +38,7 @@
         <div class="row form-group">
             <label class="text-right col-sm-offset-1 col-sm-2 control-label right-padding-5"
                    pg-text="order.name">Имя</label>
+
             <div class="col-sm-2  left-padding-0">
                 <input type="text" class="form-control"
                        placeholder={{order.contactName}}
@@ -45,7 +46,7 @@
                        ng-change="updateName()"/>
             </div>
 
-            <div class="col-sm-2">
+            <div class="col-sm-6">
                 <input ng-show="order.pickup" ng-disabled="true" type="text" class="form-control"
                        placeholder={{order.seller.sellerPickupPlace}} ng-model="order.seller.sellerPickupPlace"/>
                 <input ng-show="order.delivery" ng-disabled="true" type="text" class="form-control"
@@ -53,7 +54,7 @@
             </div>
         </div>
 
-        <div class="row form-group vertical-center">
+        <div class="row vertical-center">
             <label class="text-right col-sm-offset-1 col-sm-2 right-padding-5">
                 <div class="control-label" pg-text="order.phoneNumber">Телефон</div>
             </label>
@@ -62,7 +63,7 @@
                 <input type="text" class="form-control"
                        placeholder={{order.phone}}
                        ng-model="order.phone"
-                        ng-change="updatePhone()"/>
+                       ng-change="updatePhone()"/>
             </div>
             <label class="col-sm-1 margin-top-34 right-padding-5">
                 <div class="control-label" pg-text="order.onDate">на дату</div>
@@ -91,6 +92,12 @@
                                 ng-change="limitToTime(order.delivery)">
                     </timepicker>
                 </div>
+            </div>
+        </div>
+
+        <div class="row form-group">
+            <div class="col-sm-offset-5 col-sm-6">
+                <input class="form-control" type="text" placeholder={{order.description}} ng-model="order.description"/>
             </div>
         </div>
 
