@@ -203,6 +203,16 @@
             </div>
         </div>
     </form>
+
+    <div class="row">
+        <div class="col-sm-offset-1 col-sm-10">
+            Гарантия составляет {{order.seller.sellerFreeReplacement}}дн. на замену и
+            {{order.seller.sellerFreeRepair}}дн. на бесплатный ремонт.
+        </div>
+        <div class="col-sm-offset-1 col-sm-10">
+            Дополнительные условия: {{order.seller.sellerWarrantyAdditional}}
+        </div>
+    </div>
 </div>
 
 <footer class="modal-footer">
