@@ -5,6 +5,7 @@
 </header>
 
 <div xmlns:th="http://www.thymeleaf.org">
+    <h4 class="text-center">Накладная №{{order.id}}<small> от {{order.sendDate|date : 'd.M.yyyy'}}</small></h4>
     <div class="row">
         <div class="text-right col-sm-offset-1 col-sm-2 right-padding-5" th:text="#{order.seller}">Поставщик:</div>
         <div class="col-sm-3 left-padding-0">{{order.seller.name}}</div>

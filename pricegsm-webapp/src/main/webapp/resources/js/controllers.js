@@ -366,6 +366,9 @@ function OrderCtrl($scope, $filter, $modal, $resource, orders, notifyManager) {
                 resolve: {
                     currentOrder: function () {
                         return currentOrder;
+                    },
+                    currentPriceList: function () {
+                        return null;
                     }
                 }
             });
