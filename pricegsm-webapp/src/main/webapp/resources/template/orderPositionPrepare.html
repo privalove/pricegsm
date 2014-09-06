@@ -10,11 +10,15 @@
         <div class="col-sm-3 left-padding-0">{{order.seller.name}}</div>
     </div>
     <div class="row form-group">
+        <div class="text-right col-sm-offset-1 col-sm-2 right-padding-5" pg-text="order.phoneNumber">Телефон</div>
+        <div class="col-sm-3 left-padding-0">{{order.seller.phone}}</div>
+    </div>
+    <div class="row">
         <div class="text-right col-sm-offset-1 col-sm-2 right-padding-5" th:text="#{order.buyer}">Покупатель:</div>
         <div class="col-sm-3 left-padding-0">{{order.buyer.name}}</div>
     </div>
     <form id="orderForm" class="form-horizontal" name="orderForm">
-        <div class="row form-group">
+        <div class="row">
             <div class="text-right col-sm-offset-1 col-sm-2 control-label right-padding-5"
                  th:text="#{order.contactData}">Контактные данные:
             </div>
@@ -34,10 +38,13 @@
         <div class="row form-group">
             <label class="text-right col-sm-offset-1 col-sm-2 control-label right-padding-5"
                    pg-text="order.name">Имя</label>
-
             <div class="col-sm-2  left-padding-0">
-                <input type="text" class="form-control" placeholder={{order.contactName}} ng-model="order.contactName"/>
+                <input type="text" class="form-control"
+                       placeholder={{order.contactName}}
+                       ng-model="order.contactName"
+                       ng-change="updateName()"/>
             </div>
+
             <div class="col-sm-2">
                 <input ng-show="order.pickup" ng-disabled="true" type="text" class="form-control"
                        placeholder={{order.seller.sellerPickupPlace}} ng-model="order.seller.sellerPickupPlace"/>
@@ -47,14 +54,15 @@
         </div>
 
         <div class="row form-group vertical-center">
-            <label class="text-right col-sm-offset-1 col-sm-2 margin-top-34 right-padding-5">
+            <label class="text-right col-sm-offset-1 col-sm-2 right-padding-5">
                 <div class="control-label" pg-text="order.phoneNumber">Телефон</div>
             </label>
 
-            <div class="col-sm-2 margin-top-34 left-padding-0">
+            <div class="col-sm-2 left-padding-0">
                 <input type="text" class="form-control"
                        placeholder={{order.phone}}
-                       ng-model="order.phone"/>
+                       ng-model="order.phone"
+                        ng-change="updatePhone()"/>
             </div>
             <label class="col-sm-1 margin-top-34 right-padding-5">
                 <div class="control-label" pg-text="order.onDate">на дату</div>

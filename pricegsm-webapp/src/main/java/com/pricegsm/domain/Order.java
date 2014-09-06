@@ -87,7 +87,6 @@ public class Order
         this.orderPositions = orderPositions;
     }
 
-    @JsonSerialize(using = GlobalEntitySerializer.class)
     @JsonDeserialize(using = GlobalEntityDeserializer.class)
     @NotNull
     @ManyToOne(optional = false)

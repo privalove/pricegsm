@@ -457,6 +457,20 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
 
     $scope.showSaveError = false;
 
+    $scope.updateName = function() {
+        if ($scope.order.contactName == null || $scope.order.contactName == undefined || $scope.order.contactName  == "") {
+            $scope.order.contactName = $scope.order.buyer.name;
+        }
+    }
+
+    $scope.updatePhone = function() {
+        if ($scope.order.phone == null || $scope.order.phone == undefined || $scope.order.phone  == "") {
+            $scope.order.phone = $scope.order.buyer.phone;
+        }
+    }
+
+    $scope.updatePhone();
+
     var baseDateFormat = "yyyy-MM-dd";
 
     function compareDates(date1, date2) {
