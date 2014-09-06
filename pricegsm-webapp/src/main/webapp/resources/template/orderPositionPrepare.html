@@ -70,13 +70,18 @@
             <div class="col-sm-4">
                 <label class="margin-top-5">с</label>
 
-                <div ng-model="order.fromTime" style="display:inline-block;">
-                    <timepicker minute-step="30" show-meridian="false"></timepicker>
+                <div style="display:inline-block;">
+                    <timepicker ng-model="order.fromTime" minute-step="30" show-meridian="false"
+                                ng-change="limitFromTime(order.delivery)">
+                    </timepicker>
                 </div>
+
                 <label class="margin-top-5">до</label>
 
-                <div ng-model="order.toTime" style="display:inline-block;">
-                    <timepicker minute-step="30" show-meridian="false"></timepicker>
+                <div style="display:inline-block;">
+                    <timepicker ng-model="order.toTime" minute-step="30" show-meridian="false"
+                                ng-change="limitToTime(order.delivery)">
+                    </timepicker>
                 </div>
             </div>
         </div>
@@ -184,7 +189,7 @@
 <footer class="modal-footer">
 
     <div class="has-error form-group" ng-show="showSaveError">
-         <div class="form-control">Данные не актуальны. Нажмите обновить.</div>
+        <div class="form-control">Данные не актуальны. Нажмите обновить.</div>
     </div>
 
     <button type="submit" class="btn btn-success" form="orderForm"

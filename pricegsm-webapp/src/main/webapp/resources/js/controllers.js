@@ -334,15 +334,29 @@ function OrderCtrl($scope, $filter, $modal, $resource, orders, notifyManager) {
     $scope.orderDetails = function (currentOrder) {
         var orderModal;
         if (currentOrder.status == "PREPARE") {
-            orderModal = $modal.open({
-                templateUrl: "resources/template/orderPositionPrepare.html",
-                controller: OrderPositionCtrl,
-                size: "lg",
-                resolve: {
-                    currentOrder: function () {
-                        return currentOrder;
+            var PriceList = $resource("order/:id/:position/pricelist.json", {id: '@id', position: '@position'});
+            PriceList.get({id: currentOrder.seller.id, position: currentOrder.priceListPosition}, function (data) {
+
+                orderModal = $modal.open({
+                    templateUrl: "resources/template/orderPositionPrepare.html",
+                    controller: OrderPositionCtrl,
+                    size: "lg",
+                    resolve: {
+                        currentOrder: function () {
+                            return currentOrder;
+                        },
+                        currentPriceList: function () {
+                            return data.payload.priceList
+                        }
                     }
-                }
+                });
+                orderModal.result.then(function (savedOrder) {
+                    if (savedOrder.orderPositions.length != 0) {
+                        saveOrder(savedOrder);
+                    } else {
+                        deleteOrder(savedOrder, getOrderIndex(savedOrder))
+                    }
+                });
             });
         } else {
             orderModal = $modal.open({
@@ -356,13 +370,6 @@ function OrderCtrl($scope, $filter, $modal, $resource, orders, notifyManager) {
                 }
             });
         }
-        orderModal.result.then(function (savedOrder) {
-            if (savedOrder.orderPositions.length != 0) {
-                saveOrder(savedOrder);
-            } else {
-                deleteOrder(savedOrder, getOrderIndex(savedOrder))
-            }
-        });
     }
 
     function saveOrder(savedOrder) {
@@ -440,11 +447,11 @@ OrderCtrl.resolve = {
     }]
 };
 
-OrderPositionCtrl.$inject = ["$scope", "$modal", "$modalInstance", "$resource", "$filter", "currentOrder"];
-function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, currentOrder) {
+OrderPositionCtrl.$inject = ["$scope", "$modal", "$modalInstance", "$resource", "$filter", "currentOrder", "currentPriceList"];
+function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, currentOrder, currentPriceList) {
     $scope.order = angular.copy(currentOrder);
 
-    $scope.priceList = null;
+    $scope.priceList = currentPriceList;
 
     $scope.deliveryDateFormat = R.get('order.format.deliveryDate');
 
@@ -465,6 +472,7 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
             return -1;
         }
     }
+
     $scope.showPastDate = compareDates(new Date(), new Date($scope.order.deliveryDate)) > 0;
 
     function getPossibleDeliveryDates() {
@@ -480,7 +488,42 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
             return [todayString, tomorrowString, afterTomorrowString];
         }
     }
+
     $scope.possibleDeliveryDates = getPossibleDeliveryDates();
+
+    $scope.limitFromTime = function(isDelivery){
+        var timeLimit;
+
+        if(isDelivery){
+            timeLimit = $scope.order.seller.sellerDeliveryFrom;
+        }       else {
+            timeLimit = $scope.order.seller.sellerPickupFrom;
+        }
+        if($scope.order.fromTime < timeLimit) {
+             $scope.order.fromTime = timeLimit;
+         }
+
+        if($scope.order.toTime < $scope.order.fromTime) {
+             $scope.order.fromTime = $scope.order.toTime;
+         }
+    }
+
+    $scope.limitToTime = function(isDelivery){
+        var timeLimit;
+        if(isDelivery){
+            timeLimit = $scope.order.seller.sellerDeliveryTo;
+        }       else {
+            timeLimit = $scope.order.seller.sellerPickupTo;
+        }
+
+        if(timeLimit < $scope.order.toTime) {
+            $scope.order.toTime = timeLimit;
+        }
+
+        if($scope.order.toTime < $scope.order.fromTime) {
+            $scope.order.toTime = $scope.order.fromTime;
+        }
+    }
 
     $scope.findPriceListPosition = function (orderPosition) {
         return _.find($scope.priceList.positions, function (priceListPosition) {
@@ -534,8 +577,8 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
     $scope.refresh = function (callback) {
         var today = new Date();
 
-        if(compareDates(today, new Date($scope.order.deliveryDate)) > 0) {
-            $scope.order.deliveryDate =  $filter('date')(today, baseDateFormat);
+        if (compareDates(today, new Date($scope.order.deliveryDate)) > 0) {
+            $scope.order.deliveryDate = $filter('date')(today, baseDateFormat);
             $scope.showPastDate = false;
             $scope.showSaveError = false;
         }
@@ -642,7 +685,7 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
     }
 
     $scope.save = function (form, status) {
-        if(compareDates(new Date(), new Date($scope.order.deliveryDate)) > 0) {
+        if (compareDates(new Date(), new Date($scope.order.deliveryDate)) > 0) {
             $scope.showSaveError = true;
             return;
         }
