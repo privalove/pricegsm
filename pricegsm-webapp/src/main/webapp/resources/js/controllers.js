@@ -347,6 +347,9 @@ function OrderCtrl($scope, $filter, $modal, $resource, orders, notifyManager) {
                         },
                         currentPriceList: function () {
                             return data.payload.priceList
+                        },
+                        deliveryPlaces: function () {
+                            return data.payload.deliveryPlaces
                         }
                     }
                 });
@@ -368,6 +371,9 @@ function OrderCtrl($scope, $filter, $modal, $resource, orders, notifyManager) {
                         return currentOrder;
                     },
                     currentPriceList: function () {
+                        return null;
+                    },
+                    deliveryPlaces: function () {
                         return null;
                     }
                 }
@@ -450,29 +456,74 @@ OrderCtrl.resolve = {
     }]
 };
 
-OrderPositionCtrl.$inject = ["$scope", "$modal", "$modalInstance", "$resource", "$filter", "currentOrder", "currentPriceList"];
-function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, currentOrder, currentPriceList) {
+OrderPositionCtrl.$inject = ["$scope", "$modal", "$modalInstance", "$resource", "$filter", "currentOrder", "currentPriceList", "deliveryPlaces"];
+function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, currentOrder, currentPriceList, deliveryPlaces) {
     $scope.order = angular.copy(currentOrder);
 
     $scope.priceList = currentPriceList;
+
+    $scope.deliveryPlaces = deliveryPlaces;
 
     $scope.deliveryDateFormat = R.get('order.format.deliveryDate');
 
     $scope.showSaveError = false;
 
-    $scope.updateName = function() {
-        if ($scope.order.contactName == null || $scope.order.contactName == undefined || $scope.order.contactName  == "") {
+    $scope.updateName = function () {
+        if ($scope.order.contactName == null || $scope.order.contactName == undefined || $scope.order.contactName == "") {
             $scope.order.contactName = $scope.order.buyer.name;
         }
     }
 
-    $scope.updatePhone = function() {
-        if ($scope.order.phone == null || $scope.order.phone == undefined || $scope.order.phone  == "") {
+    $scope.updatePhone = function () {
+        if ($scope.order.phone == null || $scope.order.phone == undefined || $scope.order.phone == "") {
             $scope.order.phone = $scope.order.buyer.phone;
         }
     }
 
     $scope.updatePhone();
+
+    $scope.calculateDeliveryPlaceAvailability = function () {
+        var currentDeliveryPlace = null;
+        _.map($scope.deliveryPlaces, function (deliveryPlace) {
+            if (deliveryPlace.name == $scope.order.seller.sellerDeliveryPlace) {
+                currentDeliveryPlace = deliveryPlace;
+                return;
+            }
+        });
+
+        return currentDeliveryPlace != null && currentDeliveryPlace.name == $scope.order.seller.region.name;
+    }
+
+    $scope.deliveryPlaceOrder = function (deliveryPlace) {
+        return  deliveryPlace.id;
+    }
+
+    $scope.selectedPlace = null;
+
+    var calculateSelectedPlace = function () {
+        _.map($scope.deliveryPlaces, function (deliveryPlace) {
+            if (deliveryPlace.name == $scope.order.place) {
+                $scope.selectedPlace = deliveryPlace;
+                return;
+            }
+        });
+        if ($scope.selectedPlace != null) {
+            return;
+        }
+
+        if($scope.order.place == null || $scope.order.place == undefined || $scope.order.place =="") {
+            return;
+        }
+
+        $scope.selectedPlace = $scope.order.seller.region.name;
+    }
+
+    calculateSelectedPlace();
+
+    $scope.setSelectedPlace = function (place) {
+        $scope.order.place = place;
+        $scope.selectedPlace = place;
+    }
 
     var baseDateFormat = "yyyy-MM-dd";
 
@@ -508,36 +559,36 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
 
     $scope.possibleDeliveryDates = getPossibleDeliveryDates();
 
-    $scope.limitFromTime = function(isDelivery){
+    $scope.limitFromTime = function (isDelivery) {
         var timeLimit;
 
-        if(isDelivery){
+        if (isDelivery) {
             timeLimit = $scope.order.seller.sellerDeliveryFrom;
-        }       else {
+        } else {
             timeLimit = $scope.order.seller.sellerPickupFrom;
         }
-        if($scope.order.fromTime < timeLimit) {
-             $scope.order.fromTime = timeLimit;
-         }
+        if ($scope.order.fromTime < timeLimit) {
+            $scope.order.fromTime = timeLimit;
+        }
 
-        if($scope.order.toTime < $scope.order.fromTime) {
-             $scope.order.fromTime = $scope.order.toTime;
-         }
+        if ($scope.order.toTime < $scope.order.fromTime) {
+            $scope.order.fromTime = $scope.order.toTime;
+        }
     }
 
-    $scope.limitToTime = function(isDelivery){
+    $scope.limitToTime = function (isDelivery) {
         var timeLimit;
-        if(isDelivery){
+        if (isDelivery) {
             timeLimit = $scope.order.seller.sellerDeliveryTo;
-        }       else {
+        } else {
             timeLimit = $scope.order.seller.sellerPickupTo;
         }
 
-        if(timeLimit < $scope.order.toTime) {
+        if (timeLimit < $scope.order.toTime) {
             $scope.order.toTime = timeLimit;
         }
 
-        if($scope.order.toTime < $scope.order.fromTime) {
+        if ($scope.order.toTime < $scope.order.fromTime) {
             $scope.order.toTime = $scope.order.fromTime;
         }
     }
@@ -711,6 +762,9 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
                 $scope.order.totalAmount = $scope.calcTotalAmount($scope.order);
                 $scope.order.status = status;
                 $scope.order.totalPrice = $scope.calcTotalPrice($scope.order);
+                if ($scope.order.place == null || $scope.order.place == undefined) {
+                    $scope.order.place = $scope.order.seller.sellerPickupPlace;
+                }
                 $scope.ok($scope.order);
             });
         }
@@ -799,11 +853,6 @@ angular.module('orderFilters', []).filter('sellerDeliveryDate', function () {
             if (order.delivery) {
                 return R.get('order.delivery.delivery');
             }
-
-            if (order.deliveryFree) {
-                return R.get('order.delivery.deliveryFree');
-            }
-
             if (order.pickup) {
                 return R.get('order.delivery.pickup');
             }

@@ -2,8 +2,10 @@ package com.pricegsm.controller;
 
 import com.pricegsm.domain.*;
 import com.pricegsm.securiry.PrincipalHolder;
+import com.pricegsm.service.DeliveryPlaceService;
 import com.pricegsm.service.OrderService;
 import com.pricegsm.service.PriceListService;
+import com.pricegsm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -25,6 +27,12 @@ public class OrderController {
     @Autowired
     private PriceListService priceListService;
 
+    @Autowired
+    private DeliveryPlaceService deliveryPlaceService;
+
+    @Autowired
+    private UserService userService;
+
     @RequestMapping(value = "/order", method = RequestMethod.GET)
     public void order() {
     }
@@ -38,9 +46,10 @@ public class OrderController {
 
     @RequestMapping(value = "/order/{sellerId}/{position}/pricelist.json", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public OperationResult priceList(@PathVariable int sellerId, @PathVariable int position) {
+    public OperationResult priceList(@PathVariable long sellerId, @PathVariable int position) {
         return OperationResult.ok().payload("orderPositionTemplate", new OrderPosition())
-                .payload("priceList", priceListService.getPriceList(sellerId, position));
+                .payload("priceList", priceListService.getPriceList(sellerId, position))
+                .payload("deliveryPlaces", deliveryPlaceService.findActiveByRegion(userService.load(sellerId).getRegion().getId()));
     }
 
     @RequestMapping(value = "/order/{orderId}/order.json", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
