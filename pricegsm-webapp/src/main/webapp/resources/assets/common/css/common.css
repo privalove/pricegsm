@@ -1,5 +1,7 @@
 /* angular ui */
-.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+.nav, .pagination, .carousel, .panel-title a {
+    cursor: pointer;
+}
 
 body.login .box-forgot, body.login .box-register {
     display: block !important;
@@ -85,7 +87,6 @@ table.pg-pricelist .pg-actions {
     margin-top: 5px;
 }
 
-
 .margin-top-20 {
     margin-top: 20px;
 }
@@ -105,5 +106,18 @@ table.pg-pricelist .pg-actions {
 .vertical-center label,
 .vertical-center div {
     vertical-align: middle;
+}
+
+.reduceAmountButton {
+    height: 22px;
+    width: 21px;
+}
+
+.reduceAmountButton button  {
+    display: none;
+}
+
+.reduceAmountButton:hover button  {
+    display: block;
 }
 

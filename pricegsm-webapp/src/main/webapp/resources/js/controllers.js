@@ -482,7 +482,7 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
 
     $scope.updatePhone();
 
-    $scope.calculateDeliveryPlaceAvailability = function () {
+    var calculateDeliveryPlaceAvailability = function () {
         var currentDeliveryPlace = null;
         _.map($scope.deliveryPlaces, function (deliveryPlace) {
             if (deliveryPlace.name == $scope.order.seller.sellerDeliveryPlace) {
@@ -493,6 +493,8 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
 
         return currentDeliveryPlace != null && currentDeliveryPlace.name == $scope.order.seller.region.name;
     }
+
+    $scope.deliveryPlaceAvailability = calculateDeliveryPlaceAvailability();
 
     $scope.deliveryPlaceOrder = function (deliveryPlace) {
         return  deliveryPlace.id;
@@ -511,7 +513,7 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
             return;
         }
 
-        if($scope.order.place == null || $scope.order.place == undefined || $scope.order.place =="") {
+        if ($scope.order.place == null || $scope.order.place == undefined || $scope.order.place == "") {
             return;
         }
 
@@ -520,6 +522,20 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
 
     calculateSelectedPlace();
 
+    $scope.setPlace = function (place) {
+        $scope.order.place = place;
+    }
+
+    var calculateOrderPlace = function () {
+        if ($scope.order.delivery == true) {
+            $scope.setPlace($scope.order.seller.sellerDeliveryPlace)
+        } else if ($scope.order.pickup == true) {
+            $scope.setPlace($scope.order.seller.sellerPickupPlace)
+        }
+    }
+
+    calculateOrderPlace();
+
     $scope.setSelectedPlace = function (place) {
         $scope.selectedPlace = place;
 
@@ -527,6 +543,14 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
             $scope.order.place = place;
         } else {
             $scope.order.place = "";
+        }
+    }
+
+    $scope.calculateDeliveryPlaceFromDelivery = function (place) {
+        if (calculateDeliveryPlaceAvailability()) {
+            $scope.setSelectedPlace(place);
+        } else {
+            $scope.setPlace(place);
         }
     }
 
@@ -677,18 +701,30 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
         $scope.opened = true;
     };
 
+    $scope.reduceAmount = function (orderPosition) {
+        if (orderPosition.amount > 0) {
+            orderPosition.amount--;
+            $scope.updatePriceListAmount(orderPosition);
+        }
+    }
+
     $scope.addOrderPosition = function (priceListPosition) {
 
         var exitingOrderPosition = _.find($scope.order.orderPositions, function (orderPosition) {
             return orderPosition.priceListPosition == priceListPosition.id;
         });
 
+        priceListPosition.amount++;
         if (exitingOrderPosition != undefined) {
+            exitingOrderPosition.amount++;
+            $scope.refreshOrderPositions($scope.order);
+            exitingOrderPosition.totalPrice = $scope.getPositionTotalPrice(exitingOrderPosition);
             return;
         }
 
         var position = angular.copy($scope.orderPositionTemplate);
         position.order = {id: currentOrder.id, name: ""};
+        position.amount = 1;
         position.totalPrice = 0;
         position.product = priceListPosition.product;
         position.priceListPosition = priceListPosition.id;
@@ -719,7 +755,7 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
         return exitingOrderPosition == undefined
             && orderForm.$valid
             && ($scope.order.delivery || $scope.order.deliveryFree || $scope.order.pickup)
-            && !($scope.order.place == null || $scope.order.place == undefined || $scope.order.place =="");
+            && !($scope.order.place == null || $scope.order.place == undefined || $scope.order.place == "");
     }
 
     $scope.resetOtherDelivery = function (selectedDeliveryType) {

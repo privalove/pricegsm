@@ -31,12 +31,14 @@
         <div class="col-sm-offset-2 col-sm-3">
             <label class="radio-inline">
                 <input ng-disabled="{{!order.seller.sellerPickup}}" name="pickup" type="radio"
-                       ng-model="order.pickup" ng-value="true" ng-change="resetOtherDelivery('pickup')"/>
+                       ng-model="order.pickup" ng-value="true" ng-change="resetOtherDelivery('pickup')"
+                       ng-click="setPlace(order.seller.sellerPickupPlace)"/>
                 <span pg-text="order.delivery.pickup"></span>
             </label>
             <label class="radio-inline">
                 <input ng-disabled="{{!order.seller.sellerDelivery}}" name="delivery" type="radio"
-                       ng-model="order.delivery" ng-value="true" ng-change="resetOtherDelivery('delivery')"/>
+                       ng-model="order.delivery" ng-value="true" ng-change="resetOtherDelivery('delivery')"
+                       ng-click="calculateDeliveryPlaceFromDelivery(order.seller.sellerDeliveryPlace)"/>
                 <span pg-text="order.delivery.delivery"></span>
             </label>
         </div>
@@ -53,10 +55,10 @@
         </div>
 
         <div class="col-sm-6">
-            <input ng-show="order.pickup" ng-disabled="true" type="text" class="form-control"
+            <input ng-show="order.pickup" ng-hide="order.delivery" ng-disabled="true" type="text" class="form-control"
                    placeholder={{order.seller.sellerPickupPlace}} ng-model="order.seller.sellerPickupPlace"/>
 
-            <div ng-show="calculateDeliveryPlaceAvailability() && order.delivery">
+            <div ng-show="deliveryPlaceAvailability && order.delivery">
                 <label class="radio-inline" ng-repeat="p in deliveryPlaces | orderBy: deliveryPlaceOrder">
                     <input name="deliveryPlace" type="radio" ng-model="selectedPlace"
                            ng-click="setSelectedPlace(p.name)" ng-value="p.name"/>
@@ -66,7 +68,7 @@
                        type="text" class="form-control" placeholder={{order.place}} ng-model="order.place"/>
             </div>
 
-            <input ng-show="!calculateDeliveryPlaceAvailability() && order.delivery" ng-disabled="true" type="text"
+            <input ng-show="!deliveryPlaceAvailability && order.delivery" ng-hide="order.pickup || deliveryPlaceAvailability" ng-disabled="true" type="text"
                    class="form-control"
                    placeholder={{order.seller.sellerDeliveryPlace}} ng-model="order.seller.sellerDeliveryPlace"/>
         </div>
@@ -128,6 +130,7 @@
                     <th pg-text="priceListPosition.name">Наименование</th>
                     <th pg-text="color">цвет</th>
                     <th pg-text="note">примичание</th>
+                    <th></th>
                     <th class="pg-amount" pg-text="page.order.totalAmount">количество</th>
                     <th pg-text="priceListPosition.price">цена</th>
                     <th pg-text="page.order.totalPrice">сумма</th>
@@ -139,6 +142,14 @@
                     <td>{{orderPosition.product.name}}</td>
                     <td>{{orderPosition.product.color.name}}</td>
                     <td>{{orderPosition.product.description}}</td>
+                    <td>
+                        <div class="reduceAmountButton pull-right">
+                            <button type="button" class="btn btn-xs btn-danger" tooltip="Удалить"
+                                    ng-click="reduceAmount(orderPosition)">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                    </td>
                     <td>
                         <input type="number" name="moq" class="form-control input-group"
                                min="0" max="" required=""
