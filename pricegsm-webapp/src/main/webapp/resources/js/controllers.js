@@ -521,8 +521,13 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
     calculateSelectedPlace();
 
     $scope.setSelectedPlace = function (place) {
-        $scope.order.place = place;
         $scope.selectedPlace = place;
+
+        if (place != $scope.order.seller.region.name) {
+            $scope.order.place = place;
+        } else {
+            $scope.order.place = "";
+        }
     }
 
     var baseDateFormat = "yyyy-MM-dd";
@@ -713,7 +718,8 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
         });
         return exitingOrderPosition == undefined
             && orderForm.$valid
-            && ($scope.order.delivery || $scope.order.deliveryFree || $scope.order.pickup);
+            && ($scope.order.delivery || $scope.order.deliveryFree || $scope.order.pickup)
+            && !($scope.order.place == null || $scope.order.place == undefined || $scope.order.place =="");
     }
 
     $scope.resetOtherDelivery = function (selectedDeliveryType) {
