@@ -803,7 +803,8 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
             }, 0)
     }
 
-    $scope.deleteOrderPosition = function (index) {
+    $scope.deleteOrderPosition = function ($event, index) {
+        $event.stopPropagation();
         $scope.order.orderPositions.splice(index, 1);
         if ($scope.priceList != null) {
             $scope.refresh()

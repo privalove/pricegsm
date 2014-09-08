@@ -162,7 +162,7 @@
                     <td>{{orderPosition.totalPrice}}</td>
                     <td>
                         <button type="button" class="btn btn-xs btn-danger" tooltip="Удалить"
-                                ng-click="deleteOrderPosition(orderPosition)">
+                                ng-click="deleteOrderPosition($event,$index)">
                             <i class="fa fa-times"></i>
                         </button>
                     </td>
