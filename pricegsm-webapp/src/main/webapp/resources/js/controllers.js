@@ -836,6 +836,12 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
             resolve: {
                 currentOrder: function () {
                     return order;
+                },
+                currentPriceList: function () {
+                    return null;
+                },
+                deliveryPlaces: function () {
+                    return null;
                 }
             }
         });

@@ -169,7 +169,7 @@
                 </tr>
                 <tr></tr>
                 <tr>
-                    <th colspan="4"></th>
+                    <th colspan="5"></th>
                     <th colspan="1"><span>Итого:</span></th>
                     <th colspan="1"><span>{{calcTotalPrice(order)}}</span></th>
                     <th colspan="1"></th>
@@ -253,11 +253,6 @@
             ng-disabled="!formEnable(orderForm)" ng-click="save(orderForm, 'PREPARE')">
         <i class="fa fa-save"></i>
         <span>Сохранить</span>
-    </button>
-
-    <button type="button" class="btn btn-default" ng-click="print()" ng-disabled="!formEnable(orderForm)">
-        <i class="fa fa-print"></i>
-        <span>Печать</span>
     </button>
 
     <button type="button" class="btn btn-default" ng-click="review(order)" ng-disabled="!formEnable(orderForm)">

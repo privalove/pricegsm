@@ -93,7 +93,7 @@
 </div>
 
 <footer class="modal-footer">
-    <button type="button" class="btn btn-default" ng-click="print()">
+    <button ng-hide="order.status == 'PREPARE'" type="button" class="btn btn-default" ng-click="print()">
         <i class="fa fa-print"></i>
         <span>Печать</span>
     </button>
