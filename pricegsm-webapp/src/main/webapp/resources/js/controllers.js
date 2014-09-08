@@ -502,10 +502,14 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
 
     $scope.selectedPlace = null;
 
+    var savedOrderPlace = null;
+
     var calculateSelectedPlace = function () {
+        $scope.selectedPlace = null;
         _.map($scope.deliveryPlaces, function (deliveryPlace) {
-            if (deliveryPlace.name == $scope.order.place) {
-                $scope.selectedPlace = deliveryPlace;
+            if (deliveryPlace.name == savedOrderPlace && deliveryPlace.name != $scope.order.seller.region.name) {
+                $scope.selectedPlace = deliveryPlace.name;
+                $scope.order.place = savedOrderPlace;
                 return;
             }
         });
@@ -513,28 +517,30 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
             return;
         }
 
-        if ($scope.order.place == null || $scope.order.place == undefined || $scope.order.place == "") {
+        $scope.order.place = savedOrderPlace;
+        if (savedOrderPlace == null || savedOrderPlace == undefined || savedOrderPlace == "") {
             return;
         }
 
         $scope.selectedPlace = $scope.order.seller.region.name;
     }
 
-    calculateSelectedPlace();
-
     $scope.setPlace = function (place) {
         $scope.order.place = place;
-    }
+    };
 
-    var calculateOrderPlace = function () {
+    (function () {
         if ($scope.order.delivery == true) {
-            $scope.setPlace($scope.order.seller.sellerDeliveryPlace)
+            if (!calculateDeliveryPlaceAvailability()) {
+                $scope.setPlace($scope.order.seller.sellerDeliveryPlace)
+            } else {
+                savedOrderPlace = $scope.order.place;
+                calculateSelectedPlace();
+            }
         } else if ($scope.order.pickup == true) {
             $scope.setPlace($scope.order.seller.sellerPickupPlace)
         }
-    }
-
-    calculateOrderPlace();
+    })();
 
     $scope.setSelectedPlace = function (place) {
         $scope.selectedPlace = place;
@@ -542,13 +548,23 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
         if (place != $scope.order.seller.region.name) {
             $scope.order.place = place;
         } else {
-            $scope.order.place = "";
+            var currentSelectedPlace = null;
+            _.map($scope.deliveryPlaces, function (deliveryPlace) {
+                if (deliveryPlace.name == savedOrderPlace && deliveryPlace.name != $scope.order.seller.region.name) {
+                    currentSelectedPlace = place;
+                }
+            });
+            if (currentSelectedPlace != null) {
+                $scope.order.place = "";
+            } else {
+                $scope.order.place = savedOrderPlace;
+            }
         }
     }
 
     $scope.calculateDeliveryPlaceFromDelivery = function (place) {
         if (calculateDeliveryPlaceAvailability()) {
-            $scope.setSelectedPlace(place);
+            calculateSelectedPlace();
         } else {
             $scope.setPlace(place);
         }

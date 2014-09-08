@@ -61,14 +61,16 @@
             <div ng-show="deliveryPlaceAvailability && order.delivery">
                 <label class="radio-inline" ng-repeat="p in deliveryPlaces | orderBy: deliveryPlaceOrder">
                     <input name="deliveryPlace" type="radio" ng-model="selectedPlace"
-                           ng-click="setSelectedPlace(p.name)" ng-value="p.name"/>
+                           ng-change="setSelectedPlace(p.name)" ng-value="p.name"/>
                     <span ng-text="p.name">Митино</span>
                 </label>
                 <input ng-disabled="selectedPlace != order.seller.region.name"
                        type="text" class="form-control" placeholder={{order.place}} ng-model="order.place"/>
             </div>
 
-            <input ng-show="!deliveryPlaceAvailability && order.delivery" ng-hide="order.pickup || deliveryPlaceAvailability" ng-disabled="true" type="text"
+            <input ng-show="!deliveryPlaceAvailability && order.delivery"
+                   ng-hide="order.pickup || deliveryPlaceAvailability"
+                   ng-disabled="true" type="text"
                    class="form-control"
                    placeholder={{order.seller.sellerDeliveryPlace}} ng-model="order.seller.sellerDeliveryPlace"/>
         </div>
