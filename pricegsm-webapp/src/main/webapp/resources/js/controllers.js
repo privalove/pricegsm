@@ -947,6 +947,12 @@ function PriceListCtrl($scope, $filter, notifyManager, priceListResource, PriceL
         priceList.position = index;
 
         if (form.$valid) {
+
+            var phone = priceList.phone;
+            if (phone == null || phone == undefined || phone == "") {
+                priceList.phone = priceList.user.phone;
+            }
+
             priceList.$save({priceListId: index}, function (data) {
                 if (data.ok) {
                     notifyManager.success("Прайс лист успешно сохранен");
@@ -956,6 +962,20 @@ function PriceListCtrl($scope, $filter, notifyManager, priceListResource, PriceL
             })
         }
     };
+
+    var baseDateFormat = "yyyy-MM-dd";
+
+    $scope.extend = function (form, index) {
+        var priceList = $scope.priceLists[index];
+
+        priceList.active = true;
+
+        var date = new Date();
+        priceList.sellFromDate = $filter('date')(date, baseDateFormat);
+        priceList.sellToDate = $filter('date')(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1), baseDateFormat);
+
+        $scope.save(form, index);
+    }
 
     if (priceListResource.ok) {
         angular.extend($scope, priceListResource.payload);
@@ -984,7 +1004,15 @@ function PriceListCtrl($scope, $filter, notifyManager, priceListResource, PriceL
         $scope.nextCurrency = _.map($scope.priceLists, function (priceList) {
             return priceList.currency
         });
+
         $scope.exchangeRate = [];
+
+        _.each($scope.priceLists, function (priceList) {
+            var phone = priceList.phone;
+            if (phone == null || phone == undefined || "") {
+                priceList.phone = priceList.user.phone;
+            }
+        });
 
         $scope.user = new WorkConditions($scope.user);
 

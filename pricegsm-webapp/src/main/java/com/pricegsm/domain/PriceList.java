@@ -10,6 +10,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -33,6 +34,8 @@ public class PriceList
 
     private User user;
 
+    private String phone;
+
     private Currency currency;
 
     private String description;
@@ -40,7 +43,6 @@ public class PriceList
     private int position;
 
     @Id
-    @JsonSerialize(using = GlobalEntitySerializer.class)
     @JsonDeserialize(using = GlobalEntityDeserializer.class)
     @NotNull
     @ManyToOne(optional = false)
@@ -51,6 +53,17 @@ public class PriceList
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @Size(max = 255)
+    @Basic
+    @Column(name = "phone")
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     @Id

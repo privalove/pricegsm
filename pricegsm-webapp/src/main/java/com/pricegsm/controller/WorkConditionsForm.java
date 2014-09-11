@@ -27,6 +27,8 @@ public class WorkConditionsForm
 
     private Date sellerPickupTo;
 
+    private Date deadLine;
+
     private boolean sellerDeliveryFree;
 
     private int sellerDeliveryMin;
@@ -52,6 +54,7 @@ public class WorkConditionsForm
         setSellerDeliveryFree(user.isSellerDeliveryFree());
         setSellerDeliveryFrom(user.getSellerDeliveryFrom());
         setSellerDeliveryTo(user.getSellerDeliveryTo());
+        setDeadLine(user.getDeadLine());
         setSellerDeliveryMin(user.getSellerDeliveryMin());
         setSellerDeliveryPaid(user.isSellerDeliveryPaid());
         setSellerDeliveryPlace(user.getSellerDeliveryPlace());
@@ -79,6 +82,7 @@ public class WorkConditionsForm
         user.setSellerPickup(isSellerPickup());
         user.setSellerPickupFrom(getSellerPickupFrom());
         user.setSellerPickupTo(getSellerPickupTo());
+        user.setDeadLine(getDeadLine());
         user.setSellerPickupPlace(getSellerPickupPlace());
         user.setSellerWarrantyAdditional(getSellerWarrantyAdditional());
         user.setSellerPickupPlaceAddition(getSellerPickupPlaceAddition());
@@ -150,6 +154,15 @@ public class WorkConditionsForm
 
     public void setSellerPickupTo(Date sellerPickupTo) {
         this.sellerPickupTo = sellerPickupTo;
+    }
+
+    @JsonSerialize(using = DateSerializer.class)
+    public Date getDeadLine() {
+        return deadLine;
+    }
+
+    public void setDeadLine(Date deadLine) {
+        this.deadLine = deadLine;
     }
 
     public boolean isSellerDeliveryFree() {

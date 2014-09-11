@@ -11,6 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -53,6 +54,8 @@ public class User
     private Date sellerPickupFrom = TIME_10_00;
 
     private Date sellerPickupTo = TIME_17_00;
+
+    private Date deadLine = TIME_17_00;
 
     private boolean sellerDeliveryFree;
 
@@ -237,6 +240,18 @@ public class User
 
     public void setSellerPickupTo(Date seller_pickup_to) {
         this.sellerPickupTo = seller_pickup_to;
+    }
+
+    @NotNull
+    @Basic
+    @Temporal(TemporalType.TIME)
+    @Column(name = "deadline", nullable = false)
+    public Date getDeadLine() {
+        return deadLine;
+    }
+
+    public void setDeadLine(Date deadLine) {
+        this.deadLine = deadLine;
     }
 
     /**

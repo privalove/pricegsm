@@ -6,7 +6,7 @@
     <span th:text="#{page.priceList.current}">Tекущий</span> {{priceLists[0].sellFromDate | date:"dd
     MMM"}} - {{priceLists[0].sellToDate | date:"dd MMM"}}
 </tab-heading>
-<form role="form" name="plForm" novalidate="" ng-submit="save(plForm, 0)">
+<form role="form" name="plForm" novalidate="">
     <div class="row">
         <div class="col-md-2">
                 <toggle-switch
@@ -16,7 +16,7 @@
                         th:attr="on-label=#{on},off-label=#{off},knob-label=#{priceList.active}"
                         model="priceLists[0].active"></toggle-switch>
         </div>
-        <div class="col-md-6 dropdown" is-open="status.isopen">
+        <div class="col-md-5 dropdown" is-open="status.isopen">
             <a href="" role="button" class="btn btn-default dropdown-toggle">
                 <span th:text="#{page.priceList.addVendor}">Добавить производителя</span>
                 <span class="caret"></span>
@@ -28,12 +28,24 @@
                 </li>
             </ul>
 
-            <button class="btn btn-warning" ng-disabled="!plForm.$valid">
+        <button class="btn btn-green" ng-click="extend(plForm, 0)" ng-disabled="!plForm.$valid">
+            <span th:text="#{button.extend}">Продлить</span>
+            <i class="fa fa-arrow-right"></i>
+        </button>
+        <button class="btn btn-warning" ng-click="save(plForm, 0)" ng-disabled="!plForm.$valid">
                 <span th:text="#{button.save}">Сохранить</span>
                 <i class="fa fa-save"></i>
             </button>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
+            <label class="text-right">
+                <div class="control-label" pg-text="order.phoneNumber">Телефон</div>
+            </label>
+
+            <input type="text" ng-model="priceLists[0].phone"/>
+        </div>
+
+        <div class="col-md-2">
             <div class="input-group dropdown">
                 <a href="" role="button" class="btn btn-default dropdown-toggle input-group-addon">
                     <span th:text="#{page.priceList.changeCurrency}"
@@ -163,95 +175,96 @@
                         <div class="form-group" ng-hide="position.fake">
                             <div>
                                 <div th:attr="tooltip=#{priceListPosition.add.product.color}">
-                                    <button ng-click="addPositionNextColor(priceLists[0], position.product.name, position.product.color.id)" type="button"
-                                            class="btn btn-green btn-xs"><i class="fa fa-plus"></i></button>
-                                </div>
+                                <button ng-click="addPositionNextColor(priceLists[0], position.product.name, position.product.color.id)"
+                                        type="button"
+                                        class="btn btn-green btn-xs"><i class="fa fa-plus"></i></button>
                             </div>
                         </div>
-                    </td>
-                    <td>
-                        <div class="form-group" ng-hide="position.fake">
-                            <div class="row">
-                                <div class="col-sm-12 dropdown">
-                                    <a href='' class="dropdown-toggle btn btn-default btn-md">
-                                        <span ng-bind="position.product.color.name">White</span>
-                                        <span class="caret"></span>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li ng-repeat="product in products | filter:{yandexId:position.product.yandexId}">
-                                            <a class="dropdown-toggle" href="" ng-click="position.product = product"
-                                               ng-text="product.color.name">Black</a>
-                                        </li>
-                                    </ul>
-                                </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group" ng-hide="position.fake">
+                        <div class="row">
+                            <div class="col-sm-12 dropdown">
+                                <a href='' class="dropdown-toggle btn btn-default btn-md">
+                                    <span ng-bind="position.product.color.name">White</span>
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li ng-repeat="product in products | filter:{yandexId:position.product.yandexId}">
+                                        <a class="dropdown-toggle" href="" ng-click="position.product = product"
+                                           ng-text="product.color.name">Black</a>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
-                        <div class="form-group" ng-show="position.fake">
-                            <p class="form-control-static" ng-text="position.product.color.name">White</p>
+                    </div>
+                    <div class="form-group" ng-show="position.fake">
+                        <p class="form-control-static" ng-text="position.product.color.name">White</p>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group" ng-class="{'has-error':!pForm.price.$valid}" ng-hide="position.fake">
+                        <div class="input-group">
+                            <input name="price" type="number" class="form-control"
+                                   min="1" required=""
+                                   ng-model="position.price"/>
+                            <span class="input-group-addon">{{priceLists[0].currency.symbol}}</span>
                         </div>
-                    </td>
-                    <td>
-                        <div class="form-group" ng-class="{'has-error':!pForm.price.$valid}" ng-hide="position.fake">
-                            <div class="input-group">
-                                <input name="price" type="number" class="form-control"
-                                       min="1" required=""
-                                       ng-model="position.price"/>
-                                <span class="input-group-addon">{{priceLists[0].currency.symbol}}</span>
-                            </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group" ng-hide="position.fake">
+                        <select class="form-control"
+                                ng-model="position.specification.id"
+                                ng-options="o.id as o.name for o in specifications">
+                            <option value="">Нет</option>
+                        </select>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group" ng-class="{'has-error':!pForm.moq.$valid}" ng-hide="position.fake">
+                        <div class="input-group">
+                            <span class="input-group-addon">от</span>
+                            <input type="number" name="moq" class="form-control" min="1" required=""
+                                   ng-model="position.moq"/>
                         </div>
-                    </td>
-                    <td>
-                        <div class="form-group" ng-hide="position.fake">
-                            <select class="form-control"
-                                    ng-model="position.specification.id"
-                                    ng-options="o.id as o.name for o in specifications">
-                                <option value="">Нет</option>
-                            </select>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="form-group" ng-class="{'has-error':!pForm.moq.$valid}" ng-hide="position.fake">
-                            <div class="input-group">
-                                <span class="input-group-addon">от</span>
-                                <input type="number" name="moq" class="form-control" min="1" required=""
-                                       ng-model="position.moq"/>
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="form-group" ng-hide="position.fake">
-                            <input type="text" class="form-control"
-                                   ng-model="position.description"/>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="form-group" ng-class="{'has-error':!pForm.amount.$valid}" ng-hide="position.fake">
-                            <input type="number" name="amount" class="form-control" min="0" required=""
-                                   ng-model="position.amount"/>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="form-group" ng-hide="position.fake">
-                            <p>
-                                <button type="button" class="btn btn-xs btn-success"
-                                        ng-click="position.amount = 9999"
-                                        tooltip="Не контролировать остаток">
-                                    &infin;
-                                </button>
-                                <button type="button" class="btn btn-xs btn-danger"
-                                        ng-click="priceLists[0].positions.splice($index, 1)"
-                                        tooltip="Удалить позицию">
-                                    <i class="fa fa-times"></i>
-                                </button>
-                            </p>
-                        </div>
-                    </td>
-                </tr>
-                <tr ng-repeat-end="vendor in vendors"></tr>
-                </tbody>
-            </table>
-        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group" ng-hide="position.fake">
+                        <input type="text" class="form-control"
+                               ng-model="position.description"/>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group" ng-class="{'has-error':!pForm.amount.$valid}" ng-hide="position.fake">
+                        <input type="number" name="amount" class="form-control" min="0" required=""
+                               ng-model="position.amount"/>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group" ng-hide="position.fake">
+                        <p>
+                            <button type="button" class="btn btn-xs btn-success"
+                                    ng-click="position.amount = 9999"
+                                    tooltip="Не контролировать остаток">
+                                &infin;
+                            </button>
+                            <button type="button" class="btn btn-xs btn-danger"
+                                    ng-click="priceLists[0].positions.splice($index, 1)"
+                                    tooltip="Удалить позицию">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </p>
+                    </div>
+                </td>
+            </tr>
+            <tr ng-repeat-end="vendor in vendors"></tr>
+            </tbody>
+        </table>
     </div>
+</div>
 </form>
 </tab>
 <tab ng-repeat="priceList in preOrderPriceLists()">
@@ -270,209 +283,218 @@
     </tab-heading>
 </tab>
 <tab>
-    <tab-heading>
-        <span th:text="#{page.priceList.settings}">Условия работы</span>
-    </tab-heading>
-    <form name="userForm" role="form" ng-submit="updateWorkConditions(userForm)" class="form-horizontal" novalidate="">
-        <div class="row">
-            <div class="col-md-12">
-                <button class="btn btn-warning" ng-disabled="!userForm.$valid">
-                    <span th:text="#{button.save}">Сохранить</span>
-                    <i class="fa fa-save"></i>
-                </button>
+<tab-heading>
+    <span th:text="#{page.priceList.settings}">Условия работы</span>
+</tab-heading>
+<form name="userForm" role="form" ng-submit="updateWorkConditions(userForm)" class="form-horizontal" novalidate="">
+<div class="row">
+<div class="col-md-12">
+    <button class="btn btn-warning" ng-disabled="!userForm.$valid">
+        <span th:text="#{button.save}">Сохранить</span>
+        <i class="fa fa-save"></i>
+    </button>
+</div>
+<div class="col-md-12">
+    <fieldset>
+        <legend>Гарантия</legend>
+        <div class="form-group" ng-class="{'has-error':!userForm.sellerFreeReplacement.$valid}">
+            <label class="control-label col-xs-3" th:text="#{user.sellerFreeReplacement}">Бесплатная замена</label>
+
+            <div class="col-xs-3">
+                <div class="input-group" style="width:100px">
+                    <input type="number" name="sellerFreeReplacement" class="form-control"
+                           ng-model="user.sellerFreeReplacement" required="" min="0"/>
+                    <span class="input-group-addon">дн.</span>
+                </div>
             </div>
-            <div class="col-md-12">
-                <fieldset>
-                    <legend>Гарантия</legend>
-                    <div class="form-group" ng-class="{'has-error':!userForm.sellerFreeReplacement.$valid}">
-                        <label class="control-label col-xs-3" th:text="#{user.sellerFreeReplacement}">Бесплатная замена</label>
+        </div>
+        <div class="form-group" ng-class="{'has-error':!userForm.sellerFreeRepair.$valid}">
+            <label class="control-label col-xs-3" th:text="#{user.sellerFreeRepair}">Бесплатный ремонт</label>
 
-                        <div class="col-xs-3">
-                            <div class="input-group" style="width:100px">
-                                <input type="number" name="sellerFreeReplacement" class="form-control"
-                                       ng-model="user.sellerFreeReplacement" required="" min="0"/>
-                                <span class="input-group-addon">дн.</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group" ng-class="{'has-error':!userForm.sellerFreeRepair.$valid}">
-                        <label class="control-label col-xs-3" th:text="#{user.sellerFreeRepair}">Бесплатный ремонт</label>
-
-                        <div class="col-xs-3">
-                            <div class="input-group" style="width:100px">
-                                <input type="number" name="sellerFreeRepair" class="form-control"
-                                       min="0" required=""
-                                       ng-model="user.sellerFreeRepair"/>
-                                <span class="input-group-addon">дн.</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group" ng-class="{'has-error':!userForm.sellerWarrantyAdditional.$valid}">
-                        <label class="control-label col-sm-3" th:text="#{user.sellerWarrantyAdditional}">Дополнительно</label>
-
-                        <div class="col-sm-9">
-                            <input type="text" name="sellerWarrantyAdditional" class="form-control"
-                                   placeholder="Дополнительные условия гарантии и работы"
-                                   th:placeholder="#{user.sellerWarrantyAdditional.title}"
-                                   ng-maxlength="255"
-                                   ng-model="user.sellerWarrantyAdditional"/>
-                        </div>
-                    </div>
-
-                </fieldset>
-
-                <fieldset>
-                    <legend>Доставка</legend>
-                <div class="form-group">
-                    <label class="control-label col-xs-3">Тип доставки</label>
-
-                    <div class="col-xs-9 checkbox">
-                        <label class="checkbox-inline">
-                            <input name="deliveryType" type="checkbox" ng-model="user.sellerPickup" ng-value="false"/>
-                            <span>Самовывоз</span>
-                        </label>
-                        <label class="checkbox-inline">
-                            <input name="deliveryType" type="checkbox" ng-model="user.sellerDelivery" ng-value="true"/>
-                            <span>Доставка</span>
-                        </label>
-                    </div>
+            <div class="col-xs-3">
+                <div class="input-group" style="width:100px">
+                    <input type="number" name="sellerFreeRepair" class="form-control"
+                           min="0" required=""
+                           ng-model="user.sellerFreeRepair"/>
+                    <span class="input-group-addon">дн.</span>
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <fieldset ng-show="user.sellerPickup">
-                            <legend>Условия самовывоза</legend>
-
-                            <div class="form-group">
-                                <label class="control-label col-lg-3">Место самовывоза</label>
-
-                                <div class="col-lg-9 radio">
-                                    <label class="radio-inline">
-                                        <input name="pickupPlace" type="radio" ng-model="user.sellerPickupPlace"
-                                               th:value="#{no}" value="Нет"/>
-                                        <span th:text="#{no}">Нет</span>
-                                    </label>
-                                    <label class="radio-inline" ng-repeat="p in deliveryPlaces">
-                                        <input name="pickupPlace" type="radio" ng-model="user.sellerPickupPlace"
-                                               ng-value="p.name"/>
-                                        <span ng-text="p.name">Митино</span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="control-label col-sm-3" th:text="#{user.sellerPickupPlaceAddition}">Дополнительно</label>
-
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control" th:placeholder="#{user.sellerPickupPlaceAddition.title}"
-                                           placeholder="Дополнительные условия самовывоза"
-                                           ng-model="user.sellerPickupPlaceAddition"/>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="control-label col-sm-3" th:text="#{page.priceList.pickupTime}">Время
-                                    самовывоза</label>
-
-                                <div class="col-sm-9">
-                                    <label>с</label>
-
-                                    <div ng-model="user.sellerPickupFrom" style="display:inline-block;">
-                                        <timepicker minute-step="30" show-meridian="false"></timepicker>
-                                    </div>
-                                    <label>до</label>
-
-                                    <div ng-model="user.sellerPickupTo" style="display:inline-block;">
-                                        <timepicker minute-step="30" show-meridian="false"></timepicker>
-                                    </div>
-                                </div>
-                                 
-                            </div>
-
-                        </fieldset>
-                    </div>
-                    <div class="col-md-6">
-                        <fieldset ng-show="user.sellerDelivery">
-                            <legend>Условия доставки</legend>
-
-                            <div class="form-group">
-                                <label class="control-label col-lg-3">Место доставки</label>
-
-                                <div class="col-lg-9 radio">
-                                    <label class="radio-inline">
-                                        <input name="deliveryPlace" type="radio" ng-model="user.sellerDeliveryPlace"
-                                               th:value="#{no}" value="Нет"/>
-                                        <span th:text="#{no}">Нет</span>
-                                    </label>
-                                    <label class="radio-inline" ng-repeat="d in deliveryPlaces">
-                                        <input name="deliveryPlace" type="radio" ng-model="user.sellerDeliveryPlace"
-                                               ng-value="d.name"/>
-                                        <span ng-text="d.name">Митино</span>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-sm-3" th:text="#{page.priceList.deliveryTime}">Время
-                                    доставки</label>
-
-                                <div class="col-sm-9">
-                                    <label>с</label>
-
-                                    <div ng-model="user.sellerDeliveryFrom" style="display:inline-block;">
-                                        <timepicker minute-step="30" show-meridian="false"></timepicker>
-                                    </div>
-                                    <label>до</label>
-
-                                    <div ng-model="user.sellerDeliveryTo" style="display:inline-block;">
-                                        <timepicker minute-step="30" show-meridian="false"></timepicker>
-                                    </div>
-                                </div>
-                                 
-                            </div>
-                            <div class="form-group"  ng-class="{'has-error':!userForm.sellerDeliveryMin.$valid}">
-                                <div class="row">
-                                    <label class="control-label col-xs-3">
-                                        <span>Бесплатная доставка</span>
-                                        <input type="checkbox" ng-model="user.sellerDeliveryFree"/>
-                                    </label>
-
-                                    <div class="col-xs-9" ng-show="user.sellerDeliveryFree">
-                                        <div class="input-group" style="width:250px">
-
-                                            <span class="input-group-addon">Бесплатно от</span>
-                                            <input type="number" name="sellerDeliveryMin" class="form-control"
-                                                   min="1" required=""
-                                                   ng-model="user.sellerDeliveryMin"/>
-                                            <span class="input-group-addon">шт.</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group" ng-class="{'has-error':!userForm.sellerDeliveryCost.$valid}">
-                                <div class="row">
-                                    <label class="control-label col-xs-3">
-                                        <span>Платная доставка</span>
-                                        <input type="checkbox" ng-model="user.sellerDeliveryPaid"/>
-                                    </label>
-
-                                    <div class="col-xs-9" ng-show="user.sellerDeliveryPaid">
-                                        <div class="input-group" style="width:250px">
-                                        <input type="number" name="sellerDeliveryCost" class="form-control"
-                                               min="0" required=""
-                                               ng-model="user.sellerDeliveryCost"/>
-                                        <span class="input-group-addon">руб. за доставку</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </fieldset>
-                    </div>
-                </div>
-                </fieldset>
             </div>
         </div>
 
-    </form>
+        <div class="form-group" ng-class="{'has-error':!userForm.sellerWarrantyAdditional.$valid}">
+            <label class="control-label col-sm-3" th:text="#{user.sellerWarrantyAdditional}">Дополнительно</label>
+
+            <div class="col-sm-9">
+                <input type="text" name="sellerWarrantyAdditional" class="form-control"
+                       placeholder="Дополнительные условия гарантии и работы"
+                       th:placeholder="#{user.sellerWarrantyAdditional.title}"
+                       ng-maxlength="255"
+                       ng-model="user.sellerWarrantyAdditional"/>
+            </div>
+        </div>
+
+    </fieldset>
+
+    <fieldset>
+        <legend>Доставка</legend>
+        <div class="row form-group">
+            <label class="text-right col-xs-3 margin-top-41">Тип доставки</label>
+
+            <div class="col-xs-3 margin-top-29">
+                <label class="checkbox-inline">
+                    <input name="deliveryType" type="checkbox" ng-model="user.sellerPickup" ng-value="false"/>
+                    <span>Самовывоз</span>
+                </label>
+                <label class="checkbox-inline">
+                    <input name="deliveryType" type="checkbox" ng-model="user.sellerDelivery" ng-value="true"/>
+                    <span>Доставка</span>
+                </label>
+            </div>
+            <div class="col-xs-2 margin-top-34">
+                <label class="control-label">Заказ осуществляется до</label>
+            </div>
+            <div class="col-xs-3">
+                <timepicker ng-model="user.deadLine" minute-step="30" show-meridian="false">
+                </timepicker>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <fieldset ng-show="user.sellerPickup">
+                    <legend>Условия самовывоза</legend>
+
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Место самовывоза</label>
+
+                        <div class="col-lg-9 radio">
+                            <label class="radio-inline">
+                                <input name="pickupPlace" type="radio" ng-model="user.sellerPickupPlace"
+                                       th:value="#{no}" value="Нет"/>
+                                <span th:text="#{no}">Нет</span>
+                            </label>
+                            <label class="radio-inline" ng-repeat="p in deliveryPlaces">
+                                <input name="pickupPlace" type="radio" ng-model="user.sellerPickupPlace"
+                                       ng-value="p.name"/>
+                                <span ng-text="p.name">Митино</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3"
+                               th:text="#{user.sellerPickupPlaceAddition}">Дополнительно</label>
+
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control"
+                                   th:placeholder="#{user.sellerPickupPlaceAddition.title}"
+                                   placeholder="Дополнительные условия самовывоза"
+                                   ng-model="user.sellerPickupPlaceAddition"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" th:text="#{page.priceList.pickupTime}">Время
+                            самовывоза</label>
+
+                        <div class="col-sm-9">
+                            <label>с</label>
+
+                            <div ng-model="user.sellerPickupFrom" style="display:inline-block;">
+                                <timepicker minute-step="30" show-meridian="false"></timepicker>
+                            </div>
+                            <label>до</label>
+
+                            <div ng-model="user.sellerPickupTo" style="display:inline-block;">
+                                <timepicker minute-step="30" show-meridian="false"></timepicker>
+                            </div>
+                        </div>
+                         
+                    </div>
+
+                </fieldset>
+            </div>
+            <div class="col-md-6">
+                <fieldset ng-show="user.sellerDelivery">
+                    <legend>Условия доставки</legend>
+
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Место доставки</label>
+
+                        <div class="col-lg-9 radio">
+                            <label class="radio-inline">
+                                <input name="deliveryPlace" type="radio" ng-model="user.sellerDeliveryPlace"
+                                       th:value="#{no}" value="Нет"/>
+                                <span th:text="#{no}">Нет</span>
+                            </label>
+                            <label class="radio-inline" ng-repeat="d in deliveryPlaces">
+                                <input name="deliveryPlace" type="radio" ng-model="user.sellerDeliveryPlace"
+                                       ng-value="d.name"/>
+                                <span ng-text="d.name">Митино</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" th:text="#{page.priceList.deliveryTime}">Время
+                            доставки</label>
+
+                        <div class="col-sm-9">
+                            <label>с</label>
+
+                            <div ng-model="user.sellerDeliveryFrom" style="display:inline-block;">
+                                <timepicker minute-step="30" show-meridian="false"></timepicker>
+                            </div>
+                            <label>до</label>
+
+                            <div ng-model="user.sellerDeliveryTo" style="display:inline-block;">
+                                <timepicker minute-step="30" show-meridian="false"></timepicker>
+                            </div>
+                        </div>
+                         
+                    </div>
+                    <div class="form-group" ng-class="{'has-error':!userForm.sellerDeliveryMin.$valid}">
+                        <div class="row">
+                            <label class="control-label col-xs-3">
+                                <span>Бесплатная доставка</span>
+                                <input type="checkbox" ng-model="user.sellerDeliveryFree"/>
+                            </label>
+
+                            <div class="col-xs-9" ng-show="user.sellerDeliveryFree">
+                                <div class="input-group" style="width:250px">
+
+                                    <span class="input-group-addon">Бесплатно от</span>
+                                    <input type="number" name="sellerDeliveryMin" class="form-control"
+                                           min="1" required=""
+                                           ng-model="user.sellerDeliveryMin"/>
+                                    <span class="input-group-addon">шт.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{'has-error':!userForm.sellerDeliveryCost.$valid}">
+                        <div class="row">
+                            <label class="control-label col-xs-3">
+                                <span>Платная доставка</span>
+                                <input type="checkbox" ng-model="user.sellerDeliveryPaid"/>
+                            </label>
+
+                            <div class="col-xs-9" ng-show="user.sellerDeliveryPaid">
+                                <div class="input-group" style="width:250px">
+                                    <input type="number" name="sellerDeliveryCost" class="form-control"
+                                           min="0" required=""
+                                           ng-model="user.sellerDeliveryCost"/>
+                                    <span class="input-group-addon">руб. за доставку</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </fieldset>
+</div>
+</div>
+
+</form>
 </tab>
 </tabset>
 </div>

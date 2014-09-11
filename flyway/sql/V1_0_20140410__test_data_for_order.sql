@@ -1,4 +1,3 @@
--- data for Integration tests
 alter table "order" add column currency_id bigint NOT NULL;
 alter table "order_position" drop column currency_id;
 
