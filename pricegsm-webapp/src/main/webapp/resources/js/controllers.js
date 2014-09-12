@@ -821,6 +821,7 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
                 $scope.order.totalAmount = $scope.calcTotalAmount($scope.order);
                 $scope.order.status = status;
                 $scope.order.totalPrice = $scope.calcTotalPrice($scope.order);
+                $scope.updatePhone();
                 if ($scope.order.place == null || $scope.order.place == undefined) {
                     $scope.order.place = $scope.order.seller.sellerPickupPlace;
                 }

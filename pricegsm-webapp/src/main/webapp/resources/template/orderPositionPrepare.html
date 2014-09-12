@@ -17,7 +17,7 @@
 </div>
 <div class="row form-group">
     <div class="text-right col-sm-offset-1 col-sm-2 right-padding-5" pg-text="order.phoneNumber">Телефон</div>
-    <div class="col-sm-3 left-padding-0">{{order.seller.phone}}</div>
+    <div class="col-sm-3 left-padding-0">{{priceList.phone}}</div>
 </div>
 <div class="row">
     <div class="text-right col-sm-offset-1 col-sm-2 right-padding-5" th:text="#{order.buyer}">Покупатель:</div>
@@ -84,8 +84,7 @@
         <div class="col-sm-2 left-padding-0">
             <input type="text" class="form-control"
                    placeholder={{order.phone}}
-                   ng-model="order.phone"
-                   ng-change="updatePhone()"/>
+                   ng-model="order.phone"/>
         </div>
         <label class="col-sm-1 margin-top-34 right-padding-5">
             <div class="control-label" pg-text="order.onDate">на дату</div>

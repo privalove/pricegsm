@@ -51,6 +51,17 @@
                         </div>
 
                         <div class="form-group">
+                            <label class="col-xs-2 control-label" for="organizationName">
+                                <span th:text="#{profileForm.organizationName}">Организация</span>
+                            </label>
+
+                            <div class="col-xs-9">
+                                <input type="text" id="organizationName" name="organizationName" class="form-control"
+                                       ng-model="profileForm.organizationName" pg-valid="metadata"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
                             <label class="col-xs-2 control-label" for="phone">
                                 <span th:text="#{profileForm.phone}">Phone</span>
                             </label>

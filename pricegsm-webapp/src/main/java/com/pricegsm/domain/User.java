@@ -31,6 +31,8 @@ public class User
 
     public static final Date TIME_17_00 = new Date(17 * 60 * 60 * 1000);
 
+    private String organizationName;
+
     private String phone;
 
     private String website;
@@ -92,6 +94,16 @@ public class User
         super(name, email, password);
     }
 
+    @Size(max = 255)
+    @Basic
+    @Column(name = "organization_name")
+    public String getOrganizationName() {
+        return organizationName;
+    }
+
+    public void setOrganizationName(String organizationName) {
+        this.organizationName = organizationName;
+    }
 
     @Size(max = 255)
     @Basic

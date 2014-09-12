@@ -16,6 +16,8 @@ public class ProfileForm {
 
     private String name;
 
+    private String organizationName;
+
     private String phone;
 
     private String website;
@@ -33,6 +35,7 @@ public class ProfileForm {
 
     public ProfileForm(User user) {
         setName(user.getName());
+        setOrganizationName(user.getOrganizationName());
         setPhone(user.getPhone());
         setWebsite(user.getWebsite());
         setBuyerDeliveryPlace(user.getBuyerDeliveryPlace());
@@ -43,6 +46,7 @@ public class ProfileForm {
 
     public void fill(User user) {
         user.setName(getName());
+        user.setOrganizationName(getOrganizationName());
         user.setPhone(getPhone());
         user.setWebsite(getWebsite());
         user.setBuyerDeliveryPlace(getBuyerDeliveryPlace());
@@ -65,6 +69,14 @@ public class ProfileForm {
         this.name = name;
     }
 
+    @Size(max = 255)
+    public String getOrganizationName() {
+        return organizationName;
+    }
+
+    public void setOrganizationName(String organizationName) {
+        this.organizationName = organizationName;
+    }
 
     @Size(max = 255)
     public String getPhone() {
