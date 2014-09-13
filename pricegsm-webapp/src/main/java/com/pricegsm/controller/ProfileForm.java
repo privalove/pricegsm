@@ -2,6 +2,8 @@ package com.pricegsm.controller;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.deser.std.DateDeserializers;
+import com.fasterxml.jackson.databind.ser.std.DateSerializer;
 import com.pricegsm.domain.Region;
 import com.pricegsm.domain.User;
 import com.pricegsm.jackson.GlobalEntityDeserializer;
@@ -10,9 +12,10 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.Date;
 
-public class ProfileForm {
+public class ProfileForm implements Serializable {
 
     private String name;
 
@@ -111,6 +114,8 @@ public class ProfileForm {
     /**
      * Default delivery time range from.
      */
+    @JsonSerialize(using = DateSerializer.class)
+    @JsonDeserialize(using = DateDeserializers.DateDeserializer.class)
     public Date getBuyerDeliveryFrom() {
         return buyerDeliveryFrom;
     }
@@ -122,6 +127,8 @@ public class ProfileForm {
     /**
      * Default delivery time range to.
      */
+    @JsonSerialize(using = DateSerializer.class)
+    @JsonDeserialize(using = DateDeserializers.DateDeserializer.class)
     public Date getBuyerDeliveryTo() {
         return buyerDeliveryTo;
     }

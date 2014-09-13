@@ -89,16 +89,16 @@ public class ProfileController {
     }
 
 
-    @RequestMapping(value = "/profile.json", method = RequestMethod.POST)
+    @RequestMapping(value = "/profile.json", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public OperationResult updateProfile(@RequestBody @Valid ProfileForm profilerForm, BindingResult result) {
+    public OperationResult updateProfile(@RequestBody @Valid ProfileForm profileForm, BindingResult result) {
 
         if (result.hasErrors()) {
             return OperationResult.validation()
                     .payload("profile", new ProfileForm((User) principalHolder.getCurrentUser()));
         }
 
-        userService.updateProfile(profilerForm);
+        userService.updateProfile(profileForm);
 
         User user =  userService.loadCurrentUser();
 
