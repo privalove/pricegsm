@@ -468,6 +468,8 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
 
     $scope.showSaveError = false;
 
+    $scope.showActuallityError = false;
+
     $scope.updateName = function () {
         if ($scope.order.contactName == null || $scope.order.contactName == undefined || $scope.order.contactName == "") {
             $scope.order.contactName = $scope.order.buyer.name;
@@ -575,30 +577,63 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
     function compareDates(date1, date2) {
         date1 = new Date(date1.getFullYear(), date1.getMonth(), date1.getDate());
         date2 = new Date(date2.getFullYear(), date2.getMonth(), date2.getDate());
-        if (date1 > date2) {
+        if (date1.valueOf() > date2.valueOf()) {
             return 1;
         }
-        if (date1 == date2) {
+        if (date1.valueOf() == date2.valueOf()) {
             return 0;
         }
-        if (date1 < date2) {
+        if (date1.valueOf() < date2.valueOf()) {
             return -1;
         }
     }
 
     $scope.showPastDate = compareDates(new Date(), new Date($scope.order.deliveryDate)) > 0;
 
+    function getDateList(startDate, numberOfDays) {
+        var format = "yyyy-MM-dd";
+        var dates = [];
+        for (var i = 0; i < numberOfDays; i++) {
+            dates.push($filter('date')(new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + i), format));
+        }
+        return dates;
+    }
+
     function getPossibleDeliveryDates() {
         var today = new Date();
-        var todayString = $filter('date')(today, baseDateFormat);
         var tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
-        var tomorrowString = $filter('date')(tomorrow, baseDateFormat);
-        if (today.getHours() < 21) {
-            return [todayString, tomorrowString];
+        if ($scope.priceList.position == 0) {
+            if (today.getHours() < $scope.order.seller.deadLine) {
+                return getDateList(today, 3);
+            } else {
+                return getDateList(tomorrow, 2);
+            }
         } else {
-            var afterTomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 2);
-            var afterTomorrowString = $filter('date')(afterTomorrow, baseDateFormat);
-            return [todayString, tomorrowString, afterTomorrowString];
+            var fromDate = new Date($scope.priceList.sellFromDate);
+            var toDate = new Date($scope.priceList.sellToDate);
+            if (compareDates(today, toDate) >= 0) {
+                if (today.getHours() < $scope.order.seller.deadLine) {
+                    fromDate = today;
+                } else {
+                    return [];
+                }
+            }
+
+            if (compareDates(today, fromDate) >= 0) {
+                if (today.getHours() < $scope.order.seller.deadLine) {
+                    fromDate = today;
+                } else {
+                    fromDate = tomorrow;
+                }
+            }
+
+            var dayNumber = toDate.getDate();
+            if (toDate.getMonth() != fromDate.getMonth()) {
+                toDate.setDate(-1)
+                dayNumber += toDate.getDate() + 1;
+            }
+            var numberOfDays = dayNumber - fromDate.getDate() + 1;
+            return getDateList(fromDate, numberOfDays);
         }
     }
 
@@ -696,14 +731,29 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
             $scope.showSaveError = false;
         }
 
+        var sellToDate = new Date($scope.priceList.sellToDate);
+        var sellFromDate = new Date($scope.priceList.sellFromDate);
+        var afterDeadline = today.getHours() >= new Date($scope.order.seller.deadLine).getHours();
+        var comparedDatesFrom = compareDates(today, sellFromDate);
+        var comparedDatesTo = compareDates(today, sellToDate);
+        if ($scope.priceList.position > 0 && comparedDatesTo == 1
+            || $scope.priceList.position > 0 && comparedDatesTo == 0 && afterDeadline
+            || $scope.priceList.position == 0 && comparedDatesFrom > 0
+            || $scope.priceList.position == 0 && comparedDatesFrom == 0 && afterDeadline) {
+
+            $scope.showActuallityError = true;
+            return;
+        }
+        $scope.showActuallityError = false;
+
         $scope.loadPriceList($scope.order.seller.id, $scope.order.priceListPosition, callback);
     }
 
     $scope.showPriceList = function () {
-        $scope.showHidePriceList = !$scope.showHidePriceList;
-        if ($scope.showHidePriceList) {
+        if (!$scope.showHidePriceList) {
             $scope.refresh();
         }
+        $scope.showHidePriceList = !$scope.showHidePriceList && !$scope.showActuallityError;
     }
 
     $scope.cancel = function () {
@@ -771,7 +821,8 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
         return exitingOrderPosition == undefined
             && orderForm.$valid
             && ($scope.order.delivery || $scope.order.deliveryFree || $scope.order.pickup)
-            && !($scope.order.place == null || $scope.order.place == undefined || $scope.order.place == "");
+            && !($scope.order.place == null || $scope.order.place == undefined || $scope.order.place == "")
+            && !$scope.showActuallityError;
     }
 
     $scope.resetOtherDelivery = function (selectedDeliveryType) {
@@ -965,18 +1016,29 @@ function PriceListCtrl($scope, $filter, notifyManager, priceListResource, PriceL
         }
     };
 
+    //todo ask
     var baseDateFormat = "yyyy-MM-dd";
 
     $scope.extend = function (form, index) {
         var priceList = $scope.priceLists[index];
 
-        priceList.active = true;
+//        priceList.active = true;
 
-        var date = new Date();
-        priceList.sellFromDate = $filter('date')(date, baseDateFormat);
-        priceList.sellToDate = $filter('date')(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1), baseDateFormat);
+//        var date = new Date();
+        //todo deadline logic
+//        priceList.sellFromDate = $filter('date')(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1), baseDateFormat);
+//        priceList.sellToDate = $filter('date')(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 2), baseDateFormat);
 
         $scope.save(form, index);
+    }
+
+    $scope.extendAvailability = function (form, index) {
+        var priceList = $scope.priceLists[index];
+        var date1 = new Date();
+        var date2 = new Date(priceList.sellFromDate);
+        date2.setHours(17);
+        date2.setMinutes(0);
+        return date1 < date2 || !form.$valid;
     }
 
     if (priceListResource.ok) {

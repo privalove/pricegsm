@@ -28,7 +28,7 @@
                 </li>
             </ul>
 
-        <button class="btn btn-green" ng-click="extend(plForm, 0)" ng-disabled="!plForm.$valid">
+        <button class="btn btn-green" ng-click="extend(plForm, 0)" ng-disabled="extendAvailability(plForm, 0)">
             <span th:text="#{button.extend}">Продлить</span>
             <i class="fa fa-arrow-right"></i>
         </button>
