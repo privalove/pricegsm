@@ -1,14 +1,13 @@
-<header class="modal-header">
+<header class="no-border modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="cancel()"><i
             class="fa fa-times-circle fa-lg"></i></button>
-    <h1 class="gf-modal-heading" pg-text="orderPosition">Order</h1>
 </header>
 
 <div xmlns:th="http://www.thymeleaf.org">
 <div class="row">
     <div class="col-sm-3 text-right right-padding-5">Статус: {{order.status | statusFilter}}</div>
 </div>
-<h4 class="text-center">Накладная №{{order.id}}
+<h4 class="text-center">Заказ поставщику №{{order.id}}
     <small> от {{order.sendDate|date : 'd.M.yyyy'}}</small>
 </h4>
 <div class="row">
@@ -29,10 +28,18 @@
 </div>
 <form id="orderForm" class="form-horizontal" name="orderForm">
     <div class="row">
+
         <div class="text-right col-sm-offset-1 col-sm-2 control-label right-padding-5"
-             th:text="#{order.contactData}">Контактные данные:
+             th:text="#{order.contactData}">Контактное лицо:
         </div>
-        <div class="col-sm-offset-2 col-sm-3">
+        <div class="col-sm-2  left-padding-0">
+            <input type="text" class="form-control"
+                   placeholder={{order.contactName}}
+                   ng-model="order.contactName"/>
+        </div>
+
+
+        <div class="col-sm-3">
             <label class="radio-inline">
                 <input ng-disabled="{{!order.seller.sellerPickup}}" name="pickup" type="radio"
                        ng-model="order.pickup" ng-value="true" ng-change="resetOtherDelivery('pickup')"
@@ -48,13 +55,14 @@
         </div>
     </div>
     <div class="row form-group">
-        <label class="text-right col-sm-offset-1 col-sm-2 control-label right-padding-5"
-               pg-text="order.name">Имя</label>
+        <label class="text-right col-sm-offset-1 col-sm-2 right-padding-5">
+            <div class="control-label" pg-text="order.phoneNumber">Телефон</div>
+        </label>
 
-        <div class="col-sm-2  left-padding-0">
+        <div class="col-sm-2 left-padding-0">
             <input type="text" class="form-control"
-                   placeholder={{order.contactName}}
-            ng-model="order.contactName"/>
+                   placeholder={{order.phone}}
+                   ng-model="order.phone"/>
         </div>
 
         <div class="col-sm-6">
@@ -80,16 +88,8 @@
     </div>
 
     <div class="row vertical-center">
-        <label class="text-right col-sm-offset-1 col-sm-2 right-padding-5">
-            <div class="control-label" pg-text="order.phoneNumber">Телефон</div>
-        </label>
 
-        <div class="col-sm-2 left-padding-0">
-            <input type="text" class="form-control"
-                   placeholder={{order.phone}}
-                   ng-model="order.phone"/>
-        </div>
-        <label class="col-sm-1 margin-top-34 right-padding-5">
+        <label class="col-sm-offset-5 col-sm-1 margin-top-34 right-padding-5">
             <div class="control-label" pg-text="order.onDate">на дату</div>
         </label>
 
@@ -133,6 +133,7 @@
                 <tr>
                     <th pg-text="priceListPosition.name">Наименование</th>
                     <th pg-text="color">цвет</th>
+                    <th>Спец-ия</th>
                     <th pg-text="note">примичание</th>
                     <th></th>
                     <th class="pg-amount" pg-text="page.order.totalAmount">количество</th>
@@ -145,6 +146,7 @@
                 <tr class="{{orderPosition.selectedStyle}}" ng-repeat="orderPosition in order.orderPositions">
                     <td>{{orderPosition.product.name}}</td>
                     <td>{{orderPosition.product.color.name}}</td>
+                    <th>{{}}</th>
                     <td>{{orderPosition.product.description}}</td>
                     <td>
                         <div class="reduceAmountButton pull-right">

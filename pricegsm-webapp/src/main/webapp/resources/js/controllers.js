@@ -333,10 +333,9 @@ function OrderCtrl($scope, $filter, $modal, $resource, orders, notifyManager) {
 
     $scope.orderDetails = function (currentOrder) {
         var orderModal;
-        if (currentOrder.status == "PREPARE") {
-            var PriceList = $resource("order/:id/:position/pricelist.json", {id: '@id', position: '@position'});
-            PriceList.get({id: currentOrder.seller.id, position: currentOrder.priceListPosition}, function (data) {
-
+        var PriceList = $resource("order/:id/:position/pricelist.json", {id: '@id', position: '@position'});
+        PriceList.get({id: currentOrder.seller.id, position: currentOrder.priceListPosition}, function (data) {
+            if (currentOrder.status == "PREPARE") {
                 orderModal = $modal.open({
                     templateUrl: "resources/template/orderPositionPrepare.html",
                     controller: OrderPositionCtrl,
@@ -346,10 +345,10 @@ function OrderCtrl($scope, $filter, $modal, $resource, orders, notifyManager) {
                             return currentOrder;
                         },
                         currentPriceList: function () {
-                            return data.payload.priceList
+                            return data.payload.priceList;
                         },
                         deliveryPlaces: function () {
-                            return data.payload.deliveryPlaces
+                            return data.payload.deliveryPlaces;
                         }
                     }
                 });
@@ -360,25 +359,25 @@ function OrderCtrl($scope, $filter, $modal, $resource, orders, notifyManager) {
                         deleteOrder(savedOrder, getOrderIndex(savedOrder))
                     }
                 });
-            });
-        } else {
-            orderModal = $modal.open({
-                templateUrl: "resources/template/orderPosition.html",
-                controller: OrderPositionCtrl,
-                size: "lg",
-                resolve: {
-                    currentOrder: function () {
-                        return currentOrder;
-                    },
-                    currentPriceList: function () {
-                        return null;
-                    },
-                    deliveryPlaces: function () {
-                        return null;
+            } else {
+                orderModal = $modal.open({
+                    templateUrl: "resources/template/orderPosition.html",
+                    controller: OrderPositionCtrl,
+                    size: "lg",
+                    resolve: {
+                        currentOrder: function () {
+                            return currentOrder;
+                        },
+                        currentPriceList: function () {
+                            return data.payload.priceList;
+                        },
+                        deliveryPlaces: function () {
+                            return data.payload.deliveryPlaces;
+                        }
                     }
-                }
-            });
-        }
+                });
+            }
+        });
     }
 
     function saveOrder(savedOrder) {
