@@ -146,7 +146,7 @@
                 <tr class="{{orderPosition.selectedStyle}}" ng-repeat="orderPosition in order.orderPositions">
                     <td>{{orderPosition.product.name}}</td>
                     <td>{{orderPosition.product.color.name}}</td>
-                    <td>{{}}</td>
+                    <td>{{getSpecification(orderPosition)}}</td>
                     <td>{{orderPosition.product.description}}</td>
                     <td>
                         <div class="reduceAmountButton pull-right">
@@ -176,7 +176,7 @@
                     <th colspan="5"></th>
                     <th colspan="1"><span>Итого:</span></th>
                     <th colspan="1"><span>{{calcTotalPrice(order)}}</span></th>
-                    <th colspan="1"></th>
+                    <th colspan="2"></th>
                 </tr>
                 </tbody>
             </table>

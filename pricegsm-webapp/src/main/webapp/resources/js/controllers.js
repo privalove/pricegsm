@@ -820,6 +820,11 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
         return priceListPosition.moq;
     }
 
+    $scope.getSpecification = function (orderPosition) {
+        var priceListPosition = $scope.findPriceListPosition(orderPosition);
+        return priceListPosition.specification.name;
+    }
+
     $scope.formEnable = function (orderForm) {
         var exitingOrderPosition = _.find($scope.order.orderPositions, function (orderPosition) {
             return orderPosition.amount == 0;
