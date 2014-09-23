@@ -767,7 +767,8 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
     };
 
     $scope.reduceAmount = function (orderPosition) {
-        if (orderPosition.amount > 0) {
+        var priceListPosition = $scope.findPriceListPosition(orderPosition);
+        if (orderPosition.amount > priceListPosition.moq) {
             orderPosition.amount--;
             $scope.updatePriceListAmount(orderPosition);
         }
@@ -779,8 +780,8 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
             return orderPosition.priceListPosition == priceListPosition.id;
         });
 
-        priceListPosition.amount++;
         if (exitingOrderPosition != undefined) {
+            priceListPosition.amount++;
             exitingOrderPosition.amount++;
             $scope.refreshOrderPositions($scope.order);
             exitingOrderPosition.totalPrice = $scope.getPositionTotalPrice(exitingOrderPosition);
@@ -789,7 +790,8 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
 
         var position = angular.copy($scope.orderPositionTemplate);
         position.order = {id: currentOrder.id, name: ""};
-        position.amount = 1;
+        position.amount = priceListPosition.moq;
+        priceListPosition.amount = priceListPosition.moq;
         position.totalPrice = 0;
         position.product = priceListPosition.product;
         position.priceListPosition = priceListPosition.id;
@@ -811,6 +813,11 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
         }
 
         orderPosition.totalPrice = $scope.getPositionTotalPrice(orderPosition);
+    }
+
+    $scope.getMinimumAmount = function (orderPosition) {
+        var priceListPosition = $scope.findPriceListPosition(orderPosition);
+        return priceListPosition.moq;
     }
 
     $scope.formEnable = function (orderForm) {
