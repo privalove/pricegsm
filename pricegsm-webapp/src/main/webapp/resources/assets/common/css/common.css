@@ -129,6 +129,7 @@ table.pg-pricelist .pg-actions {
     display: block;
 }
 
-.no-border {
+.no-border,
+.no-border-children * {
     border: none !important;
 }

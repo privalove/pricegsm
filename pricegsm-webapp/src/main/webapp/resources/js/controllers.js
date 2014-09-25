@@ -697,7 +697,8 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
                 orderPosition.price = priceListPosition.price;
             }
 
-            $scope.calcTotalPrice($scope.order);
+            $scope.order.totalPrice = $scope.calcTotalPrice($scope.order);
+            $scope.order.deliveryCost = $scope.calcDeliveryPrice($scope.order);
 
             $scope.updatePriceListAmount(orderPosition);
         });
@@ -854,15 +855,40 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
         return  orderPosition.price * amount;
     }
 
-    $scope.calcTotalPrice = function (order) {
+    $scope.calcDeliveryPrice = function (order) {
+        if (!$scope.order.seller.sellerDeliveryPaid && !$scope.order.seller.sellerDeliveryFree) {
+            return 0;
+        }
 
-        return _.reduce(
+        if ($scope.order.seller.sellerDeliveryPaid && !$scope.order.seller.sellerDeliveryFree) {
+            return $scope.order.seller.sellerDeliveryCost;
+        }
+
+        if (!$scope.order.seller.sellerDeliveryPaid && $scope.order.seller.sellerDeliveryFree) {
+            return 0;
+        }
+        if ($scope.order.seller.sellerDeliveryPaid && $scope.order.seller.sellerDeliveryFree) {
+            if ($scope.calcTotalAmount(order) >= $scope.order.seller.sellerDeliveryMin) {
+                return 0;
+            } else {
+                return  $scope.order.seller.sellerDeliveryCost;
+            }
+        }
+    }
+
+    function getPositionTotalPrice(order) {
+        var positionTotalPrice = _.reduce(
             _.map(order.orderPositions, function (position) {
                 return $scope.getPositionTotalPrice(position)
             }),
             function (memo, num) {
                 return memo + num
-            }, 0)
+            }, 0);
+        return positionTotalPrice;
+    }
+
+    $scope.calcTotalPrice = function (order) {
+        return  getPositionTotalPrice(order) + $scope.calcDeliveryPrice(order);
     }
 
     $scope.deleteOrderPosition = function ($event, index) {
@@ -883,6 +909,7 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
                 $scope.order.totalAmount = $scope.calcTotalAmount($scope.order);
                 $scope.order.status = status;
                 $scope.order.totalPrice = $scope.calcTotalPrice($scope.order);
+                $scope.order.deliveryCost = $scope.calcDeliveryPrice($scope.order);
                 $scope.updatePhone();
                 $scope.updateName()
                 if ($scope.order.place == null || $scope.order.place == undefined) {

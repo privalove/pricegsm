@@ -73,10 +73,15 @@
                     <td>{{orderPosition.price}}</td>
                     <td>{{orderPosition.price * orderPosition.amount}}</td>
                 </tr>
-                <tr>
+                <tr class="no-border-children">
+                    <th colspan="4"></th>
+                    <th colspan="1"><span>Доставка:</span></th>
+                    <th colspan="1"><span>{{order.deliveryCost}}</span></th>
+                </tr>
+                <tr class="no-border-children">
                     <th colspan="4"></th>
                     <th colspan="1"><span>Итого:</span></th>
-                    <th colspan="1"><span>{{calcTotalPrice(order)}}</span></th>
+                    <th colspan="1"><span>{{order.totalPrice}}</span></th>
                 </tr>
                 </tbody>
             </table>

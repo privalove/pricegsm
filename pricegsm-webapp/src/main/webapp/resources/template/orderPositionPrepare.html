@@ -174,8 +174,14 @@
                 <tr></tr>
                 <tr>
                     <th colspan="5"></th>
+                    <th colspan="1"><span>Доставка:</span></th>
+                    <th colspan="1"><span>{{order.deliveryCost}}</span></th>
+                    <th colspan="2"></th>
+                </tr>
+                <tr class="no-border-children">
+                    <th colspan="5"></th>
                     <th colspan="1"><span>Итого:</span></th>
-                    <th colspan="1"><span>{{calcTotalPrice(order)}}</span></th>
+                    <th colspan="1"><span>{{order.totalPrice}}</span></th>
                     <th colspan="2"></th>
                 </tr>
                 </tbody>
