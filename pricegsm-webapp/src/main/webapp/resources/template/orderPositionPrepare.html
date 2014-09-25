@@ -162,8 +162,8 @@
                                ng-change="updatePriceListAmount(orderPosition)"
                                ng-model="orderPosition.amount"/>
                     </td>
-                    <td>{{orderPosition.price}}</td>
-                    <td>{{orderPosition.totalPrice}}</td>
+                    <td>{{orderPosition.price | priceFilter : priceList.currency.symbol}}</td>
+                    <td>{{orderPosition.totalPrice | priceFilter : priceList.currency.symbol}}</td>
                     <td>
                         <button type="button" class="btn btn-xs btn-danger" tooltip="Удалить"
                                 ng-click="deleteOrderPosition($event,$index)">
@@ -173,15 +173,15 @@
                 </tr>
                 <tr></tr>
                 <tr>
-                    <th colspan="5"></th>
-                    <th colspan="1"><span>Доставка:</span></th>
-                    <th colspan="1"><span>{{order.deliveryCost}}</span></th>
-                    <th colspan="2"></th>
+                    <td colspan="5"></td>
+                    <td colspan="1"><span>Доставка:</span></td>
+                    <td colspan="1"><span>{{order.deliveryCost  | priceFilter : priceList.currency.symbol}}</span></td>
+                    <td colspan="2"></td>
                 </tr>
                 <tr class="no-border-children">
                     <th colspan="5"></th>
                     <th colspan="1"><span>Итого:</span></th>
-                    <th colspan="1"><span>{{order.totalPrice}}</span></th>
+                    <th colspan="1"><span>{{order.totalPrice  | priceFilter : priceList.currency.symbol}}</span></th>
                     <th colspan="2"></th>
                 </tr>
                 </tbody>
@@ -233,7 +233,7 @@
                     <td>{{position.specification.name}}</td>
                     <td>{{position.description}}</td>
                     <td>{{position.amount}}</td>
-                    <td>{{position.price}}</td>
+                    <td>{{position.price | priceFilter : priceList.currency.symbol}}</td>
                     <td>{{position.moq}}</td>
                 </tr>
                 </tbody>

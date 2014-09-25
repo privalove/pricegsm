@@ -966,21 +966,22 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
 
 }
 
-angular.module('orderFilters', []).filter('sellerDeliveryDate', function () {
-    return function (orders, sellerId, deliveryDate) {
+angular.module('orderFilters', [])
+    .filter('sellerDeliveryDate', function () {
+        return function (orders, sellerId, deliveryDate) {
 
-        var resultOrders = [];
+            var resultOrders = [];
 
-        orders.forEach(function (order) {
-            if ((sellerId === undefined || sellerId == "" || order.seller.id == sellerId)
-                && (deliveryDate === undefined || deliveryDate == "" || order.deliveryDate == deliveryDate )) {
-                resultOrders.push(order);
-            }
-        });
+            orders.forEach(function (order) {
+                if ((sellerId === undefined || sellerId == "" || order.seller.id == sellerId)
+                    && (deliveryDate === undefined || deliveryDate == "" || order.deliveryDate == deliveryDate )) {
+                    resultOrders.push(order);
+                }
+            });
 
-        return resultOrders;
-    };
-})
+            return resultOrders;
+        };
+    })
     .filter('statusFilter', function () {
         return function (status) {
             if (status == "PREPARE") {
@@ -1004,7 +1005,7 @@ angular.module('orderFilters', []).filter('sellerDeliveryDate', function () {
             }
         };
     })
-    .filter('deliveryFilter', function () {
+    .filter('deliveryFilter',function () {
         return function (order) {
             if (order.delivery) {
                 return R.get('order.delivery.delivery');
@@ -1012,6 +1013,10 @@ angular.module('orderFilters', []).filter('sellerDeliveryDate', function () {
             if (order.pickup) {
                 return R.get('order.delivery.pickup');
             }
+        }
+    }).filter('priceFilter', function () {
+        return function (price, currencySymbol) {
+            return "" + currencySymbol + price;
         }
     });
 

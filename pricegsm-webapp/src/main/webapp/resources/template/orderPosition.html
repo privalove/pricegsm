@@ -70,18 +70,18 @@
                     <td>{{orderPosition.product.color.name}}</td>
                     <td>{{orderPosition.product.description}}</td>
                     <td>{{orderPosition.amount}}</td>
-                    <td>{{orderPosition.price}}</td>
-                    <td>{{orderPosition.price * orderPosition.amount}}</td>
+                    <td>{{orderPosition.price | priceFilter : priceList.currency.symbol}}</td>
+                    <td>{{orderPosition.totalPrice | priceFilter : priceList.currency.symbol}}</td>
                 </tr>
                 <tr class="no-border-children">
-                    <th colspan="4"></th>
-                    <th colspan="1"><span>Доставка:</span></th>
-                    <th colspan="1"><span>{{order.deliveryCost}}</span></th>
+                    <td colspan="4"></td>
+                    <td colspan="1"><span>Доставка:</span></td>
+                    <td colspan="1"><span>{{order.deliveryCost | priceFilter : priceList.currency.symbol}}</span></td>
                 </tr>
                 <tr class="no-border-children">
                     <th colspan="4"></th>
                     <th colspan="1"><span>Итого:</span></th>
-                    <th colspan="1"><span>{{order.totalPrice}}</span></th>
+                    <th colspan="1"><span>{{order.totalPrice | priceFilter : priceList.currency.symbol}}</span></th>
                 </tr>
                 </tbody>
             </table>
