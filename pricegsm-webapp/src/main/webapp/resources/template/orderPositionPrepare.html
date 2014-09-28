@@ -27,224 +27,219 @@
     <div class="col-sm-3 left-padding-0">{{order.buyer.organizationName}}</div>
 </div>
 <form id="orderForm" class="form-horizontal" name="orderForm">
-    <div class="row">
+<div class="row">
 
-        <div class="text-right col-sm-offset-1 col-sm-2 control-label right-padding-5"
-             th:text="#{order.contactData}">Контактное лицо:
-        </div>
-        <div class="col-sm-2  left-padding-0">
-            <input type="text" class="form-control"
-                   placeholder={{order.contactName}}
-                   ng-model="order.contactName"/>
-        </div>
-
-
-        <div class="col-sm-3">
-            <label class="radio-inline">
-                <input ng-disabled="{{!order.seller.sellerPickup}}" name="pickup" type="radio"
-                       ng-model="order.pickup" ng-value="true" ng-change="resetOtherDelivery('pickup')"
-                       ng-click="setPlace(order.seller.sellerPickupPlace)"/>
-                <span pg-text="order.delivery.pickup"></span>
-            </label>
-            <label class="radio-inline">
-                <input ng-disabled="{{!order.seller.sellerDelivery}}" name="delivery" type="radio"
-                       ng-model="order.delivery" ng-value="true" ng-change="resetOtherDelivery('delivery')"
-                       ng-click="calculateDeliveryPlaceFromDelivery(order.seller.sellerDeliveryPlace)"/>
-                <span pg-text="order.delivery.delivery"></span>
-            </label>
-        </div>
+    <div class="text-right col-sm-offset-1 col-sm-2 control-label right-padding-5"
+         th:text="#{order.contactData}">Контактное лицо:
     </div>
-    <div class="row form-group">
-        <label class="text-right col-sm-offset-1 col-sm-2 right-padding-5">
-            <div class="control-label" pg-text="order.phoneNumber">Телефон</div>
+    <div class="col-sm-2  left-padding-0">
+        <input type="text" class="form-control"
+               placeholder={{order.contactName}}
+               ng-model="order.contactName"/>
+    </div>
+
+
+    <div class="col-sm-3">
+        <label class="radio-inline">
+            <input ng-disabled="{{!order.seller.sellerPickup}}" name="pickup" type="radio"
+                   ng-model="order.pickup" ng-value="true" ng-change="resetOtherDelivery('pickup')"/>
+            <span pg-text="order.delivery.pickup"></span>
         </label>
-
-        <div class="col-sm-2 left-padding-0">
-            <input type="text" class="form-control"
-                   placeholder={{order.phone}}
-                   ng-model="order.phone"/>
-        </div>
-
-        <div class="col-sm-6">
-            <input ng-show="order.pickup" ng-hide="order.delivery" ng-disabled="true" type="text" class="form-control"
-                   placeholder={{order.seller.sellerPickupPlace}} ng-model="order.seller.sellerPickupPlace"/>
-
-            <div ng-show="deliveryPlaceAvailability && order.delivery">
-                <label class="radio-inline" ng-repeat="p in deliveryPlaces | orderBy: deliveryPlaceOrder">
-                    <input name="deliveryPlace" type="radio" ng-model="selectedPlace"
-                           ng-change="setSelectedPlace(p.name)" ng-value="p.name"/>
-                    <span ng-text="p.name">Митино</span>
-                </label>
-                <input ng-disabled="selectedPlace != order.seller.region.name"
-                       type="text" class="form-control" placeholder={{order.place}} ng-model="order.place"/>
-            </div>
-
-            <input ng-show="!deliveryPlaceAvailability && order.delivery"
-                   ng-hide="order.pickup || deliveryPlaceAvailability"
-                   ng-disabled="true" type="text"
-                   class="form-control"
-                   placeholder={{order.seller.sellerDeliveryPlace}} ng-model="order.seller.sellerDeliveryPlace"/>
-        </div>
-    </div>
-
-    <div class="row vertical-center">
-
-        <label class="col-sm-offset-5 col-sm-1 margin-top-34 right-padding-5">
-            <div class="control-label" pg-text="order.onDate">на дату</div>
+        <label class="radio-inline">
+            <input ng-disabled="{{!order.seller.sellerDelivery}}" name="delivery" type="radio"
+                   ng-model="order.delivery" ng-value="true" ng-change="resetOtherDelivery('delivery')"/>
+            <span pg-text="order.delivery.delivery"></span>
         </label>
+    </div>
+</div>
+<div class="row form-group">
+    <label class="text-right col-sm-offset-1 col-sm-2 right-padding-5">
+        <div class="control-label" pg-text="order.phoneNumber">Телефон</div>
+    </label>
 
-        <div class="col-sm-2 margin-top-34 left-padding-0">
-            <select class="form-control" ng-model="order.deliveryDate"
-                    ng-options="deliveryDate | date:deliveryDateFormat for deliveryDate in possibleDeliveryDates">
-                <option ng-show="showPastDate" value="" disabled>
-                    {{order.deliveryDate | date:deliveryDateFormat}}
-                </option>
-            </select>
-        </div>
-        <div class="col-sm-4">
-            <label class="margin-top-5">с</label>
-
-            <div style="display:inline-block;">
-                <timepicker ng-model="order.fromTime" minute-step="30" show-meridian="false"
-                            ng-change="limitFromTime(order.delivery)">
-                </timepicker>
-            </div>
-
-            <label class="margin-top-5">до</label>
-
-            <div style="display:inline-block;">
-                <timepicker ng-model="order.toTime" minute-step="30" show-meridian="false"
-                            ng-change="limitToTime(order.delivery)">
-                </timepicker>
-            </div>
-        </div>
+    <div class="col-sm-2 left-padding-0">
+        <input type="text" class="form-control"
+               placeholder={{order.phone}}
+               ng-model="order.phone"/>
     </div>
 
-    <div class="row form-group">
-        <div class="col-sm-offset-5 col-sm-6">
-            <input class="form-control" type="text" placeholder="Примечание" ng-model="order.description"/>
+    <div class="col-sm-6">
+        <input ng-show="order.pickup" ng-hide="order.delivery"
+               placeholder={{order.seller.sellerPickupPlace}}
+               ng-disabled="true" type="text" class="form-control"/>
+
+        <div pg-delivery-place="{{deliveryPlaces}}" free-input="{{order.seller.region.name}}"
+             default-input="{{deliveryPlace}}"
+             on-change-action="changeDeliveryPlace(deliveryPlace)"
+             ng-model="deliveryPlace"
+             ng-model-options="{ updateOn: 'change' }"
+             ng-show="deliveryPlaceAvailability && order.delivery" class="ng-hide">
+        </div>
+
+        <input ng-show="!deliveryPlaceAvailability && order.delivery"
+               ng-disabled="true" type="text" placeholder={{order.seller.sellerDeliveryPlace}}
+               class="form-control ng-hide"/>
+    </div>
+</div>
+
+<div class="row vertical-center">
+
+    <label class="col-sm-offset-5 col-sm-1 margin-top-34 right-padding-5">
+        <div class="control-label" pg-text="order.onDate">на дату</div>
+    </label>
+
+    <div class="col-sm-2 margin-top-34 left-padding-0">
+        <select class="form-control" ng-model="order.deliveryDate"
+                ng-options="deliveryDate | date:deliveryDateFormat for deliveryDate in possibleDeliveryDates">
+            <option ng-show="showPastDate" value="" disabled>
+                {{order.deliveryDate | date:deliveryDateFormat}}
+            </option>
+        </select>
+    </div>
+    <div class="col-sm-4">
+        <label class="margin-top-5">с</label>
+
+        <div style="display:inline-block;">
+            <timepicker ng-model="order.fromTime" minute-step="30" show-meridian="false"
+                        ng-change="limitFromTime(order.delivery)">
+            </timepicker>
+        </div>
+
+        <label class="margin-top-5">до</label>
+
+        <div style="display:inline-block;">
+            <timepicker ng-model="order.toTime" minute-step="30" show-meridian="false"
+                        ng-change="limitToTime(order.delivery)">
+            </timepicker>
         </div>
     </div>
+</div>
 
-    <div class="row">
-        <div class="col-sm-12">
-            <table class="table table-hover table-condensed pg-pricelist">
-                <thead>
-                <tr>
-                    <th pg-text="priceListPosition.name">Наименование</th>
-                    <th pg-text="color">цвет</th>
-                    <th>Спец-ия</th>
-                    <th pg-text="note">примичание</th>
-                    <th></th>
-                    <th class="pg-amount" pg-text="page.order.totalAmount">количество</th>
-                    <th pg-text="priceListPosition.price">цена</th>
-                    <th pg-text="page.order.totalPrice">сумма</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr class="{{orderPosition.selectedStyle}}" ng-repeat="orderPosition in order.orderPositions">
-                    <td>{{orderPosition.product.name}}</td>
-                    <td>{{orderPosition.product.color.name}}</td>
-                    <td>{{getSpecification(orderPosition)}}</td>
-                    <td>{{orderPosition.product.description}}</td>
-                    <td>
-                        <div class="reduceAmountButton pull-right">
-                            <button type="button" class="btn btn-xs btn-danger" tooltip="Удалить"
-                                    ng-click="reduceAmount(orderPosition)">
-                                <i class="fa fa-minus"></i>
-                            </button>
-                        </div>
-                    </td>
-                    <td>
-                        <input type="number" name="moq" class="form-control input-group"
-                               min={{getMinimumAmount(orderPosition)}} max="" required=""
-                               ng-change="updatePriceListAmount(orderPosition)"
-                               ng-model="orderPosition.amount"/>
-                    </td>
-                    <td>{{orderPosition.price | priceFilter : priceList.currency.symbol}}</td>
-                    <td>{{orderPosition.totalPrice | priceFilter : priceList.currency.symbol}}</td>
-                    <td>
+<div class="row form-group">
+    <div class="col-sm-offset-5 col-sm-6">
+        <input class="form-control" type="text" placeholder="Примечание" ng-model="order.description"/>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <table class="table table-hover table-condensed pg-pricelist">
+            <thead>
+            <tr>
+                <th pg-text="priceListPosition.name">Наименование</th>
+                <th pg-text="color">цвет</th>
+                <th>Спец-ия</th>
+                <th pg-text="note">примичание</th>
+                <th></th>
+                <th class="pg-amount" pg-text="page.order.totalAmount">количество</th>
+                <th pg-text="priceListPosition.price">цена</th>
+                <th pg-text="page.order.totalPrice">сумма</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="{{orderPosition.selectedStyle}}" ng-repeat="orderPosition in order.orderPositions">
+                <td>{{orderPosition.product.name}}</td>
+                <td>{{orderPosition.product.color.name}}</td>
+                <td>{{getSpecification(orderPosition)}}</td>
+                <td>{{orderPosition.product.description}}</td>
+                <td>
+                    <div class="reduceAmountButton pull-right">
                         <button type="button" class="btn btn-xs btn-danger" tooltip="Удалить"
-                                ng-click="deleteOrderPosition($event,$index)">
-                            <i class="fa fa-times"></i>
+                                ng-click="reduceAmount(orderPosition)">
+                            <i class="fa fa-minus"></i>
                         </button>
-                    </td>
-                </tr>
-                <tr></tr>
-                <tr>
-                    <td colspan="5"></td>
-                    <td colspan="1"><span>Доставка:</span></td>
-                    <td colspan="1"><span>{{order.deliveryCost  | priceFilter : priceList.currency.symbol}}</span></td>
-                    <td colspan="2"></td>
-                </tr>
-                <tr class="no-border-children">
-                    <th colspan="5"></th>
-                    <th colspan="1"><span>Итого:</span></th>
-                    <th colspan="1"><span>{{order.totalPrice  | priceFilter : priceList.currency.symbol}}</span></th>
-                    <th colspan="2"></th>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+                    </div>
+                </td>
+                <td>
+                    <input type="number" name="moq" class="form-control input-group"
+                           min={{getMinimumAmount(orderPosition)}} max="" required=""
+                           ng-change="updatePriceListAmount(orderPosition)"
+                           ng-model="orderPosition.amount"/>
+                </td>
+                <td>{{orderPosition.price | priceFilter : priceList.currency.symbol}}</td>
+                <td>{{orderPosition.totalPrice | priceFilter : priceList.currency.symbol}}</td>
+                <td>
+                    <button type="button" class="btn btn-xs btn-danger" tooltip="Удалить"
+                            ng-click="deleteOrderPosition($event,$index)">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </td>
+            </tr>
+            <tr></tr>
+            <tr>
+                <td colspan="5"></td>
+                <td colspan="1"><span>Доставка:</span></td>
+                <td colspan="1"><span>{{order.deliveryCost  | priceFilter : priceList.currency.symbol}}</span></td>
+                <td colspan="2"></td>
+            </tr>
+            <tr class="no-border-children">
+                <th colspan="5"></th>
+                <th colspan="1"><span>Итого:</span></th>
+                <th colspan="1"><span>{{order.totalPrice  | priceFilter : priceList.currency.symbol}}</span></th>
+                <th colspan="2"></th>
+            </tr>
+            </tbody>
+        </table>
     </div>
-    <div class="row form-group">
-        <div class="col-sm-offset-1 col-sm-5">
-            <button type="button" class="btn btn-success"
-                    ng-model="singleModel"
-                    ng-init="singleModel = 0"
-                    btn-checkbox
-                    btn-checkbox-true="1"
-                    btn-checkbox-false="0"
-                    ng-click="$parent.showPriceList()"
-                    tooltip="Подбор из прайс-листа">
-                <span>Подбор из прайс-листа</span>
-            </button>
-            <button type="button" class="btn btn-default" tooltip="Обновить" ng-click="$parent.refresh()">
-                <i class="fa fa-refresh"></i>
-                <span>Обновить</span>
-            </button>
-        </div>
+</div>
+<div class="row form-group">
+    <div class="col-sm-offset-1 col-sm-5">
+        <button type="button" class="btn btn-success"
+                ng-model="singleModel"
+                ng-init="singleModel = 0"
+                btn-checkbox
+                btn-checkbox-true="1"
+                btn-checkbox-false="0"
+                ng-click="$parent.showPriceList()"
+                tooltip="Подбор из прайс-листа">
+            <span>Подбор из прайс-листа</span>
+        </button>
+        <button type="button" class="btn btn-default" tooltip="Обновить" ng-click="$parent.refresh()">
+            <i class="fa fa-refresh"></i>
+            <span>Обновить</span>
+        </button>
     </div>
-    <div class="row form-group" ng-show="showActuallityError">
-        <div class="has-error form-group col-sm-10">
-            <div class="form-control col-sm-offset-1">Даннoe предложение не актуально.</div>
-        </div>
+</div>
+<div class="row form-group" ng-show="showActuallityError">
+    <div class="has-error form-group col-sm-10">
+        <div class="form-control col-sm-offset-1">Даннoe предложение не актуально.</div>
     </div>
-    <div class="row form-group" ng-show="showHidePriceList">
-        <div class="col-sm-12">
-            <table class="table table-hover table-condensed">
-                <thead>
-                <tr>
-                    <th>Наименование</th>
-                    <th>Цвет</th>
-                    <th>Спец-ия</th>
-                    <th>Описание</th>
-                    <th>Кол-во</th>
-                    <th>Цена</th>
-                    <th>МОК</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr class="{{position.selectedStyle}}" ng-repeat="position in priceList.positions"
-                    ng-click="addOrderPosition(position)">
-                    <td>{{position.product.name}}</td>
-                    <td>{{position.product.color.name}}</td>
-                    <td>{{position.specification.name}}</td>
-                    <td>{{position.description}}</td>
-                    <td>{{position.amount}}</td>
-                    <td>{{position.price | priceFilter : priceList.currency.symbol}}</td>
-                    <td>{{position.moq}}</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+</div>
+<div class="row form-group" ng-show="showHidePriceList">
+    <div class="col-sm-12">
+        <table class="table table-hover table-condensed">
+            <thead>
+            <tr>
+                <th>Наименование</th>
+                <th>Цвет</th>
+                <th>Спец-ия</th>
+                <th>Описание</th>
+                <th>Кол-во</th>
+                <th>Цена</th>
+                <th>МОК</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="{{position.selectedStyle}}" ng-repeat="position in priceList.positions"
+                ng-click="addOrderPosition(position)">
+                <td>{{position.product.name}}</td>
+                <td>{{position.product.color.name}}</td>
+                <td>{{position.specification.name}}</td>
+                <td>{{position.description}}</td>
+                <td>{{position.amount}}</td>
+                <td>{{position.price | priceFilter : priceList.currency.symbol}}</td>
+                <td>{{position.moq}}</td>
+            </tr>
+            </tbody>
+        </table>
     </div>
-    <div class="row form-group">
-        <div class="col-sm-offset-1 col-sm-5">
+</div>
+<div class="row form-group">
+    <div class="col-sm-offset-1 col-sm-5">
 
-        </div>
     </div>
+</div>
 </form>
 
 <div class="row">

@@ -232,9 +232,72 @@
                 },
                 require: "ngModel",
                 templateUrl: "resources/template/priceCellTemplate.html",
-                link: function($scope, element, attrs) {
+                link: function ($scope, element, attrs) {
                     $scope.field = attrs.pgPricecell;
                     $scope.currency = $scope.$parent.$eval("currency");
+                }
+            }
+        }])
+        .directive('pgDeliveryPlace', [function () {
+            return {
+                scope: {
+                    ngModel: "=",
+                    defaultInput: "@",
+                    freeInput: "@",
+                    onChangeAction: "&"
+                },
+                require: "?ngModel",
+                templateUrl: "resources/template/deliveryPlace.html",
+                link: function ($scope, element, attrs, ngModel) {
+                    $scope.places = $scope.$eval(attrs.pgDeliveryPlace);
+                    $scope.defaultInput = attrs.defaultInput;
+                    $scope.freeInput = attrs.freeInput;
+
+                    $scope.deliveryPlaceOrder = function (deliveryPlace) {
+                        return  deliveryPlace.id;
+                    }
+
+                    $scope.setSelectedPlace = function (place) {
+                        $scope.selectedPlace = place;
+                        if (place != $scope.freeInput) {
+                            $scope.updateNgModel(place);
+                        } else {
+                            $scope.updateNgModel($scope.freePlace);
+                        }
+                    }
+
+                    $scope.updateNgModel = function (place) {
+                        ngModel.$setViewValue(place);
+                        if (!($scope.onChangeAction == null || $scope.onChangeAction == undefined)) {
+                                $scope.onChangeAction(place);
+                        }
+                    }
+
+                    var initialize = function (places, defaultInput) {
+                        if (defaultInput == null || defaultInput == undefined || defaultInput == "") {
+                            return;
+                        }
+                        _.map(places, function (place) {
+                            if (place.name == defaultInput && place.name != $scope.freeInput) {
+                                $scope.selectedPlace = place.name;
+                                return;
+                            }
+                        });
+
+                        if ($scope.selectedPlace != null) {
+                            return;
+                        }
+
+                        $scope.selectedPlace = $scope.freeInput;
+                        $scope.freePlace = defaultInput;
+                    }
+
+                    initialize($scope.places, $scope.defaultInput);
+
+                    attrs.$observe('defaultInput', function (value) {
+                        initialize($scope.places, value);
+                    });
+
                 }
             }
         }])

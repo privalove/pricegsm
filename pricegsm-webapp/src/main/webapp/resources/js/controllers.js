@@ -496,80 +496,19 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
     }
 
     $scope.deliveryPlaceAvailability = calculateDeliveryPlaceAvailability();
-
-    $scope.deliveryPlaceOrder = function (deliveryPlace) {
-        return  deliveryPlace.id;
-    }
-
-    $scope.selectedPlace = null;
-
-    var savedOrderPlace = null;
-
-    var calculateSelectedPlace = function () {
-        $scope.selectedPlace = null;
-        _.map($scope.deliveryPlaces, function (deliveryPlace) {
-            if (deliveryPlace.name == savedOrderPlace && deliveryPlace.name != $scope.order.seller.region.name) {
-                $scope.selectedPlace = deliveryPlace.name;
-                $scope.order.place = savedOrderPlace;
-                return;
-            }
-        });
-        if ($scope.selectedPlace != null) {
-            return;
-        }
-
-        $scope.order.place = savedOrderPlace;
-        if (savedOrderPlace == null || savedOrderPlace == undefined || savedOrderPlace == "") {
-            return;
-        }
-
-        $scope.selectedPlace = $scope.order.seller.region.name;
-    }
-
-    $scope.setPlace = function (place) {
-        $scope.order.place = place;
-    };
+    $scope.deliveryPlace = null;
 
     (function () {
-        if ($scope.order.delivery == true) {
-            if (!calculateDeliveryPlaceAvailability()) {
-                $scope.setPlace($scope.order.seller.sellerDeliveryPlace)
-            } else {
-                savedOrderPlace = $scope.order.place;
-                calculateSelectedPlace();
-            }
-        } else if ($scope.order.pickup == true) {
-            $scope.setPlace($scope.order.seller.sellerPickupPlace)
+        if ($scope.order.pickup == true) {
+            $scope.deliveryPlace == "";
+        } else {
+            $scope.deliveryPlace = $scope.order.place;
         }
     })();
 
-    $scope.setSelectedPlace = function (place) {
-        $scope.selectedPlace = place;
-
-        if (place != $scope.order.seller.region.name) {
-            $scope.order.place = place;
-        } else {
-            var currentSelectedPlace = null;
-            _.map($scope.deliveryPlaces, function (deliveryPlace) {
-                if (deliveryPlace.name == savedOrderPlace && deliveryPlace.name != $scope.order.seller.region.name) {
-                    currentSelectedPlace = place;
-                }
-            });
-            if (currentSelectedPlace != null) {
-                $scope.order.place = "";
-            } else {
-                $scope.order.place = savedOrderPlace;
-            }
-        }
-    }
-
-    $scope.calculateDeliveryPlaceFromDelivery = function (place) {
-        if (calculateDeliveryPlaceAvailability()) {
-            calculateSelectedPlace();
-        } else {
-            $scope.setPlace(place);
-        }
-    }
+    $scope.changeDeliveryPlace = function (deliveryPlace) {
+        $scope.deliveryPlace = deliveryPlace;
+    };
 
     var baseDateFormat = "yyyy-MM-dd";
 
@@ -832,8 +771,9 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
         });
         return exitingOrderPosition == undefined
             && orderForm.$valid
-            && ($scope.order.delivery || $scope.order.deliveryFree || $scope.order.pickup)
-            && !($scope.order.place == null || $scope.order.place == undefined || $scope.order.place == "")
+            && ($scope.order.delivery || $scope.order.pickup)
+            && !($scope.order.delivery && $scope.deliveryPlaceAvailability
+            && ($scope.deliveryPlace == null || $scope.deliveryPlace == undefined || $scope.deliveryPlace == ""))
             && !$scope.showActuallityError;
     }
 
@@ -912,8 +852,12 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
                 $scope.order.deliveryCost = $scope.calcDeliveryPrice($scope.order);
                 $scope.updatePhone();
                 $scope.updateName()
-                if ($scope.order.place == null || $scope.order.place == undefined) {
+                if ($scope.order.pickup) {
                     $scope.order.place = $scope.order.seller.sellerPickupPlace;
+                } else if ($scope.deliveryPlaceAvailability) {
+                    $scope.order.place = $scope.deliveryPlace;
+                } else {
+                    $scope.order.place = $scope.order.seller.sellerDeliveryPlace;
                 }
                 $scope.ok($scope.order);
             });
@@ -1334,9 +1278,9 @@ function ProfileCtrl($scope, $location, $modal, notifyManager, profileForm, cont
     };
 
     if (context.ok) {
-        $scope.profileForm = profileForm;
-
         angular.extend($scope, context.payload);
+
+        $scope.profileForm = profileForm;
     }
 }
 

@@ -50,7 +50,7 @@ public class OrderController {
         return OperationResult.ok().payload("orderPositionTemplate", new OrderPosition())
                 .payload("priceList", priceListService.getPriceList(sellerId, position))
                 .payload("deliveryPlaces", deliveryPlaceService.findActiveByRegion(userService.load(sellerId).getRegion().getId()));
-    }
+}
 
     @RequestMapping(value = "/order/{orderId}/order.json", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody

@@ -1,0 +1,8 @@
+<div>
+    <label class="radio-inline" ng-repeat="p in places | orderBy: deliveryPlaceOrder">
+        <input name="deliveryPlace" type="radio" ng-click="setSelectedPlace(p.name)" ng-model="selectedPlace" ng-value="p.name"/>
+        <span ng-text="p.name">Митино</span>
+    </label>
+    <input ng-show="freeInput == selectedPlace"
+           type="text" class="form-control ng-hide" ng-model="freePlace" ng-change="updateNgModel(freePlace)"/>
+</div>

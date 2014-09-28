@@ -4,6 +4,7 @@ import com.pricegsm.domain.User;
 import com.pricegsm.jackson.GlobalEntityListWrapper;
 import com.pricegsm.jackson.Wrappers;
 import com.pricegsm.securiry.PrincipalHolder;
+import com.pricegsm.service.DeliveryPlaceService;
 import com.pricegsm.service.RegionService;
 import com.pricegsm.service.UserService;
 import com.pricegsm.support.web.MessageHelper;
@@ -39,6 +40,9 @@ public class ProfileController {
 
     @Autowired
     private RegionService regionService;
+
+    @Autowired
+    private DeliveryPlaceService deliveryPlaceService;
 
     @RequestMapping({"/signin"})
     public String login() {
@@ -85,7 +89,8 @@ public class ProfileController {
     public OperationResult context() {
         return OperationResult.ok()
                 .payload("regions", Wrappers.wrap(regionService.findActive()))
-                .payload("metadata", EntityMetadata.from(ProfileForm.class));
+                .payload("metadata", EntityMetadata.from(ProfileForm.class))
+                .payload("deliveryPlaces", deliveryPlaceService.findActiveByRegion(userService.load(principalHolder.getCurrentUser().getId()).getRegion().getId()));
     }
 
 

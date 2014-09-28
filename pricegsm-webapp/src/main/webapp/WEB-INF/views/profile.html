@@ -17,7 +17,8 @@
                 </div>
                 <div class="panel-body">
 
-                    <form name="profileFormForm" class="form-horizontal" ng-submit="updateProfile()" novalidate="novalidate">
+                    <form name="profileFormForm" class="form-horizontal" ng-submit="updateProfile()"
+                          novalidate="novalidate">
 
                         <div class="form-group col-sm-12">
                             <div class="row">
@@ -90,9 +91,21 @@
 
                             <div class="col-xs-9">
                                 <select id="region" name="region" class="form-control"
-                                       ng-options="o.id as o.name for o in regions"
-                                       ng-model="profileForm.region.id" pg-valid="metadata"/>
+                                        ng-options="o.id as o.name for o in regions"
+                                        ng-model="profileForm.region.id" pg-valid="metadata"/>
                             </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-2 control-label" for="buyerDeliveryPlace">
+                                <span th:text="#{profileForm.defaultDeliveryPlace}"></span>
+                            </label>
+
+                            <div class="col-xs-9"
+                                 pg-delivery-place="{{deliveryPlaces}}" free-input="{{profileForm.region.name}}"
+                                 default-input="{{profileForm.buyerDeliveryPlace}}"
+                                 ng-model="profileForm.buyerDeliveryPlace"  ></div>
+                            <input name="buyerDeliveryPlace" id="buyerDeliveryPlace" type="hidden"
+                                   ng-model="profileForm.buyerDeliveryPlace" pg-valid="metadata"/>
                         </div>
 
                         <div class="form-group col-sm-12">
@@ -105,7 +118,7 @@
 
                                 <div class="col-sm-6 text-right pg-button-separator">
                                     <button ng-click="changePassword()" data-toggle="modal" type="submit"
-                                       class="btn btn-success">
+                                            class="btn btn-success">
                                         <i class="fa fa-key fa-lg"></i> <span th:text="#{button.changePassword}">Изменить Пароль</span>
                                     </button>
                                     <button type="submit" class="btn btn-primary">
