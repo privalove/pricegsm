@@ -7,9 +7,12 @@ import com.pricegsm.jackson.GlobalEntityDeserializer;
 import com.pricegsm.jackson.GlobalEntitySerializer;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "pricelist_position")
@@ -20,6 +23,8 @@ public class PriceListPosition
     private int version;
 
     private boolean active = true;
+
+    private List<Price> prices = new ArrayList<>();
 
     private BigDecimal price = BigDecimal.ZERO;
 
@@ -86,6 +91,16 @@ public class PriceListPosition
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    @Valid
+    @OneToMany(mappedBy = "priceListPosition", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    public List<Price> getPrices() {
+        return prices;
+    }
+
+    public void setPrices(List<Price> prices) {
+        this.prices = prices;
     }
 
     @JsonDeserialize(using = GlobalEntityDeserializer.class)

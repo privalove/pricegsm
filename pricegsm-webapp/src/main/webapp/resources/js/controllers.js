@@ -740,10 +740,23 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
         $scope.refreshOrderPositions($scope.order);
     }
 
+    var calculatePrice = function (prices, amount) {
+        var sortedPrices = _.sortBy(prices, function (price) {
+            return -1 * price.amount;
+        });
+
+        var price = _.find(sortedPrices, function (price) {
+            return price.amount <= amount;
+        });
+        return  price.price;
+    };
+
     $scope.updatePriceListAmount = function (orderPosition) {
         if ($scope.priceList != null) {
             var position = $scope.findPriceListPosition(orderPosition);
             position.amount = orderPosition.amount;
+            position.price = calculatePrice(position.prices, position.amount);
+            orderPosition.price = position.price;
         }
         if (orderPosition.amount == 0) {
             orderPosition.selectedStyle = "danger";

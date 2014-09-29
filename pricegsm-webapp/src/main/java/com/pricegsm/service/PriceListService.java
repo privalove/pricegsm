@@ -46,6 +46,10 @@ public class PriceListService
 
         for (PriceListPosition position : entity.getPositions()) {
             position.setPriceList(priceList);
+
+            for (Price price : position.getPrices()) {
+                price.setPriceListPosition(position);
+            }
         }
 
         return priceList;
