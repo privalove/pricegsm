@@ -11,9 +11,7 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "pricelist")
@@ -22,7 +20,7 @@ public class PriceList
         extends BaseEntity
         implements Activable {
 
-    List<PriceListPosition> positions = new ArrayList<>();
+    Set<PriceListPosition> positions = new LinkedHashSet<>();
 
     private int version;
 
@@ -78,11 +76,11 @@ public class PriceList
 
     @Valid
     @OneToMany(mappedBy = "priceList", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    public List<PriceListPosition> getPositions() {
+    public Set<PriceListPosition> getPositions() {
         return positions;
     }
 
-    public void setPositions(List<PriceListPosition> positions) {
+    public void setPositions(Set<PriceListPosition> positions) {
         this.positions = positions;
     }
 
