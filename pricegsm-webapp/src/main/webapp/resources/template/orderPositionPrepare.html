@@ -154,7 +154,7 @@
                 <td>
                     <input type="number" name="moq" class="form-control input-group"
                            min={{getMinimumAmount(orderPosition)}} max="" required=""
-                           ng-change="updatePriceListAmount(orderPosition)"
+                           ng-change="updatePrices(orderPosition)"
                            ng-model="orderPosition.amount"/>
                 </td>
                 <td>{{orderPosition.price | priceFilter : priceList.currency.symbol}}</td>
@@ -168,16 +168,16 @@
             </tr>
             <tr></tr>
             <tr>
-                <td colspan="5"></td>
+                <td colspan="6"></td>
                 <td colspan="1"><span>Доставка:</span></td>
                 <td colspan="1"><span>{{order.deliveryCost  | priceFilter : priceList.currency.symbol}}</span></td>
-                <td colspan="2"></td>
+                <td colspan="1"></td>
             </tr>
             <tr class="no-border-children">
-                <th colspan="5"></th>
+                <th colspan="6"></th>
                 <th colspan="1"><span>Итого:</span></th>
                 <th colspan="1"><span>{{order.totalPrice  | priceFilter : priceList.currency.symbol}}</span></th>
-                <th colspan="2"></th>
+                <th colspan="1"></th>
             </tr>
             </tbody>
         </table>

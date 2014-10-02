@@ -643,10 +643,10 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
                 orderPosition.price = priceListPosition.price;
             }
 
+            $scope.updatePriceListAmount(orderPosition);
+
             $scope.order.totalPrice = $scope.calcTotalPrice($scope.order);
             $scope.order.deliveryCost = $scope.calcDeliveryPrice($scope.order);
-
-            $scope.updatePriceListAmount(orderPosition);
         });
     };
 
@@ -717,7 +717,7 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
         var priceListPosition = $scope.findPriceListPosition(orderPosition);
         if (orderPosition.amount > priceListPosition.moq) {
             orderPosition.amount--;
-            $scope.updatePriceListAmount(orderPosition);
+            $scope.updatePrices(orderPosition);
         }
     }
 
@@ -739,12 +739,14 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
         position.order = {id: currentOrder.id, name: ""};
         position.amount = priceListPosition.moq;
         priceListPosition.amount = priceListPosition.moq;
+        priceListPosition.selectedStyle = "success";
         position.totalPrice = 0;
         position.product = priceListPosition.product;
         position.priceListPosition = priceListPosition.id;
+        position.price = calculatePrice(priceListPosition.prices, position.amount);
 
         $scope.order.orderPositions.push(position);
-        $scope.refreshOrderPositions($scope.order);
+        $scope.updatePrices($scope.order);
     }
 
     var calculatePrice = function (prices, amount) {
@@ -757,6 +759,14 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
         });
         return  price.price;
     };
+
+    $scope.updatePrices = function (orderPosition) {
+        $scope.updatePriceListAmount(orderPosition);
+
+        $scope.order.totalPrice = $scope.calcTotalPrice($scope.order);
+        $scope.order.deliveryCost = $scope.calcDeliveryPrice($scope.order);
+
+    }
 
     $scope.updatePriceListAmount = function (orderPosition) {
         if ($scope.priceList != null) {
