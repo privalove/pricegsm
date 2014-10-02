@@ -37,15 +37,8 @@
                 <i class="fa fa-save"></i>
             </button>
         </div>
-        <div class="col-md-3">
-            <label class="text-right">
-                <div class="control-label" pg-text="order.phoneNumber">Телефон</div>
-            </label>
 
-            <input type="text" ng-model="priceLists[0].phone"/>
-        </div>
-
-        <div class="col-md-2">
+        <div class="col-md-2 col-sm-offset-3">
             <div class="input-group dropdown">
                 <a href="" role="button" class="btn btn-default dropdown-toggle input-group-addon">
                     <span th:text="#{page.priceList.changeCurrency}"
@@ -296,6 +289,13 @@
 </div>
 <div class="col-md-12">
     <fieldset>
+        <legend>Контактные данные</legend>
+        <div class="form-group" ng-class="{'has-error':!userForm.sellerWarrantyAdditional.$valid}">
+            <label class="control-label col-sm-3" pg-text="order.phoneNumber">Телефон</label>
+            <div class="col-sm-3">
+                <input type="text" placeholder="{{user.phone}}" ng-model="user.managerPhone"/>
+            </div>
+        </div>
         <legend>Гарантия</legend>
         <div class="form-group" ng-class="{'has-error':!userForm.sellerFreeReplacement.$valid}">
             <label class="control-label col-xs-3" th:text="#{user.sellerFreeReplacement}">Бесплатная замена</label>

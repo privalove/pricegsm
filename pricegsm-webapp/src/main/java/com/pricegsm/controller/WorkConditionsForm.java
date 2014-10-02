@@ -11,6 +11,10 @@ import java.util.Date;
 public class WorkConditionsForm
         implements Serializable {
 
+    private String phone;
+
+    private String managerPhone;
+
     private boolean sellerPickup;
 
     private boolean sellerDelivery;
@@ -49,6 +53,8 @@ public class WorkConditionsForm
     }
 
     public WorkConditionsForm(User user) {
+        setPhone(user.getPhone());
+        setManagerPhone(user.getManagerPhone());
         setSellerDelivery(user.isSellerDelivery());
         setSellerDeliveryCost(user.getSellerDeliveryCost());
         setSellerDeliveryFree(user.isSellerDeliveryFree());
@@ -69,6 +75,8 @@ public class WorkConditionsForm
     }
 
     public void fill(User user) {
+        user.setPhone(getPhone());
+        user.setManagerPhone(getManagerPhone());
         user.setSellerDelivery(isSellerDelivery());
         user.setSellerDeliveryCost(getSellerDeliveryCost());
         user.setSellerDeliveryFree(isSellerDeliveryFree());
@@ -86,6 +94,22 @@ public class WorkConditionsForm
         user.setSellerPickupPlace(getSellerPickupPlace());
         user.setSellerWarrantyAdditional(getSellerWarrantyAdditional());
         user.setSellerPickupPlaceAddition(getSellerPickupPlaceAddition());
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getManagerPhone() {
+        return managerPhone;
+    }
+
+    public void setManagerPhone(String managerPhone) {
+        this.managerPhone = managerPhone;
     }
 
     public boolean isSellerPickup() {

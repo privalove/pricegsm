@@ -35,6 +35,8 @@ public class User
 
     private String phone;
 
+    private String managerPhone;
+
     private String website;
 
     private boolean sellerPickup;
@@ -114,6 +116,17 @@ public class User
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    @Size(max = 255)
+    @Basic
+    @Column(name = "manager_phone")
+    public String getManagerPhone() {
+        return managerPhone;
+    }
+
+    public void setManagerPhone(String managerPhone) {
+        this.managerPhone = managerPhone;
     }
 
     @Size(max = 255)

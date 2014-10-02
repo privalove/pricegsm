@@ -32,8 +32,6 @@ public class PriceList
 
     private User user;
 
-    private String phone;
-
     private Currency currency;
 
     private String description;
@@ -51,17 +49,6 @@ public class PriceList
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    @Size(max = 255)
-    @Basic
-    @Column(name = "phone")
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 
     @Id

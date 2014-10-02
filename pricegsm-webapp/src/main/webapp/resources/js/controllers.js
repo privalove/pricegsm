@@ -483,6 +483,10 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
 
     $scope.updatePhone();
 
+    if ($scope.order.seller.managerPhone == null || $scope.order.seller.managerPhone == undefined || $scope.order.seller.managerPhone == "") {
+        $scope.order.seller.managerPhone = $scope.order.seller.phone;
+    }
+
     var calculateDeliveryPlaceAvailability = function () {
         var currentDeliveryPlace = null;
         _.map($scope.deliveryPlaces, function (deliveryPlace) {
@@ -549,7 +553,10 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
         } else {
             var fromDate = new Date($scope.priceList.sellFromDate);
             var toDate = new Date($scope.priceList.sellToDate);
-            if (compareDates(today, toDate) >= 0) {
+            if (compareDates(today, toDate) > 0) {
+                return [];
+            }
+            if (compareDates(today, toDate) == 0) {
                 if (today.getHours() < $scope.order.seller.deadLine) {
                     fromDate = today;
                 } else {
@@ -1001,11 +1008,6 @@ function PriceListCtrl($scope, $filter, notifyManager, priceListResource, PriceL
 
         if (form.$valid) {
 
-            var phone = priceList.phone;
-            if (phone == null || phone == undefined || phone == "") {
-                priceList.phone = priceList.user.phone;
-            }
-
             priceList.$save({priceListId: index}, function (data) {
                 if (data.ok) {
                     notifyManager.success("Прайс лист успешно сохранен");
@@ -1071,14 +1073,11 @@ function PriceListCtrl($scope, $filter, notifyManager, priceListResource, PriceL
 
         $scope.exchangeRate = [];
 
-        _.each($scope.priceLists, function (priceList) {
-            var phone = priceList.phone;
-            if (phone == null || phone == undefined || "") {
-                priceList.phone = priceList.user.phone;
-            }
-        });
-
         $scope.user = new WorkConditions($scope.user);
+
+        if ($scope.user.managerPhone == null || $scope.user.managerPhone == undefined || $scope.user.managerPhone == "") {
+            $scope.user.managerPhone = $scope.user.phone;
+        }
 
         $scope.preOrderPriceLists = function () {
             return $scope.priceLists.slice(1);
