@@ -80,7 +80,7 @@
                            th:attr="tooltip=#{priceListPosition.color.title}"></i>
                         <span th:text="#{priceListPosition.color}">Цвет</span>
                     </th>
-                    <th class="pg-price">
+                    <th colspan="2" class="pg-price">
                         <i class="fa fa-question-circle"
                            th:attr="tooltip=#{priceListPosition.price.title}"></i>
                         <span th:text="#{priceListPosition.price}">Цена</span>
@@ -136,13 +136,13 @@
                             </div>
                         </div>
                     </td>
-                    <td colspan="5">
+                    <td colspan="7">
                         <label>
                             <input type="checkbox" ng-model="showAll[vendor.id]"/> показать все
                         </label>
                     </td>
                 </tr>
-                <tr ng-repeat="position in filterByVendor(priceLists[0].positions, vendor.id, showAll[vendor.id])"
+                <tr ng-repeat-start="position in filterByVendor(priceLists[0].positions, vendor.id, showAll[vendor.id])"
                     ng-form="" name="pForm">
                     <td>
                         <div class="form-group" ng-hide="position.fake">
@@ -197,11 +197,22 @@
                     </div>
                 </td>
                 <td>
+                    <div class="form-group" ng-hide="position.fake">
+                        <div>
+                            <div th:attr="tooltip=#{priceListPosition.add.product.price}">
+                                <button ng-click="addPrice(position)"
+                                        type="button"
+                                        class="btn btn-green btn-xs"><i class="fa fa-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <td>
                     <div class="form-group" ng-class="{'has-error':!pForm.price.$valid}" ng-hide="position.fake">
                         <div class="input-group">
                             <input name="price" type="number" class="form-control"
                                    min="1" required=""
-                                   ng-model="position.price"/>
+                                   ng-model="position.prices[0].price"/>
                             <span class="input-group-addon">{{priceLists[0].currency.symbol}}</span>
                         </div>
                     </div>
@@ -220,7 +231,7 @@
                         <div class="input-group">
                             <span class="input-group-addon">от</span>
                             <input type="number" name="moq" class="form-control" min="1" required=""
-                                   ng-model="position.moq"/>
+                                   ng-model="position.prices[0].minOrderQuantity"/>
                         </div>
                     </div>
                 </td>
@@ -237,7 +248,7 @@
                     </div>
                 </td>
                 <td>
-                    <div class="form-group" ng-hide="position.fake">
+                    <div class="form-group text-right" ng-hide="position.fake">
                         <p>
                             <button type="button" class="btn btn-xs btn-success"
                                     ng-click="position.amount = 9999"
@@ -253,6 +264,38 @@
                     </div>
                 </td>
             </tr>
+                <tr ng-repeat="price in position.prices.slice(1)" ng-form="" name="priceForm">
+                    <td colspan="5"></td>
+                    <td>
+                        <div class="form-group" ng-class="{'has-error':!priceForm.price.$valid}" ng-hide="position.fake">
+                            <div class="input-group">
+                                <input name="price" type="number" class="form-control"
+                                       min="1" required=""
+                                       ng-model="price.price"/>
+                                <span class="input-group-addon">{{priceLists[0].currency.symbol}}</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td></td>
+                    <td>
+                        <div class="form-group" ng-class="{'has-error':!priceForm.minOrderQuantity.$valid}" ng-hide="position.fake">
+                            <div class="input-group">
+                            <span class="input-group-addon">от</span>
+                            <input type="number" name="minOrderQuantity" class="form-control" min="1" required=""
+                                   ng-model="price.minOrderQuantity"/>
+                            </div>
+                        </div>
+                    </td>
+                    <td colspan="2"></td>
+                    <td class="text-right">
+                        <button type="button" class="btn btn-xs btn-danger"
+                                ng-click="position.prices.splice($index + 1, 1)"
+                                tooltip="Удалить позицию">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr ng-repeat-end="position in positions"></tr>
             <tr ng-repeat-end="vendor in vendors"></tr>
             </tbody>
         </table>

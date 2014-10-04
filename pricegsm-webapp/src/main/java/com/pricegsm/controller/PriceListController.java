@@ -1,5 +1,6 @@
 package com.pricegsm.controller;
 
+import com.pricegsm.domain.Price;
 import com.pricegsm.domain.PriceList;
 import com.pricegsm.domain.PriceListPosition;
 import com.pricegsm.domain.User;
@@ -76,6 +77,7 @@ public class PriceListController {
                 .payload("priceLists", priceLists)
                 .payload("template", priceListService.getDefaultInstance())
                 .payload("positionTemplate", new PriceListPosition())
+                .payload("priceTemplate", new Price())
                 .payload("vendors", Wrappers.wrap(vendorService.findActive()))
                 .payload("products", productService.findActive())
                 .payload("specifications", specificationService.findActive())

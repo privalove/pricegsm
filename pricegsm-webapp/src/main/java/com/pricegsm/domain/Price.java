@@ -1,10 +1,6 @@
 package com.pricegsm.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.pricegsm.jackson.GlobalEntityDeserializer;
-import com.pricegsm.jackson.GlobalEntitySerializer;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -24,7 +20,7 @@ public class Price extends GlobalEntity {
 
     private BigDecimal price = BigDecimal.ZERO;
 
-    private int amount;
+    private int minOrderQuantity;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -61,12 +57,12 @@ public class Price extends GlobalEntity {
     @Min(0)
     @NotNull
     @Basic
-    @Column(name = "amount", nullable = false)
-    public int getAmount() {
-        return amount;
+    @Column(name = "min_order_quantity", nullable = false)
+    public int getMinOrderQuantity() {
+        return minOrderQuantity;
     }
 
-    public void setAmount(int amount) {
-        this.amount = amount;
+    public void setMinOrderQuantity(int amount) {
+        this.minOrderQuantity = amount;
     }
 }

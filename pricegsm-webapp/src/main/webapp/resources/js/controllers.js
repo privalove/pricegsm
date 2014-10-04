@@ -1183,6 +1183,10 @@ function PriceListCtrl($scope, $filter, notifyManager, priceListResource, PriceL
             priceList.positions.push(position);
         };
 
+        $scope.addPrice = function(position){
+            position.prices.push(angular.copy($scope.priceTemplate));
+        }
+
         $scope.addVendor = function (vendor, index) {
             $scope.selectedVendors[index].push(vendor);
         };
