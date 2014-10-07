@@ -152,7 +152,7 @@
                     </div>
                 </td>
                 <td>
-                    <input type="number" name="moq" class="form-control input-group"
+                    <input type="number" name="amount" class="form-control input-group"
                            min={{getMinimumAmount(orderPosition)}} max="" required=""
                            ng-change="updatePrices(orderPosition)"
                            ng-model="orderPosition.amount"/>
@@ -221,16 +221,22 @@
             </tr>
             </thead>
             <tbody>
-            <tr class="{{position.selectedStyle}}" ng-repeat="position in priceList.positions"
-                ng-click="addOrderPosition(position)">
+            <tr class="{{position.prices[0].selectedStyle}}" ng-repeat-start="position in priceList.positions"
+                ng-click="addOrderPosition(position, position.prices[0])">
                 <td>{{position.product.name}}</td>
                 <td>{{position.product.color.name}}</td>
                 <td>{{position.specification.name}}</td>
                 <td>{{position.description}}</td>
                 <td>{{position.amount}}</td>
-                <td>{{position.price | priceFilter : priceList.currency.symbol}}</td>
-                <td>{{position.moq}}</td>
+                <td>{{position.prices[0].price | priceFilter : priceList.currency.symbol}}</td>
+                <td>{{position.prices[0].minOrderQuantity}}</td>
             </tr>
+            <tr class="{{price.selectedStyle}}" ng-repeat="price in position.prices.slice(1)" ng-click="addOrderPosition(position, price)">
+                <td colspan="5"></td>
+                <td colspan="1">{{price.price | priceFilter : priceList.currency.symbol}}</td>
+                <td colspan="1">{{price.minOrderQuantity}}</td>
+            </tr>
+            <tr ng-repeat-end="position in positions"></tr>
             </tbody>
         </table>
     </div>

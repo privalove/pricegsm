@@ -26,8 +26,6 @@ public class PriceListPosition
 
     private List<Price> prices = new ArrayList<>();
 
-    private BigDecimal price = BigDecimal.ZERO;
-
     private Product product;
 
     private Specification specification;
@@ -35,8 +33,6 @@ public class PriceListPosition
     private PriceList priceList;
 
     private int amount = 1;
-
-    private int moq = 1;
 
     private String description;
 
@@ -79,18 +75,6 @@ public class PriceListPosition
 
     public void setActive(boolean active) {
         this.active = active;
-    }
-
-    @Min(0)
-    @NotNull
-    @Basic
-    @Column(name = "price", nullable = false)
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
     }
 
     @Valid
@@ -137,21 +121,6 @@ public class PriceListPosition
 
     public void setAmount(int amount) {
         this.amount = amount;
-    }
-
-    /**
-     * Minimal Order Quantity
-     */
-    @Min(1)
-    @NotNull
-    @Basic
-    @Column(name = "min_order_quantity", nullable = false)
-    public int getMoq() {
-        return moq;
-    }
-
-    public void setMoq(int moq) {
-        this.moq = moq;
     }
 
     @Basic

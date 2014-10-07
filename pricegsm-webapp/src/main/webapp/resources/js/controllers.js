@@ -625,46 +625,57 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
     }
 
     $scope.refreshOrderPositions = function (order) {
-
-        $scope.order.orderPositions = _.reject(order.orderPositions, function (orderPosition) {
-            var priceListPosition = $scope.findPriceListPosition(orderPosition);
-            return priceListPosition == undefined;
-        });
+          //todo delete
+//        $scope.order.orderPositions = _.reject(order.orderPositions, function (orderPosition) {
+//            var priceListPosition = $scope.findPriceListPosition(orderPosition);
+//            return priceListPosition == undefined;
+//        });
 
         _.map(order.orderPositions, function (orderPosition) {
             var priceListPosition = $scope.findPriceListPosition(orderPosition);
-            priceListPosition.selectedStyle = "success";
+            var prices = priceListPosition.prices;
+            var price = findPrice(prices, orderPosition.amount);
 
             if (priceListPosition.amount < orderPosition.amount) {
                 orderPosition.amount = priceListPosition.amount;
             }
 
-            if (priceListPosition.price != orderPosition.price) {
-                orderPosition.price = priceListPosition.price;
+            if (priceListPosition.price != price.price) {
+                orderPosition.price = price.price;
             }
 
             $scope.updatePriceListAmount(orderPosition);
 
+        });
+        if (order.orderPositions.length != 0) {
             $scope.order.totalPrice = $scope.calcTotalPrice($scope.order);
             $scope.order.deliveryCost = $scope.calcDeliveryPrice($scope.order);
-        });
+        } else {
+            $scope.order.totalPrice = 0;
+            $scope.order.deliveryCost = 0;
+        }
     };
 
     $scope.loadPriceList = function (sellerId, position, callback) {
         var PriceList = $resource("order/:id/:position/pricelist.json", {id: '@id', position: '@position'});
         PriceList.get({id: sellerId, position: position}, function (data) {
+
             $scope.priceList = data.payload.priceList;
             $scope.orderPositionTemplate = data.payload.orderPositionTemplate;
             $scope.refreshOrderPositions($scope.order);
+
             _.map($scope.priceList.positions, function (priceListPosition) {
                 priceListPosition.amount = 0;
             });
+
             _.map($scope.order.orderPositions, function (orderPosition) {
-                $scope.updatePriceListAmount(orderPosition);
+                $scope.updatePrices(orderPosition);
             });
+
             if (callback != null && callback != undefined) {
                 callback();
             }
+
         });
     };
 
@@ -721,15 +732,22 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
         }
     }
 
-    $scope.addOrderPosition = function (priceListPosition) {
+    $scope.addOrderPosition = function (priceListPosition, price) {
 
         var exitingOrderPosition = _.find($scope.order.orderPositions, function (orderPosition) {
             return orderPosition.priceListPosition == priceListPosition.id;
         });
 
         if (exitingOrderPosition != undefined) {
-            priceListPosition.amount++;
-            exitingOrderPosition.amount++;
+            if (price.minOrderQuantity > exitingOrderPosition.amount) {
+                priceListPosition.amount = price.minOrderQuantity;
+                exitingOrderPosition.amount = price.minOrderQuantity;
+                exitingOrderPosition.price = price.price;
+            } else {
+                priceListPosition.amount++;
+                exitingOrderPosition.amount++;
+            }
+
             $scope.refreshOrderPositions($scope.order);
             exitingOrderPosition.totalPrice = $scope.getPositionTotalPrice(exitingOrderPosition);
             return;
@@ -737,26 +755,31 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
 
         var position = angular.copy($scope.orderPositionTemplate);
         position.order = {id: currentOrder.id, name: ""};
-        position.amount = priceListPosition.moq;
-        priceListPosition.amount = priceListPosition.moq;
-        priceListPosition.selectedStyle = "success";
+        priceListPosition.amount = price.minOrderQuantity;
+        position.amount = price.minOrderQuantity;
+        position.price = price.price;
         position.totalPrice = 0;
         position.product = priceListPosition.product;
         position.priceListPosition = priceListPosition.id;
         position.price = calculatePrice(priceListPosition.prices, position.amount);
 
         $scope.order.orderPositions.push(position);
-        $scope.updatePrices($scope.order);
+        $scope.updatePrices(position);
     }
 
-    var calculatePrice = function (prices, amount) {
+    function findPrice(prices, amount) {
         var sortedPrices = _.sortBy(prices, function (price) {
-            return -1 * price.amount;
+            return -1 * price.minOrderQuantity;
         });
 
         var price = _.find(sortedPrices, function (price) {
-            return price.amount <= amount;
+            return price.minOrderQuantity <= amount;
         });
+        return price;
+    }
+
+    var calculatePrice = function (prices, amount) {
+        var price = findPrice(prices, amount);
         return  price.price;
     };
 
@@ -768,12 +791,22 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
 
     }
 
+    function updatePricesSelectedStyle(prices, price) {
+        _.map(prices, function (price) {
+            price.selectedStyle = "";
+        });
+        price.selectedStyle = "success";
+    }
+
     $scope.updatePriceListAmount = function (orderPosition) {
         if ($scope.priceList != null) {
-            var position = $scope.findPriceListPosition(orderPosition);
-            position.amount = orderPosition.amount;
-            position.price = calculatePrice(position.prices, position.amount);
-            orderPosition.price = position.price;
+            var priceListPosition = $scope.findPriceListPosition(orderPosition);
+            priceListPosition.amount = orderPosition.amount;
+            var prices = priceListPosition.prices;
+            var price = findPrice(prices, orderPosition.amount);
+            updatePricesSelectedStyle(prices, price);
+            priceListPosition.price = price.price;
+            orderPosition.price = priceListPosition.price;
         }
         if (orderPosition.amount == 0) {
             orderPosition.selectedStyle = "danger";
@@ -787,7 +820,10 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
 
     $scope.getMinimumAmount = function (orderPosition) {
         var priceListPosition = $scope.findPriceListPosition(orderPosition);
-        return priceListPosition.moq;
+        var price = _.min(priceListPosition.prices, function (price) {
+            return price.minOrderQuantity;
+        });
+        return  price.minOrderQuantity;
     }
 
     $scope.getSpecification = function (orderPosition) {
@@ -1183,7 +1219,7 @@ function PriceListCtrl($scope, $filter, notifyManager, priceListResource, PriceL
             priceList.positions.push(position);
         };
 
-        $scope.addPrice = function(position){
+        $scope.addPrice = function (position) {
             position.prices.push(angular.copy($scope.priceTemplate));
         }
 
