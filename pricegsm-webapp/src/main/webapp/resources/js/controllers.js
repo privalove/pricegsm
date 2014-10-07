@@ -665,7 +665,7 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
             $scope.refreshOrderPositions($scope.order);
 
             _.map($scope.priceList.positions, function (priceListPosition) {
-                priceListPosition.amount = 0;
+                priceListPosition.prices[0].amount = 0;
             });
 
             _.map($scope.order.orderPositions, function (orderPosition) {
@@ -791,11 +791,13 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
 
     }
 
-    function updatePricesSelectedStyle(prices, price) {
+    function updatePricesSelected(prices, price, amount) {
         _.map(prices, function (price) {
             price.selectedStyle = "";
+            price.amount = "";
         });
         price.selectedStyle = "success";
+        price.amount = amount;
     }
 
     $scope.updatePriceListAmount = function (orderPosition) {
@@ -804,7 +806,7 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
             priceListPosition.amount = orderPosition.amount;
             var prices = priceListPosition.prices;
             var price = findPrice(prices, orderPosition.amount);
-            updatePricesSelectedStyle(prices, price);
+            updatePricesSelected(prices, price, priceListPosition.amount);
             priceListPosition.price = price.price;
             orderPosition.price = priceListPosition.price;
         }
