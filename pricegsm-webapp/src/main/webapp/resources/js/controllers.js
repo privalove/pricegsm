@@ -467,6 +467,8 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
 
     $scope.showSaveError = false;
 
+    $scope.showHidePriceList = true;
+
     $scope.showActuallityError = false;
 
     $scope.updateName = function () {
@@ -509,10 +511,6 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
             $scope.deliveryPlace = $scope.order.place;
         }
     })();
-
-    $scope.changeDeliveryPlace = function (deliveryPlace) {
-        $scope.deliveryPlace = deliveryPlace;
-    };
 
     var baseDateFormat = "yyyy-MM-dd";
 
@@ -624,8 +622,13 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
         });
     }
 
+    _.each($scope.order.orderPositions, function (orderPosition) {
+        markSelectedPrice(orderPosition);
+    });
+
+
     $scope.refreshOrderPositions = function (order) {
-          //todo delete
+        //todo delete
 //        $scope.order.orderPositions = _.reject(order.orderPositions, function (orderPosition) {
 //            var priceListPosition = $scope.findPriceListPosition(orderPosition);
 //            return priceListPosition == undefined;
@@ -699,18 +702,13 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
             || $scope.priceList.position == 0 && comparedDatesFrom == 0 && afterDeadline) {
 
             $scope.showActuallityError = true;
+            $scope.showHidePriceList = false;
             return;
         }
         $scope.showActuallityError = false;
+        $scope.showHidePriceList = true;
 
         $scope.loadPriceList($scope.order.seller.id, $scope.order.priceListPosition, callback);
-    }
-
-    $scope.showPriceList = function () {
-        if (!$scope.showHidePriceList) {
-            $scope.refresh();
-        }
-        $scope.showHidePriceList = !$scope.showHidePriceList && !$scope.showActuallityError;
     }
 
     $scope.cancel = function () {
@@ -800,15 +798,20 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
         price.amount = amount;
     }
 
+    function markSelectedPrice(orderPosition) {
+        var priceListPosition = $scope.findPriceListPosition(orderPosition);
+        priceListPosition.amount = orderPosition.amount;
+        var prices = priceListPosition.prices;
+        var price = findPrice(prices, orderPosition.amount);
+        updatePricesSelected(prices, price, priceListPosition.amount);
+        //todo bad practice 2 responsib refsctor
+        return price;
+    }
+
     $scope.updatePriceListAmount = function (orderPosition) {
         if ($scope.priceList != null) {
-            var priceListPosition = $scope.findPriceListPosition(orderPosition);
-            priceListPosition.amount = orderPosition.amount;
-            var prices = priceListPosition.prices;
-            var price = findPrice(prices, orderPosition.amount);
-            updatePricesSelected(prices, price, priceListPosition.amount);
-            priceListPosition.price = price.price;
-            orderPosition.price = priceListPosition.price;
+            var price = markSelectedPrice(orderPosition);
+            orderPosition.price = price.price;
         }
         if (orderPosition.amount == 0) {
             orderPosition.selectedStyle = "danger";
