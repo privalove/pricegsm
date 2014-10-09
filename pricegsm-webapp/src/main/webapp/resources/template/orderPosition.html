@@ -58,6 +58,7 @@
                 <tr>
                     <th pg-text="priceListPosition.name">Наименование</th>
                     <th pg-text="color">цвет</th>
+                    <th>Спец-ия</th>
                     <th pg-text="note">примичание</th>
                     <th pg-text="page.order.totalAmount">количество</th>
                     <th pg-text="priceListPosition.price">цена</th>
@@ -68,18 +69,19 @@
                 <tr ng-repeat="orderPosition in order.orderPositions">
                     <td>{{orderPosition.product.name}}</td>
                     <td>{{orderPosition.product.color.name}}</td>
+                    <td>{{orderPosition.specification.name}}</td>
                     <td>{{orderPosition.product.description}}</td>
                     <td>{{orderPosition.amount}}</td>
                     <td>{{orderPosition.price | priceFilter : priceList.currency.symbol}}</td>
                     <td>{{orderPosition.totalPrice | priceFilter : priceList.currency.symbol}}</td>
                 </tr>
                 <tr class="no-border-children">
-                    <td colspan="4"></td>
+                    <td colspan="5"></td>
                     <td colspan="1"><span>Доставка:</span></td>
                     <td colspan="1"><span>{{order.deliveryCost | priceFilter : priceList.currency.symbol}}</span></td>
                 </tr>
                 <tr class="no-border-children">
-                    <th colspan="4"></th>
+                    <th colspan="5"></th>
                     <th colspan="1"><span>Итого:</span></th>
                     <th colspan="1"><span>{{order.totalPrice | priceFilter : priceList.currency.symbol}}</span></th>
                 </tr>

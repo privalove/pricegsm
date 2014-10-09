@@ -18,6 +18,8 @@ public class OrderPosition
 
     private Product product;
 
+    private Specification specification;
+
     private BigDecimal totalPrice;
 
     private BigDecimal price;
@@ -59,6 +61,18 @@ public class OrderPosition
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    @JsonSerialize(using = GlobalEntitySerializer.class)
+    @JsonDeserialize(using = GlobalEntityDeserializer.class)
+    @ManyToOne()
+    @JoinColumn(name = "specification_id", referencedColumnName = "id")
+    public Specification getSpecification() {
+        return specification;
+    }
+
+    public void setSpecification(Specification specification) {
+        this.specification = specification;
     }
 
     @NotNull

@@ -626,6 +626,13 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
         markSelectedPrice(orderPosition);
     });
 
+    $scope.updatePrices = function (orderPosition) {
+        $scope.updatePriceListAmount(orderPosition);
+
+        $scope.order.totalPrice = $scope.calcTotalPrice($scope.order);
+        $scope.order.deliveryCost = $scope.calcDeliveryPrice($scope.order);
+
+    }
 
     $scope.refreshOrderPositions = function (order) {
         //todo delete
@@ -638,6 +645,8 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
             var priceListPosition = $scope.findPriceListPosition(orderPosition);
             var prices = priceListPosition.prices;
             var price = findPrice(prices, orderPosition.amount);
+            $scope.updatePrices(orderPosition);
+            orderPosition.specification = priceListPosition.specification;
 
             if (priceListPosition.amount < orderPosition.amount) {
                 orderPosition.amount = priceListPosition.amount;
@@ -669,10 +678,6 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
 
             _.map($scope.priceList.positions, function (priceListPosition) {
                 priceListPosition.prices[0].amount = 0;
-            });
-
-            _.map($scope.order.orderPositions, function (orderPosition) {
-                $scope.updatePrices(orderPosition);
             });
 
             if (callback != null && callback != undefined) {
@@ -760,6 +765,7 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
         position.product = priceListPosition.product;
         position.priceListPosition = priceListPosition.id;
         position.price = calculatePrice(priceListPosition.prices, position.amount);
+        position.specification = priceListPosition.specification;
 
         $scope.order.orderPositions.push(position);
         $scope.updatePrices(position);
@@ -780,14 +786,6 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
         var price = findPrice(prices, amount);
         return  price.price;
     };
-
-    $scope.updatePrices = function (orderPosition) {
-        $scope.updatePriceListAmount(orderPosition);
-
-        $scope.order.totalPrice = $scope.calcTotalPrice($scope.order);
-        $scope.order.deliveryCost = $scope.calcDeliveryPrice($scope.order);
-
-    }
 
     function updatePricesSelected(prices, price, amount) {
         _.map(prices, function (price) {
@@ -829,11 +827,6 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
             return price.minOrderQuantity;
         });
         return  price.minOrderQuantity;
-    }
-
-    $scope.getSpecification = function (orderPosition) {
-        var priceListPosition = $scope.findPriceListPosition(orderPosition);
-        return priceListPosition.specification.name;
     }
 
     $scope.formEnable = function (orderForm) {

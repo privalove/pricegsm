@@ -141,7 +141,7 @@
             <tr class="{{orderPosition.selectedStyle}}" ng-repeat="orderPosition in order.orderPositions">
                 <td>{{orderPosition.product.name}}</td>
                 <td>{{orderPosition.product.color.name}}</td>
-                <td>{{getSpecification(orderPosition)}}</td>
+                <td>{{orderPosition.specification.name}}</td>
                 <td>{{orderPosition.product.description}}</td>
                 <td>
                     <div class="reduceAmountButton pull-right">

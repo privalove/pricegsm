@@ -20,8 +20,7 @@ ALTER TABLE "prices_seq" OWNER TO pricegsmowner;
 UPDATE "pricelist_position" SET price = 100 WHERE price < 100;
 
 INSERT INTO "prices" (id, price_list_position_id, price, min_order_quantity)
-   select (nextval('prices_seq')) ,id, price, min_order_quantity from "pricelist_position"
-   RETURNING id;
+   select (nextval('prices_seq')) ,id, price, min_order_quantity from "pricelist_position";
 
 INSERT INTO "prices" (id, price_list_position_id, price, min_order_quantity)
    select (nextval('prices_seq')), id, (price-10), (min_order_quantity + 10) from "pricelist_position";
