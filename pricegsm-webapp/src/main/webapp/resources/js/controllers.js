@@ -467,9 +467,11 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
 
     $scope.showSaveError = false;
 
-    $scope.showHidePriceList = true;
-
     $scope.showActuallityError = false;
+
+    $scope.isRefreshed = false;
+
+    $scope.isShowRefreshedError = false;
 
     $scope.updateName = function () {
         if ($scope.order.contactName == null || $scope.order.contactName == undefined || $scope.order.contactName == "") {
@@ -634,6 +636,20 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
 
     }
 
+    $scope.validateRefreshedState = function () {
+        if (!$scope.isRefreshed) {
+            $scope.isShowRefreshedError = true;
+        }
+        return $scope.isRefreshed;
+    }
+
+    $scope.changePrices = function (orderPosition) {
+        if (!$scope.validateRefreshedState()) {
+            return;
+        }
+        $scope.updatePrices(orderPosition);
+    }
+
     $scope.refreshOrderPositions = function (order) {
         //todo delete
 //        $scope.order.orderPositions = _.reject(order.orderPositions, function (orderPosition) {
@@ -672,13 +688,13 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
         var PriceList = $resource("order/:id/:position/pricelist.json", {id: '@id', position: '@position'});
         PriceList.get({id: sellerId, position: position}, function (data) {
 
+            $scope.isRefreshed = true;
+            $scope.isShowRefreshedError = false;
+
             $scope.priceList = data.payload.priceList;
             $scope.orderPositionTemplate = data.payload.orderPositionTemplate;
-            $scope.refreshOrderPositions($scope.order);
 
-            _.map($scope.priceList.positions, function (priceListPosition) {
-                priceListPosition.prices[0].amount = 0;
-            });
+            $scope.refreshOrderPositions($scope.order);
 
             if (callback != null && callback != undefined) {
                 callback();
@@ -707,11 +723,9 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
             || $scope.priceList.position == 0 && comparedDatesFrom == 0 && afterDeadline) {
 
             $scope.showActuallityError = true;
-            $scope.showHidePriceList = false;
             return;
         }
         $scope.showActuallityError = false;
-        $scope.showHidePriceList = true;
 
         $scope.loadPriceList($scope.order.seller.id, $scope.order.priceListPosition, callback);
     }
@@ -728,15 +742,20 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
     };
 
     $scope.reduceAmount = function (orderPosition) {
-        var priceListPosition = $scope.findPriceListPosition(orderPosition);
-        if (orderPosition.amount > priceListPosition.moq) {
+        if (!$scope.validateRefreshedState()) {
+            return;
+        }
+
+        if (orderPosition.amount > $scope.getMinimumAmount(orderPosition)) {
             orderPosition.amount--;
             $scope.updatePrices(orderPosition);
         }
     }
 
     $scope.addOrderPosition = function (priceListPosition, price) {
-
+        if (!$scope.validateRefreshedState()) {
+            return;
+        }
         var exitingOrderPosition = _.find($scope.order.orderPositions, function (orderPosition) {
             return orderPosition.priceListPosition == priceListPosition.id;
         });
@@ -899,7 +918,7 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
         $event.stopPropagation();
         $scope.order.orderPositions.splice(index, 1);
         if ($scope.priceList != null) {
-            $scope.refresh()
+            $scope.refresh();
         }
     }
 

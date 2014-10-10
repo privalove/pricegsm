@@ -4,6 +4,11 @@
 </header>
 
 <div xmlns:th="http://www.thymeleaf.org">
+<div class="row form-group" ng-show="isShowRefreshedError">
+    <div class="has-error form-group col-sm-10">
+        <div class="form-control col-sm-offset-1">Данные не актуальны. Нажмите обновить.</div>
+    </div>
+</div>
 <div class="row">
     <div class="col-sm-3 text-right right-padding-5">Статус: {{order.status | statusFilter}}</div>
 </div>
@@ -154,8 +159,9 @@
                 <td>
                     <input type="number" name="amount" class="form-control input-group"
                            min={{getMinimumAmount(orderPosition)}} max="" required=""
-                           ng-change="updatePrices(orderPosition)"
-                           ng-model="orderPosition.amount"/>
+                           ng-change="changePrices(orderPosition)"
+                           ng-click="validateRefreshedState()"
+                           ng-model="orderPosition.amount" ng-readonly="!isRefreshed" />
                 </td>
                 <td>{{orderPosition.price | priceFilter : priceList.currency.symbol}}</td>
                 <td>{{orderPosition.totalPrice | priceFilter : priceList.currency.symbol}}</td>
@@ -196,7 +202,7 @@
         <div class="form-control col-sm-offset-1">Даннoe предложение не актуально.</div>
     </div>
 </div>
-<div class="row form-group" ng-show="showHidePriceList">
+<div class="row form-group">
     <div class="col-sm-12">
         <table class="table table-hover table-condensed">
             <thead>
