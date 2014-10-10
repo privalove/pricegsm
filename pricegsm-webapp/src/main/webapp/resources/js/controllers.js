@@ -659,6 +659,11 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
 
         _.map(order.orderPositions, function (orderPosition) {
             var priceListPosition = $scope.findPriceListPosition(orderPosition);
+            if(priceListPosition == undefined || priceListPosition == null) {
+                orderPosition.selectedStyle = "danger";
+                orderPosition.deleted = true;
+                return;
+            }
             var prices = priceListPosition.prices;
             var price = findPrice(prices, orderPosition.amount);
             $scope.updatePrices(orderPosition);
@@ -817,6 +822,9 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
 
     function markSelectedPrice(orderPosition) {
         var priceListPosition = $scope.findPriceListPosition(orderPosition);
+        if(priceListPosition == undefined || priceListPosition == null) {
+            return orderPosition.price;
+        }
         priceListPosition.amount = orderPosition.amount;
         var prices = priceListPosition.prices;
         var price = findPrice(prices, orderPosition.amount);
@@ -842,6 +850,9 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
 
     $scope.getMinimumAmount = function (orderPosition) {
         var priceListPosition = $scope.findPriceListPosition(orderPosition);
+        if(priceListPosition == undefined || priceListPosition == null) {
+            return orderPosition.amount;
+        }
         var price = _.min(priceListPosition.prices, function (price) {
             return price.minOrderQuantity;
         });
@@ -872,7 +883,7 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
 
     $scope.getPositionTotalPrice = function (orderPosition) {
         var amount = orderPosition.amount;
-        if (amount == undefined) {
+        if (amount == undefined || orderPosition.deleted) {
             return 0;
         }
         return  orderPosition.price * amount;
@@ -984,6 +995,9 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
 
         return _.reduce(
             _.map(order.orderPositions, function (position) {
+                if(position.deleted){
+                    return 0;
+                }
                 return position.amount;
             }),
             function (memo, num) {
