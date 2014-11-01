@@ -300,6 +300,48 @@
 
                 }
             }
+        }]).directive('pgTimePeriod', [function () {
+            return {
+                scope: {
+                    fromTime: "=",
+                    toTime: "=",
+                    fromTimeLimit: "@",
+                    toTimeLimit: "@"
+                },
+                restrict: 'E',
+                require: "?fromTime",
+                templateUrl: "resources/template/timePeriod.html",
+                link: function ($scope, element, attrs) {
+
+                    $scope.limitFromTime = function () {
+                        var timeLimit = attrs.fromTimeLimit;
+                        if ($scope.fromTime.valueOf() < timeLimit) {
+                            $scope.fromTime = timeLimit;
+                            attrs.fromTime = timeLimit;
+                        }
+
+                        if ($scope.toTime.valueOf() < $scope.fromTime.valueOf()) {
+                            $scope.fromTime = $scope.toTime;
+                            attrs.fromTime = $scope.toTime;
+                        }
+                    }
+
+                    $scope.limitToTime = function () {
+                        var timeLimit = attrs.toTimeLimit;
+
+                        if (timeLimit < $scope.toTime.valueOf()) {
+                            $scope.toTime = timeLimit;
+                            attrs.toTime = timeLimit;
+                        }
+
+                        if ($scope.toTime.valueOf() < $scope.fromTime.valueOf()) {
+                            $scope.toTime = $scope.fromTime;
+                            attrs.toTime = $scope.fromTime;
+                        }
+                    }
+
+                }
+            }
         }])
 
     ;

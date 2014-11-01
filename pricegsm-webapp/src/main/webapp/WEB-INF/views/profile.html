@@ -100,12 +100,22 @@
                                 <span th:text="#{profileForm.defaultDeliveryPlace}"></span>
                             </label>
 
-                            <div class="col-xs-9"
+                            <div class="col-xs-4"
                                  pg-delivery-place="{{deliveryPlaces}}" free-input="{{profileForm.region.name}}"
                                  default-input="{{profileForm.buyerDeliveryPlace}}"
                                  ng-model="profileForm.buyerDeliveryPlace"  ></div>
                             <input name="buyerDeliveryPlace" id="buyerDeliveryPlace" type="hidden"
                                    ng-model="profileForm.buyerDeliveryPlace" pg-valid="metadata"/>
+
+                            <pg-time-period class="col-xs-4"
+                                from-time= "profileForm.buyerDeliveryFrom"
+                                to-time= "profileForm.buyerDeliveryTo"
+                                from-time-limit= "profileForm.buyerDeliveryFrom"
+                                to-time-limit= "profileForm.buyerDeliveryTo"></pg-time-period>
+                            <input name="buyerDeliveryFrom" id="buyerDeliveryFrom" type="hidden"
+                                   ng-model="profileForm.buyerDeliveryFrom" pg-valid="metadata"/>
+                            <input name="buyerDeliveryTo" id="buyerDeliveryTo" type="hidden"
+                                   ng-model="profileForm.buyerDeliveryTo" pg-valid="metadata"/>
                         </div>
 
                         <div class="form-group col-sm-12">
