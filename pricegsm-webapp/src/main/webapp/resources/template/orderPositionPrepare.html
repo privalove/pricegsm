@@ -147,7 +147,7 @@
                 <td>{{orderPosition.product.name}}</td>
                 <td>{{orderPosition.product.color.name}}</td>
                 <td>{{orderPosition.specification.name}}</td>
-                <td>{{orderPosition.product.description}}</td>
+                <td>{{orderPosition.description}}</td>
                 <td>
                     <div class="reduceAmountButton pull-right">
                         <button type="button" class="btn btn-xs btn-danger" tooltip="Удалить"
@@ -163,8 +163,8 @@
                            ng-click="validateRefreshedState()"
                            ng-model="orderPosition.amount" ng-readonly="!isRefreshed || orderPosition.deleted" />
                 </td>
-                <td>{{orderPosition.price | priceFilter : priceList.currency.symbol}}</td>
-                <td>{{orderPosition.totalPrice | priceFilter : priceList.currency.symbol}}</td>
+                <td>{{orderPosition.price | priceFilter : order.currency.symbol}}</td>
+                <td>{{orderPosition.totalPrice | priceFilter : order.currency.symbol}}</td>
                 <td>
                     <button type="button" class="btn btn-xs btn-danger" tooltip="Удалить"
                             ng-click="deleteOrderPosition($event,$index)">
@@ -176,13 +176,13 @@
             <tr>
                 <td colspan="6"></td>
                 <td colspan="1"><span>Доставка:</span></td>
-                <td colspan="1"><span>{{order.deliveryCost  | priceFilter : priceList.currency.symbol}}</span></td>
+                <td colspan="1"><span>{{order.deliveryCost  | priceFilter : order.currency.symbol}}</span></td>
                 <td colspan="1"></td>
             </tr>
             <tr class="no-border-children">
                 <th colspan="6"></th>
                 <th colspan="1"><span>Итого:</span></th>
-                <th colspan="1"><span>{{order.totalPrice  | priceFilter : priceList.currency.symbol}}</span></th>
+                <th colspan="1"><span>{{order.totalPrice  | priceFilter : order.currency.symbol}}</span></th>
                 <th colspan="1"></th>
             </tr>
             </tbody>

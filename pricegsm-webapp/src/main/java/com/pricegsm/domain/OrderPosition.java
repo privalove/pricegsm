@@ -30,6 +30,8 @@ public class OrderPosition
 
     private long priceListPosition;
 
+    private String description;
+
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(generator = "PriceList")
@@ -132,5 +134,15 @@ public class OrderPosition
 
     public void setPriceListPosition(long priceListPosition) {
         this.priceListPosition = priceListPosition;
+    }
+
+    @Basic
+    @Column(name = "description")
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

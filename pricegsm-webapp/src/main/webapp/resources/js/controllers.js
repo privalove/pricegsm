@@ -542,6 +542,9 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
     }
 
     function getPossibleDeliveryDates() {
+        if ($scope.priceList == null || $scope.priceList == undefined) {
+            return;
+        }
         var today = new Date();
         var tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
         if ($scope.priceList.position == 0) {
@@ -584,6 +587,7 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
 
     $scope.possibleDeliveryDates = getPossibleDeliveryDates();
 
+//    todo refactor
     $scope.limitFromTime = function (isDelivery) {
         var timeLimit;
 
@@ -624,9 +628,11 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
         });
     }
 
-    _.each($scope.order.orderPositions, function (orderPosition) {
-        markSelectedPrice(orderPosition);
-    });
+    if ($scope.priceList != null && $scope.priceList != undefined) {
+        _.each($scope.order.orderPositions, function (orderPosition) {
+            markSelectedPrice(orderPosition);
+        });
+    }
 
     $scope.updatePrices = function (orderPosition) {
         $scope.updatePriceListAmount(orderPosition);
@@ -651,15 +657,9 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
     }
 
     $scope.refreshOrderPositions = function (order) {
-        //todo delete
-//        $scope.order.orderPositions = _.reject(order.orderPositions, function (orderPosition) {
-//            var priceListPosition = $scope.findPriceListPosition(orderPosition);
-//            return priceListPosition == undefined;
-//        });
-
         _.map(order.orderPositions, function (orderPosition) {
             var priceListPosition = $scope.findPriceListPosition(orderPosition);
-            if(priceListPosition == undefined || priceListPosition == null) {
+            if (priceListPosition == undefined || priceListPosition == null) {
                 orderPosition.selectedStyle = "danger";
                 orderPosition.deleted = true;
                 return;
@@ -668,6 +668,7 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
             var price = findPrice(prices, orderPosition.amount);
             $scope.updatePrices(orderPosition);
             orderPosition.specification = priceListPosition.specification;
+            orderPosition.description = priceListPosition.description;
 
             if (priceListPosition.amount < orderPosition.amount) {
                 orderPosition.amount = priceListPosition.amount;
@@ -698,6 +699,8 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
 
             $scope.priceList = data.payload.priceList;
             $scope.orderPositionTemplate = data.payload.orderPositionTemplate;
+
+            $scope.order.currency = $scope.priceList.currency;
 
             $scope.refreshOrderPositions($scope.order);
 
@@ -790,6 +793,7 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
         position.priceListPosition = priceListPosition.id;
         position.price = calculatePrice(priceListPosition.prices, position.amount);
         position.specification = priceListPosition.specification;
+        position.description = priceListPosition.description;
 
         $scope.order.orderPositions.push(position);
         $scope.updatePrices(position);
@@ -822,7 +826,7 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
 
     function markSelectedPrice(orderPosition) {
         var priceListPosition = $scope.findPriceListPosition(orderPosition);
-        if(priceListPosition == undefined || priceListPosition == null) {
+        if (priceListPosition == undefined || priceListPosition == null) {
             return orderPosition.price;
         }
         priceListPosition.amount = orderPosition.amount;
@@ -850,7 +854,7 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
 
     $scope.getMinimumAmount = function (orderPosition) {
         var priceListPosition = $scope.findPriceListPosition(orderPosition);
-        if(priceListPosition == undefined || priceListPosition == null) {
+        if (priceListPosition == undefined || priceListPosition == null) {
             return orderPosition.amount;
         }
         var price = _.min(priceListPosition.prices, function (price) {
@@ -995,7 +999,7 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
 
         return _.reduce(
             _.map(order.orderPositions, function (position) {
-                if(position.deleted){
+                if (position.deleted) {
                     return 0;
                 }
                 return position.amount;
