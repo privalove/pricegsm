@@ -514,6 +514,10 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
         }
     })();
 
+    $scope.changeDeliveryPlace = function (place) {
+        $scope.deliveryPlace = place;
+    }
+
     var baseDateFormat = "yyyy-MM-dd";
 
     function compareDates(date1, date2) {
@@ -587,40 +591,24 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
 
     $scope.possibleDeliveryDates = getPossibleDeliveryDates();
 
-//    todo refactor
-    $scope.limitFromTime = function (isDelivery) {
-        var timeLimit;
-
+    $scope.getLimitFromTime = function (isDelivery) {
         if (isDelivery) {
-            timeLimit = $scope.order.seller.sellerDeliveryFrom;
+            return $scope.order.seller.sellerDeliveryFrom;
         } else {
-            timeLimit = $scope.order.seller.sellerPickupFrom;
-        }
-        if ($scope.order.fromTime < timeLimit) {
-            $scope.order.fromTime = timeLimit;
-        }
-
-        if ($scope.order.toTime < $scope.order.fromTime) {
-            $scope.order.fromTime = $scope.order.toTime;
+            return $scope.order.seller.sellerPickupFrom;
         }
     }
 
-    $scope.limitToTime = function (isDelivery) {
-        var timeLimit;
+    $scope.getLimitToTime = function (isDelivery) {
         if (isDelivery) {
-            timeLimit = $scope.order.seller.sellerDeliveryTo;
+            return $scope.order.seller.sellerDeliveryTo;
         } else {
-            timeLimit = $scope.order.seller.sellerPickupTo;
-        }
-
-        if (timeLimit < $scope.order.toTime) {
-            $scope.order.toTime = timeLimit;
-        }
-
-        if ($scope.order.toTime < $scope.order.fromTime) {
-            $scope.order.toTime = $scope.order.fromTime;
+            return $scope.order.seller.sellerPickupTo;
         }
     }
+
+    $scope.limitFromTime = $scope.getLimitFromTime($scope.order.delivery);
+    $scope.limitToTime = $scope.getLimitToTime($scope.order.delivery);
 
     $scope.findPriceListPosition = function (orderPosition) {
         return _.find($scope.priceList.positions, function (priceListPosition) {
@@ -883,6 +871,9 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
             $scope.order.pickup = false;
         }
         $scope.order.deliveryFree = false;
+
+        $scope.limitFromTime = $scope.getLimitFromTime($scope.order.delivery);
+        $scope.limitToTime = $scope.getLimitToTime($scope.order.delivery);
     }
 
     $scope.getPositionTotalPrice = function (orderPosition) {

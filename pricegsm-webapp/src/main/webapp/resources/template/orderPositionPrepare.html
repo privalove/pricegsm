@@ -101,23 +101,11 @@
             </option>
         </select>
     </div>
-    <div class="col-sm-4">
-        <label class="margin-top-5">с</label>
-
-        <div style="display:inline-block;">
-            <timepicker ng-model="order.fromTime" minute-step="30" show-meridian="false"
-                        ng-change="limitFromTime(order.delivery)">
-            </timepicker>
-        </div>
-
-        <label class="margin-top-5">до</label>
-
-        <div style="display:inline-block;">
-            <timepicker ng-model="order.toTime" minute-step="30" show-meridian="false"
-                        ng-change="limitToTime(order.delivery)">
-            </timepicker>
-        </div>
-    </div>
+    <pg-time-period class="col-xs-4"
+                    from-time= "order.fromTime"
+                    to-time= "order.toTime"
+                    from-time-limit= "{{limitFromTime}}"
+                    to-time-limit= "{{limitToTime}}"></pg-time-period>
 </div>
 
 <div class="row form-group">

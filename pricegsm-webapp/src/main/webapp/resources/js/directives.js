@@ -269,7 +269,7 @@
                     $scope.updateNgModel = function (place) {
                         ngModel.$setViewValue(place);
                         if (!($scope.onChangeAction == null || $scope.onChangeAction == undefined)) {
-                                $scope.onChangeAction(place);
+                            $scope.onChangeAction(place);
                         }
                     }
 
@@ -316,8 +316,9 @@
                     $scope.limitFromTime = function () {
                         var timeLimit = attrs.fromTimeLimit;
                         if ($scope.fromTime.valueOf() < timeLimit) {
-                            $scope.fromTime = timeLimit;
-                            attrs.fromTime = timeLimit;
+                            var timeLimitDate = new Date(parseInt(timeLimit));
+                            $scope.fromTime = timeLimitDate;
+                            attrs.fromTime = timeLimitDate;
                         }
 
                         if ($scope.toTime.valueOf() < $scope.fromTime.valueOf()) {
@@ -330,8 +331,9 @@
                         var timeLimit = attrs.toTimeLimit;
 
                         if (timeLimit < $scope.toTime.valueOf()) {
-                            $scope.toTime = timeLimit;
-                            attrs.toTime = timeLimit;
+                            var timeLimitDate = new Date(parseInt(timeLimit));
+                            $scope.toTime = timeLimitDate;
+                            attrs.toTime = timeLimitDate;
                         }
 
                         if ($scope.toTime.valueOf() < $scope.fromTime.valueOf()) {
@@ -339,6 +341,14 @@
                             attrs.toTime = $scope.fromTime;
                         }
                     }
+
+                    $scope.$watch("fromTimeLimit", function () {
+                        $scope.limitFromTime()
+                    });
+
+                    $scope.$watch("toTimeLimit", function () {
+                        $scope.limitToTime()
+                    });
 
                 }
             }
