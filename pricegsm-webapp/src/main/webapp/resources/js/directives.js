@@ -309,7 +309,6 @@
                     toTimeLimit: "@"
                 },
                 restrict: 'E',
-                require: "?fromTime",
                 templateUrl: "resources/template/timePeriod.html",
                 link: function ($scope, element, attrs) {
 
@@ -349,6 +348,136 @@
                     $scope.$watch("toTimeLimit", function () {
                         $scope.limitToTime()
                     });
+
+                }
+            }
+        }]).directive('pgPriceList', [function () {
+            return {
+                scope: {
+                    order: "@"
+                },
+                require: "?ngModel",
+                templateUrl: "resources/template/priceList.html",
+                link: function ($scope, element, attrs) {
+                    $scope.priceList = attrs.pgPriceList;
+
+                    if (attrs.order != null && attrs.order != undefined) {
+                        _.each(attrs.order.orderPositions, function (orderPosition) {
+                            markSelectedPrice(orderPosition);
+                        });
+                    }
+
+                    function markSelectedPrice(orderPosition) {
+                        var priceListPosition = findPriceListPosition(orderPosition);
+                        if (priceListPosition == undefined || priceListPosition == null) {
+                            return orderPosition.price;
+                        }
+                        priceListPosition.amount = orderPosition.amount;
+                        var prices = priceListPosition.prices;
+                        var price = findPrice(prices, orderPosition.amount);
+                        updatePricesSelected(prices, price, priceListPosition.amount);
+                        //todo bad practice 2 responsib refsctor
+                        return price;
+                    }
+
+                    function findPriceListPosition(orderPosition) {
+                        return _.find($scope.priceList.positions, function (priceListPosition) {
+                            return orderPosition.priceListPosition == priceListPosition.id;
+                        });
+                    }
+
+                    function findPrice(prices, amount) {
+                        var sortedPrices = _.sortBy(prices, function (price) {
+                            return -1 * price.minOrderQuantity;
+                        });
+
+                        var price = _.find(sortedPrices, function (price) {
+                            return price.minOrderQuantity <= amount;
+                        });
+                        return price;
+                    }
+
+                    function updatePricesSelected(prices, price, amount) {
+                        _.map(prices, function (price) {
+                            price.selectedStyle = "";
+                            price.amount = "";
+                        });
+                        price.selectedStyle = "success";
+                        price.amount = amount;
+                    }
+
+                    function updatePriceListAmount(orderPosition) {
+                        if ($scope.priceList != null) {
+                            var price = markSelectedPrice(orderPosition);
+                            orderPosition.price = price.price;
+                        }
+                        if (orderPosition.amount == 0) {
+                            orderPosition.selectedStyle = "danger";
+
+                        } else {
+                            orderPosition.selectedStyle = "";
+                        }
+
+                        orderPosition.totalPrice = $scope.getPositionTotalPrice(orderPosition);
+                    }
+
+                    //todo add Order createon
+                    $scope.addOrderPosition = function (priceListPosition, price) {
+                        if (!$scope.validateRefreshedState()) {
+                            return;
+                        }
+                        var exitingOrderPosition = _.find($scope.order.orderPositions, function (orderPosition) {
+                            return orderPosition.priceListPosition == priceListPosition.id;
+                        });
+
+                        if (exitingOrderPosition != undefined) {
+                            if (price.minOrderQuantity > exitingOrderPosition.amount) {
+                                priceListPosition.amount = price.minOrderQuantity;
+                                exitingOrderPosition.amount = price.minOrderQuantity;
+                                exitingOrderPosition.price = price.price;
+                            } else {
+                                priceListPosition.amount++;
+                                exitingOrderPosition.amount++;
+                            }
+
+                            $scope.refreshOrderPositions($scope.order);
+                            exitingOrderPosition.totalPrice = $scope.getPositionTotalPrice(exitingOrderPosition);
+                            return;
+                        }
+
+                        var position = angular.copy($scope.orderPositionTemplate);
+                        position.order = {id: currentOrder.id, name: ""};
+                        priceListPosition.amount = price.minOrderQuantity;
+                        position.amount = price.minOrderQuantity;
+                        position.price = price.price;
+                        position.totalPrice = 0;
+                        position.product = priceListPosition.product;
+                        position.priceListPosition = priceListPosition.id;
+                        position.price = calculatePrice(priceListPosition.prices, position.amount);
+                        position.specification = priceListPosition.specification;
+                        position.description = priceListPosition.description;
+
+                        order.orderPositions.push(position);
+                        updatePrices(position);
+                    }
+
+                     function updatePrices(orderPosition) {
+                        $scope.updatePriceListAmount(orderPosition);
+
+                        $scope.order.totalPrice = $scope.calcTotalPrice($scope.order);
+                        $scope.order.deliveryCost = $scope.calcDeliveryPrice($scope.order);
+
+                    }
+
+                }
+            }
+        }]).directive('pgOrder', [function () {
+            return {
+                scope: {
+                },
+                require: "?ngModel",
+                templateUrl: "resources/template/order.html",
+                link: function ($scope, element, attrs) {
 
                 }
             }

@@ -490,7 +490,7 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
     if ($scope.order.seller.managerPhone == null || $scope.order.seller.managerPhone == undefined || $scope.order.seller.managerPhone == "") {
         $scope.order.seller.managerPhone = $scope.order.seller.phone;
     }
-
+    //todo try to refactor DeliveryPlace start
     var calculateDeliveryPlaceAvailability = function () {
         var currentDeliveryPlace = null;
         _.map($scope.deliveryPlaces, function (deliveryPlace) {
@@ -517,7 +517,9 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
     $scope.changeDeliveryPlace = function (place) {
         $scope.deliveryPlace = place;
     }
+    //todo try to refactor DeliveryPlace end
 
+    //todo create date list directive start
     var baseDateFormat = "yyyy-MM-dd";
 
     function compareDates(date1, date2) {
@@ -590,6 +592,7 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
     }
 
     $scope.possibleDeliveryDates = getPossibleDeliveryDates();
+    //todo create date list directive end
 
     $scope.getLimitFromTime = function (isDelivery) {
         if (isDelivery) {
@@ -610,6 +613,20 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
     $scope.limitFromTime = $scope.getLimitFromTime($scope.order.delivery);
     $scope.limitToTime = $scope.getLimitToTime($scope.order.delivery);
 
+    $scope.resetOtherDelivery = function (selectedDeliveryType) {
+        if (selectedDeliveryType != "delivery") {
+            $scope.order.delivery = false;
+        }
+        if (selectedDeliveryType != "pickup") {
+            $scope.order.pickup = false;
+        }
+        $scope.order.deliveryFree = false;
+
+        $scope.limitFromTime = $scope.getLimitFromTime($scope.order.delivery);
+        $scope.limitToTime = $scope.getLimitToTime($scope.order.delivery);
+    }
+
+    //todo PriceList and Order start
     $scope.findPriceListPosition = function (orderPosition) {
         return _.find($scope.priceList.positions, function (priceListPosition) {
             return orderPosition.priceListPosition == priceListPosition.id;
@@ -725,17 +742,6 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
 
         $scope.loadPriceList($scope.order.seller.id, $scope.order.priceListPosition, callback);
     }
-
-    $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
-    };
-
-    $scope.open = function ($event) {
-        $event.preventDefault();
-
-        $event.stopPropagation();
-        $scope.opened = true;
-    };
 
     $scope.reduceAmount = function (orderPosition) {
         if (!$scope.validateRefreshedState()) {
@@ -863,19 +869,6 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
             && !$scope.showActuallityError;
     }
 
-    $scope.resetOtherDelivery = function (selectedDeliveryType) {
-        if (selectedDeliveryType != "delivery") {
-            $scope.order.delivery = false;
-        }
-        if (selectedDeliveryType != "pickup") {
-            $scope.order.pickup = false;
-        }
-        $scope.order.deliveryFree = false;
-
-        $scope.limitFromTime = $scope.getLimitFromTime($scope.order.delivery);
-        $scope.limitToTime = $scope.getLimitToTime($scope.order.delivery);
-    }
-
     $scope.getPositionTotalPrice = function (orderPosition) {
         var amount = orderPosition.amount;
         if (amount == undefined || orderPosition.deleted) {
@@ -953,6 +946,20 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
         }
     };
 
+    $scope.calcTotalAmount = function (order) {
+
+        return _.reduce(
+            _.map(order.orderPositions, function (position) {
+                if (position.deleted) {
+                    return 0;
+                }
+                return position.amount;
+            }),
+            function (memo, num) {
+                return memo + num;
+            }, 0)
+    }
+
     $scope.review = function (order) {
         $modal.open({
             templateUrl: "resources/template/orderPosition.html",
@@ -982,24 +989,20 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
         $scope.cancel();
     }
 
+    $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+    };
+
+    $scope.open = function ($event) {
+        $event.preventDefault();
+
+        $event.stopPropagation();
+        $scope.opened = true;
+    };
+
     $scope.ok = function (resultOrder) {
         $modalInstance.close(resultOrder);
     }
-
-    $scope.calcTotalAmount = function (order) {
-
-        return _.reduce(
-            _.map(order.orderPositions, function (position) {
-                if (position.deleted) {
-                    return 0;
-                }
-                return position.amount;
-            }),
-            function (memo, num) {
-                return memo + num;
-            }, 0)
-    }
-
 }
 
 angular.module('orderFilters', [])

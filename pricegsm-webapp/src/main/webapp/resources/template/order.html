@@ -1,0 +1,63 @@
+<div class="row">
+    <div class="col-sm-12">
+        <table class="table table-hover table-condensed">
+            <thead>
+            <tr>
+                <th pg-text="priceListPosition.name">Наименование</th>
+                <th pg-text="color">цвет</th>
+                <th>Спец-ия</th>
+                <th pg-text="note">примичание</th>
+                <th></th>
+                <th class="pg-amount" pg-text="page.order.totalAmount">количество</th>
+                <th pg-text="priceListPosition.price">цена</th>
+                <th pg-text="page.order.totalPrice">сумма</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="{{orderPosition.selectedStyle}}" ng-repeat="orderPosition in order.orderPositions">
+                <td>{{orderPosition.product.name}}</td>
+                <td>{{orderPosition.product.color.name}}</td>
+                <td>{{orderPosition.specification.name}}</td>
+                <td>{{orderPosition.description}}</td>
+                <td>
+                    <div class="reduceAmountButton pull-right">
+                        <button type="button" class="btn btn-xs btn-danger" tooltip="Удалить"
+                                ng-click="reduceAmount(orderPosition)">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                </td>
+                <td>
+                    <input type="number" name="amount" class="form-control input-group"
+                           min={{getMinimumAmount(orderPosition)}} max="" required=""
+                           ng-change="changePrices(orderPosition)"
+                           ng-click="validateRefreshedState()"
+                           ng-model="orderPosition.amount" ng-readonly="!isRefreshed || orderPosition.deleted" />
+                </td>
+                <td>{{orderPosition.price | priceFilter : order.currency.symbol}}</td>
+                <td>{{orderPosition.totalPrice | priceFilter : order.currency.symbol}}</td>
+                <td>
+                    <button type="button" class="btn btn-xs btn-danger" tooltip="Удалить"
+                            ng-click="deleteOrderPosition($event,$index)">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </td>
+            </tr>
+            <tr></tr>
+            <tr>
+                <td colspan="6"></td>
+                <td colspan="1"><span>Доставка:</span></td>
+                <td colspan="1"><span>{{order.deliveryCost  | priceFilter : order.currency.symbol}}</span></td>
+                <td colspan="1"></td>
+            </tr>
+            <tr class="no-border-children">
+                <th colspan="6"></th>
+                <th colspan="1"><span>Итого:</span></th>
+                <th colspan="1"><span>{{order.totalPrice  | priceFilter : order.currency.symbol}}</span></th>
+                <th colspan="1"></th>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
