@@ -351,15 +351,16 @@
 
                 }
             }
-        }]).directive('pgPriceList', [function () {
+        }]).directive('pgPricelist', [function () {
             return {
                 scope: {
+                    pricelist: "=",
                     order: "@"
                 },
-                require: "?ngModel",
+                restrict: 'E',
                 templateUrl: "resources/template/priceList.html",
                 link: function ($scope, element, attrs) {
-                    $scope.priceList = attrs.pgPriceList;
+                    $scope.priceList = $scope.pricelist;
 
                     if (attrs.order != null && attrs.order != undefined) {
                         _.each(attrs.order.orderPositions, function (orderPosition) {
