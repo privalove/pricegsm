@@ -101,10 +101,12 @@
                         <span>Площадка</span>
                     </div>
                     <div class="panel-body">
-                        <div ng-repeat="pricelist in pricelists | orderBy : [pricelist.user.name, pricelist.user.sellFromDate]" ng-hide="pricelist.positions.length == 0">
+                        <div ng-repeat="pricelist in pricelists | orderBy : [pricelist.user.name, pricelist.user.sellFromDate]"
+                             ng-hide="pricelist.positions.length == 0">
                             <div class="row">
                                 <div class="col-xs-offset-10 col-xs-2 text-right">
-                                    <button type="button" class="btn btn-default" ng-click="review(order)" ng-disabled="!formEnable(orderForm)">
+                                    <button type="button" class="btn btn-default" ng-click="review(order)"
+                                            ng-disabled="!formEnable(orderForm)">
                                         <span>{{pricelist.sellFromDate}}</span>
                                     </button>
                                 </div>
@@ -114,10 +116,14 @@
                                     <h4>{{pricelist.user.name}}</h4>
                                 </div>
                                 <div class="col-xs-4 ng-hide" ng-show="pricelist.user.sellerPickup">
-                                    самовывоз <b>{{pricelist.user.sellerPickupPlace}}</b> {{pricelist.user.sellerPickupFrom | date: 'HH:mm'}}-{{pricelist.user.sellerPickupTo | date: 'HH:mm'}}
+                                    самовывоз <b>{{pricelist.user.sellerPickupPlace}}</b>
+                                    {{pricelist.user.sellerPickupFrom | date: 'HH:mm'}}-{{pricelist.user.sellerPickupTo
+                                    | date: 'HH:mm'}}
                                 </div>
-                               <div class="col-xs-4 ng-hide" ng-show="pricelist.user.sellerDelivery">
-                                    доставка <b>{{pricelist.user.sellerDeliveryPlace}}</b> {{pricelist.user.sellerDeliveryFrom | date: 'HH:mm'}}-{{pricelist.user.sellerDeliveryTo | date: 'HH:mm'}}
+                                <div class="col-xs-4 ng-hide" ng-show="pricelist.user.sellerDelivery">
+                                    доставка <b>{{pricelist.user.sellerDeliveryPlace}}</b>
+                                    {{pricelist.user.sellerDeliveryFrom | date:
+                                    'HH:mm'}}-{{pricelist.user.sellerDeliveryTo | date: 'HH:mm'}}
                                 </div>
                                 <div class="col-xs-2">
                                     Гар. {{pricelist.user.sellerFreeRepair}}дн.
@@ -131,19 +137,12 @@
             </div>
         </div>
     </div>
-    <div class="col-md-5">
+    <div class="col-md-4">
         <!-- statistic -->
-        <div class="row">
-            <!-- market prices  -->
-            <div class="col-sm-12">
+        <!-- market prices  -->
+        <!--<pg-shop-prices></pg-shop-prices>-->
 
-            </div>
-        </div>
-        <div class="row">
-            <!-- charts -->
-            <div class="col-sm-12">
-
-            </div>
-        </div>
+        <!-- charts -->
+        <!--<pg-price-delta-chart></pg-price-delta-chart>-->
     </div>
 </div>

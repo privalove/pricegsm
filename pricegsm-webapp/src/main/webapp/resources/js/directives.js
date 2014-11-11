@@ -462,7 +462,7 @@
                         updatePrices(position);
                     }
 
-                     function updatePrices(orderPosition) {
+                    function updatePrices(orderPosition) {
                         $scope.updatePriceListAmount(orderPosition);
 
                         $scope.order.totalPrice = $scope.calcTotalPrice($scope.order);
@@ -480,6 +480,50 @@
                 templateUrl: "resources/template/order.html",
                 link: function ($scope, element, attrs) {
 
+                }
+            }
+        }]).directive('pgShopPrices', [function () {
+            return {
+                scope: {
+                },
+                restrict: 'E',
+                replace: true,
+                require: "?ngModel",
+                templateUrl: "resources/template/shopPrices.html",
+                link: function ($scope, element, attrs) {
+
+                }
+            }
+        }]).directive('pgPriceDeltaChart', [function () {
+            return {
+                scope: {
+                },
+                restrict: 'E',
+                require: "?ngModel",
+                templateUrl: "resources/template/priceDeltaChart.html",
+                link: function ($scope, element, attrs) {
+
+                }
+            }
+        }]).directive('pgMarketUrl', [function () {
+            return {
+                scope: {
+                    product: "="
+                },
+                restrict: 'E',
+                replace: true,
+                templateUrl: "resources/template/marketUrl.html",
+                link: function ($scope, element, attrs) {
+
+
+                    $scope.marketUrl = function () {
+
+                        var exclude = $scope.product.excludeQuery ? "~~(" + $scope.product.excludeQuery.replace(/,/g, "|") + ")" : "";
+
+                        var query = "(" + $scope.product.searchQuery.replace(/,/g, "|") + ")(" + $scope.product.colorQuery.replace(/,/g, "|") + ")" + exclude;
+
+                        return "http://market.yandex.ru/search.xml?hid=" + $scope.product.type.yandexId + "&text=" + encodeURIComponent(query) + "&nopreciser=1&how=aprice&np=1&onstock=1";
+                    };
                 }
             }
         }])

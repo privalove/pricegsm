@@ -87,9 +87,7 @@
                                ng-model="shopDate" datepicker-popup=""
                                ng-change="updateShopPrices(shopDate)" max="dateMax"/>
                         <span ng-bind="shopTime | date:'HH:mm'">18:00</span>
-                        <div class="panel-tools">
-                            <a ng-href="{{marketUrl()}}" target="_blank">{{product.vendor.name }} {{product.name}} {{product.color.name}}</a>
-                        </div>
+                        <pg-market-url product="product" class="panel-tools"></pg-market-url>
                     </div>
                     <div class="panel-body">
                         <div class="gridStyle" ng-grid="gridShopOptions"></div>
@@ -102,9 +100,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <i class="clip-stats"></i>
-                        <div class="panel-tools">
-                            <a ng-href="{{marketUrl()}}" target="_blank">{{product.vendor.name }} {{product.name}} {{product.color.name}}</a>
-                        </div>
+                        <pg-market-url product="product" class="panel-tools"></pg-market-url>
                     </div>
                     <div class="panel-body" pg-chart="chartDatas" data-chart-details="chartDetails">
                         <div class="pg-chart-container flot-small-container"></div>

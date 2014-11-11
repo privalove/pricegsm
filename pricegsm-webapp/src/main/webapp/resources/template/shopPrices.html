@@ -1,0 +1,20 @@
+<div class="row" xmlns:th="http://www.thymeleaf.org">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-truck fa-lg"></i>
+                <span th:text="#{page.main.date}">На дату</span>
+                <input type="text" class="pg-shop-datepicker"
+                       ng-model="shopDate" datepicker-popup=""
+                       ng-change="updateShopPrices(shopDate)" max="dateMax"/>
+                <span ng-bind="shopTime | date:'HH:mm'">18:00</span>
+
+                <pg-market-url product="product" class="panel-tools"></pg-market-url>
+
+            </div>
+            <div class="panel-body">
+                <div class="gridStyle" ng-grid="gridShopOptions"></div>
+            </div>
+        </div>
+    </div>
+</div>
