@@ -300,7 +300,8 @@
 
                 }
             }
-        }]).directive('pgTimePeriod', [function () {
+        }])
+        .directive('pgTimePeriod', [function () {
             return {
                 scope: {
                     fromTime: "=",
@@ -355,7 +356,8 @@
             return {
                 scope: {
                     pricelist: "=",
-                    order: "@"
+                    order: "@",
+                    onSelectAction: "&"
                 },
                 restrict: 'E',
                 templateUrl: "resources/template/priceList.html",
@@ -422,8 +424,24 @@
                         orderPosition.totalPrice = $scope.getPositionTotalPrice(orderPosition);
                     }
 
+                    var selected = false;
+
+                    $scope.clickAction = function (priceListPosition, price) {
+                        var product = priceListPosition.product;
+                        $scope.product = product;
+                        var currency = $scope.priceList.currency;
+                        $scope.onSelectAction(
+                            {data: {
+                                product: product,
+                                currency: currency}
+                            }
+                        );
+
+//                        addOrderPosition(priceListPosition, price)
+                    }
+
                     //todo add Order createon
-                    $scope.addOrderPosition = function (priceListPosition, price) {
+                    function addOrderPosition(priceListPosition, price) {
                         if (!$scope.validateRefreshedState()) {
                             return;
                         }
@@ -485,13 +503,46 @@
         }]).directive('pgShopPrices', [function () {
             return {
                 scope: {
+                    prices: "=",
+                    currency: "=",
+                    onDateChange: "&"
                 },
                 restrict: 'E',
                 replace: true,
-                require: "?ngModel",
+                require: "?$cookieStore",
                 templateUrl: "resources/template/shopPrices.html",
-                link: function ($scope, element, attrs) {
+                compile: function compile(templateElement, templateAttrs) {
+                    return {
+                        pre: function ($scope, element, attrs) {
+                            $scope.dateMax = new Date();
+                            $scope.shopDate = new Date();
 
+                            $scope.$watch("shopDate", function (newValue, oldValue) {
+                                var matches = /^(?:(0[1-9]|1[012])[\-](0[1-9]|[12][0-9]|3[01])[\-](19|20)[0-9]{2})$/.exec(newValue);
+                                if (newValue != oldValue && matches != null) {
+                                    $scope.updateShopDate(newValue);
+                                }
+                            });
+
+                            $scope.updateShopDate = function (shopDate) {
+                                $scope.onDateChange({data: {shopDate: shopDate}});
+                            };
+
+                            //shop prices grid options
+                            $scope.gridShopOptions = {
+                                data: 'prices',
+                                enableSorting: false,
+                                plugins: [new ngGridFlexibleHeightPlugin({minHeight: 200})],
+                                columnDefs: [
+                                    {field: 'shop', displayName: 'Магазин', cellTemplate: 'resources/template/shopNameCellTemplate.html'},
+                                    {field: 'price', displayName: 'Цена', cellTemplate: 'resources/template/yandexPriceCellTemplate.html'}
+                                ]
+                            };
+
+                        }
+                    }
+                },
+                link: function ($scope, element, attrs) {
                 }
             }
         }]).directive('pgPriceDeltaChart', [function () {
@@ -501,7 +552,68 @@
                 restrict: 'E',
                 require: "?ngModel",
                 templateUrl: "resources/template/priceDeltaChart.html",
-                link: function ($scope, element, attrs) {
+                compile: function compile(templateElement, templateAttrs) {
+                    return {
+                        pre: function ($scope, element, attrs, $cookieStore) {
+                            $scope.fillChart = function () {
+                                $scope.chartDatas = $scope.chart.data;
+
+                                $scope.chartDetails = {
+                                    grid: {
+                                        hoverable: true,
+                                        clickable: true
+                                    },
+                                    legend: {
+                                        show: true,
+                                        position: "nw"
+                                    },
+                                    xaxis: {
+                                        show: true,
+                                        mode: "time",
+                                        min: $scope.chart.from,
+                                        max: $scope.chart.to,
+                                        monthNames: $locale.DATETIME_FORMATS.SHORTMONTH
+                                    },
+                                    yaxis: {
+                                        tickFormatter: function formatter(val) {
+                                            return val + "&nbsp;" + $scope.currency.symbol;
+                                        }
+                                    }
+                                };
+                            };
+
+                            $scope.fillChart();
+                        }
+                    }
+                },
+                link: function ($scope, element, attrs, IndexChartResource, $cookieStore) {
+
+                    $scope.getIndexChartResource = function (data) {
+
+                        $cookieStore.put("chartData", data.chartData || $cookieStore.get("chartData"));
+                        $cookieStore.put("product", data.product || $cookieStore.get("product"));
+
+                        return IndexChartResource.get({
+                            product: $cookieStore.get("product"),
+                            chartData: $cookieStore.get("chartData"),
+                            dynRange: $cookieStore.get("dynRange"),
+                            currency: $cookieStore.get("currency")
+                        }).$promise;
+                    };
+
+                    $scope.updateChart = function () {
+                        $scope.getIndexChartResource({
+                            dynRange: $scope.dynRange,
+                            product: $scope.product.id})
+                            .then(function (indexChartResource) {
+                                if (indexChartResource.ok) {
+                                    $scope.safeApply(function () {
+                                        angular.extend($scope, indexChartResource.payload);
+                                        $scope.fillChart();
+                                    });
+                                }
+                            });
+                    };
 
                 }
             }
@@ -515,8 +627,10 @@
                 templateUrl: "resources/template/marketUrl.html",
                 link: function ($scope, element, attrs) {
 
-
                     $scope.marketUrl = function () {
+                        if ($scope.product == null || $scope.product == undefined || $scope.product == "") {
+                            return "";
+                        }
 
                         var exclude = $scope.product.excludeQuery ? "~~(" + $scope.product.excludeQuery.replace(/,/g, "|") + ")" : "";
 

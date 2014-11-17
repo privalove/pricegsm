@@ -15,7 +15,7 @@
             <tbody>
             <tr class="{{position.prices[0].selectedStyle}}"
                 ng-repeat-start="position in priceList.positions"
-                ng-click="addOrderPosition(position, position.prices[0])">
+                ng-click="clickAction(position, position.prices[0])">
                 <td>{{position.product.name}}</td>
                 <td>{{position.product.color.name}}</td>
                 <td>{{position.specification.name}}</td>
@@ -26,7 +26,7 @@
             </tr>
             <tr class="{{price.selectedStyle}}"
                 ng-repeat="price in position.prices.slice(1)"
-                ng-click="addOrderPosition(position, price)">
+                ng-click="clickAction(position, price)">
                 <td colspan="4"></td>
                 <td colspan="1">{{price.amount}}</td>
                 <td colspan="1">{{price.price | priceFilter : priceList.currency.symbol}}</td>

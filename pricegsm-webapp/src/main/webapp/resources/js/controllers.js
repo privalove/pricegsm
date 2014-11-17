@@ -7,16 +7,6 @@ function AppCtrl($scope) {
 IndexCtrl.$inject = ["$scope", "$cookieStore", "$filter", "$locale", "indexResource", "IndexResource", "IndexChartResource", "IndexShopResource"];
 function IndexCtrl($scope, $cookieStore, $filter, $locale, indexResource, IndexResource, IndexChartResource, IndexShopResource) {
 
-    //todo check usage and delete
-    $scope.marketUrl = function () {
-
-        var exclude = $scope.product.excludeQuery ? "~~(" + $scope.product.excludeQuery.replace(/,/g, "|") + ")" : "";
-
-        var query = "(" + $scope.product.searchQuery.replace(/,/g, "|") + ")(" + $scope.product.colorQuery.replace(/,/g, "|") + ")" + exclude;
-
-        return "http://market.yandex.ru/search.xml?hid=" + $scope.product.type.yandexId + "&text=" + encodeURIComponent(query) + "&nopreciser=1&how=aprice&np=1&onstock=1";
-    };
-
     $scope.getIndexChartResource = function (data) {
 
         $cookieStore.put("chartData", data.chartData || $cookieStore.get("chartData"));
@@ -26,18 +16,6 @@ function IndexCtrl($scope, $cookieStore, $filter, $locale, indexResource, IndexR
             product: $cookieStore.get("product"),
             chartData: $cookieStore.get("chartData"),
             dynRange: $cookieStore.get("dynRange"),
-            currency: $cookieStore.get("currency")
-        }).$promise;
-    };
-
-    $scope.getIndexShopResource = function (data) {
-
-        $cookieStore.put("shopDate", data.shopDate || $cookieStore.get("shopDate"));
-        $cookieStore.put("product", data.product || $cookieStore.get("product"));
-
-        return IndexShopResource.get({
-            product: $cookieStore.get("product"),
-            shopDate: $cookieStore.get("shopDate"),
             currency: $cookieStore.get("currency")
         }).$promise;
     };
@@ -54,6 +32,18 @@ function IndexCtrl($scope, $cookieStore, $filter, $locale, indexResource, IndexR
                     });
                 }
             });
+    };
+
+    $scope.getIndexShopResource = function (data) {
+
+        $cookieStore.put("shopDate", data.shopDate || $cookieStore.get("shopDate"));
+        $cookieStore.put("product", data.product || $cookieStore.get("product"));
+
+        return IndexShopResource.get({
+            product: $cookieStore.get("product"),
+            shopDate: $cookieStore.get("shopDate"),
+            currency: $cookieStore.get("currency")
+        }).$promise;
     };
 
     $scope.updateShopPrices = function () {
@@ -217,8 +207,13 @@ function getIndexResource(IndexResource, $cookieStore, data) {
     }).$promise;
 }
 
-MarketplaceCtrl.$inject = ["$scope", "pricelists", "orders", "Order"];
-function MarketplaceCtrl($scope, pricelists, orders, Order) {
+function isEmpty(data) {
+    return data == undefined || data == null || data == "";
+
+}
+
+MarketplaceCtrl.$inject = ["$scope", "$filter", "pricelists", "orders", "Order", "IndexShopResource"];
+function MarketplaceCtrl($scope, $filter, pricelists, orders, Order, IndexShopResource) {
 
     $scope.findOrDefaultOrderPosition = function (seller, pricelistPosition) {
         var result;
@@ -282,8 +277,51 @@ function MarketplaceCtrl($scope, pricelists, orders, Order) {
 
     };
 
+    var shopPricesData = {
+        product: undefined,
+        shopDate: new Date(),
+        currency: undefined
+    };
+
+    $scope.getIndexShopResource = function () {
+
+        return IndexShopResource.get({
+            product: shopPricesData.product.id,
+            shopDate: $filter("date")(shopPricesData.shopDate, 'yyyy-MM-dd'),
+            currency: shopPricesData.currency.id
+        }).$promise;
+    };
+
+    function isEmptyShopPricesData() {
+        if (isEmpty(shopPricesData.product) || isEmpty(shopPricesData.currency) || isEmpty(shopPricesData.shopDate)) {
+            return true;
+        }
+    }
+
+    function updateShopPrices() {
+        if (isEmptyShopPricesData()) {
+            return;
+        }
+
+        $scope.getIndexShopResource()
+            .then(function (indexShopResource) {
+                if (indexShopResource.ok) {
+                    $scope.safeApply(function () {
+                        angular.extend($scope, indexShopResource.payload);
+                    });
+                }
+            });
+    };
+
+    $scope.updateShopPrices = function (data) {
+        angular.extend(shopPricesData, data);
+        $scope.currency = shopPricesData.currency;
+        updateShopPrices();
+    }
+
     if (pricelists.ok) {
         $scope.pricelists = pricelists.payload.pricelists;
+        $scope.selectedProduct = $scope.pricelists[0].product;
 
         $scope.updateAmount = function (seller, position, amount) {
             $scope.findOrCreateOrderPosition(seller, position).amount = amount;

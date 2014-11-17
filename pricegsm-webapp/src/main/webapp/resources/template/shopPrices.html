@@ -6,7 +6,9 @@
                 <span th:text="#{page.main.date}">На дату</span>
                 <input type="text" class="pg-shop-datepicker"
                        ng-model="shopDate" datepicker-popup=""
-                       ng-change="updateShopPrices(shopDate)" max="dateMax"/>
+                       ng-change="updateShopDate(shopDate)"
+                       ng-model-options="{ updateOn: 'change' }"
+                       max="dateMax"/>
                 <span ng-bind="shopTime | date:'HH:mm'">18:00</span>
 
                 <pg-market-url product="product" class="panel-tools"></pg-market-url>
