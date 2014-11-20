@@ -29,7 +29,9 @@
                     $scope.$watch(function () {
                         return $filter("json")($scope.pgChart) + $filter("json")($scope.chartDetails);
                     }, function () {
-                        $.plot(chartContainer, $scope.pgChart, $scope.chartDetails);
+                        if ($scope.pgChart != undefined && $scope.chartDetails != undefined) {
+                            $.plot(chartContainer, $scope.pgChart, $scope.chartDetails);
+                        }
                     });
                 }
             }
@@ -505,6 +507,7 @@
                 scope: {
                     prices: "=",
                     currency: "=",
+                    product: "=",
                     onDateChange: "&"
                 },
                 restrict: 'E',
@@ -548,16 +551,19 @@
         }]).directive('pgPriceDeltaChart', [function () {
             return {
                 scope: {
+                    monthNames: "=",
+                    chart: "=",
+                    currency: "="
                 },
                 restrict: 'E',
                 require: "?ngModel",
                 templateUrl: "resources/template/priceDeltaChart.html",
                 compile: function compile(templateElement, templateAttrs) {
                     return {
-                        pre: function ($scope, element, attrs, $cookieStore) {
+                        pre: function ($scope, element, attrs) {
+
                             $scope.fillChart = function () {
                                 $scope.chartDatas = $scope.chart.data;
-
                                 $scope.chartDetails = {
                                     grid: {
                                         hoverable: true,
@@ -572,7 +578,7 @@
                                         mode: "time",
                                         min: $scope.chart.from,
                                         max: $scope.chart.to,
-                                        monthNames: $locale.DATETIME_FORMATS.SHORTMONTH
+                                        monthNames: $scope.monthNames
                                     },
                                     yaxis: {
                                         tickFormatter: function formatter(val) {
@@ -580,40 +586,17 @@
                                         }
                                     }
                                 };
-                            };
 
-                            $scope.fillChart();
+                            };
+                            $scope.$watch("chart", function (newValue, oldValue) {
+                                if (newValue != oldValue) {
+                                    $scope.fillChart();
+                                }
+                            });
                         }
                     }
                 },
                 link: function ($scope, element, attrs, IndexChartResource, $cookieStore) {
-
-                    $scope.getIndexChartResource = function (data) {
-
-                        $cookieStore.put("chartData", data.chartData || $cookieStore.get("chartData"));
-                        $cookieStore.put("product", data.product || $cookieStore.get("product"));
-
-                        return IndexChartResource.get({
-                            product: $cookieStore.get("product"),
-                            chartData: $cookieStore.get("chartData"),
-                            dynRange: $cookieStore.get("dynRange"),
-                            currency: $cookieStore.get("currency")
-                        }).$promise;
-                    };
-
-                    $scope.updateChart = function () {
-                        $scope.getIndexChartResource({
-                            dynRange: $scope.dynRange,
-                            product: $scope.product.id})
-                            .then(function (indexChartResource) {
-                                if (indexChartResource.ok) {
-                                    $scope.safeApply(function () {
-                                        angular.extend($scope, indexChartResource.payload);
-                                        $scope.fillChart();
-                                    });
-                                }
-                            });
-                    };
 
                 }
             }

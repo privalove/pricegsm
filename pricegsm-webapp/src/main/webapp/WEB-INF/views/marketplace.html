@@ -5,88 +5,88 @@
         <div class="row">
             <!-- orders  -->
             <!--<div class="col-sm-12">-->
-                <!--<div class="panel panel-default">-->
-                    <!--<div class="panel-heading">-->
-                        <!--<i class="fa fa-question fa-lg"-->
-                           <!--popover-placement="right"-->
-                           <!--popover-trigger="mouseenter"></i>-->
-                        <!--<span>Заказы</span>-->
-                    <!--</div>-->
-                    <!--<div class="panel-body">-->
-                        <!--<div class="row"-->
-                             <!--ng-repeat-start="order in orders">-->
-                            <!--<div class="col-sm-12">-->
-                                <!--<div class="row">-->
-                                    <!--<div class="col-xs-6">-->
-                                        <!--<h4>{{order.seller.name}}</h4>-->
-                                    <!--</div>-->
-                                    <!--<div class="col-xs-6 text-right">-->
-                                        <!--<span>21 декабря, суббота</span>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                        <!--<div class="row">-->
-                            <!--<div class="col-sm-12">-->
-                                <!--<table class="table table-hover table-condensed">-->
-                                    <!--<thead>-->
-                                    <!--<tr>-->
-                                        <!--<th>Наименование</th>-->
-                                        <!--<th>Цвет</th>-->
-                                        <!--<th>Спец-ия</th>-->
-                                        <!--<th>Описание</th>-->
-                                        <!--<th>Кол-во</th>-->
-                                        <!--<th>Цена</th>-->
-                                        <!--<th>Итого</th>-->
-                                        <!--<th></th>-->
-                                    <!--</tr>-->
-                                    <!--</thead>-->
-                                    <!--<tbody>-->
-                                    <!--<tr ng-repeat="position in order.orderPositions">-->
-                                        <!--<td>{{position.product.name}}</td>-->
-                                        <!--<td>{{position.product.color.name}}</td>-->
-                                        <!--<td>{{position.specification.name}}</td>-->
-                                        <!--<td>{{position.description}}</td>-->
-                                        <!--<td>-->
-                                            <!--<input type="number" class="form-control" style="width:50px"-->
-                                                   <!--ng-model="position.amount" min="0"-->
-                                                   <!--ng-change="positions[position.pricelistPosition] = position.amount"/>-->
-                                        <!--</td>-->
-                                        <!--<td>{{position.price}}</td>-->
-                                        <!--<td>{{position.price*position.amount}}</td>-->
-                                        <!--<td>-->
-                                            <!--<button type="button" class="btn btn-xs btn-danger" tooltip="Удалить">-->
-                                                <!--<i class="fa fa-times"></i>-->
-                                            <!--</button>-->
-                                        <!--</td>-->
-                                    <!--</tr>-->
-                                    <!--</tbody>-->
-                                    <!--<tfoot>-->
-                                    <!--<tr>-->
-                                        <!--<th colspan="4">-->
-                                            <!--<button type="button" class="btn btn-success" tooltip="Оформить заказ">-->
-                                                <!--<i class="fa fa-save"></i>-->
-                                                <!--<span>Оформить</span>-->
-                                            <!--</button>-->
-                                            <!--<button type="button" class="btn btn-danger" tooltip="Удалить заказ">-->
-                                                <!--<i class="fa fa-times"></i>-->
-                                                <!--<span>Удалить</span>-->
-                                            <!--</button>-->
-                                            <!--<button type="button" class="btn btn-default" tooltip="Обновить заказ">-->
-                                                <!--<i class="fa fa-refresh"></i>-->
-                                                <!--<span>Обновить</span>-->
-                                            <!--</button>-->
-                                        <!--</th>-->
-                                        <!--<th colspan="2"><span>Итого:</span> <span>{{calcTotal(order)}}</span></th>-->
-                                        <!--<th></th>-->
-                                    <!--</tr>-->
-                                    <!--</tfoot>-->
-                                <!--</table>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                        <!--<div ng-repeat-end=""></div>-->
-                    <!--</div>-->
-                <!--</div>-->
+            <!--<div class="panel panel-default">-->
+            <!--<div class="panel-heading">-->
+            <!--<i class="fa fa-question fa-lg"-->
+            <!--popover-placement="right"-->
+            <!--popover-trigger="mouseenter"></i>-->
+            <!--<span>Заказы</span>-->
+            <!--</div>-->
+            <!--<div class="panel-body">-->
+            <!--<div class="row"-->
+            <!--ng-repeat-start="order in orders">-->
+            <!--<div class="col-sm-12">-->
+            <!--<div class="row">-->
+            <!--<div class="col-xs-6">-->
+            <!--<h4>{{order.seller.name}}</h4>-->
+            <!--</div>-->
+            <!--<div class="col-xs-6 text-right">-->
+            <!--<span>21 декабря, суббота</span>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--<div class="row">-->
+            <!--<div class="col-sm-12">-->
+            <!--<table class="table table-hover table-condensed">-->
+            <!--<thead>-->
+            <!--<tr>-->
+            <!--<th>Наименование</th>-->
+            <!--<th>Цвет</th>-->
+            <!--<th>Спец-ия</th>-->
+            <!--<th>Описание</th>-->
+            <!--<th>Кол-во</th>-->
+            <!--<th>Цена</th>-->
+            <!--<th>Итого</th>-->
+            <!--<th></th>-->
+            <!--</tr>-->
+            <!--</thead>-->
+            <!--<tbody>-->
+            <!--<tr ng-repeat="position in order.orderPositions">-->
+            <!--<td>{{position.product.name}}</td>-->
+            <!--<td>{{position.product.color.name}}</td>-->
+            <!--<td>{{position.specification.name}}</td>-->
+            <!--<td>{{position.description}}</td>-->
+            <!--<td>-->
+            <!--<input type="number" class="form-control" style="width:50px"-->
+            <!--ng-model="position.amount" min="0"-->
+            <!--ng-change="positions[position.pricelistPosition] = position.amount"/>-->
+            <!--</td>-->
+            <!--<td>{{position.price}}</td>-->
+            <!--<td>{{position.price*position.amount}}</td>-->
+            <!--<td>-->
+            <!--<button type="button" class="btn btn-xs btn-danger" tooltip="Удалить">-->
+            <!--<i class="fa fa-times"></i>-->
+            <!--</button>-->
+            <!--</td>-->
+            <!--</tr>-->
+            <!--</tbody>-->
+            <!--<tfoot>-->
+            <!--<tr>-->
+            <!--<th colspan="4">-->
+            <!--<button type="button" class="btn btn-success" tooltip="Оформить заказ">-->
+            <!--<i class="fa fa-save"></i>-->
+            <!--<span>Оформить</span>-->
+            <!--</button>-->
+            <!--<button type="button" class="btn btn-danger" tooltip="Удалить заказ">-->
+            <!--<i class="fa fa-times"></i>-->
+            <!--<span>Удалить</span>-->
+            <!--</button>-->
+            <!--<button type="button" class="btn btn-default" tooltip="Обновить заказ">-->
+            <!--<i class="fa fa-refresh"></i>-->
+            <!--<span>Обновить</span>-->
+            <!--</button>-->
+            <!--</th>-->
+            <!--<th colspan="2"><span>Итого:</span> <span>{{calcTotal(order)}}</span></th>-->
+            <!--<th></th>-->
+            <!--</tr>-->
+            <!--</tfoot>-->
+            <!--</table>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--<div ng-repeat-end=""></div>-->
+            <!--</div>-->
+            <!--</div>-->
             <!--</div>-->
         </div>
 
@@ -117,17 +117,19 @@
                                 </div>
                                 <div class="col-xs-4 ng-hide" ng-show="pricelist.user.sellerPickup">
                                     самовывоз <b>{{pricelist.user.sellerPickupPlace}}</b>
-                                    {{pricelist.user.sellerPickupFrom | date: 'HH:mm'}}-{{pricelist.user.sellerPickupTo | date: 'HH:mm'}}
+                                    {{pricelist.user.sellerPickupFrom | date: 'HH:mm'}}-{{pricelist.user.sellerPickupTo
+                                    | date: 'HH:mm'}}
                                 </div>
                                 <div class="col-xs-4 ng-hide" ng-show="pricelist.user.sellerDelivery">
                                     доставка <b>{{pricelist.user.sellerDeliveryPlace}}</b>
-                                    {{pricelist.user.sellerDeliveryFrom | date:'HH:mm'}}-{{pricelist.user.sellerDeliveryTo | date: 'HH:mm'}}
+                                    {{pricelist.user.sellerDeliveryFrom |
+                                    date:'HH:mm'}}-{{pricelist.user.sellerDeliveryTo | date: 'HH:mm'}}
                                 </div>
                                 <div class="col-xs-2">
                                     Гар. {{pricelist.user.sellerFreeRepair}}дн.
                                 </div>
                             </div>
-                            <pg-pricelist pricelist="pricelist" on-select-action="updateShopPrices(data)">
+                            <pg-pricelist pricelist="pricelist" on-select-action="updateStatistic(data)">
                             </pg-pricelist>
                         </div>
                     </div>
@@ -139,11 +141,15 @@
         <!-- statistic -->
         <!-- market prices  -->
         <pg-shop-prices
-                on-date-change="updateShopPrices(data)"
+                on-date-change="updateStatistic(data)"
                 prices="yandexPrices"
-                currency="currency"></pg-shop-prices>
+                currency="currency"
+                product="product"></pg-shop-prices>
 
         <!-- charts -->
-        <!--<pg-price-delta-chart></pg-price-delta-chart>-->
+        <pg-price-delta-chart
+                month-names="monthNames"
+                chart="chart"
+                currency="currency"></pg-price-delta-chart>
     </div>
 </div>

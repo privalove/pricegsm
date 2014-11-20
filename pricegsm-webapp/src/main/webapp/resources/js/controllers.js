@@ -212,8 +212,8 @@ function isEmpty(data) {
 
 }
 
-MarketplaceCtrl.$inject = ["$scope", "$filter", "pricelists", "orders", "Order", "IndexShopResource"];
-function MarketplaceCtrl($scope, $filter, pricelists, orders, Order, IndexShopResource) {
+MarketplaceCtrl.$inject = ["$scope", "$filter", "$locale", "pricelists", "orders", "Order", "IndexShopResource", "IndexChartResource"];
+function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, IndexShopResource, IndexChartResource) {
 
     $scope.findOrDefaultOrderPosition = function (seller, pricelistPosition) {
         var result;
@@ -313,15 +313,52 @@ function MarketplaceCtrl($scope, $filter, pricelists, orders, Order, IndexShopRe
             });
     };
 
-    $scope.updateShopPrices = function (data) {
+    $scope.updateStatistic = function (data) {
         angular.extend(shopPricesData, data);
+        angular.extend(chartData, data);
         $scope.currency = shopPricesData.currency;
+        $scope.product = shopPricesData.product;
         updateShopPrices();
+        updateChart();
     }
+
+    $scope.monthNames = $locale.DATETIME_FORMATS.SHORTMONTH;
+
+    var chartData = {
+        product: undefined,
+        chartData: "retail",
+        dynRange: 7,
+        currency: undefined
+    };
+    $scope.chart = {
+        from: new Date(),
+        to: new Date(),
+        data: {}
+    };
+
+    $scope.getIndexChartResource = function () {
+
+        return IndexChartResource.get({
+            product: chartData.product.id,
+            chartData: chartData.chartData,
+            dynRange: chartData.dynRange,
+            currency: chartData.currency.id
+        }).$promise;
+    };
+
+    function updateChart() {
+        $scope.getIndexChartResource()
+            .then(function (indexChartResource) {
+                if (indexChartResource.ok) {
+                    $scope.safeApply(function () {
+                        angular.extend($scope, indexChartResource.payload);
+                    });
+                }
+            });
+    };
 
     if (pricelists.ok) {
         $scope.pricelists = pricelists.payload.pricelists;
-        $scope.selectedProduct = $scope.pricelists[0].product;
 
         $scope.updateAmount = function (seller, position, amount) {
             $scope.findOrCreateOrderPosition(seller, position).amount = amount;
