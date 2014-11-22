@@ -354,7 +354,8 @@
 
                 }
             }
-        }]).directive('pgPricelist', [function () {
+        }])
+        .directive('pgPricelist', [function () {
             return {
                 scope: {
                     pricelist: "=",
@@ -364,13 +365,42 @@
                 restrict: 'E',
                 templateUrl: "resources/template/priceList.html",
                 link: function ($scope, element, attrs) {
-                    $scope.priceList = $scope.pricelist;
 
-                    if (attrs.order != null && attrs.order != undefined) {
-                        _.each(attrs.order.orderPositions, function (orderPosition) {
-                            markSelectedPrice(orderPosition);
-                        });
+                    function isSelectedPriceList(order) {
+                        return order.priceListPosition == $scope.priceList.position && order.seller.id == $scope.priceList.user.id;
                     }
+
+                    function updateView() {
+                        $scope.priceList = $scope.pricelist;
+
+                        var order = attrs.order;
+                        if (order != null && order != undefined && isSelectedPriceList(order)) {
+                            _.each(order.orderPositions, function (orderPosition) {
+                                markSelectedPrice(orderPosition);
+                            });
+                        }
+                    };
+                    updateView();
+
+                    $scope.$watch("pricelist", function(){
+                        updateView();
+                    });
+
+                    $scope.clickAction = function (priceListPosition, price) {
+                        var product = priceListPosition.product;
+                        $scope.product = product;
+                        var currency = $scope.priceList.currency;
+                        $scope.onSelectAction(
+                            {data: {
+                                priceList: $scope.priceList,
+                                priceListPosition: priceListPosition,
+                                price: price,
+                                product: product,
+                                currency: currency}
+                            }
+                        );
+                    }
+
 
                     function markSelectedPrice(orderPosition) {
                         var priceListPosition = findPriceListPosition(orderPosition);
@@ -426,83 +456,24 @@
                         orderPosition.totalPrice = $scope.getPositionTotalPrice(orderPosition);
                     }
 
-                    var selected = false;
-
-                    $scope.clickAction = function (priceListPosition, price) {
-                        var product = priceListPosition.product;
-                        $scope.product = product;
-                        var currency = $scope.priceList.currency;
-                        $scope.onSelectAction(
-                            {data: {
-                                product: product,
-                                currency: currency}
-                            }
-                        );
-
-//                        addOrderPosition(priceListPosition, price)
-                    }
-
-                    //todo add Order createon
-                    function addOrderPosition(priceListPosition, price) {
-                        if (!$scope.validateRefreshedState()) {
-                            return;
-                        }
-                        var exitingOrderPosition = _.find($scope.order.orderPositions, function (orderPosition) {
-                            return orderPosition.priceListPosition == priceListPosition.id;
-                        });
-
-                        if (exitingOrderPosition != undefined) {
-                            if (price.minOrderQuantity > exitingOrderPosition.amount) {
-                                priceListPosition.amount = price.minOrderQuantity;
-                                exitingOrderPosition.amount = price.minOrderQuantity;
-                                exitingOrderPosition.price = price.price;
-                            } else {
-                                priceListPosition.amount++;
-                                exitingOrderPosition.amount++;
-                            }
-
-                            $scope.refreshOrderPositions($scope.order);
-                            exitingOrderPosition.totalPrice = $scope.getPositionTotalPrice(exitingOrderPosition);
-                            return;
-                        }
-
-                        var position = angular.copy($scope.orderPositionTemplate);
-                        position.order = {id: currentOrder.id, name: ""};
-                        priceListPosition.amount = price.minOrderQuantity;
-                        position.amount = price.minOrderQuantity;
-                        position.price = price.price;
-                        position.totalPrice = 0;
-                        position.product = priceListPosition.product;
-                        position.priceListPosition = priceListPosition.id;
-                        position.price = calculatePrice(priceListPosition.prices, position.amount);
-                        position.specification = priceListPosition.specification;
-                        position.description = priceListPosition.description;
-
-                        order.orderPositions.push(position);
-                        updatePrices(position);
-                    }
-
-                    function updatePrices(orderPosition) {
-                        $scope.updatePriceListAmount(orderPosition);
-
-                        $scope.order.totalPrice = $scope.calcTotalPrice($scope.order);
-                        $scope.order.deliveryCost = $scope.calcDeliveryPrice($scope.order);
-
-                    }
-
                 }
             }
-        }]).directive('pgOrder', [function () {
+        }])
+        .directive('pgOrder', [function () {
             return {
                 scope: {
+                    order:"="
                 },
-                require: "?ngModel",
+                restrict: 'E',
                 templateUrl: "resources/template/order.html",
                 link: function ($scope, element, attrs) {
-
+//                    $scope.$watch("order", function(){
+//                        $scope.order;
+//                    });
                 }
             }
-        }]).directive('pgShopPrices', [function () {
+        }])
+        .directive('pgShopPrices', [function () {
             return {
                 scope: {
                     prices: "=",
@@ -512,7 +483,6 @@
                 },
                 restrict: 'E',
                 replace: true,
-                require: "?$cookieStore",
                 templateUrl: "resources/template/shopPrices.html",
                 compile: function compile(templateElement, templateAttrs) {
                     return {
@@ -548,7 +518,8 @@
                 link: function ($scope, element, attrs) {
                 }
             }
-        }]).directive('pgPriceDeltaChart', [function () {
+        }])
+        .directive('pgPriceDeltaChart', [function () {
             return {
                 scope: {
                     monthNames: "=",
@@ -556,7 +527,6 @@
                     currency: "="
                 },
                 restrict: 'E',
-                require: "?ngModel",
                 templateUrl: "resources/template/priceDeltaChart.html",
                 compile: function compile(templateElement, templateAttrs) {
                     return {
@@ -600,7 +570,8 @@
 
                 }
             }
-        }]).directive('pgMarketUrl', [function () {
+        }])
+        .directive('pgMarketUrl', [function () {
             return {
                 scope: {
                     product: "="

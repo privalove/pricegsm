@@ -209,11 +209,13 @@ function getIndexResource(IndexResource, $cookieStore, data) {
 
 function isEmpty(data) {
     return data == undefined || data == null || data == "";
-
 }
 
 MarketplaceCtrl.$inject = ["$scope", "$filter", "$locale", "pricelists", "orders", "Order", "IndexShopResource", "IndexChartResource"];
 function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, IndexShopResource, IndexChartResource) {
+    $scope.isEmpty = function(data) {
+        return isEmpty(data);
+    }
 
     $scope.findOrDefaultOrderPosition = function (seller, pricelistPosition) {
         var result;
@@ -313,6 +315,12 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
             });
     };
 
+    $scope.selectPriceListPosition = function(data) {
+        $scope.updateStatistic(data);
+
+        $scope.order = addOrderPosition(data.priceListPosition, data.price, data.priceList, $scope.order);
+    }
+
     $scope.updateStatistic = function (data) {
         angular.extend(shopPricesData, data);
         angular.extend(chartData, data);
@@ -360,6 +368,10 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
     if (pricelists.ok) {
         $scope.pricelists = pricelists.payload.pricelists;
 
+        _.each($scope.pricelists, function (pricelists) {
+            pricelists.orderPosition = 0;
+        });
+
         $scope.updateAmount = function (seller, position, amount) {
             $scope.findOrCreateOrderPosition(seller, position).amount = amount;
         };
@@ -389,6 +401,98 @@ MarketplaceCtrl.resolve = {
         return Orders.get().$promise;
     }]
 };
+
+function addOrderPosition(priceListPosition, price, priceList, order) {
+
+    var position = {
+        amount: price.minOrderQuantity,
+        price: price.price,
+        totalPrice: price.price * price.minOrderQuantity,
+        product: priceListPosition.product,
+        priceListPosition: priceListPosition.id,
+        specification: priceListPosition.specification,
+        description: priceListPosition.description
+
+    };
+
+    if (isEmpty(order)) {
+        order = {
+            seller: priceList.user,
+            currency: priceList.currency,
+            orderPositions: []
+        };
+    }
+
+    order.orderPositions.push(position);
+    order.totalAmount = calcTotalAmount(order);
+    updatePrices(order);
+
+    return order;
+}
+
+function calcTotalAmount(order) {
+
+    return _.reduce(
+        _.map(order.orderPositions, function (position) {
+            if (position.deleted) {
+                return 0;
+            }
+            return position.amount;
+        }),
+        function (memo, num) {
+            return memo + num;
+        }, 0)
+}
+
+function updatePrices(order) {
+    order.totalPrice = calcTotalPrice(order);
+    order.deliveryCost = calcDeliveryPrice(order);
+
+}
+
+function calcTotalPrice(order) {
+    return  getOrderTotalPrice(order) + calcDeliveryPrice(order);
+}
+
+function getOrderTotalPrice(order) {
+    var positionTotalPrice = _.reduce(
+        _.map(order.orderPositions, function (position) {
+            return getPositionTotalPrice(position)
+        }),
+        function (memo, num) {
+            return memo + num
+        }, 0);
+    return positionTotalPrice;
+}
+
+function getPositionTotalPrice(orderPosition) {
+    var amount = orderPosition.amount;
+    if (amount == undefined || orderPosition.deleted) {
+        return 0;
+    }
+    return  orderPosition.price * amount;
+}
+
+function calcDeliveryPrice(order) {
+    if (!order.seller.sellerDeliveryPaid && !order.seller.sellerDeliveryFree) {
+        return 0;
+    }
+
+    if (order.seller.sellerDeliveryPaid && !order.seller.sellerDeliveryFree) {
+        return order.seller.sellerDeliveryCost;
+    }
+
+    if (!order.seller.sellerDeliveryPaid && order.seller.sellerDeliveryFree) {
+        return 0;
+    }
+    if (order.seller.sellerDeliveryPaid && order.seller.sellerDeliveryFree) {
+        if (order.totalAmount >= order.seller.sellerDeliveryMin) {
+            return 0;
+        } else {
+            return  order.seller.sellerDeliveryCost;
+        }
+    }
+}
 
 OrderCtrl.$inject = ["$scope", "$filter", "$modal", "$resource", "orders", "notifyManager"];
 function OrderCtrl($scope, $filter, $modal, $resource, orders, notifyManager) {
