@@ -13,7 +13,47 @@
                     </div>
                     <div class="panel-body">
                         <!-- new order -->
-                        <pg-order order="order" ng-hide="isEmpty(order)"></pg-order>
+                        <form id="orderForm" ng-hide="isEmpty(order)">
+                            <pg-order order="order"></pg-order>
+                            <div class="row form-group">
+                                <div class="col-sm-offset-1 col-sm-5">
+                                    <button type="button" class="btn btn-default" tooltip="Обновить"
+                                            ng-click="$parent.refresh()">
+                                        <i class="fa fa-refresh"></i>
+                                        <span>Обновить</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="has-error form-group" ng-show="showSaveError">
+                                    <div class="form-control">Данные не актуальны. Нажмите обновить.</div>
+                                </div>
+
+                                <button type="submit" class="btn btn-success" form="orderForm"
+                                        ng-disabled="!formEnable(orderForm)" ng-click="save(orderForm, 'PREPARE')">
+                                    <i class="fa fa-save"></i>
+                                    <span>Сохранить</span>
+                                </button>
+
+                                <button type="button" class="btn btn-default" ng-click="review(order)"
+                                        ng-disabled="!formEnable(orderForm)">
+                                    <i class="fa fa-eye"></i>
+                                    <span>Посмотреть</span>
+                                </button>
+
+                                <button type="submit" class="btn btn-success" form="orderForm"
+                                        ng-disabled="!formEnable(orderForm)" ng-click="save(orderForm, 'SENT')">
+                                    <i class="fa fa-save"></i>
+                                    <span>Отправить</span>
+                                </button>
+
+                                <button type="reset" class="btn btn-default" data-dismiss="modal" aria-hidden="true"
+                                        ng-click="cancel()"><i
+                                        class="fa fa-times-circle fa-lg"></i> <span pg-text="button.close"></span>
+                                </button>
+                            </div>
+                        </form>
+                        <!-- price lists -->
                         <div ng-repeat="pricelist in pricelists | orderBy : [pricelist.user.name, pricelist.user.sellFromDate]"
                              ng-hide="pricelist.positions.length == 0">
                             <div class="row">

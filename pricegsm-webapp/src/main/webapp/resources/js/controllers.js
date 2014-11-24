@@ -213,7 +213,7 @@ function isEmpty(data) {
 
 MarketplaceCtrl.$inject = ["$scope", "$filter", "$locale", "pricelists", "orders", "Order", "IndexShopResource", "IndexChartResource"];
 function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, IndexShopResource, IndexChartResource) {
-    $scope.isEmpty = function(data) {
+    $scope.isEmpty = function (data) {
         return isEmpty(data);
     }
 
@@ -315,10 +315,30 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
             });
     };
 
-    $scope.selectPriceListPosition = function(data) {
-        $scope.updateStatistic(data);
+    var selectedPriceList = {
+        position: null,
+        user: {
+            id: null
+        }
+    };
 
-        $scope.order = addOrderPosition(data.priceListPosition, data.price, data.priceList, $scope.order);
+    var selectedPriceListPosition = {id: null};
+
+    $scope.selectPriceListPosition = function (data) {
+
+        if (selectedPriceList.position != data.priceList.position || selectedPriceList.user.id != data.priceList.user.id) {
+            $scope.order = null;
+        }
+
+        var newPriceListPosition = data.priceListPosition;
+        if (selectedPriceListPosition.id != newPriceListPosition.id) {
+            $scope.updateStatistic(data);
+        } else {
+            $scope.order = addOrderPosition(newPriceListPosition, data.price, data.priceList, $scope.order);
+        }
+
+        selectedPriceList = data.priceList;
+        selectedPriceListPosition = newPriceListPosition;
     }
 
     $scope.updateStatistic = function (data) {
@@ -404,17 +424,6 @@ MarketplaceCtrl.resolve = {
 
 function addOrderPosition(priceListPosition, price, priceList, order) {
 
-    var position = {
-        amount: price.minOrderQuantity,
-        price: price.price,
-        totalPrice: price.price * price.minOrderQuantity,
-        product: priceListPosition.product,
-        priceListPosition: priceListPosition.id,
-        specification: priceListPosition.specification,
-        description: priceListPosition.description
-
-    };
-
     if (isEmpty(order)) {
         order = {
             seller: priceList.user,
@@ -423,9 +432,39 @@ function addOrderPosition(priceListPosition, price, priceList, order) {
         };
     }
 
-    order.orderPositions.push(position);
-    order.totalAmount = calcTotalAmount(order);
-    updatePrices(order);
+    var exitingOrderPosition = _.find(order.orderPositions, function (orderPosition) {
+        return orderPosition.priceListPosition == priceListPosition.id;
+    });
+
+    if (exitingOrderPosition != undefined) {
+        if (price.minOrderQuantity > exitingOrderPosition.amount) {
+            priceListPosition.amount = price.minOrderQuantity;
+            exitingOrderPosition.amount = price.minOrderQuantity;
+            exitingOrderPosition.price = price.price;
+        } else {
+            priceListPosition.amount++;
+            exitingOrderPosition.amount++;
+        }
+
+        exitingOrderPosition.totalPrice = getPositionTotalPrice(exitingOrderPosition);
+
+    } else {
+
+        var position = {
+            amount: price.minOrderQuantity,
+            price: price.price,
+            totalPrice: price.price * price.minOrderQuantity,
+            product: priceListPosition.product,
+            priceListPosition: priceListPosition.id,
+            specification: priceListPosition.specification,
+            description: priceListPosition.description
+
+        };
+
+        order.orderPositions.push(position);
+        order.totalAmount = calcTotalAmount(order);
+        updatePrices(order);
+    }
 
     return order;
 }
