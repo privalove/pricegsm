@@ -326,18 +326,24 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
 
     $scope.selectPriceListPosition = function (data) {
 
-        if (selectedPriceList.position != data.priceList.position || selectedPriceList.user.id != data.priceList.user.id) {
+        var newPriceList = data.priceList;
+        if (selectedPriceList.position != newPriceList.position || selectedPriceList.user.id != newPriceList.user.id) {
             $scope.order = null;
+            selectedPriceList.orderingPosition = 1;
+            newPriceList.orderingPosition = 0;
+            var pricelist = $scope.pricelists[0];
+//            $scope.pricelists.splice(0,1);
+//            $scope.pricelists.push(pricelist);
         }
 
         var newPriceListPosition = data.priceListPosition;
         if (selectedPriceListPosition.id != newPriceListPosition.id) {
             $scope.updateStatistic(data);
         } else {
-            $scope.order = addOrderPosition(newPriceListPosition, data.price, data.priceList, $scope.order);
+            $scope.order = addOrderPosition(newPriceListPosition, data.price, newPriceList, $scope.order);
         }
 
-        selectedPriceList = data.priceList;
+        selectedPriceList = newPriceList;
         selectedPriceListPosition = newPriceListPosition;
     }
 
@@ -388,8 +394,8 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
     if (pricelists.ok) {
         $scope.pricelists = pricelists.payload.pricelists;
 
-        _.each($scope.pricelists, function (pricelists) {
-            pricelists.orderPosition = 0;
+        _.each($scope.pricelists, function (pricelist) {
+            pricelist.orderingPosition = 1;
         });
 
         $scope.updateAmount = function (seller, position, amount) {
@@ -428,6 +434,7 @@ function addOrderPosition(priceListPosition, price, priceList, order) {
         order = {
             seller: priceList.user,
             currency: priceList.currency,
+            priceListPosition: priceList.position,
             orderPositions: []
         };
     }

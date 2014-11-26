@@ -33,7 +33,7 @@
                            min={{getMinimumAmount(orderPosition)}} max="" required=""
                            ng-change="changePrices(orderPosition)"
                            ng-click="validateRefreshedState()"
-                           ng-model="orderPosition.amount" ng-readonly="!isRefreshed || orderPosition.deleted" />
+                           ng-model="orderPosition.amount" ng-readonly={{readonly}} />
                 </td>
                 <td>{{orderPosition.price | priceFilter : order.currency.symbol}}</td>
                 <td>{{orderPosition.totalPrice | priceFilter : order.currency.symbol}}</td>

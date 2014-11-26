@@ -359,7 +359,7 @@
             return {
                 scope: {
                     pricelist: "=",
-                    order: "@",
+                    order: "=",
                     onSelectAction: "&"
                 },
                 restrict: 'E',
@@ -373,16 +373,24 @@
                     function updateView() {
                         $scope.priceList = $scope.pricelist;
 
-                        var order = attrs.order;
+                        var order = $scope.order;
                         if (order != null && order != undefined && isSelectedPriceList(order)) {
                             _.each(order.orderPositions, function (orderPosition) {
-                                markSelectedPrice(orderPosition);
+                                updatePriceListAmount(orderPosition);
                             });
                         }
                     };
                     updateView();
 
-                    $scope.$watch("pricelist", function(){
+//                    $scope.$watch("pricelist", function () {
+//                        updateView();
+//                    });
+
+                    $scope.$watch("order", function () {
+                        updateView();
+                    });
+
+                    $scope.$watch("order.positions", function () {
                         updateView();
                     });
 
@@ -399,6 +407,7 @@
                                 currency: currency}
                             }
                         );
+                        updateView();
                     }
 
 
@@ -453,7 +462,7 @@
                             orderPosition.selectedStyle = "";
                         }
 
-                        orderPosition.totalPrice = $scope.getPositionTotalPrice(orderPosition);
+                        orderPosition.totalPrice = getPositionTotalPrice(orderPosition);
                     }
 
                 }
@@ -462,14 +471,17 @@
         .directive('pgOrder', [function () {
             return {
                 scope: {
-                    order:"="
+                    order: "=",
+                    readonly: "@"
                 },
                 restrict: 'E',
                 templateUrl: "resources/template/order.html",
                 link: function ($scope, element, attrs) {
-//                    $scope.$watch("order", function(){
-//                        $scope.order;
-//                    });
+                    $scope.readonly = $scope.$eval(attrs.readonly);
+
+                    $scope.$watch("readonly", function () {
+                        $scope.readonly = $scope.$eval(attrs.readonly);
+                    });
                 }
             }
         }])
