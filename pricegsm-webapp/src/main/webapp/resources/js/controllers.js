@@ -347,6 +347,10 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
         selectedPriceListPosition = newPriceListPosition;
     }
 
+    $scope.$watch("order", function () {
+        updateView();
+    }, true);
+
     $scope.updateStatistic = function (data) {
         angular.extend(shopPricesData, data);
         angular.extend(chartData, data);
@@ -456,7 +460,6 @@ function addOrderPosition(priceListPosition, price, priceList, order) {
         exitingOrderPosition.totalPrice = getPositionTotalPrice(exitingOrderPosition);
 
     } else {
-
         var position = {
             amount: price.minOrderQuantity,
             price: price.price,
@@ -467,11 +470,11 @@ function addOrderPosition(priceListPosition, price, priceList, order) {
             description: priceListPosition.description
 
         };
-
         order.orderPositions.push(position);
-        order.totalAmount = calcTotalAmount(order);
-        updatePrices(order);
     }
+
+    order.totalAmount = calcTotalAmount(order);
+    updatePrices(order);
 
     return order;
 }

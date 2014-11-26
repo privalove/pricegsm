@@ -365,34 +365,25 @@
                 restrict: 'E',
                 templateUrl: "resources/template/priceList.html",
                 link: function ($scope, element, attrs) {
+                    $scope.priceList = $scope.pricelist;
 
                     function isSelectedPriceList(order) {
                         return order.priceListPosition == $scope.priceList.position && order.seller.id == $scope.priceList.user.id;
                     }
 
                     function updateView() {
-                        $scope.priceList = $scope.pricelist;
-
                         var order = $scope.order;
                         if (order != null && order != undefined && isSelectedPriceList(order)) {
+                        $scope.priceList = $scope.pricelist;
                             _.each(order.orderPositions, function (orderPosition) {
-                                updatePriceListAmount(orderPosition);
+                                markSelectedPrice(orderPosition);
                             });
                         }
                     };
-                    updateView();
-
-//                    $scope.$watch("pricelist", function () {
-//                        updateView();
-//                    });
 
                     $scope.$watch("order", function () {
                         updateView();
-                    });
-
-                    $scope.$watch("order.positions", function () {
-                        updateView();
-                    });
+                    }, true);
 
                     $scope.clickAction = function (priceListPosition, price) {
                         var product = priceListPosition.product;
@@ -407,9 +398,7 @@
                                 currency: currency}
                             }
                         );
-                        updateView();
                     }
-
 
                     function markSelectedPrice(orderPosition) {
                         var priceListPosition = findPriceListPosition(orderPosition);
@@ -420,8 +409,6 @@
                         var prices = priceListPosition.prices;
                         var price = findPrice(prices, orderPosition.amount);
                         updatePricesSelected(prices, price, priceListPosition.amount);
-                        //todo bad practice 2 responsib refsctor
-                        return price;
                     }
 
                     function findPriceListPosition(orderPosition) {
@@ -449,22 +436,6 @@
                         price.selectedStyle = "success";
                         price.amount = amount;
                     }
-
-                    function updatePriceListAmount(orderPosition) {
-                        if ($scope.priceList != null) {
-                            var price = markSelectedPrice(orderPosition);
-                            orderPosition.price = price.price;
-                        }
-                        if (orderPosition.amount == 0) {
-                            orderPosition.selectedStyle = "danger";
-
-                        } else {
-                            orderPosition.selectedStyle = "";
-                        }
-
-                        orderPosition.totalPrice = getPositionTotalPrice(orderPosition);
-                    }
-
                 }
             }
         }])
