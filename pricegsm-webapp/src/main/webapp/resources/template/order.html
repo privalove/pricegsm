@@ -30,10 +30,10 @@
                 </td>
                 <td>
                     <input type="number" name="amount" class="form-control input-group"
-                           min={{getMinimumAmount(orderPosition)}} max="" required=""
-                           ng-change="changePrices(orderPosition)"
-                           ng-click="validateRefreshedState()"
-                           ng-model="orderPosition.amount" ng-readonly={{readonly}} />
+                           ng-change="updateAmount()"
+                           ng-readonly={{readonly}}
+                           ng-model="orderPosition.amount"
+                           min="{{orderPosition.minOrderQuantity}}" max="" required=""/>
                 </td>
                 <td>{{orderPosition.price | priceFilter : order.currency.symbol}}</td>
                 <td>{{orderPosition.totalPrice | priceFilter : order.currency.symbol}}</td>

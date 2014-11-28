@@ -367,24 +367,6 @@
                 link: function ($scope, element, attrs) {
                     $scope.priceList = $scope.pricelist;
 
-                    function isSelectedPriceList(order) {
-                        return order.priceListPosition == $scope.priceList.position && order.seller.id == $scope.priceList.user.id;
-                    }
-
-                    function updateView() {
-                        var order = $scope.order;
-                        if (order != null && order != undefined && isSelectedPriceList(order)) {
-                        $scope.priceList = $scope.pricelist;
-                            _.each(order.orderPositions, function (orderPosition) {
-                                markSelectedPrice(orderPosition);
-                            });
-                        }
-                    };
-
-                    $scope.$watch("order", function () {
-                        updateView();
-                    }, true);
-
                     $scope.clickAction = function (priceListPosition, price) {
                         var product = priceListPosition.product;
                         $scope.product = product;
@@ -399,43 +381,6 @@
                             }
                         );
                     }
-
-                    function markSelectedPrice(orderPosition) {
-                        var priceListPosition = findPriceListPosition(orderPosition);
-                        if (priceListPosition == undefined || priceListPosition == null) {
-                            return orderPosition.price;
-                        }
-                        priceListPosition.amount = orderPosition.amount;
-                        var prices = priceListPosition.prices;
-                        var price = findPrice(prices, orderPosition.amount);
-                        updatePricesSelected(prices, price, priceListPosition.amount);
-                    }
-
-                    function findPriceListPosition(orderPosition) {
-                        return _.find($scope.priceList.positions, function (priceListPosition) {
-                            return orderPosition.priceListPosition == priceListPosition.id;
-                        });
-                    }
-
-                    function findPrice(prices, amount) {
-                        var sortedPrices = _.sortBy(prices, function (price) {
-                            return -1 * price.minOrderQuantity;
-                        });
-
-                        var price = _.find(sortedPrices, function (price) {
-                            return price.minOrderQuantity <= amount;
-                        });
-                        return price;
-                    }
-
-                    function updatePricesSelected(prices, price, amount) {
-                        _.map(prices, function (price) {
-                            price.selectedStyle = "";
-                            price.amount = "";
-                        });
-                        price.selectedStyle = "success";
-                        price.amount = amount;
-                    }
                 }
             }
         }])
@@ -443,7 +388,8 @@
             return {
                 scope: {
                     order: "=",
-                    readonly: "@"
+                    readonly: "@",
+                    updateOrder: "&"
                 },
                 restrict: 'E',
                 templateUrl: "resources/template/order.html",
@@ -453,6 +399,22 @@
                     $scope.$watch("readonly", function () {
                         $scope.readonly = $scope.$eval(attrs.readonly);
                     });
+
+                    $scope.deleteOrderPosition = function ($event, index) {
+                        $scope.order.orderPositions.splice(index, 1);
+                        $scope.updateOrder($scope.order);
+                    }
+
+                    $scope.reduceAmount = function (orderPosition) {
+                        if (orderPosition.minOrderQuantity < orderPosition.amount) {
+                            orderPosition.amount--;
+                            $scope.updateOrder($scope.order);
+                        }
+                    }
+
+                    $scope.updateAmount = function () {
+                        $scope.updateOrder($scope.order);
+                    }
                 }
             }
         }])

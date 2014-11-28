@@ -331,7 +331,7 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
             $scope.order = null;
             selectedPriceList.orderingPosition = 1;
             newPriceList.orderingPosition = 0;
-            var pricelist = $scope.pricelists[0];
+//            var pricelist = $scope.pricelists[0];
 //            $scope.pricelists.splice(0,1);
 //            $scope.pricelists.push(pricelist);
         }
@@ -341,15 +341,21 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
             $scope.updateStatistic(data);
         } else {
             $scope.order = addOrderPosition(newPriceListPosition, data.price, newPriceList, $scope.order);
+            updateView(newPriceList, $scope.order);
         }
 
         selectedPriceList = newPriceList;
         selectedPriceListPosition = newPriceListPosition;
     }
 
-    $scope.$watch("order", function () {
-        updateView();
-    }, true);
+    $scope.updateOrder = function (order) {
+        var priceList = findPriceListByOrder($scope.pricelists,order);
+        if (isSelectedPriceList(order, priceList)) {
+            updateOrderPositionsByPriceList(order, priceList);
+            $scope.order = updateOrder(order);
+            updateView(priceList, order);
+        }
+    };
 
     $scope.updateStatistic = function (data) {
         angular.extend(shopPricesData, data);
@@ -422,7 +428,6 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
         $scope.orders = orders.payload.orders;
     }
 }
-
 MarketplaceCtrl.resolve = {
     "pricelists": ["PriceLists", function (PriceLists) {
         return PriceLists.get().$promise;
@@ -455,6 +460,8 @@ function addOrderPosition(priceListPosition, price, priceList, order) {
         } else {
             priceListPosition.amount++;
             exitingOrderPosition.amount++;
+            var newPrice = findPrice(priceListPosition.prices, exitingOrderPosition.amount);
+            exitingOrderPosition.price = newPrice.price;
         }
 
         exitingOrderPosition.totalPrice = getPositionTotalPrice(exitingOrderPosition);
@@ -467,9 +474,10 @@ function addOrderPosition(priceListPosition, price, priceList, order) {
             product: priceListPosition.product,
             priceListPosition: priceListPosition.id,
             specification: priceListPosition.specification,
-            description: priceListPosition.description
+            description: priceListPosition.description,
+            minOrderQuantity: priceListPosition.prices[0].minOrderQuantity
 
-        };
+    };
         order.orderPositions.push(position);
     }
 
@@ -496,7 +504,6 @@ function calcTotalAmount(order) {
 function updatePrices(order) {
     order.totalPrice = calcTotalPrice(order);
     order.deliveryCost = calcDeliveryPrice(order);
-
 }
 
 function calcTotalPrice(order) {
@@ -541,6 +548,90 @@ function calcDeliveryPrice(order) {
             return  order.seller.sellerDeliveryCost;
         }
     }
+}
+
+function findPriceListByOrder(pricelists, order) {
+    return _.find(pricelists, function (pricelist) {
+        return isSelectedPriceList(order, pricelist);
+    });
+}
+
+function updateOrderPositionsByPriceList(order, priceList) {
+    _.each(order.orderPositions, function (orderPosition) {
+        var priceListPosition = findPriceListPosition(orderPosition, priceList);
+        var price = findPrice(priceListPosition.prices, orderPosition.amount);
+        orderPosition.price = price.price;
+    });
+}
+
+function findPriceListPosition(orderPosition, priceList) {
+    return _.find(priceList.positions, function (priceListPosition) {
+        return orderPosition.priceListPosition == priceListPosition.id;
+    });
+}
+
+function updateOrder(order) {
+    _.each(order.orderPositions, function (orderPosition) {
+        orderPosition.totalPrice = getPositionTotalPrice(orderPosition);
+    });
+
+    order.totalAmount = calcTotalAmount(order);
+    updatePrices(order);
+
+    return order;
+}
+
+function updateView(priceList, order) {
+    _.each(priceList.positions, function (priceListPosition) {
+        markSelectedPrice(priceListPosition, order);
+    });
+};
+
+function isSelectedPriceList(order, priceList) {
+    return order.priceListPosition == priceList.position && order.seller.id == priceList.user.id;
+}
+
+function markSelectedPrice(priceListPosition, order) {
+    var orderPosition = findOrderPosition(priceListPosition, order);
+    var prices = priceListPosition.prices;
+    if (orderPosition == undefined || orderPosition == null) {
+        clearPricesStyles(prices);
+        return;
+    }
+
+    priceListPosition.amount = orderPosition.amount;
+    var price = findPrice(prices, orderPosition.amount);
+    updatePricesSelected(prices, price, orderPosition.amount);
+}
+
+function findOrderPosition(priceListPosition, order) {
+    return _.find(order.orderPositions, function (orderPosition) {
+        return orderPosition.priceListPosition == priceListPosition.id;
+    });
+}
+
+function findPrice(prices, amount) {
+    var sortedPrices = _.sortBy(prices, function (price) {
+        return -1 * price.minOrderQuantity;
+    });
+
+    var price = _.find(sortedPrices, function (price) {
+        return price.minOrderQuantity <= amount;
+    });
+    return price;
+}
+
+function clearPricesStyles(prices) {
+    _.map(prices, function (price) {
+        price.selectedStyle = "";
+        price.amount = "";
+    });
+}
+
+function updatePricesSelected(prices, price, amount) {
+    clearPricesStyles(prices);
+    price.selectedStyle = "success";
+    price.amount = amount;
 }
 
 OrderCtrl.$inject = ["$scope", "$filter", "$modal", "$resource", "orders", "notifyManager"];
