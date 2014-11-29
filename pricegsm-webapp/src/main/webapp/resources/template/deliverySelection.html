@@ -18,7 +18,7 @@
                placeholder={{order.seller.sellerPickupPlace}}
                ng-disabled="true" type="text" class="form-control"/>
 
-        <div pg-delivery-place="{{deliveryPlaces}}" free-input="{{order.seller.region.name}}"
+        <pg-delivery-place delivery-places="deliveryPlaces" free-input="{{order.seller.region.name}}"
              default-input="{{deliveryPlace}}"
              on-change-action="changeDeliveryPlace(deliveryPlace)"
              ng-model="deliveryPlace"

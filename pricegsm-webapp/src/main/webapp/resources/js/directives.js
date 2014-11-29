@@ -244,14 +244,16 @@
             return {
                 scope: {
                     ngModel: "=",
+                    deliveryPlaces: "=",
                     defaultInput: "@",
                     freeInput: "@",
                     onChangeAction: "&"
                 },
+                restrict: 'E',
                 require: "?ngModel",
                 templateUrl: "resources/template/deliveryPlace.html",
                 link: function ($scope, element, attrs, ngModel) {
-                    $scope.places = $scope.$eval(attrs.pgDeliveryPlace);
+                    $scope.places = $scope.deliveryPlaces;
                     $scope.defaultInput = attrs.defaultInput;
                     $scope.freeInput = attrs.freeInput;
 
@@ -310,6 +312,7 @@
                     limitFromTime: "=",
                     limitToTime: "="
                 },
+                restrict: 'E',
                 require: "?ngModel",
                 templateUrl: "resources/template/deliverySelection.html",
                 link: function ($scope, element, attrs, ngModel) {

@@ -100,18 +100,20 @@
                                 <span th:text="#{profileForm.defaultDeliveryPlace}"></span>
                             </label>
 
-                            <div class="col-xs-4"
-                                 pg-delivery-place="{{deliveryPlaces}}" free-input="{{profileForm.region.name}}"
-                                 default-input="{{profileForm.buyerDeliveryPlace}}"
-                                 ng-model="profileForm.buyerDeliveryPlace"  ></div>
+                            <pg-delivery-place class="col-xs-4"
+                                               delivery-places="deliveryPlaces"
+                                               free-input="{{profileForm.region.name}}"
+                                               default-input="{{profileForm.buyerDeliveryPlace}}"
+                                               ng-model="profileForm.buyerDeliveryPlace">
+                            </pg-delivery-place>
                             <input name="buyerDeliveryPlace" id="buyerDeliveryPlace" type="hidden"
                                    ng-model="profileForm.buyerDeliveryPlace" pg-valid="metadata"/>
 
                             <pg-time-period class="col-xs-4"
-                                from-time= "profileForm.buyerDeliveryFrom"
-                                to-time= "profileForm.buyerDeliveryTo"
-                                from-time-limit= "profileForm.buyerDeliveryFrom"
-                                to-time-limit= "profileForm.buyerDeliveryTo"></pg-time-period>
+                                            from-time="profileForm.buyerDeliveryFrom"
+                                            to-time="profileForm.buyerDeliveryTo"
+                                            from-time-limit="profileForm.buyerDeliveryFrom"
+                                            to-time-limit="profileForm.buyerDeliveryTo"></pg-time-period>
                             <input name="buyerDeliveryFrom" id="buyerDeliveryFrom" type="hidden"
                                    ng-model="profileForm.buyerDeliveryFrom" pg-valid="metadata"/>
                             <input name="buyerDeliveryTo" id="buyerDeliveryTo" type="hidden"

@@ -73,13 +73,16 @@
                placeholder={{order.seller.sellerPickupPlace}}
                ng-disabled="true" type="text" class="form-control"/>
 
-        <div pg-delivery-place="{{deliveryPlaces}}" free-input="{{order.seller.region.name}}"
-             default-input="{{deliveryPlace}}"
-             on-change-action="changeDeliveryPlace(deliveryPlace)"
-             ng-model="deliveryPlace"
-             ng-model-options="{ updateOn: 'change' }"
-             ng-show="deliveryPlaceAvailability && order.delivery" class="ng-hide">
-        </div>
+        <pg-delivery-place
+                delivery-places="deliveryPlaces"
+                free-input="{{order.seller.region.name}}"
+                default-input="{{deliveryPlace}}"
+                on-change-action="changeDeliveryPlace(deliveryPlace)"
+                ng-model="deliveryPlace"
+                ng-model-options="{ updateOn: 'change' }"
+                ng-show="deliveryPlaceAvailability && order.delivery"
+                class="ng-hide">
+        </pg-delivery-place>
 
         <input ng-show="!deliveryPlaceAvailability && order.delivery"
                ng-disabled="true" type="text" placeholder={{order.seller.sellerDeliveryPlace}}
@@ -102,10 +105,10 @@
         </select>
     </div>
     <pg-time-period class="col-xs-4"
-                    from-time= "order.fromTime"
-                    to-time= "order.toTime"
-                    from-time-limit= "{{limitFromTime}}"
-                    to-time-limit= "{{limitToTime}}"></pg-time-period>
+                    from-time="order.fromTime"
+                    to-time="order.toTime"
+                    from-time-limit="{{limitFromTime}}"
+                    to-time-limit="{{limitToTime}}"></pg-time-period>
 </div>
 
 <div class="row form-group">
@@ -149,7 +152,7 @@
                            min={{getMinimumAmount(orderPosition)}} max="" required=""
                            ng-change="changePrices(orderPosition)"
                            ng-click="validateRefreshedState()"
-                           ng-model="orderPosition.amount" ng-readonly="!isRefreshed || orderPosition.deleted" />
+                           ng-model="orderPosition.amount" ng-readonly="!isRefreshed || orderPosition.deleted"/>
                 </td>
                 <td>{{orderPosition.price | priceFilter : order.currency.symbol}}</td>
                 <td>{{orderPosition.totalPrice | priceFilter : order.currency.symbol}}</td>
@@ -215,7 +218,8 @@
                 <td>{{position.prices[0].price | priceFilter : priceList.currency.symbol}}</td>
                 <td>{{position.prices[0].minOrderQuantity}}</td>
             </tr>
-            <tr class="{{price.selectedStyle}}" ng-repeat="price in position.prices.slice(1)" ng-click="addOrderPosition(position, price)">
+            <tr class="{{price.selectedStyle}}" ng-repeat="price in position.prices.slice(1)"
+                ng-click="addOrderPosition(position, price)">
                 <td colspan="4"></td>
                 <td colspan="1">{{price.amount}}</td>
                 <td colspan="1">{{price.price | priceFilter : priceList.currency.symbol}}</td>

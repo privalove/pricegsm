@@ -72,7 +72,13 @@
                                            ng-model="order.phone"/>
                                 </div>
                             </div>
+                            <div class="row form-group">
+                                <p>
+                            </div>
                         </form>
+                        <div class="row form-group" ng-hide="hideOrderForm"></div>
+                        <div class="row form-group" ng-hide="hideOrderForm"></div>
+                        <div class="row form-group" ng-hide="hideOrderForm"></div>
                         <!-- price lists -->
                         <div ng-repeat="pricelist in pricelists | orderBy : [pricelist.orderingPosition, pricelist.user.name, pricelist.user.sellFromDate]"
                              ng-hide="pricelist.positions.length == 0">
