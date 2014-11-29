@@ -309,9 +309,10 @@
             return {
                 scope: {
                     order: "=",
-                    limitFromTime: "=",
-                    limitToTime: "="
+                    deliveryPlaces: "=",
+                    updateTimeLimits: "&"
                 },
+                replace: true,
                 restrict: 'E',
                 require: "?ngModel",
                 templateUrl: "resources/template/deliverySelection.html",
@@ -334,27 +335,11 @@
 
                     (function () {
                         if ($scope.order.pickup == true) {
-                            $scope.deliveryPlace == "";
+                            $scope.deliveryPlace = "";
                         } else {
                             $scope.deliveryPlace = $scope.order.place;
                         }
                     })();
-
-
-                    $scope.limitFromTime = $scope.getLimitFromTime($scope.order.delivery);
-                    $scope.limitToTime = $scope.getLimitToTime($scope.order.delivery);
-                    $scope.resetOtherDelivery = function (selectedDeliveryType) {
-                        if (selectedDeliveryType != "delivery") {
-                            $scope.order.delivery = false;
-                        }
-                        if (selectedDeliveryType != "pickup") {
-                            $scope.order.pickup = false;
-                        }
-                        $scope.order.deliveryFree = false;
-
-                        $scope.limitFromTime = $scope.getLimitFromTime($scope.order.delivery);
-                        $scope.limitToTime = $scope.getLimitToTime($scope.order.delivery);
-                    }
 
                     $scope.getLimitFromTime = function (isDelivery) {
                         if (isDelivery) {
@@ -370,6 +355,25 @@
                         } else {
                             return $scope.order.seller.sellerPickupTo;
                         }
+                    }
+
+                    function updateTimeLimits() {
+                        var limitFromTime = $scope.getLimitFromTime($scope.order.delivery);
+                        var limitToTime = $scope.getLimitToTime($scope.order.delivery);
+                        $scope.updateTimeLimits({limits: {from: limitFromTime, to: limitToTime}});
+                    };
+                    updateTimeLimits();
+
+                    $scope.resetOtherDelivery = function (selectedDeliveryType) {
+                        if (selectedDeliveryType != "delivery") {
+                            $scope.order.delivery = false;
+                        }
+                        if (selectedDeliveryType != "pickup") {
+                            $scope.order.pickup = false;
+                        }
+                        $scope.order.deliveryFree = false;
+
+                        updateTimeLimits();
                     }
 
                     $scope.changeDeliveryPlace = function (place) {
@@ -399,6 +403,9 @@
 
                     $scope.limitFromTime = function () {
                         var timeLimit = attrs.fromTimeLimit;
+                        if (isEmpty(timeLimit)) {
+                            return;
+                        }
                         if ($scope.fromTime.valueOf() < timeLimit) {
                             var timeLimitDate = new Date(parseInt(timeLimit));
                             $scope.fromTime = timeLimitDate;
@@ -413,7 +420,9 @@
 
                     $scope.limitToTime = function () {
                         var timeLimit = attrs.toTimeLimit;
-
+                        if (isEmpty(timeLimit)) {
+                            return;
+                        }
                         if (timeLimit < $scope.toTime.valueOf()) {
                             var timeLimitDate = new Date(parseInt(timeLimit));
                             $scope.toTime = timeLimitDate;
@@ -514,6 +523,7 @@
                             return getDateList(fromDate, numberOfDays);
                         }
                     }
+
                     $scope.possibleDeliveryDates = getPossibleDeliveryDates();
                 }
             }

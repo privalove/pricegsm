@@ -1,33 +1,37 @@
-<div class="row">
-    <div class="col-sm-3">
-        <label class="radio-inline">
-            <input ng-disabled="{{!order.seller.sellerPickup}}" name="pickup" type="radio"
-                   ng-model="order.pickup" ng-value="true" ng-change="resetOtherDelivery('pickup')"/>
-            <span pg-text="order.delivery.pickup"></span>
-        </label>
-        <label class="radio-inline">
-            <input ng-disabled="{{!order.seller.sellerDelivery}}" name="delivery" type="radio"
-                   ng-model="order.delivery" ng-value="true" ng-change="resetOtherDelivery('delivery')"/>
-            <span pg-text="order.delivery.delivery"></span>
-        </label>
-    </div>
-</div>
-<div class="row">
-    <div class="col-sm-6">
-        <input ng-show="order.pickup" ng-hide="order.delivery"
-               placeholder={{order.seller.sellerPickupPlace}}
-               ng-disabled="true" type="text" class="form-control"/>
-
-        <pg-delivery-place delivery-places="deliveryPlaces" free-input="{{order.seller.region.name}}"
-             default-input="{{deliveryPlace}}"
-             on-change-action="changeDeliveryPlace(deliveryPlace)"
-             ng-model="deliveryPlace"
-             ng-model-options="{ updateOn: 'change' }"
-             ng-show="deliveryPlaceAvailability && order.delivery" class="ng-hide">
+<div>
+    <div class="row">
+        <div class="col-sm-4">
+            <label class="radio-inline">
+                <input ng-disabled="{{!order.seller.sellerPickup}}" name="pickup" type="radio"
+                       ng-model="order.pickup" ng-value="true" ng-change="resetOtherDelivery('pickup')"/>
+                <span pg-text="order.delivery.pickup"></span>
+            </label>
+            <label class="radio-inline">
+                <input ng-disabled="{{!order.seller.sellerDelivery}}" name="delivery" type="radio"
+                       ng-model="order.delivery" ng-value="true" ng-change="resetOtherDelivery('delivery')"/>
+                <span pg-text="order.delivery.delivery"></span>
+            </label>
         </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-7">
+            <input ng-show="order.pickup" ng-hide="order.delivery"
+                   placeholder={{order.seller.sellerPickupPlace}}
+                   ng-disabled="true" type="text" class="form-control"/>
 
-        <input ng-show="!deliveryPlaceAvailability && order.delivery"
-               ng-disabled="true" type="text" placeholder={{order.seller.sellerDeliveryPlace}}
-               class="form-control ng-hide"/>
+            <pg-delivery-place
+                    delivery-places="deliveryPlaces"
+                    free-input="{{order.seller.region.name}}"
+                    default-input="{{deliveryPlace}}"
+                    on-change-action="changeDeliveryPlace(deliveryPlace)"
+                    ng-model="deliveryPlace"
+                    ng-model-options="{ updateOn: 'change' }"
+                    ng-show="deliveryPlaceAvailability && order.delivery" class="ng-hide">
+            </pg-delivery-place>
+
+            <input ng-show="!deliveryPlaceAvailability && order.delivery"
+                   ng-disabled="true" type="text" placeholder={{order.seller.sellerDeliveryPlace}}
+                   class="form-control ng-hide"/>
+        </div>
     </div>
 </div>

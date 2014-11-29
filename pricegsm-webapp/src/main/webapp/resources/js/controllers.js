@@ -328,11 +328,26 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
 
     $scope.hideOrderForm = true;
 
+    $scope.limitFromTime = new Date();
+    $scope.limitToTime = new Date();
+    $scope.deliveryPlaces = null;
+
+    $scope.updateTimeLimits = function (limits) {
+        $scope.limitFromTime = limits.from;
+        $scope.limitToTime = limits.to;
+    }
+
+    $scope.order = {
+        fromTime: new Date(),
+        toTime: new Date()
+    };
+
     $scope.selectPriceListPosition = function (data) {
 
         var newPriceList = data.priceList;
         if (selectedPriceList.position != newPriceList.position || selectedPriceList.user.id != newPriceList.user.id) {
-            $scope.hideOrderForm = true;
+            $scope.deliveryPlaces = newPriceList.user.region.deliveryPlaces;
+            resetOrder();
             selectedPriceList.orderingPosition = 1;
             newPriceList.orderingPosition = 0;
 //            var pricelist = $scope.pricelists[0];
@@ -433,14 +448,21 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
         $scope.orders = orders.payload.orders;
         $scope.buyer = orders.payload.buyer;
         $scope.order = createOrderTemplate($scope.buyer);
+        $scope.deliveryPlaces = $scope.buyer.region.deliveryPlaces;
     }
 
-    $scope.cancel = function () {
+    function resetOrder() {
         $scope.hideOrderForm = true;
         $scope.order.orderPositions = [];
         var priceList = findPriceListByOrder($scope.pricelists, $scope.order);
-        updatePriceListView(priceList, $scope.order);
+        if (priceList != undefined) {
+            updatePriceListView(priceList, $scope.order);
+        }
         $scope.order = createOrderTemplate($scope.buyer);
+    }
+
+    $scope.cancel = function () {
+        resetOrder();
     }
 }
 MarketplaceCtrl.resolve = {
@@ -456,6 +478,9 @@ function createOrderTemplate(buyer) {
     var order = {
         contactName: buyer.name,
         phone: buyer.phone,
+        seller: buyer,
+        fromTime: buyer.buyerDeliveryFrom,
+        toTime: buyer.buyerDeliveryTo,
         orderPositions: []
     };
     return order;

@@ -46,7 +46,7 @@ public class MarketplaceController {
         BaseUser currentUser = principalHolder.getCurrentUser();
         return OperationResult.ok()
                 .payload("orders", orderService.findByBuyer(currentUser.getId()))
-                .payload("buyer", currentUser );
+                .payload("buyer", currentUser);
     }
 
     @RequestMapping(value = "/marketplace/order.json", method = RequestMethod.POST)

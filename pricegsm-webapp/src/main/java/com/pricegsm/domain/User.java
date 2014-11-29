@@ -422,8 +422,6 @@ public class User
     /**
      * Current region of user.
      */
-    @JsonSerialize(using = GlobalEntitySerializer.class)
-    @JsonDeserialize(using = GlobalEntityDeserializer.class)
     @ManyToOne
     @JoinColumn(name = "region_id", referencedColumnName = "id")
     public Region getRegion() {
