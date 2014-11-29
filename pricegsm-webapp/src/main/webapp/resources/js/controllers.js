@@ -279,6 +279,8 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
 
     };
 
+    $scope.showSaveError = false
+
     var shopPricesData = {
         product: undefined,
         shopDate: new Date(),
@@ -324,11 +326,13 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
 
     var selectedPriceListPosition = {id: null};
 
+    $scope.hideOrderForm = true;
+
     $scope.selectPriceListPosition = function (data) {
 
         var newPriceList = data.priceList;
         if (selectedPriceList.position != newPriceList.position || selectedPriceList.user.id != newPriceList.user.id) {
-            $scope.order = null;
+            $scope.hideOrderForm = true;
             selectedPriceList.orderingPosition = 1;
             newPriceList.orderingPosition = 0;
 //            var pricelist = $scope.pricelists[0];
@@ -340,8 +344,9 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
         if (selectedPriceListPosition.id != newPriceListPosition.id) {
             $scope.updateStatistic(data);
         } else {
-            $scope.order = addOrderPosition(newPriceListPosition, data.price, newPriceList, $scope.order);
-            updateView(newPriceList, $scope.order);
+            $scope.order = addOrderPosition(newPriceListPosition, data.price, newPriceList, $scope.order, $scope.hideOrderForm);
+            $scope.hideOrderForm = false;
+            updatePriceListView(newPriceList, $scope.order);
         }
 
         selectedPriceList = newPriceList;
@@ -349,11 +354,11 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
     }
 
     $scope.updateOrder = function (order) {
-        var priceList = findPriceListByOrder($scope.pricelists,order);
+        var priceList = findPriceListByOrder($scope.pricelists, order);
         if (isSelectedPriceList(order, priceList)) {
             updateOrderPositionsByPriceList(order, priceList);
             $scope.order = updateOrder(order);
-            updateView(priceList, order);
+            updatePriceListView(priceList, order);
         }
     };
 
@@ -426,6 +431,16 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
 
     if (orders.ok) {
         $scope.orders = orders.payload.orders;
+        $scope.buyer = orders.payload.buyer;
+        $scope.order = createOrderTemplate($scope.buyer);
+    }
+
+    $scope.cancel = function () {
+        $scope.hideOrderForm = true;
+        $scope.order.orderPositions = [];
+        var priceList = findPriceListByOrder($scope.pricelists, $scope.order);
+        updatePriceListView(priceList, $scope.order);
+        $scope.order = createOrderTemplate($scope.buyer);
     }
 }
 MarketplaceCtrl.resolve = {
@@ -437,15 +452,23 @@ MarketplaceCtrl.resolve = {
     }]
 };
 
-function addOrderPosition(priceListPosition, price, priceList, order) {
+function createOrderTemplate(buyer) {
+    var order = {
+        contactName: buyer.name,
+        phone: buyer.phone,
+        orderPositions: []
+    };
+    return order;
+}
 
-    if (isEmpty(order)) {
-        order = {
+function addOrderPosition(priceListPosition, price, priceList, order, isNewMode) {
+
+    if (isNewMode) {
+        angular.extend(order, {
             seller: priceList.user,
             currency: priceList.currency,
-            priceListPosition: priceList.position,
-            orderPositions: []
-        };
+            priceListPosition: priceList.position
+        });
     }
 
     var exitingOrderPosition = _.find(order.orderPositions, function (orderPosition) {
@@ -477,7 +500,7 @@ function addOrderPosition(priceListPosition, price, priceList, order) {
             description: priceListPosition.description,
             minOrderQuantity: priceListPosition.prices[0].minOrderQuantity
 
-    };
+        };
         order.orderPositions.push(position);
     }
 
@@ -581,7 +604,7 @@ function updateOrder(order) {
     return order;
 }
 
-function updateView(priceList, order) {
+function updatePriceListView(priceList, order) {
     _.each(priceList.positions, function (priceListPosition) {
         markSelectedPrice(priceListPosition, order);
     });

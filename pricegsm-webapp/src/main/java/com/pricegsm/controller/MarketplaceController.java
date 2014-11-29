@@ -1,5 +1,6 @@
 package com.pricegsm.controller;
 
+import com.pricegsm.domain.BaseUser;
 import com.pricegsm.domain.Order;
 import com.pricegsm.securiry.PrincipalHolder;
 import com.pricegsm.service.OrderService;
@@ -42,7 +43,10 @@ public class MarketplaceController {
     @RequestMapping(value = "/marketplace/orders.json", method = RequestMethod.GET)
     @ResponseBody
     public OperationResult orders() {
-        return OperationResult.ok().payload("orders", orderService.findByBuyer(principalHolder.getCurrentUser().getId()));
+        BaseUser currentUser = principalHolder.getCurrentUser();
+        return OperationResult.ok()
+                .payload("orders", orderService.findByBuyer(currentUser.getId()))
+                .payload("buyer", currentUser );
     }
 
     @RequestMapping(value = "/marketplace/order.json", method = RequestMethod.POST)

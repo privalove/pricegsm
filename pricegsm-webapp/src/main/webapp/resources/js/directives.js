@@ -303,6 +303,85 @@
                 }
             }
         }])
+        .directive('pgDeliverySelection', [function () {
+            return {
+                scope: {
+                    order: "=",
+                    limitFromTime: "=",
+                    limitToTime: "="
+                },
+                require: "?ngModel",
+                templateUrl: "resources/template/deliverySelection.html",
+                link: function ($scope, element, attrs, ngModel) {
+
+                    var calculateDeliveryPlaceAvailability = function () {
+                        var currentDeliveryPlace = null;
+                        _.map($scope.deliveryPlaces, function (deliveryPlace) {
+                            if (deliveryPlace.name == $scope.order.seller.sellerDeliveryPlace) {
+                                currentDeliveryPlace = deliveryPlace;
+                                return;
+                            }
+                        });
+
+                        return currentDeliveryPlace != null && currentDeliveryPlace.name == $scope.order.seller.region.name;
+                    }
+
+                    $scope.deliveryPlaceAvailability = calculateDeliveryPlaceAvailability();
+                    $scope.deliveryPlace = null;
+
+                    (function () {
+                        if ($scope.order.pickup == true) {
+                            $scope.deliveryPlace == "";
+                        } else {
+                            $scope.deliveryPlace = $scope.order.place;
+                        }
+                    })();
+
+
+                    $scope.limitFromTime = $scope.getLimitFromTime($scope.order.delivery);
+                    $scope.limitToTime = $scope.getLimitToTime($scope.order.delivery);
+                    $scope.resetOtherDelivery = function (selectedDeliveryType) {
+                        if (selectedDeliveryType != "delivery") {
+                            $scope.order.delivery = false;
+                        }
+                        if (selectedDeliveryType != "pickup") {
+                            $scope.order.pickup = false;
+                        }
+                        $scope.order.deliveryFree = false;
+
+                        $scope.limitFromTime = $scope.getLimitFromTime($scope.order.delivery);
+                        $scope.limitToTime = $scope.getLimitToTime($scope.order.delivery);
+                    }
+
+                    $scope.getLimitFromTime = function (isDelivery) {
+                        if (isDelivery) {
+                            return $scope.order.seller.sellerDeliveryFrom;
+                        } else {
+                            return $scope.order.seller.sellerPickupFrom;
+                        }
+                    }
+
+                    $scope.getLimitToTime = function (isDelivery) {
+                        if (isDelivery) {
+                            return $scope.order.seller.sellerDeliveryTo;
+                        } else {
+                            return $scope.order.seller.sellerPickupTo;
+                        }
+                    }
+
+                    $scope.changeDeliveryPlace = function (place) {
+                        $scope.deliveryPlace = place;
+                        if ($scope.order.pickup) {
+                            $scope.order.place = $scope.order.seller.sellerPickupPlace;
+                        } else if ($scope.deliveryPlaceAvailability) {
+                            $scope.order.place = $scope.deliveryPlace;
+                        } else {
+                            $scope.order.place = $scope.order.seller.sellerDeliveryPlace;
+                        }
+                    }
+                }
+            }
+        }])
         .directive('pgTimePeriod', [function () {
             return {
                 scope: {
@@ -355,6 +434,87 @@
                 }
             }
         }])
+        .directive('pgDateListSelector', [function () {
+            return {
+                scope: {
+                    priceList: "="
+                },
+                restrict: 'E',
+                templateUrl: "resources/template/dateList.html",
+                link: function ($scope, element, attrs, $filter) {
+
+                    function compareDates(date1, date2) {
+                        date1 = new Date(date1.getFullYear(), date1.getMonth(), date1.getDate());
+                        date2 = new Date(date2.getFullYear(), date2.getMonth(), date2.getDate());
+                        if (date1.valueOf() > date2.valueOf()) {
+                            return 1;
+                        }
+                        if (date1.valueOf() == date2.valueOf()) {
+                            return 0;
+                        }
+                        if (date1.valueOf() < date2.valueOf()) {
+                            return -1;
+                        }
+                    }
+
+                    $scope.showPastDate = compareDates(new Date(), new Date($scope.order.deliveryDate)) > 0;
+
+                    function getDateList(startDate, numberOfDays) {
+                        var format = "yyyy-MM-dd";
+                        var dates = [];
+                        for (var i = 0; i < numberOfDays; i++) {
+                            dates.push($filter('date')(new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + i), format));
+                        }
+                        return dates;
+                    }
+
+                    function getPossibleDeliveryDates() {
+                        if ($scope.priceList == null || $scope.priceList == undefined) {
+                            return;
+                        }
+                        var today = new Date();
+                        var tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+                        if ($scope.priceList.position == 0) {
+                            if (today.getHours() < $scope.order.seller.deadLine) {
+                                return getDateList(today, 3);
+                            } else {
+                                return getDateList(tomorrow, 2);
+                            }
+                        } else {
+                            var fromDate = new Date($scope.priceList.sellFromDate);
+                            var toDate = new Date($scope.priceList.sellToDate);
+                            if (compareDates(today, toDate) > 0) {
+                                return [];
+                            }
+                            if (compareDates(today, toDate) == 0) {
+                                if (today.getHours() < $scope.order.seller.deadLine) {
+                                    fromDate = today;
+                                } else {
+                                    return [];
+                                }
+                            }
+
+                            if (compareDates(today, fromDate) >= 0) {
+                                if (today.getHours() < $scope.order.seller.deadLine) {
+                                    fromDate = today;
+                                } else {
+                                    fromDate = tomorrow;
+                                }
+                            }
+
+                            var dayNumber = toDate.getDate();
+                            if (toDate.getMonth() != fromDate.getMonth()) {
+                                toDate.setDate(-1)
+                                dayNumber += toDate.getDate() + 1;
+                            }
+                            var numberOfDays = dayNumber - fromDate.getDate() + 1;
+                            return getDateList(fromDate, numberOfDays);
+                        }
+                    }
+                    $scope.possibleDeliveryDates = getPossibleDeliveryDates();
+                }
+            }
+        }])
         .directive('pgPricelist', [function () {
             return {
                 scope: {
@@ -392,7 +552,7 @@
                     updateOrder: "&"
                 },
                 restrict: 'E',
-                templateUrl: "resources/template/order.html",
+                templateUrl: "resources/template/orderTable.html",
                 link: function ($scope, element, attrs) {
                     $scope.readonly = $scope.$eval(attrs.readonly);
 
