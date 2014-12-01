@@ -480,7 +480,7 @@
                         var format = "yyyy-MM-dd";
                         var dates = [];
                         for (var i = 0; i < numberOfDays; i++) {
-                            dates.push(new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + i), format);
+                            dates.push(new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + i));
                         }
                         return dates;
                     }
@@ -532,7 +532,7 @@
 
                     $scope.possibleDeliveryDates = getPossibleDeliveryDates(priceList);
 
-                    $scope.$watch("priceList", function () {
+                    $scope.$watch("order", function () {
                         priceList = $scope.priceList;
                         order = $scope.order;
                         $scope.possibleDeliveryDates = getPossibleDeliveryDates(priceList);
