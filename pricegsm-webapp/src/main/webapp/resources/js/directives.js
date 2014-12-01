@@ -314,7 +314,6 @@
                 },
                 replace: true,
                 restrict: 'E',
-                require: "?ngModel",
                 templateUrl: "resources/template/deliverySelection.html",
                 link: function ($scope, element, attrs, ngModel) {
 
@@ -449,11 +448,17 @@
         .directive('pgDateListSelector', [function () {
             return {
                 scope: {
-                    priceList: "="
+                    priceList: "=",
+                    order: "="
                 },
                 restrict: 'E',
                 templateUrl: "resources/template/dateList.html",
-                link: function ($scope, element, attrs, $filter) {
+                link: function ($scope, element, attrs) {
+                    var priceList = $scope.priceList;
+                    var order = $scope.order;
+
+//                    $scope.deliveryDateFormat = R.get('order.format.deliveryDate');
+                    $scope.deliveryDateFormat = "dd MMM, EEE";
 
                     function compareDates(date1, date2) {
                         date1 = new Date(date1.getFullYear(), date1.getMonth(), date1.getDate());
@@ -469,37 +474,38 @@
                         }
                     }
 
-                    $scope.showPastDate = compareDates(new Date(), new Date($scope.order.deliveryDate)) > 0;
+                    $scope.showPastDate = compareDates(new Date(), new Date(order.deliveryDate)) > 0;
 
                     function getDateList(startDate, numberOfDays) {
                         var format = "yyyy-MM-dd";
                         var dates = [];
                         for (var i = 0; i < numberOfDays; i++) {
-                            dates.push($filter('date')(new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + i), format));
+                            dates.push(new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + i), format);
                         }
                         return dates;
                     }
 
-                    function getPossibleDeliveryDates() {
-                        if ($scope.priceList == null || $scope.priceList == undefined) {
+                    function getPossibleDeliveryDates(priceList2) {
+                        priceList2 = priceList2 || $scope.priceList;
+                        if (priceList2 == null || priceList2 == undefined) {
                             return;
                         }
                         var today = new Date();
                         var tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
-                        if ($scope.priceList.position == 0) {
-                            if (today.getHours() < $scope.order.seller.deadLine) {
+                        if (priceList2.position == 0) {
+                            if (today.getHours() < priceList2.user.deadLine) {
                                 return getDateList(today, 3);
                             } else {
                                 return getDateList(tomorrow, 2);
                             }
                         } else {
-                            var fromDate = new Date($scope.priceList.sellFromDate);
-                            var toDate = new Date($scope.priceList.sellToDate);
+                            var fromDate = new Date(priceList2.sellFromDate);
+                            var toDate = new Date(priceList2.sellToDate);
                             if (compareDates(today, toDate) > 0) {
                                 return [];
                             }
                             if (compareDates(today, toDate) == 0) {
-                                if (today.getHours() < $scope.order.seller.deadLine) {
+                                if (today.getHours() < priceList2.user.deadLine) {
                                     fromDate = today;
                                 } else {
                                     return [];
@@ -507,7 +513,7 @@
                             }
 
                             if (compareDates(today, fromDate) >= 0) {
-                                if (today.getHours() < $scope.order.seller.deadLine) {
+                                if (today.getHours() < priceList2.user.deadLine) {
                                     fromDate = today;
                                 } else {
                                     fromDate = tomorrow;
@@ -524,7 +530,14 @@
                         }
                     }
 
-                    $scope.possibleDeliveryDates = getPossibleDeliveryDates();
+                    $scope.possibleDeliveryDates = getPossibleDeliveryDates(priceList);
+
+                    $scope.$watch("priceList", function () {
+                        priceList = $scope.priceList;
+                        order = $scope.order;
+                        $scope.possibleDeliveryDates = getPossibleDeliveryDates(priceList);
+                        $scope.showPastDate = compareDates(new Date(), new Date(order.deliveryDate)) > 0;
+                    }, true);
                 }
             }
         }])

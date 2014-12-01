@@ -317,12 +317,16 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
             });
     };
 
-    var selectedPriceList = {
+    $scope.selectedPriceList = {
         position: null,
+        sellFromDate: new Date(),
+        sellToDate: new Date(),
         user: {
-            id: null
+            id: null,
+            deadLine: new Date()
         }
-    };
+    }
+    ;
 
     var selectedPriceListPosition = {id: null};
 
@@ -342,13 +346,14 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
         toTime: new Date()
     };
 
+
     $scope.selectPriceListPosition = function (data) {
 
         var newPriceList = data.priceList;
-        if (selectedPriceList.position != newPriceList.position || selectedPriceList.user.id != newPriceList.user.id) {
+        if ($scope.selectedPriceList.position != newPriceList.position || $scope.selectedPriceList.user.id != newPriceList.user.id) {
             $scope.deliveryPlaces = newPriceList.user.region.deliveryPlaces;
             resetOrder();
-            selectedPriceList.orderingPosition = 1;
+            $scope.selectedPriceList.orderingPosition = 1;
             newPriceList.orderingPosition = 0;
 //            var pricelist = $scope.pricelists[0];
 //            $scope.pricelists.splice(0,1);
@@ -364,7 +369,7 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
             updatePriceListView(newPriceList, $scope.order);
         }
 
-        selectedPriceList = newPriceList;
+        $scope.selectedPriceList = newPriceList;
         selectedPriceListPosition = newPriceListPosition;
     }
 
@@ -452,13 +457,13 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
     }
 
     function resetOrder() {
+        $scope.order = createOrderTemplate($scope.buyer);
         $scope.hideOrderForm = true;
         $scope.order.orderPositions = [];
         var priceList = findPriceListByOrder($scope.pricelists, $scope.order);
         if (priceList != undefined) {
             updatePriceListView(priceList, $scope.order);
         }
-        $scope.order = createOrderTemplate($scope.buyer);
     }
 
     $scope.cancel = function () {
@@ -481,6 +486,7 @@ function createOrderTemplate(buyer) {
         seller: buyer,
         fromTime: buyer.buyerDeliveryFrom,
         toTime: buyer.buyerDeliveryTo,
+        deliveryDate: new Date(),
         orderPositions: []
     };
     return order;
