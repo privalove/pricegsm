@@ -114,8 +114,7 @@
                         <div class="row form-group" ng-hide="hideOrderForm"></div>
                         <div class="row form-group" ng-hide="hideOrderForm"></div>
                         <!-- price lists -->
-                        <div ng-repeat="pricelist in pricelists | orderBy : [pricelist.orderingPosition, pricelist.user.name, pricelist.user.sellFromDate]"
-                             ng-hide="pricelist.positions.length == 0">
+                        <div class="{{isHidePriceLists(pricelist)}}" ng-repeat="pricelist in pricelists | orderBy : [pricelist.orderingPosition, pricelist.user.name, pricelist.user.sellFromDate]">
                             <div class="row">
                                 <div class="col-xs-2">
                                     <h4>{{pricelist.user.name}}</h4>

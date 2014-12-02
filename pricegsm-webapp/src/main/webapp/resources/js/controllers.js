@@ -346,19 +346,17 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
         toTime: new Date()
     };
 
-
+    var selectionPriceListActive = false;
     $scope.selectPriceListPosition = function (data) {
 
         var newPriceList = data.priceList;
         if ($scope.selectedPriceList.position != newPriceList.position || $scope.selectedPriceList.user.id != newPriceList.user.id) {
             $scope.deliveryPlaces = newPriceList.user.region.deliveryPlaces;
             resetOrder();
-            $scope.selectedPriceList.orderingPosition = 1;
-            newPriceList.orderingPosition = 0;
+            $scope.selectedPriceList.isSelected = false;
+            selectionPriceListActive = true;
+            newPriceList.isSelected = true;
             resetOrderDetailsForm();
-//            var pricelist = $scope.pricelists[0];
-//            $scope.pricelists.splice(0,1);
-//            $scope.pricelists.push(pricelist);
         }
 
         var newPriceListPosition = data.priceListPosition;
@@ -372,6 +370,14 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
 
         $scope.selectedPriceList = newPriceList;
         selectedPriceListPosition = newPriceListPosition;
+    }
+
+    $scope.isHidePriceLists = function (pricelist) {
+        if (pricelist.positions.length == 0 || !pricelist.isSelected && selectionPriceListActive) {
+            return "ng-hide";
+        }
+
+        return "";
     }
 
     $scope.updateOrder = function (order) {
@@ -447,7 +453,7 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
         $scope.pricelists = pricelists.payload.pricelists;
 
         _.each($scope.pricelists, function (pricelist) {
-            pricelist.orderingPosition = 1;
+            pricelist.isSelected = false;
         });
 
         $scope.updateAmount = function (seller, position, amount) {
@@ -484,6 +490,7 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
     }
 
     $scope.cancel = function () {
+        selectionPriceListActive = false;
         resetOrder();
     }
 }
