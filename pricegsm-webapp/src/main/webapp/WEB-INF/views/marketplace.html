@@ -13,26 +13,84 @@
                     </div>
                     <div class="panel-body">
                         <!-- new order -->
-                        <form id="orderForm" ng-hide="hideOrderForm" class="form-horizontal form-group">
+                        <form id="orderForm" ng-hide="hideOrderForm"
+                              class="panel panel-default form-horizontal form-group">
                             <pg-order order="order"
                                       readonly="{{false}}"
                                       update-order="updateOrder(order)"
-                                      >
+                                    >
 
                             </pg-order>
                             <div class="row form-group">
                                 <div class="col-xs-offset-1 col-xs-11">
-                                    <div class="has-error form-group" ng-show="showSaveError">
-                                        <div class="form-control">Данные не актуальны. Нажмите обновить.</div>
-                                    </div>
+                                    <button type="button" class="btn btn-default" tooltip="Оформить"
+                                            ng-click="showHideForm()">
+                                        <i class="fa"></i>
+                                        <span>{{showHideFormLabel}}</span>
+                                    </button>
 
+                                    <button type="reset" class="btn btn-default" data-dismiss="modal" aria-hidden="true"
+                                            ng-click="cancel()"><i
+                                            class="fa fa-times-circle fa-lg"></i> <span pg-text="button.delete"></span>
+                                    </button>
                                     <button type="button" class="btn btn-default" tooltip="Обновить"
                                             ng-click="$parent.refresh()">
                                         <i class="fa fa-refresh"></i>
                                         <span>Обновить</span>
                                     </button>
 
-                                    <button type="submit" class="btn btn-success" form="orderForm"
+                                </div>
+                            </div>
+                            <div ng-hide="hideForm">
+                                <div class="row form-group">
+
+                                    <div class="text-right text-right  col-xs-3 control-label right-padding-5">
+                                        Контактное лицо:
+                                    </div>
+                                    <div class="col-sm-2  left-padding-0">
+                                        <input type="text" class="form-control"
+                                               ng-model="order.contactName"/>
+                                    </div>
+
+                                    <label class="text-right col-sm-offset-1 col-xs-2 right-padding-5">
+                                        <div class="control-label" pg-text="order.phoneNumber">Телефон</div>
+                                    </label>
+
+                                    <div class="col-sm-2 left-padding-0">
+                                        <input type="text" class="form-control"
+                                               ng-model="order.phone"/>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-xs-offset-1">
+                                        <pg-delivery-selection
+                                                order="order"
+                                                update-time-limits="updateTimeLimits(limits)"
+                                                delivery-places="deliveryPlaces">
+                                        </pg-delivery-selection>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <pg-date-list-selector
+                                            price-list="selectedPriceList"
+                                            order="order">
+
+                                    </pg-date-list-selector>
+                                    <pg-time-period class="col-xs-5"
+                                                    from-time="order.fromTime"
+                                                    to-time="order.toTime"
+                                                    from-time-limit="{{limitFromTime}}"
+                                                    to-time-limit="{{limitToTime}}"></pg-time-period>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-xs-offset-1 col-xs-9">
+                                        <input class="form-control" type="text" placeholder="Примечание"
+                                               ng-model="order.description"/>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <button type="submit" class="col-xs-offset-1 btn btn-success" form="orderForm"
                                             ng-disabled="!formEnable(orderForm)" ng-click="save(orderForm, 'PREPARE')">
                                         <i class="fa fa-save"></i>
                                         <span>Сохранить</span>
@@ -49,54 +107,7 @@
                                         <i class="fa fa-save"></i>
                                         <span>Отправить</span>
                                     </button>
-
-                                    <button type="reset" class="btn btn-default" data-dismiss="modal" aria-hidden="true"
-                                            ng-click="cancel()"><i
-                                            class="fa fa-times-circle fa-lg"></i> <span pg-text="button.close"></span>
-                                    </button>
-
                                 </div>
-                            </div>
-                            <div class="row form-group">
-
-                                <div class="text-right text-right  col-xs-3 control-label right-padding-5">
-                                    Контактное лицо:
-                                </div>
-                                <div class="col-sm-2  left-padding-0">
-                                    <input type="text" class="form-control"
-                                           ng-model="order.contactName"/>
-                                </div>
-
-                                <label class="text-right col-sm-offset-1 col-xs-2 right-padding-5">
-                                    <div class="control-label" pg-text="order.phoneNumber">Телефон</div>
-                                </label>
-
-                                <div class="col-sm-2 left-padding-0">
-                                    <input type="text" class="form-control"
-                                           ng-model="order.phone"/>
-                                </div>
-                            </div>
-                            <div class="row form-group">
-                                <div class="col-xs-offset-1">
-                                    <pg-delivery-selection
-                                            order="order"
-                                            update-time-limits="updateTimeLimits(limits)"
-                                            delivery-places="deliveryPlaces">
-                                    </pg-delivery-selection>
-                                </div>
-                            </div>
-
-                            <div class="row form-group">
-                                <pg-date-list-selector
-                                        price-list="selectedPriceList"
-                                        order="order">
-
-                                </pg-date-list-selector>
-                                <pg-time-period class="col-xs-5"
-                                                from-time="order.fromTime"
-                                                to-time="order.toTime"
-                                                from-time-limit="{{limitFromTime}}"
-                                                to-time-limit="{{limitToTime}}"></pg-time-period>
                             </div>
                         </form>
                         <div class="row form-group" ng-hide="hideOrderForm"></div>

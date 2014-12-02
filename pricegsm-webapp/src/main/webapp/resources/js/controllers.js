@@ -355,6 +355,7 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
             resetOrder();
             $scope.selectedPriceList.orderingPosition = 1;
             newPriceList.orderingPosition = 0;
+            resetOrderDetailsForm();
 //            var pricelist = $scope.pricelists[0];
 //            $scope.pricelists.splice(0,1);
 //            $scope.pricelists.push(pricelist);
@@ -381,6 +382,22 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
             updatePriceListView(priceList, order);
         }
     };
+
+    function resetOrderDetailsForm() {
+        $scope.showHideFormLabel = "Оформить";
+        $scope.hideForm = true;
+    }
+
+    resetOrderDetailsForm();
+
+    $scope.showHideForm = function () {
+        if ($scope.hideForm) {
+            $scope.showHideFormLabel = "Скрыть";
+            $scope.hideForm = false;
+        } else {
+            resetOrderDetailsForm();
+        }
+    }
 
     $scope.updateStatistic = function (data) {
         angular.extend(shopPricesData, data);
