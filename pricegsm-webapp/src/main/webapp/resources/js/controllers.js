@@ -353,9 +353,6 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
         if ($scope.selectedPriceList.position != newPriceList.position || $scope.selectedPriceList.user.id != newPriceList.user.id) {
             $scope.deliveryPlaces = newPriceList.user.region.deliveryPlaces;
             resetOrder();
-            $scope.selectedPriceList.isSelected = false;
-            selectionPriceListActive = true;
-            newPriceList.isSelected = true;
             resetOrderDetailsForm();
         }
 
@@ -363,6 +360,8 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
         if (selectedPriceListPosition.id != newPriceListPosition.id) {
             $scope.updateStatistic(data);
         } else {
+            selectionPriceListActive = true;
+            newPriceList.isSelected = true;
             $scope.order = addOrderPosition(newPriceListPosition, data.price, newPriceList, $scope.order, $scope.hideOrderForm);
             $scope.hideOrderForm = false;
             updatePriceListView(newPriceList, $scope.order);
@@ -479,9 +478,7 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
         $scope.deliveryPlaces = $scope.buyer.region.deliveryPlaces;
     }
 
-    function resetOrder() {
-        $scope.order = createOrderTemplate($scope.buyer);
-        $scope.hideOrderForm = true;
+    function resetPricelistView() {
         $scope.order.orderPositions = [];
         var priceList = findPriceListByOrder($scope.pricelists, $scope.order);
         if (priceList != undefined) {
@@ -489,10 +486,44 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
         }
     }
 
+    function resetOrder() {
+        resetPricelistView();
+        resetOrderDetailsForm();
+        $scope.selectedPriceList.isSelected = false;
+        selectionPriceListActive = false;
+        $scope.hideOrderForm = true;
+        $scope.order = createOrderTemplate($scope.buyer);
+    }
+
     $scope.cancel = function () {
         selectionPriceListActive = false;
         resetOrder();
     }
+
+    $scope.save = function (form, status) {
+        if (compareDates(new Date(), new Date($scope.order.deliveryDate)) > 0) {
+            $scope.showSaveError = true;
+            return;
+        }
+        if (form.$valid) {
+            $scope.refresh(function () {
+                $scope.order.totalAmount = $scope.calcTotalAmount($scope.order);
+                $scope.order.status = status;
+                $scope.order.totalPrice = $scope.calcTotalPrice($scope.order);
+                $scope.order.deliveryCost = $scope.calcDeliveryPrice($scope.order);
+                $scope.updatePhone();
+                $scope.updateName()
+                if ($scope.order.pickup) {
+                    $scope.order.place = $scope.order.seller.sellerPickupPlace;
+                } else if ($scope.deliveryPlaceAvailability) {
+                    $scope.order.place = $scope.deliveryPlace;
+                } else {
+                    $scope.order.place = $scope.order.seller.sellerDeliveryPlace;
+                }
+                $scope.ok($scope.order);
+            });
+        }
+    };
 }
 MarketplaceCtrl.resolve = {
     "pricelists": ["PriceLists", function (PriceLists) {
