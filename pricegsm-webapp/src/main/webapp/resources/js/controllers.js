@@ -500,30 +500,10 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
         resetOrder();
     }
 
-    $scope.save = function (form, status) {
-        if (compareDates(new Date(), new Date($scope.order.deliveryDate)) > 0) {
-            $scope.showSaveError = true;
-            return;
-        }
-        if (form.$valid) {
-            $scope.refresh(function () {
-                $scope.order.totalAmount = $scope.calcTotalAmount($scope.order);
-                $scope.order.status = status;
-                $scope.order.totalPrice = $scope.calcTotalPrice($scope.order);
-                $scope.order.deliveryCost = $scope.calcDeliveryPrice($scope.order);
-                $scope.updatePhone();
-                $scope.updateName()
-                if ($scope.order.pickup) {
-                    $scope.order.place = $scope.order.seller.sellerPickupPlace;
-                } else if ($scope.deliveryPlaceAvailability) {
-                    $scope.order.place = $scope.deliveryPlace;
-                } else {
-                    $scope.order.place = $scope.order.seller.sellerDeliveryPlace;
-                }
-                $scope.ok($scope.order);
-            });
-        }
-    };
+    $scope.mergePriceListAndOrder = function (data) {
+        $scope.selectedPriceList = data.priceList;
+        refreshOrderPositions($scope.order, $scope.selectedPriceList);
+    }
 }
 MarketplaceCtrl.resolve = {
     "pricelists": ["PriceLists", function (PriceLists) {
@@ -536,9 +516,11 @@ MarketplaceCtrl.resolve = {
 
 function createOrderTemplate(buyer) {
     var order = {
+        id: null,
         contactName: buyer.name,
         phone: buyer.phone,
         seller: buyer,
+        buyer: buyer,
         fromTime: buyer.buyerDeliveryFrom,
         toTime: buyer.buyerDeliveryTo,
         deliveryDate: new Date(),
@@ -577,6 +559,7 @@ function addOrderPosition(priceListPosition, price, priceList, order, isNewMode)
 
     } else {
         var position = {
+            order:  {id: order.id,  name: ""},
             amount: price.minOrderQuantity,
             price: price.price,
             totalPrice: price.price * price.minOrderQuantity,
@@ -742,6 +725,44 @@ function updatePricesSelected(prices, price, amount) {
     price.selectedStyle = "success";
     price.amount = amount;
 }
+
+function refreshOrderPositions(order, priceList) {
+    order.currency = priceList.currency;
+
+    _.map(order.orderPositions, function (orderPosition) {
+        var priceListPosition = findPriceListPosition(orderPosition, priceList);
+        if (priceListPosition == undefined || priceListPosition == null) {
+            orderPosition.selectedStyle = "danger";
+            orderPosition.deleted = true;
+            return;
+        }
+        var prices = priceListPosition.prices;
+
+        if (priceListPosition.amount < orderPosition.amount) {
+            orderPosition.amount = priceListPosition.amount;
+        }
+
+        var price = findPrice(prices, orderPosition.amount);
+
+        if (priceListPosition.price != price.price) {
+            orderPosition.price = price.price;
+        }
+
+        orderPosition.specification = priceListPosition.specification;
+
+        orderPosition.description = priceListPosition.description;
+
+    });
+
+    updatePriceListView(priceList, order);
+
+    if (order.orderPositions.length != 0) {
+        updatePrices(order)
+    } else {
+        order.totalPrice = 0;
+        order.deliveryCost = 0;
+    }
+};
 
 OrderCtrl.$inject = ["$scope", "$filter", "$modal", "$resource", "orders", "notifyManager"];
 function OrderCtrl($scope, $filter, $modal, $resource, orders, notifyManager) {

@@ -726,6 +726,67 @@
                 }
             }
         }])
+        .directive('pgSaveOrderButton', ["$resource", "notifyManager", function ($resource, notifyManager) {
+            return {
+                scope: {
+                    order: "=",
+                    callback: "&"
+                },
+                restrict: 'A',
+                replace: true,
+                link: function ($scope, element, attrs) {
+
+                    element.click(function () {
+                        saveOrder();
+                    });
+
+                    function saveOrder() {
+                        var Order = $resource("order/:order/order.json");
+
+                        var order = $scope.order;
+                        order.sendDate = new Date();
+                        order.status = attrs.pgSaveOrderButton;
+                        new Order(order).$save(function (data) {
+                            if (data.ok) {
+                                notifyManager.success("Заказ успешно отправлен");
+                                $scope.callback();
+                            }
+                        });
+                    }
+                }
+            }
+        }])
+        .directive('pgLoadPriceList', ["$resource", function ($resource) {
+            return {
+                scope: {
+                    userId: "@",
+                    position: "@",
+                    callback: "&"
+                },
+                restrict: 'A',
+
+                link: function ($scope, element, attrs) {
+
+                    element.click(function () {
+                        refresh();
+                    });
+
+                    function refresh() {
+                        loadPriceList(attrs.userId, attrs.position);
+                    }
+
+                    function loadPriceList(sellerId, position) {
+                        var PriceList = $resource("order/:id/:position/pricelist.json", {id: '@id', position: '@position'});
+                        PriceList.get({id: sellerId, position: position}, function (data) {
+
+                            if (data.ok) {
+                                $scope.callback({data: {priceList: data.payload.priceList}});
+                            }
+                        });
+                    };
+                }
+            }
+        }])
 
     ;
 

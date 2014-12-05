@@ -50,7 +50,7 @@ public class OrderController {
         return OperationResult.ok().payload("orderPositionTemplate", new OrderPosition())
                 .payload("priceList", priceListService.getPriceList(sellerId, position))
                 .payload("deliveryPlaces", deliveryPlaceService.findActiveByRegion(userService.load(sellerId).getRegion().getId()));
-}
+    }
 
     @RequestMapping(value = "/order/{orderId}/order.json", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -61,6 +61,19 @@ public class OrderController {
             return OperationResult
                     .validation()
                     .payload("order", orderService.getCurrentUserOrderById(orderId, currentUser.getId()));
+        }
+
+        orderService.save(order);
+
+        return OperationResult.ok().payload("order", orderService.load(order.getId()));
+    }
+
+    @RequestMapping(value = "/order/order.json", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public OperationResult saveOrderNew(@RequestBody Order order, BindingResult result) {
+
+        if (result.hasErrors()) {
+            return OperationResult.validation();
         }
 
         orderService.save(order);
