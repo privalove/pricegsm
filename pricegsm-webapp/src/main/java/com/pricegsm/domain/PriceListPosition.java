@@ -10,9 +10,8 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "pricelist_position")
@@ -24,7 +23,7 @@ public class PriceListPosition
 
     private boolean active = true;
 
-    private List<Price> prices = new ArrayList<>();
+    private Set<Price> prices = new LinkedHashSet<>();
 
     private Product product;
 
@@ -79,11 +78,11 @@ public class PriceListPosition
 
     @Valid
     @OneToMany(mappedBy = "priceListPosition", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    public List<Price> getPrices() {
+    public Set<Price> getPrices() {
         return prices;
     }
 
-    public void setPrices(List<Price> prices) {
+    public void setPrices(Set<Price> prices) {
         this.prices = prices;
     }
 

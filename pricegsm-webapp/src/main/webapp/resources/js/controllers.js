@@ -449,8 +449,9 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
     };
 
     if (pricelists.ok) {
-        $scope.pricelists = pricelists.payload.pricelists;
-
+        $scope.pricelists =  _.filter(pricelists.payload.pricelists, function (priceList) {
+            return isPriceListActual(priceList, new Date())
+        });
         _.each($scope.pricelists, function (pricelist) {
             pricelist.isSelected = false;
         });
@@ -972,20 +973,6 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
     //todo create date list directive start
     var baseDateFormat = "yyyy-MM-dd";
 
-    function compareDates(date1, date2) {
-        date1 = new Date(date1.getFullYear(), date1.getMonth(), date1.getDate());
-        date2 = new Date(date2.getFullYear(), date2.getMonth(), date2.getDate());
-        if (date1.valueOf() > date2.valueOf()) {
-            return 1;
-        }
-        if (date1.valueOf() == date2.valueOf()) {
-            return 0;
-        }
-        if (date1.valueOf() < date2.valueOf()) {
-            return -1;
-        }
-    }
-
     $scope.showPastDate = compareDates(new Date(), new Date($scope.order.deliveryDate)) > 0;
 
     function getDateList(startDate, numberOfDays) {
@@ -1175,15 +1162,7 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
             $scope.showSaveError = false;
         }
 
-        var sellToDate = new Date($scope.priceList.sellToDate);
-        var sellFromDate = new Date($scope.priceList.sellFromDate);
-        var afterDeadline = today.getHours() >= new Date($scope.order.seller.deadLine).getHours();
-        var comparedDatesFrom = compareDates(today, sellFromDate);
-        var comparedDatesTo = compareDates(today, sellToDate);
-        if ($scope.priceList.position > 0 && comparedDatesTo == 1
-            || $scope.priceList.position > 0 && comparedDatesTo == 0 && afterDeadline
-            || $scope.priceList.position == 0 && comparedDatesFrom > 0
-            || $scope.priceList.position == 0 && comparedDatesFrom == 0 && afterDeadline) {
+        if (!isPriceListActual($scope.priceList, today)) {
 
             $scope.showActuallityError = true;
             return;
@@ -1453,6 +1432,34 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
     $scope.ok = function (resultOrder) {
         $modalInstance.close(resultOrder);
     }
+}
+
+
+function compareDates(date1, date2) {
+    date1 = new Date(date1.getFullYear(), date1.getMonth(), date1.getDate());
+    date2 = new Date(date2.getFullYear(), date2.getMonth(), date2.getDate());
+    if (date1.valueOf() > date2.valueOf()) {
+        return 1;
+    }
+    if (date1.valueOf() == date2.valueOf()) {
+        return 0;
+    }
+    if (date1.valueOf() < date2.valueOf()) {
+        return -1;
+    }
+}
+
+function isPriceListActual(priceList, today) {
+    var sellToDate = new Date(priceList.sellToDate);
+    var sellFromDate = new Date(priceList.sellFromDate);
+    var afterDeadline = today.getHours() >= new Date(priceList.user.deadLine).getHours();
+    var comparedDatesFrom = compareDates(today, sellFromDate);
+    var comparedDatesTo = compareDates(today, sellToDate);
+    var position = priceList.position;
+    return !(position > 0 && comparedDatesTo == 1
+        || position > 0 && comparedDatesTo == 0 && afterDeadline
+        || position == 0 && comparedDatesFrom > 0
+        || position == 0 && comparedDatesFrom == 0 && afterDeadline);
 }
 
 angular.module('orderFilters', [])
