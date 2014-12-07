@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -23,7 +24,7 @@ public class PriceListPosition
 
     private boolean active = true;
 
-    private Set<Price> prices = new LinkedHashSet<>();
+    private Set<Price> prices = new HashSet<>();
 
     private Product product;
 
@@ -78,6 +79,8 @@ public class PriceListPosition
 
     @Valid
     @OneToMany(mappedBy = "priceListPosition", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderColumn(name = "min_order_quantity")
+    @OrderBy("minOrderQuantity ASC")
     public Set<Price> getPrices() {
         return prices;
     }

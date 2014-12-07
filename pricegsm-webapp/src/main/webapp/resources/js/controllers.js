@@ -503,12 +503,13 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
     }
 
     $scope.mergePriceListAndOrder = function (data) {
-        $scope.selectedPriceList = data.priceList;
+        angular.copy(data.priceList, $scope.selectedPriceList);
+        $scope.selectedPriceList.isSelected = true;
         refreshOrderPositions($scope.order, $scope.selectedPriceList);
     }
 
     $scope.onFailureSaveOrder = function () {
-        $scope.$apply(function() {
+        $scope.$apply(function () {
             $scope.order.placeError = true;
         });
     }
@@ -569,7 +570,7 @@ function addOrderPosition(priceListPosition, price, priceList, order, isNewMode)
 
     } else {
         var position = {
-            order: {id: order.id,  name: ""},
+            order: {id: order.id, name: ""},
             amount: price.minOrderQuantity,
             price: price.price,
             totalPrice: price.price * price.minOrderQuantity,
@@ -753,14 +754,22 @@ function refreshOrderPositions(order, priceList) {
         }
 
         var price = findPrice(prices, orderPosition.amount);
-
-        if (priceListPosition.price != price.price) {
-            orderPosition.price = price.price;
+        if (price != undefined) {
+            if (priceListPosition.price != price.price) {
+                orderPosition.price = price.price;
+            }
+        } else {
+            orderPosition.amount = prices[0].minOrderQuantity;
+            orderPosition.price = prices[0].price;
         }
+
+        orderPosition.minOrderQuantity = priceListPosition.prices[0].minOrderQuantity
 
         orderPosition.specification = priceListPosition.specification;
 
         orderPosition.description = priceListPosition.description;
+
+        orderPosition.totalPrice = getPositionTotalPrice(orderPosition);
 
     });
 
