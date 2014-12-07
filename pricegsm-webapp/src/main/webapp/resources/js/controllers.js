@@ -211,8 +211,8 @@ function isEmpty(data) {
     return data == undefined || data == null || data == "";
 }
 
-MarketplaceCtrl.$inject = ["$scope", "$filter", "$locale", "pricelists", "orders", "Order", "IndexShopResource", "IndexChartResource"];
-function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, IndexShopResource, IndexChartResource) {
+MarketplaceCtrl.$inject = ["$scope", "$filter", "$locale", "$modal", "pricelists", "orders", "Order", "IndexShopResource", "IndexChartResource"];
+function MarketplaceCtrl($scope, $filter, $locale, $modal, pricelists, orders, Order, IndexShopResource, IndexChartResource) {
     $scope.isEmpty = function (data) {
         return isEmpty(data);
     }
@@ -511,6 +511,25 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
     $scope.onFailureSaveOrder = function () {
         $scope.$apply(function () {
             $scope.order.placeError = true;
+        });
+    }
+
+    $scope.review = function (order) {
+        $modal.open({
+            templateUrl: "resources/template/orderPosition.html",
+            controller: OrderPositionCtrl,
+            size: "lg",
+            resolve: {
+                currentOrder: function () {
+                    return order;
+                },
+                currentPriceList: function () {
+                    return null;
+                },
+                deliveryPlaces: function () {
+                    return null;
+                }
+            }
         });
     }
 }
