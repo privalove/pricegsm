@@ -2,19 +2,19 @@
     <div class="row">
         <div class="col-sm-4">
             <label class="radio-inline">
-                <input ng-disabled="{{!order.seller.sellerPickup}}" name="pickup" type="radio"
+                <input ng-disabled="!order.seller.sellerPickup" name="pickup" type="radio"
                        ng-model="order.pickup" ng-value="true" ng-change="resetOtherDelivery('pickup')"/>
                 <span pg-text="order.delivery.pickup"></span>
             </label>
             <label class="radio-inline">
-                <input ng-disabled="{{!order.seller.sellerDelivery}}" name="delivery" type="radio"
+                <input ng-disabled="!order.seller.sellerDelivery" name="delivery" type="radio"
                        ng-model="order.delivery" ng-value="true" ng-change="resetOtherDelivery('delivery')"/>
                 <span pg-text="order.delivery.delivery"></span>
             </label>
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-7">
+        <div class="col-sm-7 ng-hide" ng-show="order.delivery || order.pickup">
             <input ng-show="order.pickup" ng-hide="order.delivery"
                    placeholder={{order.seller.sellerPickupPlace}}
                    ng-disabled="true" type="text" class="form-control"/>

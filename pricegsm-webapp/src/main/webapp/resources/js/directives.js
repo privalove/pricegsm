@@ -332,13 +332,15 @@
                     $scope.deliveryPlaceAvailability = calculateDeliveryPlaceAvailability();
                     $scope.deliveryPlace = null;
 
-                    (function () {
+                    function initDeliveryPlace() {
                         if ($scope.order.pickup == true) {
                             $scope.deliveryPlace = "";
                         } else {
                             $scope.deliveryPlace = $scope.order.place;
                         }
-                    })();
+                    };
+
+                    initDeliveryPlace();
 
                     $scope.getLimitFromTime = function (isDelivery) {
                         if (isDelivery) {
@@ -370,7 +372,9 @@
                         if (selectedDeliveryType != "pickup") {
                             $scope.order.pickup = false;
                         }
-                        $scope.order.deliveryFree = false;
+                        if(isEmpty($scope.order.place)) {
+                            $scope.changeDeliveryPlace($scope.order.seller.sellerDeliveryPlace);
+                        }
 
                         updateTimeLimits();
                     }
@@ -393,6 +397,10 @@
                             } else if (element.hasClass("has-error")) {
                                 element.removeClass("has-error");
                             }
+                        }
+
+                        if (newValue.place !== oldValue.place) {
+                            initDeliveryPlace();
                         }
                     }, true);
 

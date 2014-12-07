@@ -559,6 +559,26 @@ function createOrderTemplate(buyer) {
     return order;
 }
 
+function setDefaultDelivery(priceList, order) {
+    var seller = priceList.user;
+    if (seller.sellerPickup && seller.sellerDelivery) {
+        return;
+    }
+    if (seller.sellerPickup) {
+        angular.extend(order, {
+            pickup: true,
+            place: seller.sellerPickupPlace
+        });
+    }
+
+    if (seller.sellerDelivery) {
+        angular.extend(order, {
+            delivery: true,
+            place: seller.sellerDeliveryPlace
+        });
+    }
+
+}
 function addOrderPosition(priceListPosition, price, priceList, order, isNewMode) {
 
     if (isNewMode) {
@@ -567,6 +587,7 @@ function addOrderPosition(priceListPosition, price, priceList, order, isNewMode)
             currency: priceList.currency,
             priceListPosition: priceList.position
         });
+        setDefaultDelivery(priceList, order);
     }
 
     var exitingOrderPosition = _.find(order.orderPositions, function (orderPosition) {
