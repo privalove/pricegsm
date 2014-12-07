@@ -385,7 +385,18 @@
                             $scope.order.place = $scope.order.seller.sellerDeliveryPlace;
                         }
                     }
-                }
+
+                    $scope.$watch("order", function(newValue, oldValue) {
+                        if (newValue.placeError !== oldValue.placeError) {
+                            if(newValue.placeError) {
+                                element.addClass("has-error")
+                            } else if (element.hasClass("has-error")) {
+                                element.removeClass("has-error");
+                            }
+                        }
+                    }, true);
+
+            }
             }
         }])
         .directive('pgTimePeriod', [function () {
@@ -730,7 +741,8 @@
             return {
                 scope: {
                     order: "=",
-                    callback: "&"
+                    callback: "&",
+                    onFailure: "&"
                 },
                 restrict: 'A',
                 replace: true,
@@ -740,18 +752,44 @@
                         saveOrder();
                     });
 
+                    function setDefaultData(order) {
+                        if (isEmpty(order.contactName)) {
+                            order.contactName = order.buyer.name;
+                        }
+
+                        if (isEmpty(order.phone)) {
+                            order.phone = order.buyer.phone;
+                        }
+                    }
+
                     function saveOrder() {
                         var Order = $resource("order/:order/order.json");
 
                         var order = $scope.order;
-                        order.sendDate = new Date();
-                        order.status = attrs.pgSaveOrderButton;
-                        new Order(order).$save(function (data) {
-                            if (data.ok) {
-                                notifyManager.success("Заказ успешно отправлен");
-                                $scope.callback();
-                            }
-                        });
+
+                        if (isValid(order)) {
+                            setDefaultData(order);
+                            order.sendDate = new Date();
+                            order.status = attrs.pgSaveOrderButton;
+                            new Order(order).$save(function (data) {
+                                if (data.ok) {
+                                    notifyManager.success("Заказ успешно отправлен");
+                                    $scope.callback();
+                                }
+                            });
+                        } else {
+                            notifyManager.error("Заполните необходимые поля");
+                            $scope.onFailure()
+                        }
+                    }
+
+                    function isValid(order) {
+                        var valid = true;
+                        if (isEmpty(order.place)) {
+                            valid = false;
+                        }
+
+                        return valid;
                     }
                 }
             }

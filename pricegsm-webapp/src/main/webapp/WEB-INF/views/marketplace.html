@@ -37,10 +37,10 @@
                                             user-id="{{selectedPriceList.user.id}}"
                                             position="{{selectedPriceList.position}}"
                                             callback="mergePriceListAndOrder(data)"
-                                         type="button" class="btn btn-default">
-                                            <i class="fa fa-refresh"></i>
-                                            <span>Обновить</span>
-                                        </button>
+                                            type="button" class="btn btn-default">
+                                        <i class="fa fa-refresh"></i>
+                                        <span>Обновить</span>
+                                    </button>
                                 </div>
                             </div>
                             <div ng-hide="hideForm">
@@ -95,6 +95,7 @@
                                     <button pg-save-order-button="PREPARE"
                                             order="order"
                                             callback="cancel()"
+                                            on-failure="onFailureSaveOrder()"
                                             type="submit" class="col-xs-offset-1 btn btn-success" form="orderForm"
                                             ng-disabled="false">
                                         <i class="fa fa-save"></i>
@@ -108,6 +109,7 @@
                                     </button>
 
                                     <button pg-save-order-button="SENT" order="order" callback="$cancel()"
+                                            on-failure="onFailureSaveOrder()"
                                             type="submit" class="btn btn-success" form="orderForm"
                                             ng-disabled="false">
                                         <i class="fa fa-save"></i>

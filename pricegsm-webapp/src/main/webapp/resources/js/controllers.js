@@ -449,7 +449,7 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
     };
 
     if (pricelists.ok) {
-        $scope.pricelists =  _.filter(pricelists.payload.pricelists, function (priceList) {
+        $scope.pricelists = _.filter(pricelists.payload.pricelists, function (priceList) {
             return isPriceListActual(priceList, new Date())
         });
         _.each($scope.pricelists, function (pricelist) {
@@ -498,12 +498,19 @@ function MarketplaceCtrl($scope, $filter, $locale, pricelists, orders, Order, In
 
     $scope.cancel = function () {
         selectionPriceListActive = false;
+        $scope.order.placeError = undefined;
         resetOrder();
     }
 
     $scope.mergePriceListAndOrder = function (data) {
         $scope.selectedPriceList = data.priceList;
         refreshOrderPositions($scope.order, $scope.selectedPriceList);
+    }
+
+    $scope.onFailureSaveOrder = function () {
+        $scope.$apply(function() {
+            $scope.order.placeError = true;
+        });
     }
 }
 MarketplaceCtrl.resolve = {
@@ -525,6 +532,8 @@ function createOrderTemplate(buyer) {
         fromTime: buyer.buyerDeliveryFrom,
         toTime: buyer.buyerDeliveryTo,
         deliveryDate: new Date(),
+        place: "",
+        placeError: undefined,
         orderPositions: []
     };
     return order;
@@ -560,7 +569,7 @@ function addOrderPosition(priceListPosition, price, priceList, order, isNewMode)
 
     } else {
         var position = {
-            order:  {id: order.id,  name: ""},
+            order: {id: order.id,  name: ""},
             amount: price.minOrderQuantity,
             price: price.price,
             totalPrice: price.price * price.minOrderQuantity,
