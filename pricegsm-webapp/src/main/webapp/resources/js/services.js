@@ -18,7 +18,10 @@
         "Orders": "marketplace/orders.json",
         "OrdersOrderPage": "order/orders.json",
         "PriceListOrderPage": "order/:id/:position/pricelist.json",
-        "Order": "marketplace/order.json"
+        "Order": "marketplace/order.json",
+
+        "FiltersData": "/marketplace/filtersData.json",
+        "Buyer": "marketplace/buyer.json"
     };
 
         angular.module('pg.services', ['ngResource'])

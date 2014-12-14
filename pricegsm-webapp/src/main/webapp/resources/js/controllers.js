@@ -211,8 +211,8 @@ function isEmpty(data) {
     return data == undefined || data == null || data == "";
 }
 
-MarketplaceCtrl.$inject = ["$scope", "$filter", "$locale", "$modal", "pricelists", "orders", "Order", "IndexShopResource", "IndexChartResource"];
-function MarketplaceCtrl($scope, $filter, $locale, $modal, pricelists, orders, Order, IndexShopResource, IndexChartResource) {
+MarketplaceCtrl.$inject = ["$scope", "$filter", "$locale", "$modal", "pricelists", "buyer", "filtersData", "IndexShopResource", "IndexChartResource"];
+function MarketplaceCtrl($scope, $filter, $locale, $modal, pricelists, buyer, filtersData, IndexShopResource, IndexChartResource) {
     $scope.isEmpty = function (data) {
         return isEmpty(data);
     }
@@ -472,20 +472,27 @@ function MarketplaceCtrl($scope, $filter, $locale, $modal, pricelists, orders, O
         }
     }
 
-    if (orders.ok) {
-        $scope.orders = orders.payload.orders;
-        $scope.buyer = orders.payload.buyer;
+    if (buyer.ok) {
+        $scope.buyer = buyer.payload.buyer;
         $scope.order = createOrderTemplate($scope.buyer);
         $scope.deliveryPlaces = $scope.buyer.region.deliveryPlaces;
     }
 
-    function resetPricelistView() {
-        $scope.order.orderPositions = [];
-        var priceList = findPriceListByOrder($scope.pricelists, $scope.order);
-        if (priceList != undefined) {
-            updatePriceListView(priceList, $scope.order);
-        }
+    $scope.vendor = null;
+
+    if (filtersData){
+        $scope.vendors = filtersData.payload.vendors;
+        $scope.products = filtersData.payload.products;
+        $scope.sellers = filtersData.payload.sellers;
     }
+
+        function resetPricelistView() {
+            $scope.order.orderPositions = [];
+            var priceList = findPriceListByOrder($scope.pricelists, $scope.order);
+            if (priceList != undefined) {
+                updatePriceListView(priceList, $scope.order);
+            }
+        }
 
     function resetOrder() {
         resetPricelistView();
@@ -537,8 +544,11 @@ MarketplaceCtrl.resolve = {
     "pricelists": ["PriceLists", function (PriceLists) {
         return PriceLists.get().$promise;
     }],
-    "orders": ["Orders", function (Orders) {
-        return Orders.get().$promise;
+    "filtersData": ["FiltersData", function (FiltersData) {
+        return FiltersData.get().$promise;
+    }],
+    "buyer": ["Buyer", function (Buyer) {
+        return Buyer.get().$promise;
     }]
 };
 

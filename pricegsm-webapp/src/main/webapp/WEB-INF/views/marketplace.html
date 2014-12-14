@@ -1,4 +1,40 @@
-<div class="row" ng-init="positions = {}">
+<div class="row" ng-init="positions = {}" xmlns:th="http://www.thymeleaf.org">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="col-xs-3 margin-top-34 left-padding-0">
+                    <select class="form-control" ng-model="vendor"
+                            ng-options="vendor.name for vendor in vendors">
+                        <option value="" th:text="#{page.order.all}">все</option>
+                    </select>
+                </div>
+                <!--<div class="col-xs-3 margin-top-34 left-padding-0">-->
+                    <!--<select class="form-control" ng-model="order.deliveryDate"-->
+                            <!--ng-options="deliveryDate | date:deliveryDateFormat for deliveryDate in possibleDeliveryDates">-->
+                        <!--<option ng-show="showPastDate" value="" disabled>-->
+                            <!--{{order.deliveryDate | date:deliveryDateFormat}}-->
+                        <!--</option>-->
+                    <!--</select>-->
+                <!--</div>-->
+                <!--<div class="col-xs-3 margin-top-34 left-padding-0">-->
+                    <!--<select class="form-control" ng-model="order.deliveryDate"-->
+                            <!--ng-options="deliveryDate | date:deliveryDateFormat for deliveryDate in possibleDeliveryDates">-->
+                        <!--<option ng-show="showPastDate" value="" disabled>-->
+                            <!--{{order.deliveryDate | date:deliveryDateFormat}}-->
+                        <!--</option>-->
+                    <!--</select>-->
+                <!--</div>-->
+                <!--<div class="col-xs-3 margin-top-34 left-padding-0">-->
+                    <!--<select class="form-control" ng-model="order.deliveryDate"-->
+                            <!--ng-options="deliveryDate | date:deliveryDateFormat for deliveryDate in possibleDeliveryDates">-->
+                        <!--<option ng-show="showPastDate" value="" disabled>-->
+                            <!--{{order.deliveryDate | date:deliveryDateFormat}}-->
+                        <!--</option>-->
+                    <!--</select>-->
+                <!--</div>-->
+            </div>
+        </div>
+    </div>
     <div class="col-md-7">
         <!-- marketplace -->
         <div class="row">

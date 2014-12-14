@@ -2,9 +2,9 @@ package com.pricegsm.controller;
 
 import com.pricegsm.domain.BaseUser;
 import com.pricegsm.domain.Order;
+import com.pricegsm.domain.User;
 import com.pricegsm.securiry.PrincipalHolder;
-import com.pricegsm.service.OrderService;
-import com.pricegsm.service.PriceListService;
+import com.pricegsm.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +30,15 @@ public class MarketplaceController {
     @Autowired
     private PrincipalHolder principalHolder;
 
+    @Autowired
+    private VendorService vendorService;
+
+    @Autowired
+    private ProductService productService;
+
+    @Autowired
+    private UserService userService;
+
     @RequestMapping(value = "/marketplace", method = RequestMethod.GET)
     public void marketplace() {
     }
@@ -40,22 +49,29 @@ public class MarketplaceController {
         return OperationResult.ok().payload("pricelists", priceListService.findAll());
     }
 
-    @RequestMapping(value = "/marketplace/orders.json", method = RequestMethod.GET)
+    @RequestMapping(value = "/marketplace/filtersData.json", method = RequestMethod.GET)
     @ResponseBody
-    public OperationResult orders() {
-        BaseUser currentUser = principalHolder.getCurrentUser();
+    public OperationResult vendors() {
         return OperationResult.ok()
-                .payload("orders", orderService.findByBuyer(currentUser.getId()))
-                .payload("buyer", currentUser);
+                .payload("vendors", vendorService.findAll())
+                .payload("products", productService.findAll())
+                .payload("sellers", userService.findAll());
+    }
+
+    @RequestMapping(value = "/marketplace/buyer.json", method = RequestMethod.GET)
+    @ResponseBody
+    public OperationResult buyer() {
+        BaseUser currentUser = principalHolder.getCurrentUser();
+        return OperationResult.ok().payload("buyer", currentUser);
     }
 
     @RequestMapping(value = "/marketplace/order.json", method = RequestMethod.POST)
     @ResponseBody
     public OperationResult order(@RequestBody Order order) {
 
+        //todo add check for error
         orderService.save(order);
 
         return OperationResult.ok().payload("order", order);
     }
-
 }

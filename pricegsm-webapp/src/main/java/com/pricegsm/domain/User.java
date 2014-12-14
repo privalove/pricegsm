@@ -10,6 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -17,6 +18,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * Customer of the application.
@@ -88,6 +90,8 @@ public class User
     private String token;
 
     private boolean emailValid;
+
+    private Set<MarketplaceFilter> marketplaceFilters;
 
     public User() {
     }
@@ -476,5 +480,17 @@ public class User
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Arrays.asList(new SimpleGrantedAuthority("USER_ROLE"));
+    }
+
+    @Valid
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderColumn(name = "modified")
+    @OrderBy("modified ASC")
+    public Set<MarketplaceFilter> getMarketplaceFilters() {
+        return marketplaceFilters;
+    }
+
+    public void setMarketplaceFilters(Set<MarketplaceFilter> marketplaceFilters) {
+        this.marketplaceFilters = marketplaceFilters;
     }
 }
