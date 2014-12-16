@@ -22,7 +22,7 @@
                 <!--</div>-->
                 <div class="col-xs-3 margin-top-34 left-padding-0">
                     <select class="form-control" ng-model="seller"
-                            ng-options="vendor.name for seller in sellers">
+                            ng-options="seller.name for seller in sellers">
                         <option value="" th:text="#{page.order.all}">все</option>
                     </select>
                 </div>
@@ -153,7 +153,7 @@
                         <div class="row form-group" ng-hide="hideOrderForm"></div>
                         <!-- price lists -->
                         <div class="{{isHidePriceLists(pricelist)}}"
-                             ng-repeat="pricelist in pricelists | orderBy : [pricelist.orderingPosition, pricelist.user.name, pricelist.user.sellFromDate]">
+                             ng-repeat="pricelist in pricelists | pricelistBySeller:seller | orderBy : [pricelist.orderingPosition, pricelist.user.name, pricelist.user.sellFromDate]">
                             <div class="row">
                                 <div class="col-xs-2">
                                     <h4>{{pricelist.user.name}}</h4>

@@ -46,23 +46,30 @@ angular.module('orderFilters', [])
                 return R.get('order.delivery.pickup');
             }
         }
-    }).filter('priceFilter', function () {
+    }).filter('priceFilter',function () {
         return function (price, currencySymbol) {
             return "" + currencySymbol + price;
         }
-    }).filter('productsByVendor', function () {
-        return function (vendor, products) {
-            return _.find(products, function(product){
-                return vendor.id == product.vendor.id });
+    }).filter('productsByVendor',function () {
+        return function (products, vendor) {
+            return _.filter(products, function (product) {
+                return vendor.id == product.vendor.id
+            });
         }
-    }).filter('pricelistBySeller', function () {
-        return function (seller, pricelists) {
-            return _.find(pricelists, function(pricelist){
-                return seller.id == pricelist.seller.id });
+    }).filter('pricelistBySeller',function () {
+        return function (pricelists, seller) {
+            if (!isEmpty(seller)) {
+                return _.filter(pricelists, function (pricelist) {
+                    return seller.id == pricelist.user.id
+                });
+            } else {
+                return pricelists;
+            }
         }
     }).filter('pricelistPositionsByProduct', function () {
-        return function (product, pricelistPosotions) {
-            return _.find(pricelistPosotions, function(position){
-                return product.id == position.product.id });
+        return function (pricelistPositions, product) {
+            return _.filter(pricelistPositions, function (position) {
+                return product.id == position.product.id
+            });
         }
     });
