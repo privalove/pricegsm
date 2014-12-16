@@ -479,6 +479,7 @@ function MarketplaceCtrl($scope, $filter, $locale, $modal, pricelists, buyer, fi
     }
 
     $scope.vendor = null;
+    $scope.product = null;
 
     if (filtersData){
         $scope.vendors = filtersData.payload.vendors;
@@ -1529,60 +1530,6 @@ function isPriceListActual(priceList, today) {
         || position == 0 && comparedDatesFrom > 0
         || position == 0 && comparedDatesFrom == 0 && afterDeadline);
 }
-
-angular.module('orderFilters', [])
-    .filter('sellerDeliveryDate', function () {
-        return function (orders, sellerId, deliveryDate) {
-
-            var resultOrders = [];
-
-            orders.forEach(function (order) {
-                if ((sellerId === undefined || sellerId == "" || order.seller.id == sellerId)
-                    && (deliveryDate === undefined || deliveryDate == "" || order.deliveryDate == deliveryDate )) {
-                    resultOrders.push(order);
-                }
-            });
-
-            return resultOrders;
-        };
-    })
-    .filter('statusFilter', function () {
-        return function (status) {
-            if (status == "PREPARE") {
-                return R.get('order.status.prepare');
-            }
-
-            if (status == "SENT") {
-                return R.get('order.status.sent');
-            }
-
-            if (status == "CANCELED") {
-                return R.get('order.status.canceled');
-            }
-
-            if (status == "CONFIRMED") {
-                return R.get('order.status.confirmed');
-            }
-
-            if (status == "DECLINED") {
-                return R.get('order.status.declined');
-            }
-        };
-    })
-    .filter('deliveryFilter',function () {
-        return function (order) {
-            if (order.delivery) {
-                return R.get('order.delivery.delivery');
-            }
-            if (order.pickup) {
-                return R.get('order.delivery.pickup');
-            }
-        }
-    }).filter('priceFilter', function () {
-        return function (price, currencySymbol) {
-            return "" + currencySymbol + price;
-        }
-    });
 
 SalesCtrl.$inject = ["$scope"];
 function SalesCtrl($scope) {

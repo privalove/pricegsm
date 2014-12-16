@@ -8,30 +8,24 @@
                         <option value="" th:text="#{page.order.all}">все</option>
                     </select>
                 </div>
+                <div class="col-xs-3 margin-top-34 left-padding-0">
+                    <select class="form-control" ng-model="product"
+                            ng-options="product.name for product in products">
+                        <option value="" th:text="#{page.order.all}">все</option>
+                    </select>
+                </div>
                 <!--<div class="col-xs-3 margin-top-34 left-padding-0">-->
-                    <!--<select class="form-control" ng-model="order.deliveryDate"-->
-                            <!--ng-options="deliveryDate | date:deliveryDateFormat for deliveryDate in possibleDeliveryDates">-->
-                        <!--<option ng-show="showPastDate" value="" disabled>-->
-                            <!--{{order.deliveryDate | date:deliveryDateFormat}}-->
-                        <!--</option>-->
+                    <!--<select class="form-control" ng-model="seller"-->
+                            <!--ng-options="vendor.name for seller in sellers">-->
+                        <!--<option value="" th:text="#{page.order.all}"></option>-->
                     <!--</select>-->
                 <!--</div>-->
-                <!--<div class="col-xs-3 margin-top-34 left-padding-0">-->
-                    <!--<select class="form-control" ng-model="order.deliveryDate"-->
-                            <!--ng-options="deliveryDate | date:deliveryDateFormat for deliveryDate in possibleDeliveryDates">-->
-                        <!--<option ng-show="showPastDate" value="" disabled>-->
-                            <!--{{order.deliveryDate | date:deliveryDateFormat}}-->
-                        <!--</option>-->
-                    <!--</select>-->
-                <!--</div>-->
-                <!--<div class="col-xs-3 margin-top-34 left-padding-0">-->
-                    <!--<select class="form-control" ng-model="order.deliveryDate"-->
-                            <!--ng-options="deliveryDate | date:deliveryDateFormat for deliveryDate in possibleDeliveryDates">-->
-                        <!--<option ng-show="showPastDate" value="" disabled>-->
-                            <!--{{order.deliveryDate | date:deliveryDateFormat}}-->
-                        <!--</option>-->
-                    <!--</select>-->
-                <!--</div>-->
+                <div class="col-xs-3 margin-top-34 left-padding-0">
+                    <select class="form-control" ng-model="seller"
+                            ng-options="vendor.name for seller in sellers">
+                        <option value="" th:text="#{page.order.all}">все</option>
+                    </select>
+                </div>
             </div>
         </div>
     </div>
