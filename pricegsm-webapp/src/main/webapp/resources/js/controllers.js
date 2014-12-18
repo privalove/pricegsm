@@ -479,21 +479,31 @@ function MarketplaceCtrl($scope, $filter, $locale, $modal, pricelists, buyer, fi
     }
 
     $scope.vendor = null;
-    $scope.product = null;
+    $scope.productFilter = null;
 
-    if (filtersData){
+    if (filtersData) {
         $scope.vendors = filtersData.payload.vendors;
         $scope.products = filtersData.payload.products;
         $scope.sellers = filtersData.payload.sellers;
     }
 
-        function resetPricelistView() {
-            $scope.order.orderPositions = [];
-            var priceList = findPriceListByOrder($scope.pricelists, $scope.order);
-            if (priceList != undefined) {
-                updatePriceListView(priceList, $scope.order);
-            }
+    $scope.selectVendor = function (product) {
+         if(!isEmpty($scope.vendor)) {
+             return;
+         }
+
+        $scope.vendor = _.find($scope.vendors, function (vendor) {
+            return vendor.id == product.vendor.id
+        });
+    }
+
+    function resetPricelistView() {
+        $scope.order.orderPositions = [];
+        var priceList = findPriceListByOrder($scope.pricelists, $scope.order);
+        if (priceList != undefined) {
+            updatePriceListView(priceList, $scope.order);
         }
+    }
 
     function resetOrder() {
         resetPricelistView();

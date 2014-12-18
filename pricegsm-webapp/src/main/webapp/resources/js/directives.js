@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('pg.directives', [])
+    angular.module('pg.directives', ['orderFilters'])
         .run(["$rootScope", function ($rootScope) {
             /**
              * Safe Apply from https://coderwall.com/p/ngisma
@@ -560,11 +560,13 @@
                 }
             }
         }])
-        .directive('pgPricelist', [function () {
+        .directive('pgPricelist', ['pricelistPositionsByVendorAndProductFilter', function (pricelistPositionsByVendorAndProduct) {
             return {
                 scope: {
                     pricelist: "=",
                     order: "=",
+                    vendor: "=",
+                    product: "=",
                     onSelectAction: "&"
                 },
                 restrict: 'E',

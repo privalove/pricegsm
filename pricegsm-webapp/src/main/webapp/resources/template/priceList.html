@@ -14,7 +14,7 @@
             </thead>
             <tbody>
             <tr class="{{position.prices[0].selectedStyle}}"
-                ng-repeat-start="position in priceList.positions"
+                ng-repeat-start="position in priceList.positions | pricelistPositionsByVendorAndProduct : vendor : product"
                 ng-click="clickAction(position, position.prices[0])">
                 <td>{{position.product.name}}</td>
                 <td>{{position.product.color.name}}</td>

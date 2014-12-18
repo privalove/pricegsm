@@ -52,9 +52,13 @@ angular.module('orderFilters', [])
         }
     }).filter('productsByVendor',function () {
         return function (products, vendor) {
-            return _.filter(products, function (product) {
-                return vendor.id == product.vendor.id
-            });
+            if (!isEmpty(vendor)) {
+                return _.filter(products, function (product) {
+                    return vendor.id == product.vendor.id
+                });
+            } else {
+                return products;
+            }
         }
     }).filter('pricelistBySeller',function () {
         return function (pricelists, seller) {
@@ -66,10 +70,19 @@ angular.module('orderFilters', [])
                 return pricelists;
             }
         }
-    }).filter('pricelistPositionsByProduct', function () {
-        return function (pricelistPositions, product) {
-            return _.filter(pricelistPositions, function (position) {
-                return product.id == position.product.id
-            });
+    }).filter('pricelistPositionsByVendorAndProduct', function () {
+        return function (pricelistPositions, vendor, product) {
+            if (!isEmpty(product)) {
+                return _.filter(pricelistPositions, function (position) {
+                    return product.id == position.product.id
+                });
+
+            } else if (!isEmpty(vendor)) {
+                return _.filter(pricelistPositions, function (position) {
+                    return vendor.id == position.product.vendor.id
+                });
+            } else {
+                return pricelistPositions;
+            }
         }
     });

@@ -9,8 +9,9 @@
                     </select>
                 </div>
                 <div class="col-xs-3 margin-top-34 left-padding-0">
-                    <select class="form-control" ng-model="product"
-                            ng-options="product.name for product in products">
+                    <select class="form-control" ng-model="productFilter"
+                            ng-change="selectVendor(productFilter)"
+                            ng-options="product.name for product in products | productsByVendor : vendor">
                         <option value="" th:text="#{page.order.all}">все</option>
                     </select>
                 </div>
@@ -183,6 +184,8 @@
                             <pg-pricelist
                                     pricelist="pricelist"
                                     order="order"
+                                    vendor="vendor"
+                                    product="productFilter"
                                     on-select-action="selectPriceListPosition(data)">
                             </pg-pricelist>
                         </div>
