@@ -1700,6 +1700,7 @@ function PriceListCtrl($scope, $filter, notifyManager, priceListResource, PriceL
 
             var position = angular.copy($scope.positionTemplate);
             position.product = product;
+            $scope.addPrice(position);
 
             priceList.positions.push(position);
         };

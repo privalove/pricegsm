@@ -65,4 +65,39 @@ public class Price extends GlobalEntity {
     public void setMinOrderQuantity(int amount) {
         this.minOrderQuantity = amount;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!super.equals(o)) {
+            return false;
+        }
+        // its only for new entities
+        if (id == 0) {
+            Price price1 = (Price) o;
+
+            if (minOrderQuantity != price1.minOrderQuantity) {
+                return false;
+            }
+            if (price != null ? !price.equals(price1.price) : price1.price != null) {
+                return false;
+            }
+            if (priceListPosition != null
+                    ? !priceListPosition.equals(price1.priceListPosition)
+                    : price1.priceListPosition != null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        if (id == 0) {
+            result = 31 * result + (priceListPosition != null ? priceListPosition.hashCode() : 0);
+            result = 31 * result + (price != null ? price.hashCode() : 0);
+            result = 31 * result + minOrderQuantity;
+        }
+        return result;
+    }
 }
