@@ -2,26 +2,30 @@
     <div class="col-sm-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <div class="col-xs-3 margin-top-34 left-padding-0">
+                <span>Фильтры</span>
+            </div>
+            <div class="panel-body">
+                <div class="col-xs-2 left-padding-0">
                     <select class="form-control" ng-model="vendor"
                             ng-options="vendor.name for vendor in vendors">
                         <option value="" th:text="#{page.order.all}">все</option>
                     </select>
                 </div>
-                <div class="col-xs-3 margin-top-34 left-padding-0">
+                <div class="col-xs-2 left-padding-0">
                     <select class="form-control" ng-model="productFilter"
                             ng-change="selectVendor(productFilter)"
                             ng-options="product.name for product in products | productsByVendor : vendor">
                         <option value="" th:text="#{page.order.all}">все</option>
                     </select>
                 </div>
-                <!--<div class="col-xs-3 margin-top-34 left-padding-0">-->
-                    <!--<select class="form-control" ng-model="seller"-->
-                            <!--ng-options="vendor.name for seller in sellers">-->
-                        <!--<option value="" th:text="#{page.order.all}"></option>-->
-                    <!--</select>-->
-                <!--</div>-->
-                <div class="col-xs-3 margin-top-34 left-padding-0">
+                <div class="col-xs-2 left-padding-0">
+                    <select class="form-control" ng-model="filter"
+                            ng-change="selectFilter(filter)"
+                            ng-options="filter.vendor.name + ' ' + filter.product.name for filter in buyer.marketplaceFilters">
+                        <option value="" th:text="#{page.order.all}">все</option>
+                    </select>
+                </div>
+                <div class="col-xs-2 left-padding-0">
                     <select class="form-control" ng-model="seller"
                             ng-options="seller.name for seller in sellers">
                         <option value="" th:text="#{page.order.all}">все</option>

@@ -24,6 +24,15 @@ public class MarketplaceFilter extends GlobalEntity {
 
     private Product product;
 
+    public MarketplaceFilter() {
+    }
+
+    public MarketplaceFilter(User user, Vendor vendor, Product product) {
+        this.user = user;
+        this.vendor = vendor;
+        this.product = product;
+    }
+
     @Id
     @GeneratedValue(generator = "MarketplaceFilter")
     @SequenceGenerator(name = "MarketplaceFilter", sequenceName = "marketplace_filter_seq", allocationSize = 1)

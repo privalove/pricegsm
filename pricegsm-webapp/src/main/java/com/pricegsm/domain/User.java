@@ -485,7 +485,7 @@ public class User
     @Valid
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderColumn(name = "modified")
-    @OrderBy("modified ASC")
+    @OrderBy("modified DESC")
     public Set<MarketplaceFilter> getMarketplaceFilters() {
         return marketplaceFilters;
     }

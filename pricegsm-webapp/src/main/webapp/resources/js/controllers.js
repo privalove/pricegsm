@@ -211,8 +211,8 @@ function isEmpty(data) {
     return data == undefined || data == null || data == "";
 }
 
-MarketplaceCtrl.$inject = ["$scope", "$filter", "$locale", "$modal", "pricelists", "buyer", "filtersData", "IndexShopResource", "IndexChartResource"];
-function MarketplaceCtrl($scope, $filter, $locale, $modal, pricelists, buyer, filtersData, IndexShopResource, IndexChartResource) {
+MarketplaceCtrl.$inject = ["$scope", "$filter", "$locale", "$modal", "$resource", "pricelists", "buyer", "filtersData", "IndexShopResource", "IndexChartResource"];
+function MarketplaceCtrl($scope, $filter, $locale, $modal, $resource, pricelists, buyer, filtersData, IndexShopResource, IndexChartResource) {
     $scope.isEmpty = function (data) {
         return isEmpty(data);
     }
@@ -488,12 +488,39 @@ function MarketplaceCtrl($scope, $filter, $locale, $modal, pricelists, buyer, fi
     }
 
     $scope.selectVendor = function (product) {
-         if(!isEmpty($scope.vendor)) {
-             return;
-         }
+        if (isEmpty(product)) {
+            return;
+        }
 
+        if (isEmpty($scope.vendor)) {
+            $scope.vendor = _.find($scope.vendors, function (vendor) {
+                return vendor.id == product.vendor.id;
+            });
+        }
+
+        var marketplaceFilter = {
+            vendor: $scope.vendor,
+            product: $scope.productFilter
+        };
+
+        var Buyer = $resource("marketplace/marketplaceFilter.json");
+        new Buyer(marketplaceFilter).$save(function (data) {
+            if (data.ok) {
+                angular.extend($scope.buyer, data.payload.user);
+            }
+        });
+    }
+
+    $scope.selectFilter = function (filter) {
+        if (isEmpty(filter)) {
+            $scope.vendor = null;
+            $scope.productFilter = null;
+        }
         $scope.vendor = _.find($scope.vendors, function (vendor) {
-            return vendor.id == product.vendor.id
+            return vendor.id == filter.vendor.id;
+        });
+        $scope.productFilter = _.find($scope.products, function (product) {
+            return product.id == filter.product.id;
         });
     }
 
