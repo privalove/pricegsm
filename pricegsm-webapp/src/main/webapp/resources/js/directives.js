@@ -372,7 +372,7 @@
                         if (selectedDeliveryType != "pickup") {
                             $scope.order.pickup = false;
                         }
-                        if(isEmpty($scope.order.place)) {
+                        if (isEmpty($scope.order.place)) {
                             $scope.changeDeliveryPlace($scope.order.seller.sellerDeliveryPlace);
                         }
 
@@ -390,9 +390,9 @@
                         }
                     }
 
-                    $scope.$watch("order", function(newValue, oldValue) {
+                    $scope.$watch("order", function (newValue, oldValue) {
                         if (newValue.placeError !== oldValue.placeError) {
-                            if(newValue.placeError) {
+                            if (newValue.placeError) {
                                 element.addClass("has-error")
                             } else if (element.hasClass("has-error")) {
                                 element.removeClass("has-error");
@@ -404,7 +404,7 @@
                         }
                     }, true);
 
-            }
+                }
             }
         }])
         .directive('pgTimePeriod', [function () {
@@ -412,12 +412,16 @@
                 scope: {
                     fromTime: "=",
                     toTime: "=",
+                    minDelay: "@",
                     fromTimeLimit: "@",
                     toTimeLimit: "@"
                 },
                 restrict: 'E',
                 templateUrl: "resources/template/timePeriod.html",
                 link: function ($scope, element, attrs) {
+                    if (isEmpty(attrs.minDelay)) {
+                        attrs.minDelay = 0;
+                    }
 
                     $scope.limitFromTime = function () {
                         var timeLimit = attrs.fromTimeLimit;
@@ -576,7 +580,6 @@
 
                     $scope.clickAction = function (priceListPosition, price) {
                         var product = priceListPosition.product;
-                        $scope.product = product;
                         var currency = $scope.priceList.currency;
                         $scope.onSelectAction(
                             {data: {

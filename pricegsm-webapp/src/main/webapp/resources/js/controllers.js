@@ -627,6 +627,7 @@ function setDefaultDelivery(priceList, order) {
     }
 
 }
+
 function addOrderPosition(priceListPosition, price, priceList, order, isNewMode) {
 
     if (isNewMode) {
