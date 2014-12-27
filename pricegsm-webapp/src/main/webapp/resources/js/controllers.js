@@ -379,6 +379,25 @@ function MarketplaceCtrl($scope, $filter, $locale, $modal, $resource, pricelists
         return "";
     }
 
+    $scope.showAllPositionButton = R.get('page.marketplace.showAllPositionButton');
+    $scope.isShowAllPositionButton = function (pricelist) {
+        if (pricelist.isSelected && (!isEmpty($scope.vendor) || !isEmpty($scope.productFilter))) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    var isAllPositionShow = false;
+    $scope.showAllPosition = function(){
+        if(isAllPositionShow) {
+            $scope.showAllPositionButton = R.get('page.marketplace.showAllPositionButton');
+        } else {
+            $scope.showAllPositionButton = R.get('page.marketplace.hideAllPositionButton');
+        }
+        isAllPositionShow = !isAllPositionShow;
+    }
+
     $scope.updateOrder = function (order) {
         var priceList = findPriceListByOrder($scope.pricelists, order);
         if (isSelectedPriceList(order, priceList)) {

@@ -163,9 +163,14 @@
                                 <div class="col-xs-2">
                                     <h4>{{pricelist.user.name}}</h4>
                                 </div>
-                                <div class="col-xs-offset-7 col-xs-2 text-right">
-                                    <button type="button" class="btn btn-default" ng-click="review(order)"
-                                            ng-disabled="!formEnable(orderForm)">
+                                <div class="col-xs-2 text-right">
+                                    <button ng-click="showAllPosition()"
+                                            ng-show="isShowAllPositionButton(pricelist)" type="button" class="btn btn-default ng-hide">
+                                        <span>{{showAllPositionButton}}</span>
+                                    </button>
+                                </div>
+                                <div class="col-xs-offset-5 col-xs-2 text-right">
+                                    <button type="button" class="btn btn-default">
                                         <span>{{pricelist.sellFromDate}}</span>
                                     </button>
                                 </div>
