@@ -371,33 +371,6 @@ function MarketplaceCtrl($scope, $filter, $locale, $modal, $resource, pricelists
         selectedPriceListPosition = newPriceListPosition;
     }
 
-    $scope.isHidePriceLists = function (pricelist) {
-        if (pricelist.positions.length == 0 || !pricelist.isSelected && selectionPriceListActive) {
-            return "ng-hide";
-        }
-
-        return "";
-    }
-
-    $scope.showAllPositionButton = R.get('page.marketplace.showAllPositionButton');
-    $scope.isShowAllPositionButton = function (pricelist) {
-        if (pricelist.isSelected && (!isEmpty($scope.vendor) || !isEmpty($scope.productFilter))) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    var isAllPositionShow = false;
-    $scope.showAllPosition = function(){
-        if(isAllPositionShow) {
-            $scope.showAllPositionButton = R.get('page.marketplace.showAllPositionButton');
-        } else {
-            $scope.showAllPositionButton = R.get('page.marketplace.hideAllPositionButton');
-        }
-        isAllPositionShow = !isAllPositionShow;
-    }
-
     $scope.updateOrder = function (order) {
         var priceList = findPriceListByOrder($scope.pricelists, order);
         if (isSelectedPriceList(order, priceList)) {
@@ -497,28 +470,53 @@ function MarketplaceCtrl($scope, $filter, $locale, $modal, $resource, pricelists
         $scope.deliveryPlaces = $scope.buyer.region.deliveryPlaces;
     }
 
-    $scope.vendor = null;
-    $scope.productFilter = null;
-
     if (filtersData) {
         $scope.vendors = filtersData.payload.vendors;
         $scope.products = filtersData.payload.products;
         $scope.sellers = filtersData.payload.sellers;
     }
 
-    $scope.selectVendor = function (product) {
+    $scope.vendorFilter = null;
+    $scope.productFilter = null;
+
+    $scope.vendorFromFilter = null;
+    $scope.productFromFilter = null;
+
+    var isAllPositionShow = false;
+    var savedVendorFromFilter = null;
+    var savedProductFromFilter = null;
+
+    function selectOtherProduct() {
+        if (isAllPositionShow) {
+            savedProductFromFilter = $scope.productFilter;
+        } else {
+            $scope.productFromFilter = $scope.productFilter;
+        }
+    }
+
+    function selectOtherVendor() {
+        if (isAllPositionShow) {
+            savedVendorFromFilter = $scope.vendorFilter;
+        } else {
+            $scope.vendorFromFilter = $scope.vendorFilter;
+        }
+    }
+
+    $scope.selectProduct = function (product) {
+        selectOtherProduct();
         if (isEmpty(product)) {
             return;
         }
 
-        if (isEmpty($scope.vendor)) {
-            $scope.vendor = _.find($scope.vendors, function (vendor) {
+        if (isEmpty($scope.vendorFilter)) {
+            $scope.vendorFilter = _.find($scope.vendors, function (vendor) {
                 return vendor.id == product.vendor.id;
             });
+            $scope.selectVendor();
         }
 
         var marketplaceFilter = {
-            vendor: $scope.vendor,
+            vendor: $scope.vendorFilter,
             product: $scope.productFilter
         };
 
@@ -530,17 +528,61 @@ function MarketplaceCtrl($scope, $filter, $locale, $modal, $resource, pricelists
         });
     }
 
+    $scope.selectVendor = function () {
+        selectOtherVendor();
+
+        if (isEmpty($scope.vendorFilter)) {
+            $scope.productFilter = null;
+            $scope.productFromFilter = null;
+        }
+    }
+
     $scope.selectFilter = function (filter) {
         if (isEmpty(filter)) {
-            $scope.vendor = null;
+            $scope.vendorFilter = null;
             $scope.productFilter = null;
         }
-        $scope.vendor = _.find($scope.vendors, function (vendor) {
+        $scope.vendorFilter = _.find($scope.vendors, function (vendor) {
             return vendor.id == filter.vendor.id;
         });
         $scope.productFilter = _.find($scope.products, function (product) {
             return product.id == filter.product.id;
         });
+    }
+
+    $scope.isHidePriceLists = function (pricelist) {
+        if (pricelist.positions.length == 0 || !pricelist.isSelected && selectionPriceListActive) {
+            return "ng-hide";
+        }
+
+        return "";
+    }
+
+    $scope.showAllPositionButton = R.get('page.marketplace.showAllPositionButton');
+    $scope.isShowAllPositionButton = function (pricelist) {
+        if (pricelist.isSelected && (!isEmpty($scope.vendorFilter) || !isEmpty($scope.productFilter))) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    $scope.showAllPosition = function () {
+        isAllPositionShow = !isAllPositionShow;
+        if (isAllPositionShow) {
+            $scope.showAllPositionButton = R.get('page.marketplace.hideAllPositionButton');
+
+            savedVendorFromFilter = $scope.vendorFromFilter;
+            savedProductFromFilter = $scope.productFromFilter;
+
+            $scope.vendorFromFilter = null;
+            $scope.productFromFilter = null;
+        } else {
+            $scope.showAllPositionButton = R.get('page.marketplace.showAllPositionButton');
+
+            $scope.vendorFromFilter = savedVendorFromFilter;
+            $scope.productFromFilter = savedProductFromFilter;
+        }
     }
 
     function resetPricelistView() {
@@ -564,6 +606,9 @@ function MarketplaceCtrl($scope, $filter, $locale, $modal, $resource, pricelists
         selectionPriceListActive = false;
         $scope.order.placeError = undefined;
         resetOrder();
+        if(isAllPositionShow){
+            $scope.showAllPosition();
+        }
     }
 
     $scope.mergePriceListAndOrder = function (data) {

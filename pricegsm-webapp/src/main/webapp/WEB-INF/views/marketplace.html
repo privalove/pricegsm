@@ -6,15 +6,16 @@
             </div>
             <div class="panel-body">
                 <div class="col-xs-2 left-padding-0">
-                    <select class="form-control" ng-model="vendor"
+                    <select class="form-control" ng-model="vendorFilter"
+                            ng-change="selectVendor()"
                             ng-options="vendor.name for vendor in vendors">
                         <option value="" th:text="#{page.order.all}">все</option>
                     </select>
                 </div>
                 <div class="col-xs-2 left-padding-0">
                     <select class="form-control" ng-model="productFilter"
-                            ng-change="selectVendor(productFilter)"
-                            ng-options="product.name for product in products | productsByVendor : vendor">
+                            ng-change="selectProduct(productFilter)"
+                            ng-options="product.name for product in products | productsByVendor : vendorFilter">
                         <option value="" th:text="#{page.order.all}">все</option>
                     </select>
                 </div>
@@ -143,7 +144,7 @@
                                         <span>Посмотреть</span>
                                     </button>
 
-                                    <button pg-save-order-button="SENT" order="order" callback="$cancel()"
+                                    <button pg-save-order-button="SENT" order="order" callback="cancel()"
                                             on-failure="onFailureSaveOrder()"
                                             type="submit" class="btn btn-success" form="orderForm"
                                             ng-disabled="false">
@@ -193,8 +194,8 @@
                             <pg-pricelist
                                     pricelist="pricelist"
                                     order="order"
-                                    vendor="vendor"
-                                    product="productFilter"
+                                    vendor="vendorFromFilter"
+                                    product="productFromFilter"
                                     on-select-action="selectPriceListPosition(data)">
                             </pg-pricelist>
                         </div>
