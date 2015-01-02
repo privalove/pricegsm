@@ -115,11 +115,10 @@
                                             order="order">
 
                                     </pg-date-list-selector>
-                                    <pg-time-period class="col-xs-5"
-                                                    from-time="order.fromTime"
-                                                    to-time="order.toTime"
-                                                    from-time-limit="{{limitFromTime}}"
-                                                    to-time-limit="{{limitToTime}}"></pg-time-period>
+                                    <pg-order-time-period
+                                                    order="order"
+                                                    seller="selectedPriceList.user"
+                                                    min-delay="2"></pg-order-time-period>
                                 </div>
                                 <div class="row form-group">
                                     <div class="col-xs-offset-1 col-xs-9">

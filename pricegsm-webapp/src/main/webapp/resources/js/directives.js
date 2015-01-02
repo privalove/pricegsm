@@ -419,11 +419,12 @@
                 restrict: 'E',
                 templateUrl: "resources/template/timePeriod.html",
                 link: function ($scope, element, attrs) {
-                    if (isEmpty(attrs.minDelay)) {
-                        attrs.minDelay = 0;
+                    var minDelay = 0;
+                    if (!isEmpty(attrs.minDelay)) {
+                        minDelay = 3600 * parseInt(attrs.minDelay) * 1000;
                     }
 
-                    $scope.limitFromTime = function () {
+                    $scope.limitFromTime = function (adjustToTime) {
                         var timeLimit = attrs.fromTimeLimit;
                         if (isEmpty(timeLimit)) {
                             return;
@@ -432,15 +433,19 @@
                             var timeLimitDate = new Date(parseInt(timeLimit));
                             $scope.fromTime = timeLimitDate;
                             attrs.fromTime = timeLimitDate;
+                            if(adjustToTime && ($scope.toTime.valueOf() < $scope.fromTime.valueOf() + minDelay)) {
+                                $scope.toTime =  new Date($scope.fromTime.valueOf() + minDelay);
+                                return;
+                            }
                         }
 
-                        if ($scope.toTime.valueOf() < $scope.fromTime.valueOf()) {
-                            $scope.fromTime = $scope.toTime;
-                            attrs.fromTime = $scope.toTime;
+                        if ($scope.toTime.valueOf() < $scope.fromTime.valueOf() + minDelay) {
+                            $scope.fromTime = $scope.toTime - minDelay;
+                            attrs.fromTime = $scope.toTime - minDelay;
                         }
                     }
 
-                    $scope.limitToTime = function () {
+                    $scope.limitToTime = function (adjustFromTime) {
                         var timeLimit = attrs.toTimeLimit;
                         if (isEmpty(timeLimit)) {
                             return;
@@ -449,22 +454,79 @@
                             var timeLimitDate = new Date(parseInt(timeLimit));
                             $scope.toTime = timeLimitDate;
                             attrs.toTime = timeLimitDate;
+                            if(adjustFromTime && ($scope.toTime.valueOf() < $scope.fromTime.valueOf() + minDelay)) {
+                                $scope.fromTime = new Date($scope.toTime.valueOf() - minDelay);
+                                return;
+                            }
                         }
 
-                        if ($scope.toTime.valueOf() < $scope.fromTime.valueOf()) {
-                            $scope.toTime = $scope.fromTime;
-                            attrs.toTime = $scope.fromTime;
+                        if ($scope.toTime.valueOf() < $scope.fromTime.valueOf() + minDelay) {
+                            var date = new Date($scope.fromTime.valueOf() + minDelay);
+                            $scope.toTime = date;
+                            attrs.toTime = date;
                         }
                     }
 
                     $scope.$watch("fromTimeLimit", function () {
-                        $scope.limitFromTime()
+                        $scope.limitFromTime(true)
                     });
 
                     $scope.$watch("toTimeLimit", function () {
-                        $scope.limitToTime()
+                        $scope.limitToTime(true)
                     });
 
+                }
+            }
+        }])
+        .directive('pgOrderTimePeriod', [function () {
+            return {
+                scope: {
+                    seller: "=",
+                    order: "=",
+                    minDelay: "@"
+                },
+                restrict: 'E',
+                templateUrl: "resources/template/orderTimePeriod.html",
+                link: function ($scope, element, attrs) {
+                    if (isEmpty(attrs.minDelay)) {
+                        attrs.minDelay = 0;
+                    }
+                    $scope.minDelay = attrs.minDelay;
+
+                    function updateTimeLimits() {
+                        $scope.limitFromTime = getLimitFromTime();
+                        $scope.limitToTime = getLimitToTime();
+                    };
+                    updateTimeLimits();
+
+                    function getLimitFromTime() {
+                        if ($scope.order.delivery) {
+                            return $scope.seller.sellerDeliveryFrom;
+                        }
+                        if ($scope.order.pickup) {
+                            return $scope.seller.sellerPickupFrom;
+                        }
+                        return $scope.order.buyerDeliveryFrom;
+                    }
+
+                    function getLimitToTime() {
+                        if ($scope.order.delivery) {
+                            return $scope.seller.sellerDeliveryTo;
+                        }
+                        if ($scope.order.pickup) {
+                            return $scope.seller.sellerPickupTo;
+                        }
+                        return $scope.order.buyerDeliveryTo;
+                    }
+
+                    $scope.$watch("seller", function () {
+                        updateTimeLimits();
+                    });
+                    $scope.$watch("order", function (oldValue, newValue) {
+                        if ((oldValue.pickup != newValue.pickup) || (oldValue.delivery != newValue.delivery)) {
+                            updateTimeLimits();
+                        }
+                    }, true);
                 }
             }
         }])
