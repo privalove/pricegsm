@@ -309,8 +309,7 @@
             return {
                 scope: {
                     order: "=",
-                    deliveryPlaces: "=",
-                    updateTimeLimits: "&"
+                    deliveryPlaces: "="
                 },
                 replace: true,
                 restrict: 'E',
@@ -329,7 +328,12 @@
                         return currentDeliveryPlace != null && currentDeliveryPlace.name == $scope.order.seller.region.name;
                     }
 
-                    $scope.deliveryPlaceAvailability = calculateDeliveryPlaceAvailability();
+                    function updateDeliveryPlaceAvailability() {
+                        $scope.deliveryPlaceAvailability = calculateDeliveryPlaceAvailability();
+                    }
+
+                    updateDeliveryPlaceAvailability();
+
                     $scope.deliveryPlace = null;
 
                     function initDeliveryPlace() {
@@ -339,31 +343,7 @@
                             $scope.deliveryPlace = $scope.order.place;
                         }
                     };
-
                     initDeliveryPlace();
-
-                    $scope.getLimitFromTime = function (isDelivery) {
-                        if (isDelivery) {
-                            return $scope.order.seller.sellerDeliveryFrom;
-                        } else {
-                            return $scope.order.seller.sellerPickupFrom;
-                        }
-                    }
-
-                    $scope.getLimitToTime = function (isDelivery) {
-                        if (isDelivery) {
-                            return $scope.order.seller.sellerDeliveryTo;
-                        } else {
-                            return $scope.order.seller.sellerPickupTo;
-                        }
-                    }
-
-                    function updateTimeLimits() {
-                        var limitFromTime = $scope.getLimitFromTime($scope.order.delivery);
-                        var limitToTime = $scope.getLimitToTime($scope.order.delivery);
-                        $scope.updateTimeLimits({limits: {from: limitFromTime, to: limitToTime}});
-                    };
-                    updateTimeLimits();
 
                     $scope.resetOtherDelivery = function (selectedDeliveryType) {
                         if (selectedDeliveryType != "delivery") {
@@ -372,22 +352,23 @@
                         if (selectedDeliveryType != "pickup") {
                             $scope.order.pickup = false;
                         }
-                        if (isEmpty($scope.order.place)) {
-                            $scope.changeDeliveryPlace($scope.order.seller.sellerDeliveryPlace);
+
+                        if ($scope.order.pickup) {
+                            $scope.changeDeliveryPlace($scope.order.seller.sellerPickupPlace);
                         }
 
-                        updateTimeLimits();
+                        if ($scope.order.delivery) {
+                            if ($scope.order.seller.sellerDeliveryPlace == $scope.order.seller.region.name) {
+                                $scope.changeDeliveryPlace($scope.order.buyer.buyerDeliveryPlace);
+                            } else {
+                                $scope.changeDeliveryPlace($scope.order.seller.sellerDeliveryPlace);
+                            }
+                        }
                     }
 
                     $scope.changeDeliveryPlace = function (place) {
                         $scope.deliveryPlace = place;
-                        if ($scope.order.pickup) {
-                            $scope.order.place = $scope.order.seller.sellerPickupPlace;
-                        } else if ($scope.deliveryPlaceAvailability) {
-                            $scope.order.place = $scope.deliveryPlace;
-                        } else {
-                            $scope.order.place = $scope.order.seller.sellerDeliveryPlace;
-                        }
+                        $scope.order.place = place;
                     }
 
                     $scope.$watch("order", function (newValue, oldValue) {
@@ -401,6 +382,10 @@
 
                         if (newValue.place !== oldValue.place) {
                             initDeliveryPlace();
+                        }
+
+                        if (newValue.seller !== oldValue.seller) {
+                            updateDeliveryPlaceAvailability();
                         }
                     }, true);
 
@@ -433,8 +418,8 @@
                             var timeLimitDate = new Date(parseInt(timeLimit));
                             $scope.fromTime = timeLimitDate;
                             attrs.fromTime = timeLimitDate;
-                            if(adjustToTime && ($scope.toTime.valueOf() < $scope.fromTime.valueOf() + minDelay)) {
-                                $scope.toTime =  new Date($scope.fromTime.valueOf() + minDelay);
+                            if (adjustToTime && ($scope.toTime.valueOf() < $scope.fromTime.valueOf() + minDelay)) {
+                                $scope.toTime = new Date($scope.fromTime.valueOf() + minDelay);
                                 return;
                             }
                         }
@@ -454,7 +439,7 @@
                             var timeLimitDate = new Date(parseInt(timeLimit));
                             $scope.toTime = timeLimitDate;
                             attrs.toTime = timeLimitDate;
-                            if(adjustFromTime && ($scope.toTime.valueOf() < $scope.fromTime.valueOf() + minDelay)) {
+                            if (adjustFromTime && ($scope.toTime.valueOf() < $scope.fromTime.valueOf() + minDelay)) {
                                 $scope.fromTime = new Date($scope.toTime.valueOf() - minDelay);
                                 return;
                             }

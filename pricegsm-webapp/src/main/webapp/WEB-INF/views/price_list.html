@@ -116,7 +116,7 @@
                         <button type="button" class="btn btn-xs btn-danger"
                                 ng-hide="filterByVendor(priceLists[0].positions, vendor.id, false).length > 0"
                                 ng-click="selectedVendors[0].splice($index, 1)"
-                                tooltip="Удалить позицию" tooltip-placement="right">
+                                tooltip="Удалить производителя" tooltip-placement="right">
                             <i class="fa fa-times"></i>
                         </button>
                     </td>
@@ -290,7 +290,7 @@
                     <td class="text-right">
                         <button type="button" class="btn btn-xs btn-danger"
                                 ng-click="position.prices.splice($index + 1, 1)"
-                                tooltip="Удалить позицию">
+                                tooltip="Удалить цену">
                             <i class="fa fa-times"></i>
                         </button>
                     </td>

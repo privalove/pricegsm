@@ -332,19 +332,7 @@ function MarketplaceCtrl($scope, $filter, $locale, $modal, $resource, pricelists
 
     $scope.hideOrderForm = true;
 
-    $scope.limitFromTime = new Date();
-    $scope.limitToTime = new Date();
     $scope.deliveryPlaces = null;
-
-    $scope.updateTimeLimits = function (limits) {
-        $scope.limitFromTime = limits.from;
-        $scope.limitToTime = limits.to;
-    }
-
-    $scope.order = {
-        fromTime: new Date(),
-        toTime: new Date()
-    };
 
     var selectionPriceListActive = false;
     $scope.selectPriceListPosition = function (data) {
@@ -381,6 +369,7 @@ function MarketplaceCtrl($scope, $filter, $locale, $modal, $resource, pricelists
     };
 
     function resetOrderDetailsForm() {
+        //todo to i18n
         $scope.showHideFormLabel = "Оформить";
         $scope.hideForm = true;
     }
@@ -389,6 +378,7 @@ function MarketplaceCtrl($scope, $filter, $locale, $modal, $resource, pricelists
 
     $scope.showHideForm = function () {
         if ($scope.hideForm) {
+            //todo to i18n
             $scope.showHideFormLabel = "Скрыть";
             $scope.hideForm = false;
         } else {
@@ -606,7 +596,7 @@ function MarketplaceCtrl($scope, $filter, $locale, $modal, $resource, pricelists
         selectionPriceListActive = false;
         $scope.order.placeError = undefined;
         resetOrder();
-        if(isAllPositionShow){
+        if (isAllPositionShow) {
             $scope.showAllPosition();
         }
     }
@@ -679,14 +669,14 @@ function setDefaultDelivery(priceList, order) {
     if (seller.sellerPickup) {
         angular.extend(order, {
             pickup: true,
-            place: seller.sellerPickupPlace
+            place: ""
         });
     }
 
     if (seller.sellerDelivery) {
         angular.extend(order, {
             delivery: true,
-            place: seller.sellerDeliveryPlace
+            place: ""
         });
     }
 
