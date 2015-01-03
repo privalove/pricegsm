@@ -345,14 +345,7 @@
                     };
                     initDeliveryPlace();
 
-                    $scope.resetOtherDelivery = function (selectedDeliveryType) {
-                        if (selectedDeliveryType != "delivery") {
-                            $scope.order.delivery = false;
-                        }
-                        if (selectedDeliveryType != "pickup") {
-                            $scope.order.pickup = false;
-                        }
-
+                    function initOrderDeliveryPlace() {
                         if ($scope.order.pickup) {
                             $scope.changeDeliveryPlace($scope.order.seller.sellerPickupPlace);
                         }
@@ -364,6 +357,17 @@
                                 $scope.changeDeliveryPlace($scope.order.seller.sellerDeliveryPlace);
                             }
                         }
+                    }
+
+                    $scope.resetOtherDelivery = function (selectedDeliveryType) {
+                        if (selectedDeliveryType != "delivery") {
+                            $scope.order.delivery = false;
+                        }
+                        if (selectedDeliveryType != "pickup") {
+                            $scope.order.pickup = false;
+                        }
+
+                        initOrderDeliveryPlace();
                     }
 
                     $scope.changeDeliveryPlace = function (place) {

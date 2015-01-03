@@ -882,6 +882,7 @@ function updatePricesSelected(prices, price, amount) {
 
 function refreshOrderPositions(order, priceList) {
     order.currency = priceList.currency;
+    order.seller = priceList.user;
 
     _.map(order.orderPositions, function (orderPosition) {
         var priceListPosition = findPriceListPosition(orderPosition, priceList);
