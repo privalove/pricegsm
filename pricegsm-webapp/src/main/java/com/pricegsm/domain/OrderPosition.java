@@ -145,4 +145,68 @@ public class OrderPosition
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+
+        // its only for new entities
+        if (id == 0) {
+            OrderPosition that = (OrderPosition) o;
+
+            if (amount != that.amount) {
+                return false;
+            }
+            if (priceListPosition != that.priceListPosition) {
+                return false;
+            }
+            if (version != that.version) {
+                return false;
+            }
+            if (description != null
+                    ? !description.equals(that.description) : that.description != null) {
+                return false;
+            }
+            if (order != null ? !order.equals(that.order) : that.order != null) {
+                return false;
+            }
+            if (price != null ? !price.equals(that.price) : that.price != null) {
+                return false;
+            }
+            if (product != null ? !product.equals(that.product) : that.product != null) {
+                return false;
+            }
+            if (specification != null
+                    ? !specification.equals(that.specification) : that.specification != null) {
+                return false;
+            }
+            if (totalPrice != null ? !totalPrice.equals(that.totalPrice) : that.totalPrice != null) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        if (id == 0) {
+            result = 31 * result + (order != null ? order.hashCode() : 0);
+            result = 31 * result + (product != null ? product.hashCode() : 0);
+            result = 31 * result + (specification != null ? specification.hashCode() : 0);
+            result = 31 * result + (totalPrice != null ? totalPrice.hashCode() : 0);
+            result = 31 * result + (price != null ? price.hashCode() : 0);
+            result = 31 * result + amount;
+            result = 31 * result + version;
+            result = 31 * result + (int) (priceListPosition ^ (priceListPosition >>> 32));
+            result = 31 * result + (description != null ? description.hashCode() : 0);
+        }
+        return result;
+    }
 }
