@@ -502,7 +502,7 @@ function MarketplaceCtrl($scope, $filter, $locale, $modal, $resource, pricelists
             $scope.vendorFilter = _.find($scope.vendors, function (vendor) {
                 return vendor.id == product.vendor.id;
             });
-            $scope.selectVendor();
+            selectOtherVendor();
         }
 
         var marketplaceFilter = {
@@ -521,10 +521,8 @@ function MarketplaceCtrl($scope, $filter, $locale, $modal, $resource, pricelists
     $scope.selectVendor = function () {
         selectOtherVendor();
 
-        if (isEmpty($scope.vendorFilter)) {
-            $scope.productFilter = null;
-            $scope.productFromFilter = null;
-        }
+        $scope.productFilter = null;
+        $scope.productFromFilter = null;
     }
 
     $scope.selectFilter = function (filter) {
@@ -535,9 +533,12 @@ function MarketplaceCtrl($scope, $filter, $locale, $modal, $resource, pricelists
         $scope.vendorFilter = _.find($scope.vendors, function (vendor) {
             return vendor.id == filter.vendor.id;
         });
+        $scope.selectVendor();
+
         $scope.productFilter = _.find($scope.products, function (product) {
             return product.id == filter.product.id;
         });
+        $scope.selectProduct();
     }
 
     $scope.isHidePriceLists = function (pricelist) {
@@ -654,6 +655,8 @@ function createOrderTemplate(buyer) {
         fromTime: buyer.buyerDeliveryFrom,
         toTime: buyer.buyerDeliveryTo,
         deliveryDate: new Date(),
+        sendDate: new Date(),
+        status: "PREPARE",
         place: "",
         placeError: undefined,
         orderPositions: []

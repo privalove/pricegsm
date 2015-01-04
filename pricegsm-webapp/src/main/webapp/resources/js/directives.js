@@ -620,8 +620,8 @@
                 scope: {
                     pricelist: "=",
                     order: "=",
-                    vendor: "=",
-                    product: "=",
+                    vendorFilter: "=",
+                    productFilter: "=",
                     onSelectAction: "&"
                 },
                 restrict: 'E',
