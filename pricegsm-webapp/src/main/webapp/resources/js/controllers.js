@@ -915,15 +915,12 @@ function refreshOrderPositions(order, priceList) {
         orderPosition.specification = priceListPosition.specification;
 
         orderPosition.description = priceListPosition.description;
-
-        orderPosition.totalPrice = getPositionTotalPrice(orderPosition);
-
     });
 
     updatePriceListView(priceList, order);
 
     if (order.orderPositions.length != 0) {
-        updatePrices(order)
+        updateOrder(order);
     } else {
         order.totalPrice = 0;
         order.deliveryCost = 0;

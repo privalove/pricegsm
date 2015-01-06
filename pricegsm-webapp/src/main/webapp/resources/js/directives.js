@@ -801,19 +801,23 @@
                 }
             }
         }])
-        .directive('pgSaveOrderButton', ["$resource", "notifyManager", function ($resource, notifyManager) {
+        .directive('pgUpdateAndSaveOrder', ["$resource", "notifyManager", function ($resource, notifyManager) {
             return {
                 scope: {
                     order: "=",
+                    update: "&",
                     callback: "&",
                     onFailure: "&"
                 },
                 restrict: 'A',
-                replace: true,
-                link: function ($scope, element, attrs) {
+                require: "?^pgLoadPriceListService",
+                link: function ($scope, element, attrs, loadPriceListController) {
 
                     element.click(function () {
-                        saveOrder();
+                        loadPriceListController.loadPriceList($scope.order.seller.id, $scope.order.priceListPosition, function(data) {
+                            $scope.update(data);
+                            saveOrder();
+                        });
                     });
 
                     function setDefaultData(order) {
@@ -858,38 +862,36 @@
                 }
             }
         }])
-        .directive('pgLoadPriceList', ["$resource", function ($resource) {
+        .directive('pgLoadPriceListService', ['$resource', function ($resource) {
             return {
-                scope: {
-                    userId: "@",
-                    position: "@",
-                    callback: "&"
-                },
-                restrict: 'A',
-
-                link: function ($scope, element, attrs) {
-
-                    element.click(function () {
-                        refresh();
-                    });
-
-                    function refresh() {
-                        loadPriceList(attrs.userId, attrs.position);
-                    }
-
-                    function loadPriceList(sellerId, position) {
+                controller: function () {
+                    this.loadPriceList = function (sellerId, position, callback) {
                         var PriceList = $resource("order/:id/:position/pricelist.json", {id: '@id', position: '@position'});
                         PriceList.get({id: sellerId, position: position}, function (data) {
 
                             if (data.ok) {
-                                $scope.callback({data: {priceList: data.payload.priceList}});
+                                callback({data: {priceList: data.payload.priceList}});
                             }
                         });
                     };
                 }
             }
         }])
-
-    ;
+        .directive('pgLoadPriceList', [function () {
+            return {
+                scope: {
+                    userId: "@",
+                    position: "@",
+                    callback: "&"
+                },
+                require: "pgLoadPriceListService",
+                restrict: 'A',
+                link: function ($scope, element, attrs, loadPriceListController) {
+                    element.click(function () {
+                        loadPriceListController.loadPriceList(attrs.userId, attrs.position, $scope.callback);
+                    });
+                }
+            }
+        }]);
 
 })();
