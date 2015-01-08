@@ -400,7 +400,7 @@ function MarketplaceCtrl($scope, $filter, $locale, $modal, $resource, pricelists
     var chartData = {
         product: undefined,
         chartData: "retail",
-        dynRange: 7,
+        dynRange: 14,
         currency: undefined
     };
     $scope.chart = {

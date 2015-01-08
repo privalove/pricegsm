@@ -52,12 +52,22 @@ angular.module('orderFilters', [])
         }
     }).filter('productsByVendor',function () {
         return function (products, vendor) {
+            function getUniqueProductByName(products) {
+                var productGroupedByName = _.groupBy(products, function (product) {
+                    return product.name;
+                });
+                return _.map(productGroupedByName, function (productsGroup) {
+                    return productsGroup[0];
+                });
+            }
+
             if (!isEmpty(vendor)) {
-                return _.filter(products, function (product) {
+                var productsByVendor = _.filter(products, function (product) {
                     return vendor.id == product.vendor.id
                 });
+                return getUniqueProductByName(productsByVendor);
             } else {
-                return products;
+                return getUniqueProductByName(products);
             }
         }
     }).filter('pricelistBySeller',function () {
@@ -74,7 +84,7 @@ angular.module('orderFilters', [])
         return function (pricelistPositions, vendor, product) {
             if (!isEmpty(product)) {
                 return _.filter(pricelistPositions, function (position) {
-                    return product.id == position.product.id
+                    return product.name == position.product.name
                 });
 
             } else if (!isEmpty(vendor)) {
