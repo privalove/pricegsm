@@ -841,11 +841,13 @@
                             order.status = attrs.pgSaveOrderButton;
                             new Order(order).$save(function (data) {
                                 if (data.ok) {
+                                    //todo to i18n
                                     notifyManager.success("Заказ успешно отправлен");
                                     $scope.callback();
                                 }
                             });
                         } else {
+                            //todo to i18n
                             notifyManager.error("Заполните необходимые поля");
                             $scope.onFailure()
                         }
