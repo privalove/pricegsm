@@ -1,0 +1,84 @@
+<div xmlns:th="http://www.thymeleaf.org">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <i class="fa fa-question fa-lg"
+               popover-placement="right"
+               popover-trigger="mouseenter"></i>
+            <span th:text="#{partner.page.title}"></span>
+        </div>
+        <div class="panel-body">
+            <div class="row  margin-top-20 form-group">
+                <div class="col-sm-3">
+                    <input type="text" class="form-control" ng-model="findName"/>
+                </div>
+                <div class="col-sm-2">
+                    <button type="reset" class="btn btn-default" data-dismiss="modal" aria-hidden="true"
+                            ng-click="findPartner(findName)"><i
+                            class="fa fa-lg"></i> <span th:text="#{partner.find}"></span>
+                    </button>
+                </div>
+                <div class="col-sm-4">
+                    <div ng-show="isExistFindResult()" class="ng-hide">
+                        <span th:text="#{partner.found}" class="right-padding-5"></span>
+                        <span class="right-padding-5">{{foundUser.organizationName}}</span>
+                        <span class="right-padding-5">{{foundUser.name}}</span>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <button ng-show="" type="reset" class="ng-hide btn btn-default" data-dismiss="modal"
+                            aria-hidden="true"
+                            ng-click="sendRequest()"><i
+                            class="fa fa-times-circle fa-lg"></i> <span th:text="#{partner.send.rquest}"></span>
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="row  form-group">
+                <div class="col-sm-12">
+
+                    <table class="table table-hover table-condensed">
+                        <thead>
+                        <tr>
+                            <th th:text="#{partner.organization.name}">Наименование</th>
+                            <th th:text="#{partner.name}">имя</th>
+                            <th th:text="#{partner.phone}">телефон</th>
+                            <th th:text="#{partner.sity}">город</th>
+                            <th th:text="#{partner.price.list}">прайс</th>
+                            <th th:text="#{partner.last.order}">посл. заказ</th>
+                            <th th:text="#{partner.last.price.list}">посл. прайс</th>
+                            <th th:text="#{partner.note}">примечание</th>
+                            <th th:text="#{partner.web.site}">WEB-сайт</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="partner in partners">
+                            <td>Заказ №{{order.id}}</td>
+                            <td>{{order.sendDate|date:sendDateFormat}}</td>
+                            <td>{{order.seller.name}}</td>
+                            <td>{{order.totalPrice}}</td>
+                            <td>{{order.currency.code}}</td>
+                            <td>{{order.totalAmount}}</td>
+                            <td>{{order|deliveryFilter}}</td>
+                            <td>{{order.deliveryDate | date:deliveryDateFormat}}</td>
+                            <td>{{order.status | statusFilter}}</td>
+                            <td>
+                                <button type="button" class="btn btn-xs btn-danger" tooltip="Добавить"
+                                        ng-click="addPartner($event, $index, partner)">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                                <button type="button" class="btn btn-xs btn-danger" tooltip="Удалить"
+                                        ng-click="deletePartner($event, $index, partner)">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

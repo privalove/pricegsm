@@ -20,7 +20,10 @@
         "PriceListOrderPage": "order/:id/:position/pricelist.json",
         "Order": "marketplace/order.json",
 
+        "Partners": "partner/partners.json",
+
         "FiltersData": "/marketplace/filtersData.json",
+
         "Buyer": "marketplace/buyer.json"
     };
 

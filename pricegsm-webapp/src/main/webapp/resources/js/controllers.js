@@ -1870,14 +1870,42 @@ PriceListCtrl.resolve = {
     }]
 };
 
-function PartnerCtrl($scope) {
+PartnerCtrl.$inject = ["$scope", "partners"];
+function PartnerCtrl($scope, partners) {
+
+    $scope.foundUser = null;
+
+    $scope.findPartner = function (findName) {
+
+    }
+
+    $scope.isExistFindResult = function () {
+        return !isEmpty($scope.foundUser);
+    }
+
+    $scope.addPartner = function ($event, $index, partner) {
+
+    }
+    $scope.deletePartner = function ($event, $index, partner) {
+
+    }
+
+    $scope.sendRequest = function () {
+
+    }
+
+    if (partners.ok) {
+        angular.extend($scope, partners.payload);
+    }
+
 
 }
 
-PartnerCtrl.$inject = ["$scope"];
 
 PartnerCtrl.resolve = {
-
+    partners: ["Partners", function (Partners) {
+        return Partners.get().$promise;
+    }]
 };
 
 UserChangePasswordCtrl.$inject = ["$scope", "$modalInstance", "notifyManager", "ChangePassword"];
