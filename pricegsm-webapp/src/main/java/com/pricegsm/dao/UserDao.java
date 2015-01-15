@@ -20,4 +20,14 @@ public class UserDao
         }
     }
 
+    public User loadByOrganizationName(String organizationName) {
+        try {
+            return (User) getEntityManager()
+                    .createQuery("select u from User u where u.organizationName = :organizationName")
+                    .setParameter("organizationName", organizationName)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
 }

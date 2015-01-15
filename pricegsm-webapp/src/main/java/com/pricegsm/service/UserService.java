@@ -86,4 +86,8 @@ public class UserService
         workConditions.fill(user);
         getDao().merge(user);
     }
+
+    public User findByOrganizationName(String organizationName) {
+        return getDao().loadByOrganizationName(organizationName);
+    }
 }

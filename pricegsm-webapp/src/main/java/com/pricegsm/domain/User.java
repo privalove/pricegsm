@@ -102,7 +102,7 @@ public class User
 
     @Size(max = 255)
     @Basic
-    @Column(name = "organization_name")
+    @Column(name = "organization_name", unique = true)
     public String getOrganizationName() {
         return organizationName;
     }

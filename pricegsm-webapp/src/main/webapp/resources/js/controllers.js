@@ -1870,13 +1870,22 @@ PriceListCtrl.resolve = {
     }]
 };
 
-PartnerCtrl.$inject = ["$scope", "partners"];
-function PartnerCtrl($scope, partners) {
+PartnerCtrl.$inject = ["$scope", "$resource", "partners"];
+function PartnerCtrl($scope, $resource, partners) {
 
     $scope.foundUser = null;
 
-    $scope.findPartner = function (findName) {
 
+    //todo don't fogert exclude exist partners
+    $scope.findPartner = function (findName) {
+        var User = $resource("partner/:organizationName/findPartner.json", {organizationName: '@organizationName'});
+        User.get({organizationName: findName}, function (data) {
+              if(data.ok && !isEmpty(data.payload.user)) {
+                  $scope.foundUser = data.payload.user;
+              } else {
+                  $scope.foundUser = null;
+              }
+        });
     }
 
     $scope.isExistFindResult = function () {
