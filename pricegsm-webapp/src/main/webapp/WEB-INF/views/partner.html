@@ -13,7 +13,8 @@
                 </div>
                 <div class="col-sm-1">
                     <button type="reset" class="btn btn-default" data-dismiss="modal" aria-hidden="true"
-                            ng-click="findPartner(findName)"><i
+                            ng-click="findPartner(findName)"
+                            ng-disabled="isEmpty(findName)"><i
                             class="fa fa-lg"></i> <span th:text="#{partner.find}"></span>
                     </button>
                 </div>

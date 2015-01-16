@@ -1870,21 +1870,22 @@ PriceListCtrl.resolve = {
     }]
 };
 
-PartnerCtrl.$inject = ["$scope", "$resource", "partners"];
-function PartnerCtrl($scope, $resource, partners) {
+PartnerCtrl.$inject = ["$scope", "$resource", "partners", "Partners"];
+function PartnerCtrl($scope, $resource, partners, Partners) {
 
     $scope.foundUser = null;
 
 
     //todo don't fogert exclude exist partners
     $scope.findPartner = function (findName) {
-        var User = $resource("partner/:organizationName/findPartner.json", {organizationName: '@organizationName'});
-        User.get({organizationName: findName}, function (data) {
-              if(data.ok && !isEmpty(data.payload.user)) {
-                  $scope.foundUser = data.payload.user;
-              } else {
-                  $scope.foundUser = null;
-              }
+        var organizationName = {organizationName: findName};
+        var User = $resource("partner/findOrganization.json");
+        new User(organizationName).$save(function (data) {
+            if (data.ok && !isEmpty(data.payload.user)) {
+                $scope.foundUser = data.payload.user;
+            } else {
+                $scope.foundUser = null;
+            }
         });
     }
 
@@ -1901,6 +1902,10 @@ function PartnerCtrl($scope, $resource, partners) {
 
     $scope.sendRequest = function () {
 
+    }
+
+    $scope.isEmpty = function(data) {
+        return isEmpty(data);
     }
 
     if (partners.ok) {
