@@ -655,7 +655,8 @@ function createOrderTemplate(buyer) {
         fromTime: buyer.buyerDeliveryFrom,
         toTime: buyer.buyerDeliveryTo,
         deliveryDate: new Date(),
-        sendDate: new Date(),
+        creationDate: new Date(),
+        sendDate: null,
         status: "PREPARE",
         place: "",
         placeError: undefined,
@@ -1031,7 +1032,7 @@ function OrderCtrl($scope, $filter, $modal, $resource, orders, notifyManager) {
     $scope.sellers = $filter("unique")(_.map($scope.orders, function (order) {
         return order.seller;
     }), "id");
-    $scope.sendDateFormat = R.get('order.format.sendDate');
+    $scope.creationDateFormat = R.get('order.format.creationDate');
 
     $scope.deliveryDateFormat = R.get('order.format.deliveryDate');
 
@@ -1521,6 +1522,9 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
             $scope.refresh(function () {
                 $scope.order.totalAmount = $scope.calcTotalAmount($scope.order);
                 $scope.order.status = status;
+                if (status == "SENT") {
+                    $scope.order.sendDate = new Date();
+                }
                 $scope.order.totalPrice = $scope.calcTotalPrice($scope.order);
                 $scope.order.deliveryCost = $scope.calcDeliveryPrice($scope.order);
                 $scope.updatePhone();
@@ -1889,22 +1893,27 @@ function PartnerCtrl($scope, $resource, partners, Partners) {
         });
     }
 
+    $scope.sendRequest = function () {
+        var User = $resource("partner/sendRequest.json");
+        new User($scope.foundUser).$save(function (data) {
+            if (data.ok) {
+                partners.push(data.payload.partner);
+            }
+        });
+    }
+
     $scope.isExistFindResult = function () {
         return !isEmpty($scope.foundUser);
     }
-
     $scope.addPartner = function ($event, $index, partner) {
 
     }
+
     $scope.deletePartner = function ($event, $index, partner) {
 
     }
 
-    $scope.sendRequest = function () {
-
-    }
-
-    $scope.isEmpty = function(data) {
+    $scope.isEmpty = function (data) {
         return isEmpty(data);
     }
 

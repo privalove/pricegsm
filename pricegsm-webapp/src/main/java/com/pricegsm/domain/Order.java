@@ -35,6 +35,8 @@ public class Order
 
     private Date sendDate;
 
+    private Date creationDate;
+
     private Status status = Status.PREPARE;
 
     private int version;
@@ -129,6 +131,17 @@ public class Order
 
     public void setSendDate(Date send_date) {
         this.sendDate = send_date;
+    }
+
+    @Basic
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "creation_date")
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 
     @NotNull

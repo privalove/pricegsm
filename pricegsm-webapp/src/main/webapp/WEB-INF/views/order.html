@@ -29,7 +29,7 @@
                             <thead>
                             <tr>
                                 <th th:text="#{page.order.name}">дата создания</th>
-                                <th th:text="#{page.order.sendDate}">дата создания</th>
+                                <th th:text="#{page.order.creationDate}">дата создания</th>
                                 <th th:text="#{page.order.seller}">контрагент</th>
                                 <th th:text="#{page.order.totalPrice}">сумма</th>
                                 <th th:text="#{page.order.currency}">валюта</th>
@@ -43,7 +43,7 @@
                             <tbody>
                             <tr ng-repeat="order in orders | sellerDeliveryDate:seller:deliveryDate | orderBy : [orderStatus, deliveryDateOrder]" ng-click="orderDetails(order)">
                                 <td>Заказ №{{order.id}}</td>
-                                <td>{{order.sendDate|date:sendDateFormat}}</td>
+                                <td>{{order.creationDate | date:creationDateFormat}}</td>
                                 <td>{{order.seller.name}}</td>
                                 <td>{{order.totalPrice}}</td>
                                 <td>{{order.currency.code}}</td>

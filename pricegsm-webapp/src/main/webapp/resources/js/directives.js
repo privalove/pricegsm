@@ -837,8 +837,11 @@
 
                         if (isValid(order)) {
                             setDefaultData(order);
-                            order.sendDate = new Date();
+                            order.creationDate = new Date();
                             order.status = attrs.pgSaveOrderButton;
+                            if(order.status == "SENT") {
+                                order.sendDate = new Date();
+                            }
                             new Order(order).$save(function (data) {
                                 if (data.ok) {
                                     //todo to i18n

@@ -1,5 +1,6 @@
 package com.pricegsm.controller;
 
+import com.pricegsm.domain.Partner;
 import com.pricegsm.domain.User;
 import com.pricegsm.securiry.PrincipalHolder;
 import com.pricegsm.service.PartnerService;
@@ -43,6 +44,13 @@ public class PartnerController {
             user = null;
         }
         return OperationResult.ok().payload("user", user);
+    }
+
+    @RequestMapping(value = "partner/sendRequest.json", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public OperationResult sendRequest(@RequestBody User user, BindingResult result) {
+        Partner partner = partnerService.addPartnership(user);
+        return OperationResult.ok().payload("partner", user);
     }
 
 }

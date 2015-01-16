@@ -80,7 +80,8 @@
                            th:attr="tooltip=#{priceListPosition.color.title}"></i>
                         <span th:text="#{priceListPosition.color}">Цвет</span>
                     </th>
-                    <th colspan="2" class="pg-price">
+                    <th></th>
+                    <th colspan="1" class="pg-price">
                         <i class="fa fa-question-circle"
                            th:attr="tooltip=#{priceListPosition.price.title}"></i>
                         <span th:text="#{priceListPosition.price}">Цена</span>
@@ -145,10 +146,10 @@
                 <tr ng-repeat-start="position in filterByVendor(priceLists[0].positions, vendor.id, showAll[vendor.id])"
                     ng-form="" name="pForm">
                     <td>
-                        <div class="form-group" ng-hide="position.fake">
+                        <div class="" ng-hide="position.fake">
                             <input type="checkbox" ng-model="position.active"/>
                         </div>
-                        <div class="form-group" ng-show="position.fake">
+                        <div class="" ng-show="position.fake">
                             <button type="button" class="btn btn-xs btn-success"
                                     ng-click="addPosition(priceLists[0], position.product)"
                                     th:attr="tooltip=#{page.priceList.addPosition}">
@@ -157,7 +158,7 @@
                         </div>
                     </td>
                     <td>
-                        <div class="form-group">
+                        <div class="">
                             <p class="form-control-static"
                                ng-bind="position.product.name">
                                 iPhone 5S 16Gb
@@ -165,7 +166,7 @@
                         </div>
                     </td>
                     <td>
-                        <div class="form-group" ng-hide="position.fake">
+                        <div class="" ng-hide="position.fake">
                             <div>
                                 <div th:attr="tooltip=#{priceListPosition.add.product.color}">
                                 <button ng-click="addPositionNextColor(priceLists[0], position.product.name, position.product.color.id)"
@@ -176,7 +177,7 @@
                     </div>
                 </td>
                 <td>
-                    <div class="form-group" ng-hide="position.fake">
+                    <div class="" ng-hide="position.fake">
                         <div class="row">
                             <div class="col-sm-12 dropdown">
                                 <a href='' class="dropdown-toggle btn btn-default btn-md">
@@ -192,12 +193,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group" ng-show="position.fake">
+                    <div class="" ng-show="position.fake">
                         <p class="form-control-static" ng-text="position.product.color.name">White</p>
                     </div>
                 </td>
                 <td>
-                    <div class="form-group" ng-hide="position.fake">
+                    <div class="" ng-hide="position.fake">
                         <div>
                             <div th:attr="tooltip=#{priceListPosition.add.product.price}">
                                 <button ng-click="addPrice(position)"
@@ -208,7 +209,7 @@
                     </div>
                 </td>
                 <td>
-                    <div class="form-group" ng-class="{'has-error':!pForm.price.$valid}" ng-hide="position.fake">
+                    <div class="" ng-class="{'has-error':!pForm.price.$valid}" ng-hide="position.fake">
                         <div class="input-group">
                             <input name="price" type="number" class="form-control"
                                    min="1" required=""
@@ -218,7 +219,7 @@
                     </div>
                 </td>
                 <td>
-                    <div class="form-group" ng-hide="position.fake">
+                    <div class="" ng-hide="position.fake">
                         <select class="form-control"
                                 ng-model="position.specification.id"
                                 ng-options="o.id as o.name for o in specifications">
@@ -227,7 +228,7 @@
                     </div>
                 </td>
                 <td>
-                    <div class="form-group" ng-class="{'has-error':!pForm.moq.$valid}" ng-hide="position.fake">
+                    <div class="" ng-class="{'has-error':!pForm.moq.$valid}" ng-hide="position.fake">
                         <div class="input-group">
                             <span class="input-group-addon">от</span>
                             <input type="number" name="moq" class="form-control" min="1" required=""
@@ -236,19 +237,19 @@
                     </div>
                 </td>
                 <td>
-                    <div class="form-group" ng-hide="position.fake">
+                    <div class="" ng-hide="position.fake">
                         <input type="text" class="form-control"
                                ng-model="position.description"/>
                     </div>
                 </td>
                 <td>
-                    <div class="form-group" ng-class="{'has-error':!pForm.amount.$valid}" ng-hide="position.fake">
+                    <div class="" ng-class="{'has-error':!pForm.amount.$valid}" ng-hide="position.fake">
                         <input type="number" name="amount" class="form-control" min="0" required=""
                                ng-model="position.amount"/>
                     </div>
                 </td>
                 <td>
-                    <div class="form-group text-right" ng-hide="position.fake">
+                    <div class=" text-right" ng-hide="position.fake">
                         <p>
                             <button type="button" class="btn btn-xs btn-success"
                                     ng-click="position.amount = 9999"
@@ -267,7 +268,7 @@
                 <tr ng-repeat="price in position.prices.slice(1)" ng-form="" name="priceForm">
                     <td colspan="5"></td>
                     <td>
-                        <div class="form-group" ng-class="{'has-error':!priceForm.price.$valid}" ng-hide="position.fake">
+                        <div class="" ng-class="{'has-error':!priceForm.price.$valid}" ng-hide="position.fake">
                             <div class="input-group">
                                 <input name="price" type="number" class="form-control"
                                        min="1" required=""
@@ -278,7 +279,7 @@
                     </td>
                     <td></td>
                     <td>
-                        <div class="form-group" ng-class="{'has-error':!priceForm.minOrderQuantity.$valid}" ng-hide="position.fake">
+                        <div class="" ng-class="{'has-error':!priceForm.minOrderQuantity.$valid}" ng-hide="position.fake">
                             <div class="input-group">
                             <span class="input-group-addon">от</span>
                             <input type="number" name="minOrderQuantity" class="form-control" min="1" required=""
