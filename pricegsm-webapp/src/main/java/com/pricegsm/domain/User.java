@@ -93,6 +93,8 @@ public class User
 
     private Set<MarketplaceFilter> marketplaceFilters;
 
+    private Set<Partner> partners;
+
     public User() {
     }
 
@@ -271,6 +273,7 @@ public class User
         this.sellerPickupTo = seller_pickup_to;
     }
 
+    @JsonSerialize(using = DateSerializer.class)
     @NotNull
     @Basic
     @Temporal(TemporalType.TIME)
@@ -477,6 +480,7 @@ public class User
     }
 
     @Transient
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Arrays.asList(new SimpleGrantedAuthority("USER_ROLE"));
@@ -493,4 +497,17 @@ public class User
     public void setMarketplaceFilters(Set<MarketplaceFilter> marketplaceFilters) {
         this.marketplaceFilters = marketplaceFilters;
     }
+
+    @Valid
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderColumn(name = "modified")
+    @OrderBy("modified DESC")
+    public Set<Partner> getPartners() {
+        return partners;
+    }
+
+    public void setPartners(Set<Partner> partners) {
+        this.partners = partners;
+    }
+
 }

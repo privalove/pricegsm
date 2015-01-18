@@ -33,14 +33,14 @@ public class PartnerController {
     @RequestMapping(value = "/partner/partners.json", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public OperationResult partners() {
-        return OperationResult.ok().payload("partners", partnerService.findAll());
+        return OperationResult.ok().payload("partners", partnerService.getPartners());
     }
 
     @RequestMapping(value = "/partner/findOrganization.json", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public OperationResult findPartner(@RequestBody OrganizationName organizationName, BindingResult result) {
         User user = userService.findByOrganizationName(organizationName.getOrganizationName());
-        if(principalHolder.getCurrentUser().equals(user)) {
+        if (principalHolder.getCurrentUser().equals(user)) {
             user = null;
         }
         return OperationResult.ok().payload("user", user);
@@ -49,8 +49,22 @@ public class PartnerController {
     @RequestMapping(value = "partner/sendRequest.json", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public OperationResult sendRequest(@RequestBody User user, BindingResult result) {
-        Partner partner = partnerService.addPartnership(user);
-        return OperationResult.ok().payload("partner", user);
+        partnerService.addPartnership(user.getId());
+        return OperationResult.ok().payload("partner", partnerService.getPartnerByUser(user));
+    }
+
+    @RequestMapping(value = "partner/addPartner.json", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public OperationResult addPartner(@RequestBody PartnerUIModel partner, BindingResult result) {
+        partnerService.confirmPartnership(partner);
+        return OperationResult.ok().payload("partner", partnerService.getPartner(partner.getId()));
+    }
+
+    @RequestMapping(value = "partner/deletePartner.json", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public OperationResult deletePartner(@RequestBody PartnerUIModel partner, BindingResult result) {
+        partnerService.deletePartnership(partner);
+        return OperationResult.ok();
     }
 
 }

@@ -15,13 +15,23 @@ public class Partner
 
     private User user;
 
-    private Partner partner;
+    private User partner;
 
     private boolean approved;
 
     private boolean confirmed;
 
     private boolean showPriceList = true;
+
+    public Partner() {
+    }
+
+    public Partner(User user, User partner, boolean approved, boolean confirmed) {
+        this.user = user;
+        this.partner = partner;
+        this.approved = approved;
+        this.confirmed = confirmed;
+    }
 
     @Id
     @Column(name = "id", nullable = false)
@@ -50,11 +60,11 @@ public class Partner
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "partner_id", referencedColumnName = "id", nullable = false)
-    public Partner getPartner() {
+    public User getPartner() {
         return partner;
     }
 
-    public void setPartner(Partner partner) {
+    public void setPartner(User partner) {
         this.partner = partner;
     }
 
@@ -92,5 +102,36 @@ public class Partner
 
     public void setShowPriceList(boolean showPriceList) {
         this.showPriceList = showPriceList;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Partner)) return false;
+        if (!super.equals(o)) return false;
+
+        Partner partner1 = (Partner) o;
+        if (id == 0) {
+            if (approved != partner1.approved) return false;
+            if (confirmed != partner1.confirmed) return false;
+            if (showPriceList != partner1.showPriceList) return false;
+            if (partner != null ? !partner.equals(partner1.partner) : partner1.partner != null) return false;
+            //noinspection RedundantIfStatement
+            if (user != null ? !user.equals(partner1.user) : partner1.user != null) return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        if (id == 0) {
+            result = 31 * result + (user != null ? user.hashCode() : 0);
+            result = 31 * result + (partner != null ? partner.hashCode() : 0);
+            result = 31 * result + (approved ? 1 : 0);
+            result = 31 * result + (confirmed ? 1 : 0);
+            result = 31 * result + (showPriceList ? 1 : 0);
+        }
+        return result;
     }
 }

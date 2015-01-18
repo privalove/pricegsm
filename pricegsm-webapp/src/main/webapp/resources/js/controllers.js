@@ -1893,11 +1893,12 @@ function PartnerCtrl($scope, $resource, partners, Partners) {
         });
     }
 
-    $scope.sendRequest = function () {
+    $scope.sendRequest = function ($event) {
+        $event.stopPropagation();
         var User = $resource("partner/sendRequest.json");
         new User($scope.foundUser).$save(function (data) {
             if (data.ok) {
-                partners.push(data.payload.partner);
+                $scope.partners.push(data.payload.partner);
             }
         });
     }
@@ -1905,12 +1906,53 @@ function PartnerCtrl($scope, $resource, partners, Partners) {
     $scope.isExistFindResult = function () {
         return !isEmpty($scope.foundUser);
     }
-    $scope.addPartner = function ($event, $index, partner) {
 
+    function isAlreadyAdded() {
+        if (isEmpty($scope.foundUser)) {
+            return false;
+        }
+
+        return !isEmpty(_.find($scope.partners, function (partner) {
+            return partner.partnerId == $scope.foundUser.id;
+        })
+        );
+    }
+
+    $scope.isShowAddButton = function () {
+        return  !isEmpty($scope.foundUser) && !isAlreadyAdded();
+    }
+
+    $scope.isShowAlreadyAddedLabel = function () {
+        return  !isEmpty($scope.foundUser) && isAlreadyAdded();
+    }
+
+    $scope.isShowDeletePartnerButton = function (partner) {
+        return  partner.approved && partner.confirmed;
+    }
+
+    $scope.isShowApprovePartnerButton = function (partner) {
+        return  partner.approved && !partner.confirmed
+    }
+
+
+    $scope.addPartner = function ($event, $index, partner) {
+        $event.stopPropagation();
+        var Partner = $resource("partner/addPartner.json");
+        new Partner(partner).$save(function (data) {
+            if (data.ok) {
+                angular.extend(partner, data.payload.partner);
+            }
+        });
     }
 
     $scope.deletePartner = function ($event, $index, partner) {
-
+        $event.stopPropagation();
+        var Partner = $resource("partner/deletePartner.json");
+        new Partner(partner).$save(function (data) {
+            if (data.ok) {
+                $scope.partners.splice($index, 1);
+            }
+        });
     }
 
     $scope.isEmpty = function (data) {

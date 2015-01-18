@@ -26,11 +26,12 @@
                     </div>
                 </div>
                 <div class="col-sm-3">
-                    <button ng-show="isExistFindResult()" type="reset" class="ng-hide btn btn-default" data-dismiss="modal"
+                    <button ng-show="isShowAddButton()" type="reset" class="ng-hide btn btn-default" data-dismiss="modal"
                             aria-hidden="true"
-                            ng-click="sendRequest()"><i
+                            ng-click="sendRequest($event)"><i
                             class="fa fa-lg"></i> <span th:text="#{partner.send.rquest}"></span>
                     </button>
+                    <label ng-show="isShowAlreadyAddedLabel()" class="ng-hide" th:text="#{partner.already.added}"></label>
                 </div>
             </div>
 
@@ -44,7 +45,7 @@
                             <th th:text="#{partner.organization.name}">Наименование</th>
                             <th th:text="#{partner.name}">имя</th>
                             <th th:text="#{partner.phone}">телефон</th>
-                            <th th:text="#{partner.sity}">город</th>
+                            <th th:text="#{partner.city}">город</th>
                             <th th:text="#{partner.price.list}">прайс</th>
                             <th th:text="#{partner.last.order}">посл. заказ</th>
                             <th th:text="#{partner.last.price.list}">посл. прайс</th>
@@ -55,25 +56,27 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="partner in partners">
-                            <td>{{partner.user.organizationName}}</td>
-                            <td>{{partner.user.name}}</td>
-                            <td>{{partner.user.phone}}</td>
-                            <td>{{partner.user.region.name}}</td>
+                            <td>{{partner.partnerOrganizationName}}</td>
+                            <td>{{partner.partnerName}}</td>
+                            <td>{{partner.partnerPhone}}</td>
+                            <td>{{partner.partnerCity}}</td>
                             <td>
                                 <label>
                                     <input type="checkbox" ng-model="partner.showPriceList"/>
                                 </label>
                             </td>
-                            <td>{{partner.lastOrderSend}}</td>
-                            <td>{{partner.lastPriceList}}</td>
+                            <td>{{partner.lastOrderSend|date : 'dd.MM.yyyy'}}</td>
+                            <td>{{partner.lastPriceList|date : 'dd.MM.yyyy'}}</td>
                             <!--<td>{{partner.note}}</td>-->
-                            <td>{{partner.user.website}}</td>
+                            <td>{{partner.partnerWebsite}}</td>
                             <td>
-                                <button type="button" class="btn btn-xs btn-danger" tooltip="Добавить"
+                                <button ng-show="isShowApprovePartnerButton(partner)"
+                                        type="button" class="btn btn-xs btn-green ng-hide" tooltip="Добавить"
                                         ng-click="addPartner($event, $index, partner)">
-                                    <i class="fa fa-times"></i>
+                                    <i class="fa fa-plus"></i>
                                 </button>
-                                <button type="button" class="btn btn-xs btn-danger" tooltip="Удалить"
+                                <button ng-show="isShowDeletePartnerButton(partner)"
+                                        type="button" class="btn btn-xs btn-danger ng-hide" tooltip="Удалить"
                                         ng-click="deletePartner($event, $index, partner)">
                                     <i class="fa fa-times"></i>
                                 </button>
