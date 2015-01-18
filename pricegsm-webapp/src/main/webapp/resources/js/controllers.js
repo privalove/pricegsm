@@ -1934,16 +1934,30 @@ function PartnerCtrl($scope, $resource, partners, Partners) {
         return  partner.approved && !partner.confirmed
     }
 
-    $scope.getPartnerClassName = function(partner) {
-        if($scope.isShowApprovePartnerButton(partner)) {
+    $scope.getPartnerClassName = function (partner) {
+        if ($scope.isShowApprovePartnerButton(partner)) {
             return "bg-warning";
         }
-        if(!partner.approved && partner.confirmed) {
+        if (!partner.approved && partner.confirmed) {
             return "bg-success";
         }
         return""
 
     }
+
+    $scope.approveStatus = function (partner) {
+        if ($scope.isShowApprovePartnerButton(partner)) {
+            return 1;
+        }
+        if (!partner.approved && partner.confirmed) {
+            return 2;
+        }
+        return 3;
+    };
+
+    $scope.partnerOrganizationName = function (partner) {
+        return partner.partnerOrganizationName;
+    };
 
     $scope.addPartner = function ($event, $index, partner) {
         $event.stopPropagation();
@@ -1960,7 +1974,11 @@ function PartnerCtrl($scope, $resource, partners, Partners) {
         var Partner = $resource("partner/deletePartner.json");
         new Partner(partner).$save(function (data) {
             if (data.ok) {
-                $scope.partners.splice($index, 1);
+                _.map($scope.partners, function (partnerOfMap, index) {
+                    if (partnerOfMap.id == partner.id) {
+                        $scope.partners.splice(index, 1);
+                    }
+                });
             }
         });
     }

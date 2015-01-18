@@ -27,7 +27,7 @@ public class PriceListDao
                 .getSingleResult();
     }
 
-    public List<PriceList> getAcessiblePriceLists(long userId) {
+    public List<PriceList> getAccessiblePriceLists(long userId) {
         return getEntityManager()
                 .createQuery("select p from PriceList p " +
                         " inner join p.user.partners as part" +

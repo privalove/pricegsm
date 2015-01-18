@@ -10,7 +10,9 @@ import com.pricegsm.securiry.PrincipalHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.NoResultException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -78,7 +80,15 @@ public class PartnerService
         return new PartnerUIModel(
                 partnerByUser,
                 orderDao.getUserLastOrder(currentUserId, partnerUserId),
-                priceListDao.getLastPriceList(partnerUserId));
+                getLastPriceList(partnerUserId));
+    }
+
+    private Date getLastPriceList(long partnerUserId) {
+        try {
+            return priceListDao.getLastPriceList(partnerUserId);
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     public void confirmPartnership(PartnerUIModel partnerUIModel) {

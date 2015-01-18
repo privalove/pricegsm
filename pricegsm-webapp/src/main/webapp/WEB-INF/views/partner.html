@@ -55,7 +55,8 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr class="{{getPartnerClassName(partner)}}" ng-repeat="partner in partners">
+                        <tr class="{{getPartnerClassName(partner)}}"
+                            ng-repeat="partner in partners | orderBy : [approveStatus, partnerOrganizationName]">
                             <td>{{partner.partnerOrganizationName}}</td>
                             <td>{{partner.partnerName}}</td>
                             <td>{{partner.partnerPhone}}</td>

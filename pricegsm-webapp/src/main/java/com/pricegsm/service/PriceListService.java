@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class PriceListService
@@ -99,6 +98,6 @@ public class PriceListService
     public List<PriceList> getAccessiblePriceLists() {
         User user = userService.loadCurrentUser();
 
-        return dao.getAcessiblePriceLists(user.getId());
+        return dao.getAccessiblePriceLists(user.getId());
     }
 }
