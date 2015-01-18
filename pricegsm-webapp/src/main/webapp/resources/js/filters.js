@@ -95,4 +95,13 @@ angular.module('orderFilters', [])
                 return pricelistPositions;
             }
         }
-    });
+    }).filter('pgNoDataFilter', function () {
+        return function (data) {
+            if (isEmpty(data)) {
+                return R.get('partner.no.data');
+            }
+            return data;
+
+        }
+    }
+);

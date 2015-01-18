@@ -55,7 +55,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="partner in partners">
+                        <tr class="{{getPartnerClassName(partner)}}" ng-repeat="partner in partners">
                             <td>{{partner.partnerOrganizationName}}</td>
                             <td>{{partner.partnerName}}</td>
                             <td>{{partner.partnerPhone}}</td>
@@ -65,8 +65,8 @@
                                     <input type="checkbox" ng-model="partner.showPriceList"/>
                                 </label>
                             </td>
-                            <td>{{partner.lastOrderSend|date : 'dd.MM.yyyy'}}</td>
-                            <td>{{partner.lastPriceList|date : 'dd.MM.yyyy'}}</td>
+                            <td>{{partner.lastOrderSend|date : 'dd.MM.yyyy' | pgNoDataFilter}}</td>
+                            <td>{{partner.lastPriceList|date : 'dd.MM.yyyy' | pgNoDataFilter}}</td>
                             <!--<td>{{partner.note}}</td>-->
                             <td>{{partner.partnerWebsite}}</td>
                             <td>
