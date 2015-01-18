@@ -1,9 +1,6 @@
 package com.pricegsm.service;
 
-import com.pricegsm.dao.CurrencyDao;
-import com.pricegsm.dao.PriceListDao;
-import com.pricegsm.dao.ProductDao;
-import com.pricegsm.dao.UserDao;
+import com.pricegsm.dao.*;
 import com.pricegsm.domain.*;
 import com.pricegsm.util.Utils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -11,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class PriceListService
@@ -23,10 +21,16 @@ public class PriceListService
     private UserDao userDao;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private CurrencyDao currencyDao;
 
     @Autowired
     private ProductDao productDao;
+
+    @Autowired
+    private PartnerDao partnerDao;
 
     @Override
     protected PriceListDao getDao() {
@@ -90,5 +94,11 @@ public class PriceListService
 
     public PriceList findByPositionForCurrentUser(int position) {
         return postLoad(getDao().load(new PriceListPK(principalHolder.getCurrentUser().getId(), position)));
+    }
+
+    public List<PriceList> getAccessiblePriceLists() {
+        User user = userService.loadCurrentUser();
+
+        return dao.getAcessiblePriceLists(user.getId());
     }
 }

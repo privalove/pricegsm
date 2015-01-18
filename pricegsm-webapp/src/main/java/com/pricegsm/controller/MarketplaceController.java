@@ -48,7 +48,7 @@ public class MarketplaceController {
     @RequestMapping(value = "/marketplace/pricelists.json", method = RequestMethod.GET)
     @ResponseBody
     public OperationResult pricelists() {
-        return OperationResult.ok().payload("pricelists", priceListService.findAll());
+        return OperationResult.ok().payload("pricelists", priceListService.getAccessiblePriceLists());
     }
 
     @RequestMapping(value = "/marketplace/filtersData.json", method = RequestMethod.GET)

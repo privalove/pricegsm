@@ -26,4 +26,16 @@ public class PriceListDao
                 .setParameter("userId", userId)
                 .getSingleResult();
     }
+
+    public List<PriceList> getAcessiblePriceLists(long userId) {
+        return getEntityManager()
+                .createQuery("select p from PriceList p " +
+                        " inner join p.user.partners as part" +
+                        " where part.partner.id = :userId " +
+                        " and part.showPriceList = true " +
+                        " and part.approved = true " +
+                        " and part.confirmed = true")
+                .setParameter("userId", userId)
+                .getResultList();
+    }
 }
