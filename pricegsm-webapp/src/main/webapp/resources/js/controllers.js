@@ -1934,6 +1934,16 @@ function PartnerCtrl($scope, $resource, partners, Partners) {
         return  partner.approved && !partner.confirmed
     }
 
+    $scope.getPartnerClassName = function(partner) {
+        if($scope.isShowApprovePartnerButton(partner)) {
+            return "bg-warning";
+        }
+        if(!partner.approved && partner.confirmed) {
+            return "bg-success";
+        }
+        return""
+
+    }
 
     $scope.addPartner = function ($event, $index, partner) {
         $event.stopPropagation();
