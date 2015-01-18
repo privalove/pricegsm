@@ -81,11 +81,6 @@ public class Price extends GlobalEntity {
             if (price != null ? !price.equals(price1.price) : price1.price != null) {
                 return false;
             }
-            if (priceListPosition != null
-                    ? !priceListPosition.equals(price1.priceListPosition)
-                    : price1.priceListPosition != null) {
-                return false;
-            }
         }
         return true;
     }
@@ -94,7 +89,6 @@ public class Price extends GlobalEntity {
     public int hashCode() {
         int result = super.hashCode();
         if (id == 0) {
-            result = 31 * result + (priceListPosition != null ? priceListPosition.hashCode() : 0);
             result = 31 * result + (price != null ? price.hashCode() : 0);
             result = 31 * result + minOrderQuantity;
         }

@@ -1687,6 +1687,15 @@ function PriceListCtrl($scope, $filter, notifyManager, priceListResource, PriceL
         return date1 < date2 || !form.$valid;
     }
 
+    $scope.deletePriceListPosition = function ($event, priceList, deletedPosition) {
+        $event.stopPropagation();
+        _.map(priceList.positions, function (position, index) {
+            if (deletedPosition.id == position.id) {
+                priceList.positions.splice(index, 1);
+            }
+        });
+    }
+
     if (priceListResource.ok) {
         angular.extend($scope, priceListResource.payload);
 
@@ -1820,7 +1829,10 @@ function PriceListCtrl($scope, $filter, notifyManager, priceListResource, PriceL
         };
 
         $scope.addPrice = function (position) {
-            position.prices.push(angular.copy($scope.priceTemplate));
+            var newPrice = angular.copy($scope.priceTemplate);
+            newPrice.price = 1;
+            newPrice.minOrderQuantity = 1;
+            position.prices.push(newPrice);
         }
 
         $scope.addVendor = function (vendor, index) {
