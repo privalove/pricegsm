@@ -7,7 +7,9 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
+
 
 @Service
 public class PriceListService
@@ -43,8 +45,12 @@ public class PriceListService
         priceList.setUser(getCurrentUser());
 
         if (priceList.getPosition() == 0) {
-            priceList.setSellFromDate(Utils.today());
-            priceList.setSellToDate(DateUtils.addDays(Utils.today(), 1));
+            Date today = Utils.today();
+            Date startDate =
+                    today.getTime() <= entity.getUser().getDeadLine().getTime() ?
+                    today : DateUtils.addDays(today, 1);
+            priceList.setSellFromDate(startDate);
+            priceList.setSellToDate(DateUtils.addDays(startDate, 1));
         }
 
         for (PriceListPosition position : entity.getPositions()) {

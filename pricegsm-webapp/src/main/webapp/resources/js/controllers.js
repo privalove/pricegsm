@@ -1194,25 +1194,6 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
     $scope.possibleDeliveryDates = getPossibleDeliveryDates();
     //todo create date list directive end
 
-    $scope.getLimitFromTime = function (isDelivery) {
-        if (isDelivery) {
-            return $scope.order.seller.sellerDeliveryFrom;
-        } else {
-            return $scope.order.seller.sellerPickupFrom;
-        }
-    }
-
-    $scope.getLimitToTime = function (isDelivery) {
-        if (isDelivery) {
-            return $scope.order.seller.sellerDeliveryTo;
-        } else {
-            return $scope.order.seller.sellerPickupTo;
-        }
-    }
-
-    $scope.limitFromTime = $scope.getLimitFromTime($scope.order.delivery);
-    $scope.limitToTime = $scope.getLimitToTime($scope.order.delivery);
-
     $scope.resetOtherDelivery = function (selectedDeliveryType) {
         if (selectedDeliveryType != "delivery") {
             $scope.order.delivery = false;
@@ -1221,9 +1202,6 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
             $scope.order.pickup = false;
         }
         $scope.order.deliveryFree = false;
-
-        $scope.limitFromTime = $scope.getLimitFromTime($scope.order.delivery);
-        $scope.limitToTime = $scope.getLimitToTime($scope.order.delivery);
     }
 
     //todo PriceList and Order start
@@ -1406,6 +1384,9 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
             price.selectedStyle = "";
             price.amount = "";
         });
+        if(isEmpty(price)) {
+            return;
+        }
         price.selectedStyle = "success";
         price.amount = amount;
     }
@@ -1615,6 +1596,7 @@ function compareDates(date1, date2) {
     }
 }
 
+// todo fix
 function isPriceListActual(priceList, today) {
     var sellToDate = new Date(priceList.sellToDate);
     var sellFromDate = new Date(priceList.sellFromDate);

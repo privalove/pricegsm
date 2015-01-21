@@ -104,11 +104,10 @@
             </option>
         </select>
     </div>
-    <pg-time-period class="col-xs-4"
-                    from-time="order.fromTime"
-                    to-time="order.toTime"
-                    from-time-limit="{{limitFromTime}}"
-                    to-time-limit="{{limitToTime}}"></pg-time-period>
+    <pg-order-time-period
+            order="order"
+            seller="order.seller"
+            min-delay="2"></pg-order-time-period>
 </div>
 
 <div class="row form-group">
