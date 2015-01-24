@@ -1,9 +1,9 @@
-<label class="col-xs-2 margin-top-34 right-padding-5">
+<label class="col-xs-4 margin-top-34 right-padding-5 left-padding-5">
     <div class="control-label" pg-text="order.onDate">на дату</div>
 </label>
 
-<div class="col-xs-3 margin-top-34 left-padding-0">
-    <select class="form-control" ng-model="order.deliveryDate"
+<div class="col-xs-8 margin-top-34 left-padding-0">
+    <select class="form-control right-padding-5 left-padding-5" ng-model="order.deliveryDate"
             ng-options="deliveryDate | date:deliveryDateFormat for deliveryDate in possibleDeliveryDates">
         <option ng-show="showPastDate" value="" disabled>
             {{order.deliveryDate | date:deliveryDateFormat}}

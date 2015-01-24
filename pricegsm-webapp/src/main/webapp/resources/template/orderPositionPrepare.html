@@ -16,103 +16,122 @@
     <small> от {{order.sendDate|date : 'd.M.yyyy'}}</small>
 </h4>
 <div class="row">
-    <div class="text-right col-sm-offset-1 col-sm-2 right-padding-5" th:text="#{order.seller}">Поставщик:</div>
-    <div class="col-sm-3 left-padding-0">{{order.seller.organizationName}}</div>
-</div>
-<div class="row">
-    <div class="text-right col-sm-offset-1 col-sm-2 right-padding-5" th:text="#{order.seller}">Контактное лицо:</div>
-    <div class="col-sm-3 left-padding-0">{{order.seller.name}}</div>
-</div>
-<div class="row form-group">
-    <div class="text-right col-sm-offset-1 col-sm-2 right-padding-5" pg-text="order.phoneNumber">Телефон</div>
-    <div class="col-sm-3 left-padding-0">{{order.seller.managerPhone}}</div>
-</div>
-<div class="row">
-    <div class="text-right col-sm-offset-1 col-sm-2 right-padding-5" th:text="#{order.buyer}">Покупатель:</div>
-    <div class="col-sm-3 left-padding-0">{{order.buyer.organizationName}}</div>
+    <div class="col-sm-5">
+        <div class="row">
+            <div class="text-right col-sm-offset-2 col-sm-5 right-padding-5" th:text="#{order.seller}">Поставщик:</div>
+            <div class="col-sm-5 left-padding-0">{{order.seller.organizationName}}</div>
+        </div>
+        <div class="row">
+            <div class="text-right col-sm-offset-2 col-sm-5 right-padding-5" th:text="#{order.seller}">Контактное
+                лицо:
+            </div>
+            <div class="col-sm-5 left-padding-0">{{order.seller.name}}</div>
+        </div>
+        <div class="row form-group">
+            <div class="text-right col-sm-offset-2 col-sm-5 right-padding-5" pg-text="order.phoneNumber">Телефон</div>
+            <div class="col-sm-5 left-padding-0">{{order.seller.managerPhone}}</div>
+        </div>
+        <div class="row">
+            <div class="text-right col-sm-offset-2 col-sm-5 right-padding-5" th:text="#{order.buyer}">Покупатель:</div>
+            <div class="col-sm-5 left-padding-0">{{order.buyer.organizationName}}</div>
+        </div>
+    </div>
 </div>
 <form id="orderForm" class="form-horizontal" name="orderForm">
-<div class="row">
-
-    <div class="text-right col-sm-offset-1 col-sm-2 control-label right-padding-5"
-         th:text="#{order.contactData}">Контактное лицо:
-    </div>
-    <div class="col-sm-2  left-padding-0">
-        <input type="text" class="form-control"
-               placeholder={{order.contactName}}
-               ng-model="order.contactName"/>
-    </div>
-
-
-    <div class="col-sm-3">
-        <label class="radio-inline">
-            <input ng-disabled="{{!order.seller.sellerPickup}}" name="pickup" type="radio"
-                   ng-model="order.pickup" ng-value="true" ng-change="resetOtherDelivery('pickup')"/>
-            <span pg-text="order.delivery.pickup"></span>
-        </label>
-        <label class="radio-inline">
-            <input ng-disabled="{{!order.seller.sellerDelivery}}" name="delivery" type="radio"
-                   ng-model="order.delivery" ng-value="true" ng-change="resetOtherDelivery('delivery')"/>
-            <span pg-text="order.delivery.delivery"></span>
-        </label>
-    </div>
-</div>
 <div class="row form-group">
-    <label class="text-right col-sm-offset-1 col-sm-2 right-padding-5">
-        <div class="control-label" pg-text="order.phoneNumber">Телефон</div>
-    </label>
+    <div class="col-sm-5">
+        <div class="row form-group">
+            <div class="text-right col-sm-offset-2 col-sm-5 control-label right-padding-5"
+                 th:text="#{order.contactData}">Контактное лицо:
+            </div>
+            <div class="col-sm-5  left-padding-0">
+                <input type="text" class="form-control"
+                       placeholder={{order.contactName}}
+                       ng-model="order.contactName"/>
+            </div>
 
-    <div class="col-sm-2 left-padding-0">
-        <input type="text" class="form-control"
-               placeholder={{order.phone}}
-               ng-model="order.phone"/>
+        </div>
+        <div class="row">
+            <label class="text-right col-sm-offset-2 col-sm-5 right-padding-5">
+                <div class="control-label" pg-text="order.phoneNumber">Телефон</div>
+            </label>
+
+            <div class="col-sm-5 left-padding-0">
+                <input type="text" class="form-control"
+                       placeholder={{order.phone}}
+                       ng-model="order.phone"/>
+            </div>
+        </div>
     </div>
+    <div class="col-sm-7">
+        <div class="row">
+            <div class="col-sm-11">
+                <label class="radio-inline">
+                    <input ng-disabled="{{!order.seller.sellerPickup}}" name="pickup" type="radio"
+                           ng-model="order.pickup" ng-value="true" ng-change="resetOtherDelivery('pickup')"/>
+                    <span pg-text="order.delivery.pickup"></span>
+                </label>
+                <label class="radio-inline">
+                    <input ng-disabled="{{!order.seller.sellerDelivery}}" name="delivery" type="radio"
+                           ng-model="order.delivery" ng-value="true" ng-change="resetOtherDelivery('delivery')"/>
+                    <span pg-text="order.delivery.delivery"></span>
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-11">
+                <input ng-show="order.pickup" ng-hide="order.delivery"
+                       placeholder={{order.seller.sellerPickupPlace}}
+                       ng-disabled="true" type="text" class="form-control"/>
 
-    <div class="col-sm-6">
-        <input ng-show="order.pickup" ng-hide="order.delivery"
-               placeholder={{order.seller.sellerPickupPlace}}
-               ng-disabled="true" type="text" class="form-control"/>
+                <pg-delivery-place
+                        delivery-places="deliveryPlaces"
+                        free-input="{{order.seller.region.name}}"
+                        default-input="{{deliveryPlace}}"
+                        on-change-action="changeDeliveryPlace(deliveryPlace)"
+                        ng-model="deliveryPlace"
+                        ng-model-options="{ updateOn: 'change' }"
+                        ng-show="deliveryPlaceAvailability && order.delivery"
+                        class="ng-hide">
+                </pg-delivery-place>
 
-        <pg-delivery-place
-                delivery-places="deliveryPlaces"
-                free-input="{{order.seller.region.name}}"
-                default-input="{{deliveryPlace}}"
-                on-change-action="changeDeliveryPlace(deliveryPlace)"
-                ng-model="deliveryPlace"
-                ng-model-options="{ updateOn: 'change' }"
-                ng-show="deliveryPlaceAvailability && order.delivery"
-                class="ng-hide">
-        </pg-delivery-place>
+                <input ng-show="!deliveryPlaceAvailability && order.delivery"
+                       ng-disabled="true" type="text" placeholder={{order.seller.sellerDeliveryPlace}}
+                       class="form-control ng-hide"/>
+            </div>
+        </div>
+        <div class="row vertical-center">
+            <!--<label class="col-sm-2 margin-top-34 right-padding-5">-->
+                <!--<div class="control-label" pg-text="order.onDate">на дату</div>-->
+            <!--</label>-->
 
-        <input ng-show="!deliveryPlaceAvailability && order.delivery"
-               ng-disabled="true" type="text" placeholder={{order.seller.sellerDeliveryPlace}}
-               class="form-control ng-hide"/>
-    </div>
-</div>
+            <!--<div class="col-sm-3 margin-top-34 left-padding-0">-->
+                <!--<select class="form-control" ng-model="order.deliveryDate"-->
+                        <!--ng-options="deliveryDate | date:deliveryDateFormat for deliveryDate in possibleDeliveryDates">-->
+                    <!--<option ng-show="showPastDate" value="" disabled>-->
+                        <!--{{order.deliveryDate | date:deliveryDateFormat}}-->
+                    <!--</option>-->
+                <!--</select>-->
+            <!--</div>-->
+            <pg-date-list-selector class="col-sm-5"
+                                   price-list="priceList"
+                                   order="order">
 
-<div class="row vertical-center">
+            </pg-date-list-selector>
+            <pg-order-time-period
+                    order="order"
+                    seller="order.seller"
+                    min-delay="2"></pg-order-time-period>
 
-    <label class="col-sm-offset-5 col-sm-1 margin-top-34 right-padding-5">
-        <div class="control-label" pg-text="order.onDate">на дату</div>
-    </label>
+        </div>
+        <div class="row">
+            <div class="row form-group">
+                <div class="col-sm-11">
+                    <input class="form-control" type="text" placeholder="Примечание" ng-model="order.description"/>
+                </div>
+            </div>
+        </div>
 
-    <div class="col-sm-2 margin-top-34 left-padding-0">
-        <select class="form-control" ng-model="order.deliveryDate"
-                ng-options="deliveryDate | date:deliveryDateFormat for deliveryDate in possibleDeliveryDates">
-            <option ng-show="showPastDate" value="" disabled>
-                {{order.deliveryDate | date:deliveryDateFormat}}
-            </option>
-        </select>
-    </div>
-    <pg-order-time-period
-            order="order"
-            seller="order.seller"
-            min-delay="2"></pg-order-time-period>
-</div>
-
-<div class="row form-group">
-    <div class="col-sm-offset-5 col-sm-6">
-        <input class="form-control" type="text" placeholder="Примечание" ng-model="order.description"/>
     </div>
 </div>
 
