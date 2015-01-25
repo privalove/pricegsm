@@ -1104,44 +1104,6 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
     if ($scope.order.seller.managerPhone == null || $scope.order.seller.managerPhone == undefined || $scope.order.seller.managerPhone == "") {
         $scope.order.seller.managerPhone = $scope.order.seller.phone;
     }
-    //todo try to refactor DeliveryPlace start
-    var calculateDeliveryPlaceAvailability = function () {
-        var currentDeliveryPlace = null;
-        _.map($scope.deliveryPlaces, function (deliveryPlace) {
-            if (deliveryPlace.name == $scope.order.seller.sellerDeliveryPlace) {
-                currentDeliveryPlace = deliveryPlace;
-                return;
-            }
-        });
-
-        return currentDeliveryPlace != null && currentDeliveryPlace.name == $scope.order.seller.region.name;
-    }
-
-    $scope.deliveryPlaceAvailability = calculateDeliveryPlaceAvailability();
-    $scope.deliveryPlace = null;
-
-    (function () {
-        if ($scope.order.pickup == true) {
-            $scope.deliveryPlace == "";
-        } else {
-            $scope.deliveryPlace = $scope.order.place;
-        }
-    })();
-
-    $scope.changeDeliveryPlace = function (place) {
-        $scope.deliveryPlace = place;
-    }
-    //todo try to refactor DeliveryPlace end
-
-    $scope.resetOtherDelivery = function (selectedDeliveryType) {
-        if (selectedDeliveryType != "delivery") {
-            $scope.order.delivery = false;
-        }
-        if (selectedDeliveryType != "pickup") {
-            $scope.order.pickup = false;
-        }
-        $scope.order.deliveryFree = false;
-    }
 
     //todo PriceList and Order start
     $scope.findPriceListPosition = function (orderPosition) {
@@ -1376,8 +1338,7 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
         return exitingOrderPosition == undefined
             && orderForm.$valid
             && ($scope.order.delivery || $scope.order.pickup)
-            && !($scope.order.delivery && $scope.deliveryPlaceAvailability
-            && ($scope.deliveryPlace == null || $scope.deliveryPlace == undefined || $scope.deliveryPlace == ""))
+            && !isEmpty($scope.order.place)
             && !$scope.showActuallityError;
     }
 
@@ -1449,13 +1410,6 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
                 $scope.order.deliveryCost = $scope.calcDeliveryPrice($scope.order);
                 $scope.updatePhone();
                 $scope.updateName()
-                if ($scope.order.pickup) {
-                    $scope.order.place = $scope.order.seller.sellerPickupPlace;
-                } else if ($scope.deliveryPlaceAvailability) {
-                    $scope.order.place = $scope.deliveryPlace;
-                } else {
-                    $scope.order.place = $scope.order.seller.sellerDeliveryPlace;
-                }
                 $scope.ok($scope.order);
             });
         }

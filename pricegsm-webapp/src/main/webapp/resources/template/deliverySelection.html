@@ -1,6 +1,6 @@
 <div>
     <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-12">
             <label class="radio-inline">
                 <input ng-disabled="!order.seller.sellerPickup" name="pickup" type="radio"
                        ng-model="order.pickup" ng-value="true" ng-change="resetOtherDelivery('pickup')"/>
@@ -14,7 +14,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-7 ng-hide" ng-show="order.delivery || order.pickup">
+        <div class="col-sm-12 ng-hide" ng-show="order.delivery || order.pickup">
             <input ng-show="order.pickup" ng-hide="order.delivery"
                    placeholder={{order.seller.sellerPickupPlace}}
                    ng-disabled="true" type="text" class="form-control"/>
