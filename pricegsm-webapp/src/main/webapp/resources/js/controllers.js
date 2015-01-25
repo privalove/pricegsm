@@ -1133,67 +1133,6 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
     }
     //todo try to refactor DeliveryPlace end
 
-    //todo create date list directive start
-    var baseDateFormat = "yyyy-MM-dd";
-
-    $scope.showPastDate = compareDates(new Date(), new Date($scope.order.deliveryDate)) > 0;
-
-    function getDateList(startDate, numberOfDays) {
-        var format = "yyyy-MM-dd";
-        var dates = [];
-        for (var i = 0; i < numberOfDays; i++) {
-            dates.push($filter('date')(new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + i), format));
-        }
-        return dates;
-    }
-
-    function getPossibleDeliveryDates() {
-        if ($scope.priceList == null || $scope.priceList == undefined) {
-            return;
-        }
-        var today = new Date();
-        var tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
-        if ($scope.priceList.position == 0) {
-            if (today.getHours() < $scope.order.seller.deadLine) {
-                return getDateList(today, 3);
-            } else {
-                return getDateList(tomorrow, 2);
-            }
-        } else {
-            var fromDate = new Date($scope.priceList.sellFromDate);
-            var toDate = new Date($scope.priceList.sellToDate);
-            if (compareDates(today, toDate) > 0) {
-                return [];
-            }
-            if (compareDates(today, toDate) == 0) {
-                if (today.getHours() < $scope.order.seller.deadLine) {
-                    fromDate = today;
-                } else {
-                    return [];
-                }
-            }
-
-            if (compareDates(today, fromDate) >= 0) {
-                if (today.getHours() < $scope.order.seller.deadLine) {
-                    fromDate = today;
-                } else {
-                    fromDate = tomorrow;
-                }
-            }
-
-            var dayNumber = toDate.getDate();
-            if (toDate.getMonth() != fromDate.getMonth()) {
-                toDate.setDate(-1)
-                dayNumber += toDate.getDate() + 1;
-            }
-            var numberOfDays = dayNumber - fromDate.getDate() + 1;
-            return getDateList(fromDate, numberOfDays);
-        }
-    }
-
-    $scope.possibleDeliveryDates = getPossibleDeliveryDates();
-    //todo create date list directive end
-
     $scope.resetOtherDelivery = function (selectedDeliveryType) {
         if (selectedDeliveryType != "delivery") {
             $scope.order.delivery = false;
@@ -1296,7 +1235,7 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
 
     $scope.refresh = function (callback) {
         var today = new Date();
-
+        var baseDateFormat = "yyyy-MM-dd";
         if (compareDates(today, new Date($scope.order.deliveryDate)) > 0) {
             $scope.order.deliveryDate = $filter('date')(today, baseDateFormat);
             $scope.showPastDate = false;
