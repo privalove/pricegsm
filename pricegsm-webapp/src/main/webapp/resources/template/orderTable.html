@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-sm-12">
-        <table class="table table-hover table-condensed">
+        <table class="table table-hover table-condensed pg-pricelist">
             <thead>
             <tr>
                 <th pg-text="priceListPosition.name">Наименование</th>
@@ -22,7 +22,7 @@
                 <td>{{orderPosition.description}}</td>
                 <td>
                     <div class="reduceAmountButton pull-right">
-                        <button type="button" class="btn btn-xs btn-danger" tooltip="Удалить"
+                        <button ng-show="!readonly" type="button" class="ng-hide btn btn-xs btn-danger" tooltip="Удалить"
                                 ng-click="reduceAmount(orderPosition)">
                             <i class="fa fa-minus"></i>
                         </button>
@@ -31,7 +31,7 @@
                 <td>
                     <input type="number" name="amount" class="form-control input-group"
                            ng-change="updateAmount()"
-                           ng-readonly={{readonly}}
+                           ng-readonly="readonly||orderPosition.deleted"
                            ng-model="orderPosition.amount"
                            min="{{orderPosition.minOrderQuantity}}" max="" required=""/>
                 </td>

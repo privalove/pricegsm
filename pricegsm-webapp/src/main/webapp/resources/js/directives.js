@@ -642,6 +642,10 @@
                             }
                         );
                     }
+
+                    $scope.$watch("pricelist", function () {
+                        $scope.priceList = $scope.pricelist;
+                    });
                 }
             }
         }])
@@ -653,11 +657,12 @@
                     updateOrder: "&"
                 },
                 restrict: 'E',
+                replace: true,
                 templateUrl: "resources/template/orderTable.html",
                 link: function ($scope, element, attrs) {
                     $scope.readonly = $scope.$eval(attrs.readonly);
 
-                    $scope.$watch("readonly", function () {
+                    attrs.$observe("readonly", function () {
                         $scope.readonly = $scope.$eval(attrs.readonly);
                     });
 
@@ -667,7 +672,7 @@
                     }
 
                     $scope.reduceAmount = function (orderPosition) {
-                        if (orderPosition.minOrderQuantity < orderPosition.amount) {
+                        if (!$scope.readonly && orderPosition.minOrderQuantity < orderPosition.amount) {
                             orderPosition.amount--;
                             $scope.updateOrder($scope.order);
                         }

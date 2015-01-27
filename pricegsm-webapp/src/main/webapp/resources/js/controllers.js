@@ -809,6 +809,9 @@ function findPriceListByOrder(pricelists, order) {
 function updateOrderPositionsByPriceList(order, priceList) {
     _.each(order.orderPositions, function (orderPosition) {
         var priceListPosition = findPriceListPosition(orderPosition, priceList);
+        if (isEmpty(priceListPosition)) {
+            return;
+        }
         var price = findPrice(priceListPosition.prices, orderPosition.amount);
         orderPosition.price = price.price;
     });
@@ -1105,74 +1108,20 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
         $scope.order.seller.managerPhone = $scope.order.seller.phone;
     }
 
-    //todo PriceList and Order start
-    $scope.findPriceListPosition = function (orderPosition) {
-        return _.find($scope.priceList.positions, function (priceListPosition) {
-            return orderPosition.priceListPosition == priceListPosition.id;
-        });
-    }
+    updatePriceListView($scope.priceList, $scope.order);
 
-    if ($scope.priceList != null && $scope.priceList != undefined) {
-        _.each($scope.order.orderPositions, function (orderPosition) {
-            markSelectedPrice(orderPosition);
-        });
-    }
-
-    $scope.updatePrices = function (orderPosition) {
-        $scope.updatePriceListAmount(orderPosition);
-
-        $scope.order.totalPrice = $scope.calcTotalPrice($scope.order);
-        $scope.order.deliveryCost = $scope.calcDeliveryPrice($scope.order);
-
-    }
-
-    $scope.validateRefreshedState = function () {
-        if (!$scope.isRefreshed) {
-            $scope.isShowRefreshedError = true;
-        }
-        return $scope.isRefreshed;
-    }
-
-    $scope.changePrices = function (orderPosition) {
-        if (!$scope.validateRefreshedState()) {
-            return;
-        }
-        $scope.updatePrices(orderPosition);
-    }
-
-    $scope.refreshOrderPositions = function (order) {
-        _.map(order.orderPositions, function (orderPosition) {
-            var priceListPosition = $scope.findPriceListPosition(orderPosition);
-            if (priceListPosition == undefined || priceListPosition == null) {
-                orderPosition.selectedStyle = "danger";
-                orderPosition.deleted = true;
-                return;
-            }
-            var prices = priceListPosition.prices;
-            var price = findPrice(prices, orderPosition.amount);
-            $scope.updatePrices(orderPosition);
-            orderPosition.specification = priceListPosition.specification;
-            orderPosition.description = priceListPosition.description;
-
-            if (priceListPosition.amount < orderPosition.amount) {
-                orderPosition.amount = priceListPosition.amount;
-            }
-
-            if (priceListPosition.price != price.price) {
-                orderPosition.price = price.price;
-            }
-
-            $scope.updatePriceListAmount(orderPosition);
-
-        });
-        if (order.orderPositions.length != 0) {
-            $scope.order.totalPrice = $scope.calcTotalPrice($scope.order);
-            $scope.order.deliveryCost = $scope.calcDeliveryPrice($scope.order);
-        } else {
-            $scope.order.totalPrice = 0;
-            $scope.order.deliveryCost = 0;
-        }
+    $scope.updateOrder = function (order) {
+        updateOrderPositionsByPriceList(order, $scope.priceList);
+        updateOrder(order);
+        updatePriceListView($scope.priceList, order);
     };
+
+    $scope.selectPriceListPosition = function (data) {
+        if ($scope.isRefreshed) {
+            addOrderPosition(data.priceListPosition, data.price, $scope.priceList, $scope.order, false);
+            updatePriceListView($scope.priceList, $scope.order);
+        }
+    }
 
     $scope.loadPriceList = function (sellerId, position, callback) {
         var PriceList = $resource("order/:id/:position/pricelist.json", {id: '@id', position: '@position'});
@@ -1182,16 +1131,12 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
             $scope.isShowRefreshedError = false;
 
             $scope.priceList = data.payload.priceList;
-            $scope.orderPositionTemplate = data.payload.orderPositionTemplate;
 
-            $scope.order.currency = $scope.priceList.currency;
-
-            $scope.refreshOrderPositions($scope.order);
+            refreshOrderPositions($scope.order, $scope.priceList);
 
             if (callback != null && callback != undefined) {
                 callback();
             }
-
         });
     };
 
@@ -1214,123 +1159,6 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
         $scope.loadPriceList($scope.order.seller.id, $scope.order.priceListPosition, callback);
     }
 
-    $scope.reduceAmount = function (orderPosition) {
-        if (!$scope.validateRefreshedState()) {
-            return;
-        }
-
-        if (orderPosition.amount > $scope.getMinimumAmount(orderPosition)) {
-            orderPosition.amount--;
-            $scope.updatePrices(orderPosition);
-        }
-    }
-
-    $scope.addOrderPosition = function (priceListPosition, price) {
-        if (!$scope.validateRefreshedState()) {
-            return;
-        }
-        var exitingOrderPosition = _.find($scope.order.orderPositions, function (orderPosition) {
-            return orderPosition.priceListPosition == priceListPosition.id;
-        });
-
-        if (exitingOrderPosition != undefined) {
-            if (price.minOrderQuantity > exitingOrderPosition.amount) {
-                priceListPosition.amount = price.minOrderQuantity;
-                exitingOrderPosition.amount = price.minOrderQuantity;
-                exitingOrderPosition.price = price.price;
-            } else {
-                priceListPosition.amount++;
-                exitingOrderPosition.amount++;
-            }
-
-            $scope.refreshOrderPositions($scope.order);
-            exitingOrderPosition.totalPrice = $scope.getPositionTotalPrice(exitingOrderPosition);
-            return;
-        }
-
-        var position = angular.copy($scope.orderPositionTemplate);
-        position.order = {id: currentOrder.id, name: ""};
-        priceListPosition.amount = price.minOrderQuantity;
-        position.amount = price.minOrderQuantity;
-        position.price = price.price;
-        position.totalPrice = 0;
-        position.product = priceListPosition.product;
-        position.priceListPosition = priceListPosition.id;
-        position.price = calculatePrice(priceListPosition.prices, position.amount);
-        position.specification = priceListPosition.specification;
-        position.description = priceListPosition.description;
-
-        $scope.order.orderPositions.push(position);
-        $scope.updatePrices(position);
-    }
-
-    function findPrice(prices, amount) {
-        var sortedPrices = _.sortBy(prices, function (price) {
-            return -1 * price.minOrderQuantity;
-        });
-
-        var price = _.find(sortedPrices, function (price) {
-            return price.minOrderQuantity <= amount;
-        });
-        return price;
-    }
-
-    var calculatePrice = function (prices, amount) {
-        var price = findPrice(prices, amount);
-        return  price.price;
-    };
-
-    function updatePricesSelected(prices, price, amount) {
-        _.map(prices, function (price) {
-            price.selectedStyle = "";
-            price.amount = "";
-        });
-        if(isEmpty(price)) {
-            return;
-        }
-        price.selectedStyle = "success";
-        price.amount = amount;
-    }
-
-    function markSelectedPrice(orderPosition) {
-        var priceListPosition = $scope.findPriceListPosition(orderPosition);
-        if (priceListPosition == undefined || priceListPosition == null) {
-            return orderPosition.price;
-        }
-        priceListPosition.amount = orderPosition.amount;
-        var prices = priceListPosition.prices;
-        var price = findPrice(prices, orderPosition.amount);
-        updatePricesSelected(prices, price, priceListPosition.amount);
-        //todo bad practice 2 responsib refsctor
-        return price;
-    }
-
-    $scope.updatePriceListAmount = function (orderPosition) {
-        if ($scope.priceList != null) {
-            var price = markSelectedPrice(orderPosition);
-            orderPosition.price = price.price;
-        }
-        if (orderPosition.amount == 0) {
-            orderPosition.selectedStyle = "danger";
-
-        } else {
-            orderPosition.selectedStyle = "";
-        }
-
-        orderPosition.totalPrice = $scope.getPositionTotalPrice(orderPosition);
-    }
-
-    $scope.getMinimumAmount = function (orderPosition) {
-        var priceListPosition = $scope.findPriceListPosition(orderPosition);
-        if (priceListPosition == undefined || priceListPosition == null) {
-            return orderPosition.amount;
-        }
-        var price = _.min(priceListPosition.prices, function (price) {
-            return price.minOrderQuantity;
-        });
-        return  price.minOrderQuantity;
-    }
-
     $scope.formEnable = function (orderForm) {
         var exitingOrderPosition = _.find($scope.order.orderPositions, function (orderPosition) {
             return orderPosition.amount == 0;
@@ -1342,58 +1170,6 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
             && !$scope.showActuallityError;
     }
 
-    $scope.getPositionTotalPrice = function (orderPosition) {
-        var amount = orderPosition.amount;
-        if (amount == undefined || orderPosition.deleted) {
-            return 0;
-        }
-        return  orderPosition.price * amount;
-    }
-
-    $scope.calcDeliveryPrice = function (order) {
-        if (!$scope.order.seller.sellerDeliveryPaid && !$scope.order.seller.sellerDeliveryFree) {
-            return 0;
-        }
-
-        if ($scope.order.seller.sellerDeliveryPaid && !$scope.order.seller.sellerDeliveryFree) {
-            return $scope.order.seller.sellerDeliveryCost;
-        }
-
-        if (!$scope.order.seller.sellerDeliveryPaid && $scope.order.seller.sellerDeliveryFree) {
-            return 0;
-        }
-        if ($scope.order.seller.sellerDeliveryPaid && $scope.order.seller.sellerDeliveryFree) {
-            if ($scope.calcTotalAmount(order) >= $scope.order.seller.sellerDeliveryMin) {
-                return 0;
-            } else {
-                return  $scope.order.seller.sellerDeliveryCost;
-            }
-        }
-    }
-
-    function getPositionTotalPrice(order) {
-        var positionTotalPrice = _.reduce(
-            _.map(order.orderPositions, function (position) {
-                return $scope.getPositionTotalPrice(position)
-            }),
-            function (memo, num) {
-                return memo + num
-            }, 0);
-        return positionTotalPrice;
-    }
-
-    $scope.calcTotalPrice = function (order) {
-        return  getPositionTotalPrice(order) + $scope.calcDeliveryPrice(order);
-    }
-
-    $scope.deleteOrderPosition = function ($event, index) {
-        $event.stopPropagation();
-        $scope.order.orderPositions.splice(index, 1);
-        if ($scope.priceList != null) {
-            $scope.refresh();
-        }
-    }
-
     $scope.save = function (form, status) {
         if (compareDates(new Date(), new Date($scope.order.deliveryDate)) > 0) {
             $scope.showSaveError = true;
@@ -1401,33 +1177,16 @@ function OrderPositionCtrl($scope, $modal, $modalInstance, $resource, $filter, c
         }
         if (form.$valid) {
             $scope.refresh(function () {
-                $scope.order.totalAmount = $scope.calcTotalAmount($scope.order);
                 $scope.order.status = status;
                 if (status == "SENT") {
                     $scope.order.sendDate = new Date();
                 }
-                $scope.order.totalPrice = $scope.calcTotalPrice($scope.order);
-                $scope.order.deliveryCost = $scope.calcDeliveryPrice($scope.order);
                 $scope.updatePhone();
                 $scope.updateName()
                 $scope.ok($scope.order);
             });
         }
     };
-
-    $scope.calcTotalAmount = function (order) {
-
-        return _.reduce(
-            _.map(order.orderPositions, function (position) {
-                if (position.deleted) {
-                    return 0;
-                }
-                return position.amount;
-            }),
-            function (memo, num) {
-                return memo + num;
-            }, 0)
-    }
 
     $scope.review = function (order) {
         $modal.open({
@@ -1489,7 +1248,6 @@ function compareDates(date1, date2) {
     }
 }
 
-// todo fix
 function isPriceListActual(priceList, today) {
     var sellToDate = new Date(priceList.sellToDate);
     var sellFromDate = new Date(priceList.sellFromDate);

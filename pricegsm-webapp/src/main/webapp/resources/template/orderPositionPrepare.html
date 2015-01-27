@@ -38,181 +38,89 @@
     </div>
 </div>
 <form id="orderForm" class="form-horizontal" name="orderForm">
-<div class="row form-group">
-    <div class="col-sm-5">
-        <div class="row form-group">
-            <div class="text-right col-sm-offset-2 col-sm-5 control-label right-padding-5"
-                 th:text="#{order.contactData}">Контактное лицо:
-            </div>
-            <div class="col-sm-5  left-padding-0">
-                <input type="text" class="form-control"
-                       placeholder={{order.contactName}}
-                       ng-model="order.contactName"/>
-            </div>
-
-        </div>
-        <div class="row">
-            <label class="text-right col-sm-offset-2 col-sm-5 right-padding-5">
-                <div class="control-label" pg-text="order.phoneNumber">Телефон</div>
-            </label>
-
-            <div class="col-sm-5 left-padding-0">
-                <input type="text" class="form-control"
-                       placeholder={{order.phone}}
-                       ng-model="order.phone"/>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-7">
-        <div class="row">
-            <div class="col-sm-11">
-                <pg-delivery-selection
-                        order="order"
-                        delivery-places="deliveryPlaces">
-                </pg-delivery-selection>
-            </div>
-        </div>
-        <div class="row vertical-center">
-            <pg-date-list-selector class="col-sm-5"
-                                   price-list="priceList"
-                                   order="order">
-
-            </pg-date-list-selector>
-            <pg-order-time-period
-                    order="order"
-                    seller="order.seller"
-                    min-delay="2"></pg-order-time-period>
-
-        </div>
-        <div class="row">
+    <div class="row form-group">
+        <div class="col-sm-5">
             <div class="row form-group">
-                <div class="col-sm-11">
-                    <input class="form-control" type="text" placeholder="Примечание" ng-model="order.description"/>
+                <div class="text-right col-sm-offset-2 col-sm-5 control-label right-padding-5"
+                     th:text="#{order.contactData}">Контактное лицо:
+                </div>
+                <div class="col-sm-5  left-padding-0">
+                    <input type="text" class="form-control"
+                           placeholder={{order.contactName}}
+                           ng-model="order.contactName"/>
+                </div>
+
+            </div>
+            <div class="row">
+                <label class="text-right col-sm-offset-2 col-sm-5 right-padding-5">
+                    <div class="control-label" pg-text="order.phoneNumber">Телефон</div>
+                </label>
+
+                <div class="col-sm-5 left-padding-0">
+                    <input type="text" class="form-control"
+                           placeholder={{order.phone}}
+                           ng-model="order.phone"/>
                 </div>
             </div>
         </div>
+        <div class="col-sm-7">
+            <div class="row">
+                <div class="col-sm-11">
+                    <pg-delivery-selection
+                            order="order"
+                            delivery-places="deliveryPlaces">
+                    </pg-delivery-selection>
+                </div>
+            </div>
+            <div class="row vertical-center">
+                <pg-date-list-selector class="col-sm-5"
+                                       price-list="priceList"
+                                       order="order">
 
-    </div>
-</div>
+                </pg-date-list-selector>
+                <pg-order-time-period
+                        order="order"
+                        seller="order.seller"
+                        min-delay="2"></pg-order-time-period>
 
-<div class="row">
-    <div class="col-sm-12">
-        <table class="table table-hover table-condensed pg-pricelist">
-            <thead>
-            <tr>
-                <th pg-text="priceListPosition.name">Наименование</th>
-                <th pg-text="color">цвет</th>
-                <th>Спец-ия</th>
-                <th pg-text="note">примичание</th>
-                <th></th>
-                <th class="pg-amount" pg-text="page.order.totalAmount">количество</th>
-                <th pg-text="priceListPosition.price">цена</th>
-                <th pg-text="page.order.totalPrice">сумма</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr class="{{orderPosition.selectedStyle}}" ng-repeat="orderPosition in order.orderPositions">
-                <td>{{orderPosition.product.name}}</td>
-                <td>{{orderPosition.product.color.name}}</td>
-                <td>{{orderPosition.specification.name}}</td>
-                <td>{{orderPosition.description}}</td>
-                <td>
-                    <div class="reduceAmountButton pull-right">
-                        <button type="button" class="btn btn-xs btn-danger" tooltip="Удалить"
-                                ng-click="reduceAmount(orderPosition)">
-                            <i class="fa fa-minus"></i>
-                        </button>
+            </div>
+            <div class="row">
+                <div class="row form-group">
+                    <div class="col-sm-11">
+                        <input class="form-control" type="text" placeholder="Примечание" ng-model="order.description"/>
                     </div>
-                </td>
-                <td>
-                    <input type="number" name="amount" class="form-control input-group"
-                           min={{getMinimumAmount(orderPosition)}} max="" required=""
-                           ng-change="changePrices(orderPosition)"
-                           ng-click="validateRefreshedState()"
-                           ng-model="orderPosition.amount" ng-readonly="!isRefreshed || orderPosition.deleted"/>
-                </td>
-                <td>{{orderPosition.price | priceFilter : order.currency.symbol}}</td>
-                <td>{{orderPosition.totalPrice | priceFilter : order.currency.symbol}}</td>
-                <td>
-                    <button type="button" class="btn btn-xs btn-danger" tooltip="Удалить"
-                            ng-click="deleteOrderPosition($event,$index)">
-                        <i class="fa fa-times"></i>
-                    </button>
-                </td>
-            </tr>
-            <tr></tr>
-            <tr>
-                <td colspan="6"></td>
-                <td colspan="1"><span>Доставка:</span></td>
-                <td colspan="1"><span>{{order.deliveryCost  | priceFilter : order.currency.symbol}}</span></td>
-                <td colspan="1"></td>
-            </tr>
-            <tr class="no-border-children">
-                <th colspan="6"></th>
-                <th colspan="1"><span>Итого:</span></th>
-                <th colspan="1"><span>{{order.totalPrice  | priceFilter : order.currency.symbol}}</span></th>
-                <th colspan="1"></th>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-<div class="row form-group">
-    <div class="col-sm-offset-1 col-sm-5">
-        <button type="button" class="btn btn-default" tooltip="Обновить" ng-click="$parent.refresh()">
-            <i class="fa fa-refresh"></i>
-            <span>Обновить</span>
-        </button>
-    </div>
-</div>
-<div class="row form-group" ng-show="showActuallityError">
-    <div class="has-error form-group col-sm-10">
-        <div class="form-control col-sm-offset-1">Даннoe предложение не актуально.</div>
-    </div>
-</div>
-<div class="row form-group">
-    <div class="col-sm-12">
-        <table class="table table-hover table-condensed">
-            <thead>
-            <tr>
-                <th>Наименование</th>
-                <th>Цвет</th>
-                <th>Спец-ия</th>
-                <th>Описание</th>
-                <th>Кол-во</th>
-                <th>Цена</th>
-                <th>МОК</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr class="{{position.prices[0].selectedStyle}}" ng-repeat-start="position in priceList.positions"
-                ng-click="addOrderPosition(position, position.prices[0])">
-                <td>{{position.product.name}}</td>
-                <td>{{position.product.color.name}}</td>
-                <td>{{position.specification.name}}</td>
-                <td>{{position.description}}</td>
-                <td>{{position.prices[0].amount}}</td>
-                <td>{{position.prices[0].price | priceFilter : priceList.currency.symbol}}</td>
-                <td>{{position.prices[0].minOrderQuantity}}</td>
-            </tr>
-            <tr class="{{price.selectedStyle}}" ng-repeat="price in position.prices.slice(1)"
-                ng-click="addOrderPosition(position, price)">
-                <td colspan="4"></td>
-                <td colspan="1">{{price.amount}}</td>
-                <td colspan="1">{{price.price | priceFilter : priceList.currency.symbol}}</td>
-                <td colspan="1">{{price.minOrderQuantity}}</td>
-            </tr>
-            <tr ng-repeat-end="position in positions"></tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-<div class="row form-group">
-    <div class="col-sm-offset-1 col-sm-5">
+                </div>
+            </div>
 
+        </div>
     </div>
-</div>
+    <pg-order order="order"
+              readonly={{!isRefreshed}}
+              update-order="updateOrder(order)">
+    </pg-order>
+    <div class="row form-group">
+        <div class="col-sm-offset-1 col-sm-5">
+            <button type="button" class="btn btn-default" tooltip="Обновить" ng-click="$parent.refresh()">
+                <i class="fa fa-refresh"></i>
+                <span>Обновить</span>
+            </button>
+        </div>
+    </div>
+    <div class="row form-group" ng-show="showActuallityError">
+        <div class="has-error form-group col-sm-10">
+            <div class="form-control col-sm-offset-1">Даннoe предложение не актуально.</div>
+        </div>
+    </div>
+    <pg-pricelist
+            pricelist="priceList"
+            order="order"
+            on-select-action="selectPriceListPosition(data)">
+    </pg-pricelist>
+    <div class="row form-group">
+        <div class="col-sm-offset-1 col-sm-5">
+
+        </div>
+    </div>
 </form>
 
 <div class="row">
