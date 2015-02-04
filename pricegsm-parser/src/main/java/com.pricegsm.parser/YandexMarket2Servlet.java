@@ -11,11 +11,11 @@ import java.io.IOException;
 @WebServlet(name="yandex2Servlet", urlPatterns={"/yandex2"})
 public class YandexMarket2Servlet extends HttpServlet {
 
-    private YandexMarket2Parser parser;
+    private YandexMarketAPIParser parser;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
-        parser = new YandexMarket2Parser();
+        parser = new YandexMarketAPIParser();
     }
 
     @Override
