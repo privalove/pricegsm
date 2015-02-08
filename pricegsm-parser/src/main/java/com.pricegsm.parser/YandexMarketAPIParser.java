@@ -52,6 +52,10 @@ public class YandexMarketAPIParser {
 
             page = getFirstPage(query, yandexTypeId, webClient);
 
+//            String s = UrlFetchUtil.processXSL(page.asXml(), "/template/yandex4.xsl", Collections.<String, Object>emptyMap());
+//            logger.error("from yandex:   " + page.asXml());
+//            logger.error("after parser:  " + s);
+
             JSONObject shops = UrlFetchUtil.processPage(page.asXml(), "/template/yandex4.xsl");
             JSONArray offers = shops.getJSONObject("result").getJSONArray("offer");
             int count = 0;

@@ -70,6 +70,9 @@ public class ParserService {
             for (Object[] pair : dates) {
                 // for time delay - delete when migrate to direct access yandex.api
                 long startTime = System.currentTimeMillis();
+                // time delay - delete when migrate to direct access yandex.api
+                while (System.currentTimeMillis() - startTime < 5000) {
+                }
 
                 Long productId = (Long) pair[0];
                 Date date = (Date) pair[1];
@@ -84,7 +87,7 @@ public class ParserService {
                                 ? "(" + product.getColorQuery().replaceAll(",", " | ") + ")"
                                 : "";
                         String exclude = !Utils.isEmpty(product.getExcludeQuery())
-                                ? "~~ (" + product.getExcludeQuery().replaceAll(",", " | ") + ")"
+                                ? " ~~ (" + product.getExcludeQuery().replaceAll(",", " | ") + ")"
                                 : "";
                         String query = search + color + exclude;
 
@@ -129,10 +132,6 @@ public class ParserService {
                 } catch (Exception e) {
                     logger.warn("Error parse yandex data for product {}: {}", productId, Throwables.getRootCause(e).getMessage());
                     logger.debug(Throwables.getRootCause(e).getMessage(), Throwables.getRootCause(e));
-                }
-
-                // time delay - delete when migrate to direct access yandex.api
-                while (System.currentTimeMillis() - startTime < 5000) {
                 }
             }
 

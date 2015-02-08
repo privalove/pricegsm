@@ -41,7 +41,7 @@
 
     <xsl:template match="search-result">
         <count>
-            <xsl:value-of select="//search-result/@count"/>
+            <xsl:value-of select="//search-result/@total"/>
         </count>
     </xsl:template>
 

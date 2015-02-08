@@ -797,9 +797,9 @@
                             return "";
                         }
 
-                        var exclude = $scope.product.excludeQuery ? "~~(" + $scope.product.excludeQuery.replace(/,/g, "|") + ")" : "";
+                        var exclude = $scope.product.excludeQuery ? " ~~ (" + $scope.product.excludeQuery.replace(/,/g, " | ") + ")" : "";
 
-                        var query = "(" + $scope.product.searchQuery.replace(/,/g, "|") + ")(" + $scope.product.colorQuery.replace(/,/g, "|") + ")" + exclude;
+                        var query = "(" + $scope.product.searchQuery.replace(/,/g, " | ") + ")(" + $scope.product.colorQuery.replace(/,/g, " | ") + ")" + exclude;
 
                         return "http://market.yandex.ru/search.xml?hid=" + $scope.product.type.yandexId + "&text=" + encodeURIComponent(query) + "&nopreciser=1&how=aprice&np=1&onstock=1";
                     };
