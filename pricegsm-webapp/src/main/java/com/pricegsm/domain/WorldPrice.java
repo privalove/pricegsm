@@ -28,6 +28,8 @@ public class WorldPrice
 
     private Date date;
 
+    private int position;
+
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(generator = "YandexPrice")
@@ -89,5 +91,15 @@ public class WorldPrice
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    @Basic
+    @Column(name = "position")
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 }

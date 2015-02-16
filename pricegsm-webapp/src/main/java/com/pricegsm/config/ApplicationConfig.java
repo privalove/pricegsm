@@ -9,6 +9,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import static org.springframework.context.annotation.ComponentScan.Filter;
 
@@ -24,6 +25,14 @@ class ApplicationConfig {
                 new ClassPathResource("/persistence.properties"),
                 new ClassPathResource("/build.properties")});
         return ppc;
+    }
+
+    @Bean
+    public CommonsMultipartResolver multipartResolver(){
+        CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver();
+        commonsMultipartResolver.setDefaultEncoding("utf-8");
+        commonsMultipartResolver.setMaxUploadSize(100000000);
+        return commonsMultipartResolver;
     }
 
 }
