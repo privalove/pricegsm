@@ -1,5 +1,6 @@
 package com.pricegsm.parser;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -10,21 +11,35 @@ import java.util.List;
  */
 public class ProductNameSearcher implements Searcher {
 
-    private List<String> nameFragments;
+    private final ArrayList<List<String>> searchQueries;
 
     public ProductNameSearcher(String name) {
-        this.nameFragments = Arrays.asList(name.split(" "));
+
+        List<String> searchQueryStrings = Arrays.asList(name.split(","));
+        searchQueries = new ArrayList<>();
+        for (String searchQuery : searchQueryStrings) {
+            searchQueries.add(Arrays.asList(searchQuery.split(" ")));
+        }
     }
 
     @Override
     public boolean isCellFind(String data) {
         String lowerCaseData = data.toLowerCase();
-        for (String nameFragment : nameFragments) {
-            if (!lowerCaseData.matches("(^|^.*[\\W])" + nameFragment.toLowerCase() + "([\\W].*$|$)")) {
-                return false;
+        boolean error = false;
+        for (List<String> nameFragments : searchQueries) {
+            for (String nameFragment : nameFragments) {
+                if (!lowerCaseData.matches("(^|^.*[\\W])"
+                        + nameFragment.toLowerCase()
+                        + "(gB[\\W].*$|Gb[\\W].*$|GB[\\W].*$|gb[\\W].*$|[\\W].*$|"
+                        + "GB$|gb$|gB$|Gb$|$)")) {
+                    error = true;
+                    break;
+                }
             }
-
+            if (!error) {
+                return true;
+            }
         }
-        return true;
+        return false;
     }
 }

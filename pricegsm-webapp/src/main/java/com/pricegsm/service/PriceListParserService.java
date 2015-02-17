@@ -5,16 +5,11 @@ import com.pricegsm.domain.Exchange;
 import com.pricegsm.domain.Product;
 import com.pricegsm.domain.WorldPrice;
 import com.pricegsm.parser.PriceListExcelParser;
-import com.pricegsm.parser.PriceListParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
 
@@ -38,9 +33,9 @@ public class PriceListParserService {
     public void parse(MultipartFile file) {
         List<Product> products = productService.findActive();
 
-        PriceListParser parser = new PriceListExcelParser();
+        PriceListExcelParser parser = new PriceListExcelParser();
 
-        List<WorldPrice> prices = parser.parse(getFile(file), products);
+        List<WorldPrice> prices = parser.parse(file, products);
 
         Exchange rub = exchangeService.getLast(Currency.USD, Currency.RUB);
         Exchange eur = exchangeService.getLast(Currency.EUR, Currency.USD);
@@ -54,21 +49,5 @@ public class PriceListParserService {
             worldPriceService.save(price);
         }
 
-    }
-
-    private File getFile(MultipartFile file) {
-        if (!file.isEmpty()) {
-            try {
-                byte[] bytes = file.getBytes();
-                File resultFile = new File(file.getName());
-                BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(resultFile));
-                stream.write(bytes);
-                stream.close();
-                return resultFile;
-            } catch (Exception e) {
-                e.fillInStackTrace();
-            }
-        }
-        return null;
     }
 }

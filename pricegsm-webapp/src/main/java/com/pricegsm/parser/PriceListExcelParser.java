@@ -2,6 +2,7 @@ package com.pricegsm.parser;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -14,20 +15,20 @@ import java.util.Locale;
  * Date: 14.02.15
  * Time: 2:52
  */
-public class PriceListExcelParser extends PriceListParser<File> {
+public class PriceListExcelParser extends PriceListParser<MultipartFile> {
 
 
     @Override
-    protected List<String> findRow(File source, List<Searcher> searchers) {
+    protected List<String> findRow(MultipartFile source, List<Searcher> searchers) {
         List<String> result = new ArrayList<>();
         try {
-            FileInputStream file = new FileInputStream(source);
+            InputStream inputStream = source.getInputStream();
 
-            Workbook wb = WorkbookFactory.create(file);
+            Workbook wb = WorkbookFactory.create(inputStream);
             Sheet sheet = wb.getSheetAt(0);
 
             result = getResultRow(sheet, searchers);
-            file.close();
+            inputStream.close();
 
 
         } catch (FileNotFoundException e) {
