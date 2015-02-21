@@ -25,8 +25,8 @@ public class ProductNameSearcher implements Searcher {
     @Override
     public boolean isCellFind(String data) {
         String lowerCaseData = data.toLowerCase();
-        boolean error = false;
         for (List<String> nameFragments : searchQueries) {
+            boolean error = false;
             for (String nameFragment : nameFragments) {
                 if (!lowerCaseData.matches("(^|^.*[\\W])"
                         + nameFragment.toLowerCase()

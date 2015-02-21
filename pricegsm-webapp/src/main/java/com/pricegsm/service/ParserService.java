@@ -71,7 +71,7 @@ public class ParserService {
                 // for time delay - delete when migrate to direct access yandex.api
                 long startTime = System.currentTimeMillis();
                 // time delay - delete when migrate to direct access yandex.api
-                while (System.currentTimeMillis() - startTime < 5000) {
+                while (System.currentTimeMillis() - startTime < 6000) {
                 }
 
                 Long productId = (Long) pair[0];
