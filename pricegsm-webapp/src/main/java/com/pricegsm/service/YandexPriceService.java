@@ -1,12 +1,15 @@
 package com.pricegsm.service;
 
 import com.pricegsm.dao.YandexPriceDao;
+import com.pricegsm.domain.Product;
 import com.pricegsm.domain.YandexPrice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class YandexPriceService
@@ -30,6 +33,17 @@ public class YandexPriceService
 
     public YandexPrice findLastMinPrice(long productId) {
         return postLoad(getDao().findLastMinPrice(productId));
+    }
+
+    public Map<Long, YandexPrice> getProductLastMinPricesMap(long vendorId) {
+
+        List<YandexPrice> yandexPrices = getDao().findLastMinPrices(vendorId);
+        Map<Long, YandexPrice> result = new HashMap<>();
+        for (YandexPrice yandexPrice : yandexPrices) {
+            result.put(yandexPrice.getProduct().getId(), yandexPrice);
+        }
+
+        return result;
     }
 
     public YandexPrice findByDateMinPrice(long productId, Date date) {

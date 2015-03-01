@@ -49,12 +49,13 @@ public class YandexMarketAPIParser {
             YandexMarketResult result = new YandexMarketResult();
             List<Position> positions = result.getResult().getOffers();
 
+//            logger.error("query: " + query + "\nyandexTypeId: " +yandexTypeId + "\n");
 
             page = getFirstPage(query, yandexTypeId, webClient);
 
 //            String s = UrlFetchUtil.processXSL(page.asXml(), "/template/yandex4.xsl", Collections.<String, Object>emptyMap());
-//            logger.error("from yandex:   " + page.asXml());
-//            logger.error("after parser:  " + s);
+//            logger.error("from yandex: \n" + page.asXml());
+//            logger.error("after parser:  \n" + s);
 
             JSONObject shops = UrlFetchUtil.processPage(page.asXml(), "/template/yandex4.xsl");
             JSONArray offers = shops.getJSONObject("result").getJSONArray("offer");

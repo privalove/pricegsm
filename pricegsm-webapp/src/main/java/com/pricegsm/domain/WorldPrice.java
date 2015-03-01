@@ -42,7 +42,7 @@ public class WorldPrice
     @JsonSerialize(using = GlobalEntitySerializer.class)
     @JsonDeserialize(using = GlobalEntityDeserializer.class)
     @NotNull
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
     public Product getProduct() {
         return product;

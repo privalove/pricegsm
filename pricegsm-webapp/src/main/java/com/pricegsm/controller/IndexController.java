@@ -235,10 +235,14 @@ public class IndexController {
 
         String previousProductName = "";
         String previousType = "";
+//        Map<Long, YandexPrice> productLastMinPricesMap =
+//                yandexPriceService.getProductLastMinPricesMap(vendor);
 
         for (Product product : products) {
 
             YandexPrice yandexPrice = yandexPriceService.findLastMinPrice(product.getId());
+//            YandexPrice yandexPrice = productLastMinPricesMap.get(product.getId());
+
             WorldPrice worldPrice = worldPriceService.findLast(product.getId());
 
             BigDecimal retail = getPrice(yandexPrice, currency);

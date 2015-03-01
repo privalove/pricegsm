@@ -62,6 +62,26 @@ public class YandexPriceDao
         }
     }
 
+    public List<YandexPrice> findLastMinPrices(Long vendorId) {
+        try {
+            List vendorId1 = getEntityManager()
+                    .createNativeQuery(
+                            "select y.* from {h-schema}yandex_price y "
+                                    + " inner join {h-schema}product pr on y.product_id = pr.id "
+                                    + " where pr.vendor_id = :vendorId "
+                                    + " and y.id = (select y1.id from {h-schema}yandex_price y1 "
+                                    + " where pr.id = y1.product_id "
+                                    + " order by y1.sell_date desc, y1.price_rub asc "
+                                    + " offset 1 limit 1)",
+                            YandexPrice.class
+                    ).setParameter("vendorId", vendorId)
+                    .getResultList();
+            return (List<YandexPrice>) vendorId1;
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
     public YandexPrice findByDateMinPrice(long productId, Date date) {
         try {
             return (YandexPrice) getEntityManager()

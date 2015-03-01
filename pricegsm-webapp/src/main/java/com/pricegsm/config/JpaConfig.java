@@ -58,6 +58,8 @@ class JpaConfig implements TransactionManagementConfigurer {
         jpaProperties.put(Environment.DIALECT, dialect);
         jpaProperties.put(Environment.HBM2DDL_AUTO, hbm2ddlAuto);
         jpaProperties.put(Environment.DEFAULT_SCHEMA, defaultSchema);
+//        jpaProperties.put(Environment.SHOW_SQL, true);
+//        jpaProperties.put(Environment.FORMAT_SQL, true);
         entityManagerFactoryBean.setJpaProperties(jpaProperties);
 
         return entityManagerFactoryBean;

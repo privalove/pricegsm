@@ -2,6 +2,7 @@ package com.pricegsm.util;
 
 import com.google.common.base.Charsets;
 import com.google.common.primitives.Longs;
+import com.pricegsm.domain.GlobalEntity;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -179,14 +180,14 @@ public final class Utils {
     }
 
     public static String readFromUrl(String url) throws IOException {
-        try(InputStream is = new URL(url).openStream()) {
+        try (InputStream is = new URL(url).openStream()) {
             BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charsets.UTF_8));
             return IOUtils.toString(rd);
         }
     }
 
     public static JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
-        try(InputStream is = new URL(url).openStream()) {
+        try (InputStream is = new URL(url).openStream()) {
             BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charsets.UTF_8));
             return new JSONObject(IOUtils.toString(rd));
         }
@@ -205,5 +206,13 @@ public final class Utils {
         } else {
             return message;
         }
+    }
+
+    public static <T extends GlobalEntity> List<Long> getIds(List<T> models) {
+        ArrayList<Long> ids = new ArrayList<>();
+        for (T model : models) {
+            ids.add(model.getId());
+        }
+        return ids;
     }
 }
