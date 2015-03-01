@@ -133,6 +133,19 @@
                             </div>
                         </div>
 
+                        <div class="form-group" th:classappend="${#fields.hasErrors('searchPriceListQuery')}? 'has-error'">
+                            <label class="col-sm-2 control-label" for="searchPriceListQuery" th:text="#{product.masterFone}">
+                                MasterFone
+                            </label>
+
+                            <div class="col-sm-9">
+                                <input type="text" id="searchPriceListQuery" class="tagsInput form-control"
+                                       th:field="*{searchPriceListQuery}"/>
+                                <span class="help-block" th:if="${#fields.hasErrors('searchPriceListQuery')}"
+                                      th:errors="*{searchPriceListQuery}">Ошибка</span>
+                            </div>
+                        </div>
+
                         <div class="form-group" th:classappend="${#fields.hasErrors('excludeQuery')}? 'has-error'">
                             <label class="col-sm-2 control-label" for="excludeQuery" th:text="#{product.excludeQuery}">
                                 Строка исключения

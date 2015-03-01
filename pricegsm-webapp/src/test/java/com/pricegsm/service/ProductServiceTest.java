@@ -161,12 +161,12 @@ public class ProductServiceTest {
 
         Product product11 = new Product(
                 200L, "prod1", "123456", "searchQuery1",
-                "excludeQuery1", "colorQuery11", type1,
+                "search_Price_List_Query" , "excludeQuery1", "colorQuery11", type1,
                 vendor1, color11, true, "description1");
 
         Product product12 = new Product(
                 201L, "prod1", "123456", "searchQuery1",
-                "excludeQuery1", "colorQuery12", type1,
+                "search_Price_List_Query", "excludeQuery1", "colorQuery12", type1,
                 vendor1, color12, true, "description1");
 
         Color color21 = new Color(21L);
@@ -176,12 +176,12 @@ public class ProductServiceTest {
 
         Product product21 = new Product(
                 202L, "prod2", "654321", "searchQuery2",
-                "excludeQuery2", "colorQuery21", type2,
+                "search_Price_List_Query", "excludeQuery2", "colorQuery21", type2,
                 vendor2, color21, true, "description2");
 
         Product product22 = new Product(
                 203L, "prod2", "654321", "searchQuery2",
-                "excludeQuery2", "colorQuery22", type2,
+                "search_Price_List_Query", "excludeQuery2", "colorQuery22", type2,
                 vendor2, color22, true, "description2");
 
         List<Product> expectedProducts =
@@ -197,7 +197,7 @@ public class ProductServiceTest {
         ColorProductForm colorProductForm12 = new ColorProductForm(201L, new Color(12L), "colorQuery12");
         ProductForm productForm1 =
                 new ProductForm(
-                        "123456", "prod1", "searchQuery1", "excludeQuery1",
+                        "123456", "prod1", "searchQuery1", "search_Price_List_Query", "excludeQuery1",
                         new ProductType(1L), new Vendor(1L), true, "description1",
                         Arrays.asList(colorProductForm11, colorProductForm12));
 
@@ -205,7 +205,7 @@ public class ProductServiceTest {
         ColorProductForm colorProductForm22 = new ColorProductForm(203L, new Color(22L), "colorQuery22");
         ProductForm productForm2 =
                 new ProductForm(
-                        "654321", "prod2", "searchQuery2", "excludeQuery2",
+                        "654321", "prod2", "searchQuery2", "search_Price_List_Query", "excludeQuery2",
                         new ProductType(2L), new Vendor(2L), true, "description2",
                         Arrays.asList(colorProductForm21, colorProductForm22));
 
@@ -222,12 +222,12 @@ public class ProductServiceTest {
 
         Product product11 = new Product(
                 200L, "prod1", "123456", "searchQuery1",
-                "excludeQuery1", "colorQuery11", type1,
+                "search_Price_List_Query", "excludeQuery1", "colorQuery11", type1,
                 vendor1, color11, true, "description1");
 
         Product product12 = new Product(
                 201L, "prod1", "123456", "searchQuery1",
-                "excludeQuery1", "colorQuery12", type1,
+                "search_Price_List_Query", "excludeQuery1", "colorQuery12", type1,
                 vendor1, color12, true, "description1");
 
 
@@ -244,7 +244,7 @@ public class ProductServiceTest {
         ColorProductForm colorProductForm12 = new ColorProductForm(201L, new Color(12L), "colorQuery12");
         ProductForm expectedProductForm =
                 new ProductForm(
-                        "123456", "prod1", "searchQuery1", "excludeQuery1",
+                        "123456", "prod1", "searchQuery1", "search_Price_List_Query", "excludeQuery1",
                         new ProductType(1L), new Vendor(1L), true, "description1",
                         Arrays.asList(colorProductForm11, colorProductForm12));
 
@@ -261,12 +261,12 @@ public class ProductServiceTest {
 
         Product expectedProduct1 = new Product(
                 200L, "prod1", "123456", "searchQuery1",
-                "excludeQuery1", "colorQuery11", type1,
+                "search_Price_List_Query", "excludeQuery1", "colorQuery11", type1,
                 vendor1, color11, true, "description1");
 
         Product expectedProduct2 = new Product(
                 201L, "prod1", "123456", "searchQuery1",
-                "excludeQuery1", "colorQuery12", type1,
+                "search_Price_List_Query", "excludeQuery1", "colorQuery12", type1,
                 vendor1, color12, true, "description1");
 
         when(productDao.findByYandexId("123456")).thenReturn(
@@ -276,7 +276,7 @@ public class ProductServiceTest {
         ColorProductForm colorProductForm12 = new ColorProductForm(201L, new Color(12L), "colorQuery12");
         ProductForm productForm =
                 new ProductForm(
-                        "123456", "prod1", "searchQuery1", "excludeQuery1",
+                        "123456", "prod1", "searchQuery1", "search_Price_List_Query", "excludeQuery1",
                         new ProductType(1L), new Vendor(1L), true, "description1",
                         Arrays.asList(colorProductForm11, colorProductForm12));
 

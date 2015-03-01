@@ -58,7 +58,7 @@ public class ProductControllerTest extends WebAppConfigurationAware {
     @Test
     public void testNewProduct() throws Exception {
         ProductForm productForm = new ProductForm(
-                "0", null, null, null,
+                "0", null, null, "search_Price_List_Query", null,
                 null, null, true, null,
                 Arrays.asList(new ColorProductForm(0L, null, null)));
 
@@ -74,7 +74,7 @@ public class ProductControllerTest extends WebAppConfigurationAware {
         ColorProductForm colorProductForm2 = new ColorProductForm(1021L, new Color(201L), "colorQuery2");
         ProductForm productForm =
                 new ProductForm(
-                        "10495458", "product 3", "search_query", "exclude_query",
+                        "10495458", "product 3", "search_query", "search_Price_List_Query", "exclude_query",
                         new ProductType(200L), new Vendor(100L), true, "description",
                         Arrays.asList(colorProductForm1, colorProductForm2));
 
@@ -134,7 +134,7 @@ public class ProductControllerTest extends WebAppConfigurationAware {
         ColorProductForm colorProductForm3 = new ColorProductForm(0L, new Color(1L), "");
         ProductForm productForm =
                 new ProductForm(
-                        "10495458", "product 3", "search_query", "exclude_query",
+                        "10495458", "product 3", "search_query", "search_Price_List_Query", "exclude_query",
                         new ProductType(3L), new Vendor(8L), true, "desc",
                         Arrays.asList(colorProductForm1, colorProductForm2, colorProductForm3));
 
@@ -164,7 +164,7 @@ public class ProductControllerTest extends WebAppConfigurationAware {
         ColorProductForm colorProductForm = new ColorProductForm(1022L, new Color(200L), "colorQuery1");
         ProductForm productForm =
                 new ProductForm(
-                        "20495459", "product 3", "search_query", "exclude_query",
+                        "20495459", "product 3", "search_query", "search_Price_List_Query", "exclude_query",
                         new ProductType(200L), new Vendor(100L), true, "description",
                         Arrays.asList(colorProductForm));
 
@@ -198,7 +198,7 @@ public class ProductControllerTest extends WebAppConfigurationAware {
         ColorProductForm colorProductForm2 = new ColorProductForm(1025L, new Color(201L), "colorQuery2");
         ProductForm productForm =
                 new ProductForm(
-                        "20495460", "product 3", "search_query", "exclude_query",
+                        "20495460", "product 3", "search_query", "search_Price_List_Query", "exclude_query",
                         new ProductType(200L), new Vendor(100L), true, "description",
                         Arrays.asList(colorProductForm1, colorProductForm2));
 

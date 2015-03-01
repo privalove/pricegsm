@@ -23,12 +23,12 @@ public class ProductFormTest {
 
         Product expectedProduct11 = new Product(
                 200L, "prod1", "123456", "searchQuery1",
-                "excludeQuery1", "colorQuery1", type1,
+                "search_Price_List_Query", "excludeQuery1", "colorQuery1", type1,
                 vendor1, color11, true, "description1");
 
         Product expectedProduct12 = new Product(
                 201L, "prod1", "123456", "searchQuery1",
-                "excludeQuery1", "colorQuery2", type1,
+                "search_Price_List_Query", "excludeQuery1", "colorQuery2", type1,
                 vendor1, color12, true, "description1");
 
         // When
@@ -40,7 +40,7 @@ public class ProductFormTest {
         ColorProductForm colorProductForm12 = new ColorProductForm(201L, new Color(2L), "colorQuery2");
         ProductForm expectedProductForm =
                 new ProductForm(
-                        "123456", "prod1", "searchQuery1", "excludeQuery1",
+                        "123456", "prod1", "searchQuery1", "search_Price_List_Query", "excludeQuery1",
                         new ProductType(1L), new Vendor(1L), true, "description1",
                         Arrays.asList(colorProductForm11, colorProductForm12));
 
@@ -54,7 +54,7 @@ public class ProductFormTest {
         ColorProductForm colorProductForm12 = new ColorProductForm(201L, new Color(2L), "colorQuery2");
         ProductForm productForm =
                 new ProductForm(
-                        "123456", "prod1", "searchQuery1", "excludeQuery1",
+                        "123456", "prod1", "searchQuery1", "search_Price_List_Query", "excludeQuery1",
                         new ProductType(1L), new Vendor(1L), true, "description1",
                         Arrays.asList(colorProductForm11, colorProductForm12));
 
@@ -69,12 +69,12 @@ public class ProductFormTest {
 
         Product expectedProduct1 = new Product(
                 200L, "prod1", "123456", "searchQuery1",
-                "excludeQuery1", "colorQuery11", type1,
+                "search_Price_List_Query", "excludeQuery1", "colorQuery11", type1,
                 vendor1, color11, true, "description1");
 
         Product expectedProduct2 = new Product(
                 201L, "prod1", "123456", "searchQuery1",
-                "excludeQuery1", "colorQuery12", type1,
+                "search_Price_List_Query", "excludeQuery1", "colorQuery12", type1,
                 vendor1, color12, true, "description1");
 
         assertThat(products).isEqualTo(Arrays.asList(expectedProduct1, expectedProduct2));

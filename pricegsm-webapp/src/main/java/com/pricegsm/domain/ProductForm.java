@@ -25,6 +25,8 @@ public class ProductForm {
 
     private String searchQuery;
 
+    private String searchPriceListQuery;
+
     private String excludeQuery;
 
     private ProductType type;
@@ -53,6 +55,7 @@ public class ProductForm {
         setYandexId(product.getYandexId());
         setName(product.getName());
         setSearchQuery(product.getSearchQuery());
+        setSearchPriceListQuery(product.getSearchPriceListQuery());
         setExcludeQuery(product.getExcludeQuery());
         setType(product.getType());
         setVendor(product.getVendor());
@@ -63,12 +66,13 @@ public class ProductForm {
 
     public ProductForm(
             String yandexId, String name,
-            String searchQuery, String excludeQuery,
+            String searchQuery, String searchPriceListQuery, String excludeQuery,
             ProductType type, Vendor vendor, boolean active,
             String description, List<ColorProductForm> colors) {
         this.name = name;
         this.yandexId = yandexId;
         this.searchQuery = searchQuery;
+        this.searchPriceListQuery = searchPriceListQuery;
         this.excludeQuery = excludeQuery;
         this.type = type;
         this.vendor = vendor;
@@ -82,9 +86,9 @@ public class ProductForm {
         for (ColorProductForm color : colors) {
             products.add(
                     new Product(
-                            color.getProductId(), getName(), getYandexId(),
-                            getSearchQuery(), getExcludeQuery(), color.getColorQuery(),
-                            getType(), getVendor(), color.getColor(), isActive(), getDescription())
+                            color.getProductId(), getName(), getYandexId(),getSearchQuery(),
+                             getSearchPriceListQuery(), getExcludeQuery(), color.getColorQuery(),
+                             getType(), getVendor(), color.getColor(), isActive(), getDescription())
             );
         }
         return products;
@@ -170,6 +174,14 @@ public class ProductForm {
         this.colors = colors;
     }
 
+    public String getSearchPriceListQuery() {
+        return searchPriceListQuery;
+    }
+
+    public void setSearchPriceListQuery(String searchPriceListQuery) {
+        this.searchPriceListQuery = searchPriceListQuery;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -184,6 +196,7 @@ public class ProductForm {
         builder.append(getExcludeQuery(), that.getExcludeQuery());
         builder.append(getName(), that.getName());
         builder.append(getSearchQuery(), that.getSearchQuery());
+        builder.append(getSearchPriceListQuery(), that.getSearchPriceListQuery());
         builder.append(getType(), that.getType());
         builder.append(getVendor(), that.getVendor());
         builder.append(getYandexId(), that.getYandexId());
@@ -197,6 +210,7 @@ public class ProductForm {
                 .append(getName())
                 .append(getYandexId())
                 .append(getSearchQuery())
+                .append(getSearchPriceListQuery())
                 .append(getExcludeQuery())
                 .append(getType())
                 .append(getVendor())
@@ -212,6 +226,7 @@ public class ProductForm {
                 .append("yandexId", yandexId)
                 .append("name", name)
                 .append("searchQuery", searchQuery)
+                .append("searchPriceListQuery", searchPriceListQuery)
                 .append("excludeQuery", excludeQuery)
                 .append("type", type)
                 .append("vendor", vendor)
