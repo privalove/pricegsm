@@ -26,6 +26,8 @@ public class WorldPrice
 
     private BigDecimal priceUsd = BigDecimal.ZERO;
 
+    private String description;
+
     private Date date;
 
     private int position;
@@ -101,5 +103,15 @@ public class WorldPrice
 
     public void setPosition(int position) {
         this.position = position;
+    }
+
+    @Basic
+    @Column(name = "description")
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
