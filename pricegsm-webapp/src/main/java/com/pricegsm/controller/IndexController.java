@@ -119,6 +119,7 @@ public class IndexController {
                 .payload("shopTime", shopDate)
                 .payload("prices", prices)
                 .payload("yandexPrices", fetchYandexPrices(selected, shopDate, currency))
+                .payload("worldPrices", fetchWorldPrices(selected, shopDate, currency))
                 .payload("chart", fetchChart(selected, currency, chartData, dynRange));
     }
 
@@ -145,7 +146,8 @@ public class IndexController {
 
         Product selected = productService.load(productId);
 
-        List<Map<String, Object>> list = fetchYandexPrices(selected, shopDate, currency);
+        List<Map<String, Object>> yandexPrices = fetchYandexPrices(selected, shopDate, currency);
+        List<Map<String, Object>> worldPrices = fetchWorldPrices(selected, shopDate, currency);
 
         if (shopDate == null) {
             shopDate = Utils.yandexTime(yandexPriceService.findLastDate(productId));
@@ -155,7 +157,8 @@ public class IndexController {
 
         return OperationResult.ok()
                 .payload("shopTime", shopDate)
-                .payload("yandexPrices", list);
+                .payload("yandexPrices", yandexPrices)
+                .payload("worldPrices", worldPrices);
     }
 
     private Map<String, Object> fetchChart(Product selected, int currency, String chartData, int chartRange) {
@@ -213,6 +216,25 @@ public class IndexController {
 
         return result;
     }
+
+    private List<Map<String, Object>> fetchWorldPrices(
+            Product selected, Date shopDate, int currency) {
+
+        List<WorldPrice> prices = worldPriceService.findByDateForProduct(
+                selected.getId(), Utils.today(shopDate), DateUtils.addDays(shopDate, 1));
+
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (WorldPrice price : prices) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("name", selected.getName());
+            map.put("description", price.getDescription());
+            map.put("price", getPrice(price, currency));
+            result.add(map);
+        }
+
+        return result;
+    }
+
 
     /**
      * [{

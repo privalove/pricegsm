@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
 import java.util.Date;
+import java.util.List;
 
 @Repository
 public class WorldPriceDao
@@ -33,5 +34,20 @@ public class WorldPriceDao
         } catch (NoResultException e) {
             return null;
         }
+    }
+
+    public List<WorldPrice> findByDateForProduct(long productId, Date from, Date to) {
+        return getEntityManager()
+                .createQuery("select w from WorldPrice w "
+                        + " where w.product.id = :product "
+                        + " and w.date = ("
+                        + "     select max(date) from WorldPrice "
+                        + "     where product.id = :product "
+                        + "     and date <= :to and date >= :from) "
+                        + " order by w.priceRub")
+                .setParameter("from", from)
+                .setParameter("to", to)
+                .setParameter("product", productId)
+                .getResultList();
     }
 }

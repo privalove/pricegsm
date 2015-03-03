@@ -157,6 +157,18 @@ function IndexCtrl($scope, $cookieStore, $filter, $locale, indexResource, IndexR
         ]
     };
 
+    //world prices grid options
+    $scope.worldPriceOptions = {
+        data: 'worldPrices',
+        enableSorting: false,
+        plugins: [new ngGridFlexibleHeightPlugin({minHeight: 200})],
+        columnDefs: [
+            {field: 'name', displayName: 'Наименование'},
+            {field: 'description', displayName: 'Примечание'},
+            {field: 'price', displayName: 'Цена', cellTemplate: 'resources/template/yandexPriceCellTemplate.html'}
+        ]
+    };
+
     //on index resource load
     if (indexResource.ok) {
         angular.extend($scope, indexResource.payload);

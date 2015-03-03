@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class WorldPriceService
@@ -26,5 +27,9 @@ public class WorldPriceService
 
     public WorldPrice findByDate(long productId, Date date) {
         return getDao().findByDate(productId, date);
+    }
+
+    public List<WorldPrice> findByDateForProduct(long productId, Date from, Date to) {
+        return postLoad(getDao().findByDateForProduct(productId, from, to));
     }
 }
