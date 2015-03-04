@@ -2,10 +2,12 @@ package com.pricegsm.parser;
 
 import com.pricegsm.domain.Product;
 import com.pricegsm.domain.WorldPrice;
-import com.pricegsm.domain.YandexPrice;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -15,37 +17,96 @@ import java.util.List;
  */
 public abstract class PriceListParser<T> {
 
-
     public List<WorldPrice> parse(T source, List<Product> products) {
 
         ArrayList<WorldPrice> prices = new ArrayList<>();
-        for (Product product : products) {
-            WorldPrice result = getResult(source, product);
+        try {
+            openSource(source);
 
-            if (result != null) {
-                prices.add(result);
+            for (Product product : products) {
+                List<WorldPrice> results = getResults(product);
+
+                if (!results.isEmpty()) {
+                    prices.addAll(results);
+                }
+                resetSource();
             }
+            closeSource(source);
+
+        } catch (IOException | InvalidFormatException e) {
+            e.printStackTrace();
         }
         return prices;
     }
 
-    private WorldPrice getResult(T source, Product product) {
+    protected abstract void openSource(T source) throws IOException, InvalidFormatException;
+
+    protected abstract void resetSource();
+
+    protected abstract void closeSource(T source) throws IOException;
+
+    private List<WorldPrice> getResults(Product product) {
         List<Searcher> searchers = new ArrayList<>();
-        searchers.add(new ProductNameSearcher(product.getSearchQuery()));
+        searchers.add(new ProductNameSearcher(product.getSearchPriceListQuery()));
         searchers.add(new ColorSearcher(product.getColorQuery()));
 
-        List<String> row = findRow(source, searchers);
+        List<List<String>> rows = findRows(searchers);
 
-        if (row.isEmpty()) {
-            return null;
+        ArrayList<WorldPrice> worldPrices = new ArrayList<>();
+        int position = 1;
+        for (List<String> row : rows) {
+            if (row.isEmpty()) {
+                continue;
+            }
+
+            WorldPrice price = new WorldPrice();
+            price.setProduct(product);
+            price.setPriceUsd(getPrice(row));
+            price.setDescription(row.get(3));
+            price.setPosition(position);
+            position++;
+            worldPrices.add(price);
         }
 
-        WorldPrice price = new WorldPrice();
-        price.setProduct(product);
-        price.setPriceUsd(getPrice(row));
-
-        return price;
+        return worldPrices;
     }
+
+    private List<List<String>> findRows(List<Searcher> searchers) {
+        List<List<String>> rows = new ArrayList<>();
+        while (hasNextRow()) {
+            List<String> row = getNextRow();
+            if (isNeededRow(row, searchers)) {
+                rows.add(row);
+            }
+        }
+        return rows;
+    }
+
+    protected abstract boolean hasNextRow();
+
+    protected abstract List<String> getNextRow();
+
+    private boolean isNeededRow(List<String> row, List<Searcher> searchers) {
+        Iterator<String> cellIterator = row.iterator();
+        int findCounter = 0;
+        while (cellIterator.hasNext()) {
+            String cell = cellIterator.next();
+            List<Searcher> excludedSearchers = new ArrayList<>();
+            for (Searcher searcher : searchers) {
+                if (!excludedSearchers.contains(searcher)
+                        && searcher.isCellFind(cell)) {
+                    findCounter++;
+                    excludedSearchers.add(searcher);
+                    break;
+                }
+            }
+            if (findCounter == searchers.size()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     //todo add exeption
     private BigDecimal getPrice(List<String> row) {
         BigDecimal price = null;
@@ -53,12 +114,10 @@ public abstract class PriceListParser<T> {
         for (String cell : row) {
             if (priceSearcher.isCellFind(cell)) {
 //               todo
-               price = new BigDecimal(cell);
+                price = new BigDecimal(cell);
             }
 
         }
         return price;
     }
-
-    protected abstract List<String> findRow(T source, List<Searcher> searchers);
 }

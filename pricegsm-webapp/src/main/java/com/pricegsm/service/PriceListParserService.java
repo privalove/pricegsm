@@ -40,11 +40,12 @@ public class PriceListParserService {
         Exchange rub = exchangeService.getLast(Currency.USD, Currency.RUB);
         Exchange eur = exchangeService.getLast(Currency.EUR, Currency.USD);
 
+        Date date = new Date();
         for (WorldPrice price : prices) {
             BigDecimal priceUsd = price.getPriceUsd();
             price.setPriceRub(priceUsd.multiply(rub.getValue()));
             price.setPriceEur(priceUsd.multiply(eur.getValue()));
-            price.setDate(new Date());
+            price.setDate(date);
 
             worldPriceService.save(price);
         }

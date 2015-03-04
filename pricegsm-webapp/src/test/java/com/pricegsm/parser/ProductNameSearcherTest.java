@@ -77,4 +77,13 @@ public class ProductNameSearcherTest extends TestCase {
 
         assertEquals(true, productNameSearcher.isCellFind("iPad mini 3 4G 16GB "));
     }
+
+    public void testAddedWords() throws Exception {
+
+        ProductNameSearcher productNameSearcher = new ProductNameSearcher(
+                "iPhone 6 16gb");
+
+        assertEquals(true, productNameSearcher.isCellFind("iPhone 6 16gb"));
+        assertEquals(false, productNameSearcher.isCellFind("iPhone 6 plus 16gb"));
+    }
 }

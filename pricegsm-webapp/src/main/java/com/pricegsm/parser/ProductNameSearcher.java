@@ -15,18 +15,25 @@ public class ProductNameSearcher implements Searcher {
 
     public ProductNameSearcher(String name) {
 
-        List<String> searchQueryStrings = Arrays.asList(name.split(","));
         searchQueries = new ArrayList<>();
-        for (String searchQuery : searchQueryStrings) {
-            searchQueries.add(Arrays.asList(searchQuery.split(" ")));
+        if (name != null) {
+            List<String> searchQueryStrings = Arrays.asList(name.split(","));
+            for (String searchQuery : searchQueryStrings) {
+                searchQueries.add(Arrays.asList(searchQuery.split(" ")));
+            }
         }
     }
 
     @Override
     public boolean isCellFind(String data) {
+        if (searchQueries.isEmpty()) {
+            return false;
+        }
         String lowerCaseData = data.toLowerCase();
+
         for (List<String> nameFragments : searchQueries) {
             boolean error = false;
+            int findCounter = 0;
             for (String nameFragment : nameFragments) {
                 if (!lowerCaseData.matches("(^|^.*[\\W])"
                         + nameFragment.toLowerCase()
@@ -35,8 +42,9 @@ public class ProductNameSearcher implements Searcher {
                     error = true;
                     break;
                 }
+                findCounter++;
             }
-            if (!error) {
+            if (!error && findCounter == lowerCaseData.split(" ").length) {
                 return true;
             }
         }

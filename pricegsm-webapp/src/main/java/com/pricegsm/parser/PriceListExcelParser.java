@@ -17,65 +17,37 @@ import java.util.Locale;
  */
 public class PriceListExcelParser extends PriceListParser<MultipartFile> {
 
+    private InputStream inputStream;
+    private Iterator<Row> rowIterator;
+    private Sheet sheet;
 
     @Override
-    protected List<String> findRow(MultipartFile source, List<Searcher> searchers) {
-        List<String> result = new ArrayList<>();
-        try {
-            InputStream inputStream = source.getInputStream();
-
-            Workbook wb = WorkbookFactory.create(inputStream);
-            Sheet sheet = wb.getSheetAt(0);
-
-            result = getResultRow(sheet, searchers);
-            inputStream.close();
-
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InvalidFormatException e) {
-            e.printStackTrace();
-        }
-        return result;
+    protected void openSource(MultipartFile source) throws IOException, InvalidFormatException {
+        inputStream = source.getInputStream();
+        Workbook wb = WorkbookFactory.create(inputStream);
+        sheet = wb.getSheetAt(0);
+        resetSource();
     }
 
-    private List<String> getResultRow(Sheet sheet, List<Searcher> searchers) {
-        Iterator<Row> rowIterator = sheet.iterator();
-        while (rowIterator.hasNext()) {
-            Row row = rowIterator.next();
-
-            if (isNeededRow(searchers, row)) {
-                return convertRowToStringsList(row);
-            }
-        }
-        return new ArrayList<>();
+    @Override
+    protected void resetSource() {
+        rowIterator = sheet.iterator();
     }
 
-    //todo refactor -> move to superclass
-    private boolean isNeededRow(List<Searcher> searchers, Row row) {
-        Iterator<Cell> cellIterator = row.cellIterator();
-        int findCounter = 0;
-        while (cellIterator.hasNext()) {
-            Cell cell = cellIterator.next();
-            List<Searcher> excludedSearchers = new ArrayList<>();
-            if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
-                String stringCellValue = cell.getStringCellValue();
-                for (Searcher searcher : searchers) {
-                    if (!excludedSearchers.contains(searcher)
-                            && searcher.isCellFind(stringCellValue)) {
-                        findCounter++;
-                        excludedSearchers.add(searcher);
-                        break;
-                    }
-                }
-                if (findCounter == searchers.size()) {
-                    return true;
-                }
-            }
-        }
-        return false;
+    @Override
+    protected void closeSource(MultipartFile source) throws IOException {
+        inputStream.close();
+    }
+
+    @Override
+    protected boolean hasNextRow() {
+        return rowIterator.hasNext();
+    }
+
+    @Override
+    protected List<String> getNextRow() {
+        Row row = rowIterator.next();
+        return convertRowToStringsList(row);
     }
 
     private List<String> convertRowToStringsList(Row row) {
@@ -93,6 +65,9 @@ public class PriceListExcelParser extends PriceListParser<MultipartFile> {
                     break;
                 case Cell.CELL_TYPE_STRING:
                     result.add(cell.getStringCellValue());
+                    break;
+                case Cell.CELL_TYPE_BLANK:
+                    result.add("");
                     break;
             }
         }
