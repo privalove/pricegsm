@@ -58,9 +58,10 @@ public abstract class PriceListParser<T> {
             if (row.isEmpty()) {
                 continue;
             }
-
+//            todo kill magik numbers, introduce abstractions
             WorldPrice price = new WorldPrice();
             price.setProduct(product);
+            price.setPriceListProductName(row.get(1));
             price.setPriceUsd(getPrice(row));
             price.setDescription(row.get(3));
             price.setPosition(position);

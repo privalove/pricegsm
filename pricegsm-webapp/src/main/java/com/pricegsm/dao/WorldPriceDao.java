@@ -36,17 +36,14 @@ public class WorldPriceDao
         }
     }
 
-    public List<WorldPrice> findByDateForProduct(long productId, Date from, Date to) {
+    public List<WorldPrice> findByDateForProduct(long productId) {
         return getEntityManager()
                 .createQuery("select w from WorldPrice w "
                         + " where w.product.id = :product "
                         + " and w.date = ("
                         + "     select max(date) from WorldPrice "
-                        + "     where product.id = :product "
-                        + "     and date <= :to and date >= :from) "
+                        + "     where product.id = :product) "
                         + " order by w.priceRub")
-                .setParameter("from", from)
-                .setParameter("to", to)
                 .setParameter("product", productId)
                 .getResultList();
     }

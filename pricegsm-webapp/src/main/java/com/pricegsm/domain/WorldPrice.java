@@ -20,6 +20,8 @@ public class WorldPrice
 
     private Product product;
 
+    private String priceListProductName;
+
     private BigDecimal priceRub = BigDecimal.ZERO;
 
     private BigDecimal priceEur = BigDecimal.ZERO;
@@ -52,6 +54,16 @@ public class WorldPrice
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    @Basic
+    @Column(name = "pl_product_name")
+    public String getPriceListProductName() {
+        return priceListProductName;
+    }
+
+    public void setPriceListProductName(String priceListProductName) {
+        this.priceListProductName = priceListProductName;
     }
 
     @Basic
