@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
 
@@ -43,8 +45,8 @@ public class PriceListParserService {
         Date date = new Date();
         for (WorldPrice price : prices) {
             BigDecimal priceUsd = price.getPriceUsd();
-            price.setPriceRub(priceUsd.multiply(rub.getValue()));
-            price.setPriceEur(priceUsd.multiply(eur.getValue()));
+            price.setPriceRub(priceUsd.multiply(rub.getValue()).setScale(0, RoundingMode.HALF_UP));
+            price.setPriceEur(priceUsd.multiply(eur.getValue()).setScale(0, RoundingMode.HALF_UP));
             price.setDate(date);
 
             worldPriceService.save(price);
