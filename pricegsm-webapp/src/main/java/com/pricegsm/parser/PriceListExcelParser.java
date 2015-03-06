@@ -61,7 +61,7 @@ public class PriceListExcelParser extends PriceListParser<MultipartFile> {
             switch (cell.getCellType()) {
                 case Cell.CELL_TYPE_NUMERIC:
                     Double numericCellValue = cell.getNumericCellValue();
-                    result.add(String.format(Locale.UK, "%.2f", numericCellValue));
+                    result.add(String.format(Locale.UK, "%.0f", numericCellValue));
                     break;
                 case Cell.CELL_TYPE_STRING:
                     result.add(cell.getStringCellValue());

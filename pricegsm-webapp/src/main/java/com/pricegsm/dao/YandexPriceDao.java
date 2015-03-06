@@ -123,10 +123,10 @@ public class YandexPriceDao
 
         return getEntityManager()
                 //skip min price for statistic
-                .createNativeQuery("select sell_date, price from "
+                .createNativeQuery("select sell_date, avg(price) from "
                         + " (select y.sell_date as sell_date, y." + price + " as price, rank() over (partition by y.sell_date order by y.sell_date, y." + price + " asc) as rank from yandex_price y "
                         + "      where y.product_id =:productId and y.sell_date >= :from and y.sell_date <= :to) x "
-                        + " where rank = 2")
+                        + " where rank in (2,3,4) group by sell_date")
 
                 .setParameter("productId", productId)
                 .setParameter("from", from)
