@@ -89,10 +89,12 @@ public class ProductServiceTest {
         expectedProduct1.setId(201L);
         List<Product> expectedProducts = Arrays.asList(expectedProduct, expectedProduct1);
 
-        when(productDao.findActiveByVendorOrderByVendorAndName(4L)).thenReturn(expectedProducts);
+        when(productDao.findActiveByVendorOrderByVendorAndName(
+                4L, Arrays.asList(1L, 2L))).thenReturn(expectedProducts);
 
         // When
-        List<Product> actualProducts = productService.findActiveByVendorOrderByVendorAndName(4L);
+        List<Product> actualProducts =
+                productService.findActiveByVendorOrderByVendorAndName(4L, Arrays.asList(1L, 2L));
 
         // Then
         assertThat(actualProducts).isEqualTo(expectedProducts);

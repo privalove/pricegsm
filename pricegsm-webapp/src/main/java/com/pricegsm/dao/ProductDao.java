@@ -30,10 +30,17 @@ public class ProductDao
                 .getResultList();
     }
 
-    public List<Product> findActiveByVendorOrderByVendorAndName(long vendor) {
+    public List<Product> findActiveByVendorOrderByVendorAndName(long vendor, List<Long> types) {
         return getEntityManager()
-                .createQuery("select p from Product p inner join p.color c inner join p.type t where p.active = true and p.vendor.id = :vendor order by  t.name, p.name, c.name")
+                .createQuery("select p from Product p "
+                        + " inner join p.color c "
+                        + " inner join p.type t "
+                        + " where p.active = true "
+                        + " and p.vendor.id = :vendor "
+                        + " and p.type.id in (:types) "
+                        + " order by  t.name, p.name, c.name")
                 .setParameter("vendor", vendor)
+                .setParameter("types", types)
                 .getResultList();
     }
 

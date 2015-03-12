@@ -68,7 +68,8 @@ public class ProductDaoTest {
     @Test
     public void testFindActiveByVendorOrderByVendorAndName() {
         // When
-        List<Product> products = productDao.findActiveByVendorOrderByVendorAndName(200);
+        List<Product> products =
+                productDao.findActiveByVendorOrderByVendorAndName(200, Arrays.asList(200L, 201L));
 
         // Then
         Product expectedProduct = new Product();

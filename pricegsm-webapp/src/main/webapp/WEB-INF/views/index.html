@@ -25,20 +25,23 @@
     </div>
     <div class="col-sm-6">
         <ul class="list-inline pg-vendors">
-            <li ng-class="{'active': product.vendor.id == 1}">
-                <a ng-click="updateIndexPage(null, 1)" class="btn btn-link btn-sm" role="button">Apple</a>
+            <li ng-class="{'active': product.vendor.id == 1 &amp;&amp; product.type.id == 1}">
+                <a ng-click="updateIndexPage(null, 1, 1)" class="btn btn-link btn-sm" role="button">Apple - mobile</a>
+            </li>
+            <li ng-class="{'active': product.vendor.id == 1 &amp;&amp; product.type.id == 2}">
+                <a ng-click="updateIndexPage(null, 1, 2)" class="btn btn-link btn-sm" role="button">Apple - tablet</a>
             </li>
             <li ng-class="{'active':product.vendor.id == 5}">
-                <a ng-click="updateIndexPage(null, 5)" class="btn btn-link btn-sm" role="button">Samsung</a>
+                <a ng-click="updateIndexPage(null, 5, [1,2])" class="btn btn-link btn-sm" role="button">Samsung</a>
             </li>
             <li ng-class="{'active':product.vendor.id == 7}">
-                <a ng-click="updateIndexPage(null, 7)" class="btn btn-link btn-sm" role="button">Nokia</a>
+                <a ng-click="updateIndexPage(null, 7, [1,2])" class="btn btn-link btn-sm" role="button">Nokia</a>
             </li>
             <li ng-class="{'active':product.vendor.id == 8}">
-                <a ng-click="updateIndexPage(null, 8)" class="btn btn-link btn-sm" role="button">HTC</a>
+                <a ng-click="updateIndexPage(null, 8, [1,2])" class="btn btn-link btn-sm" role="button">HTC</a>
             </li>
             <li ng-class="{'active':product.vendor.id == 3}">
-                <a ng-click="updateIndexPage(null, 3)" class="btn btn-link btn-sm" role="button">Sony</a>
+                <a ng-click="updateIndexPage(null, 3, [1,2])" class="btn btn-link btn-sm" role="button">Sony</a>
             </li>
         </ul>
     </div>

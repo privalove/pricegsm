@@ -79,12 +79,13 @@ public class IndexController {
             @RequestParam(value = "product") long productId,
             @RequestParam int currency,
             @RequestParam int dynRange,
+            @RequestParam List<Long> types,
             @RequestParam int vendor,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date shopDate,
             @RequestParam String chartData) {
 
         Product selected = productService.load(productId);
-        List<ProductPriceForm> prices = fetchPrices(vendor, dynRange, currency);
+        List<ProductPriceForm> prices = fetchPrices(vendor, types,dynRange, currency);
         OperationResult result = OperationResult.ok();
 
         if (!Utils.isEmpty(prices)) {
@@ -250,10 +251,10 @@ public class IndexController {
      * worldDelta: -20
      * }]
      */
-    private List<ProductPriceForm> fetchPrices(int vendor, int dynRange, int currency) {
+    private List<ProductPriceForm> fetchPrices(int vendor, List<Long> types, int dynRange, int currency) {
         List<ProductPriceForm> result = new ArrayList<>();
 
-        List<Product> products = productService.findActiveByVendorOrderByVendorAndName(vendor);
+        List<Product> products = productService.findActiveByVendorOrderByVendorAndName(vendor, types);
 
         String previousProductName = "";
         String previousType = "";

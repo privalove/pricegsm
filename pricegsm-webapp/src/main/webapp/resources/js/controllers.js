@@ -60,13 +60,14 @@ function IndexCtrl($scope, $cookieStore, $filter, $locale, indexResource, IndexR
             });
     };
 
-    $scope.updateIndexPage = function (currency, vendor) {
+    $scope.updateIndexPage = function (currency, vendor, types) {
         $scope.currencyDisabled = true;
 
         getIndexResource(IndexResource, $cookieStore, {
             currency: currency,
             dynRange: $scope.dynRange,
-            vendor: vendor})
+            vendor: vendor,
+            types: types})
             .then(function (indexResource) {
                 if (indexResource.ok) {
                     $scope.safeApply(function () {
@@ -207,6 +208,9 @@ function getIndexResource(IndexResource, $cookieStore, data) {
     $cookieStore.put("currency", data.currency || $cookieStore.get("currency") || 1);
     $cookieStore.put("dynRange", data.dynRange || $cookieStore.get("dynRange") || 7);
     $cookieStore.put("vendor", data.vendor || $cookieStore.get("vendor") || 1);
+
+    var types = $cookieStore.get("vendor") == 1 ? 1 : [1, 2];
+    $cookieStore.put("types", data.types || $cookieStore.get("types") || types);
     $cookieStore.put("shopDate", data.shopDate || $cookieStore.get("shopDate"));
 
     return IndexResource.get({
@@ -215,7 +219,8 @@ function getIndexResource(IndexResource, $cookieStore, data) {
         currency: $cookieStore.get("currency"),
         dynRange: $cookieStore.get("dynRange"),
         shopDate: $cookieStore.get("shopDate"),
-        vendor: $cookieStore.get("vendor")
+        vendor: $cookieStore.get("vendor"),
+        types: $cookieStore.get("types")
     }).$promise;
 }
 

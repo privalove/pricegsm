@@ -14,7 +14,7 @@ public class WorldPriceDao
     public WorldPrice findLast(long productId) {
         try {
             return (WorldPrice) getEntityManager()
-                    .createQuery("select y from WorldPrice y where y.product.id = :productId order by y.date desc")
+                    .createQuery("select y from WorldPrice y where y.product.id = :productId order by y.date desc, y.priceUsd asc")
                     .setMaxResults(1)
                     .setParameter("productId", productId)
                     .getSingleResult();
@@ -26,7 +26,7 @@ public class WorldPriceDao
     public WorldPrice findByDate(long productId, Date date) {
         try {
             return (WorldPrice) getEntityManager()
-                    .createQuery("select y from WorldPrice y where y.product.id = :productId and y.date <= :date order by y.date desc")
+                    .createQuery("select y from WorldPrice y where y.product.id = :productId and y.date <= :date order by y.date desc, y.priceUsd asc")
                     .setMaxResults(1)
                     .setParameter("productId", productId)
                     .setParameter("date", date)

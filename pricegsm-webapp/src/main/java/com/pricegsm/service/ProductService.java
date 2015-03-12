@@ -27,8 +27,8 @@ public class ProductService
         return getProductForms(byVendor);
     }
 
-    public List<Product> findActiveByVendorOrderByVendorAndName(long vendor) {
-        return postLoad(getDao().findActiveByVendorOrderByVendorAndName(vendor));
+    public List<Product> findActiveByVendorOrderByVendorAndName(long vendor, List<Long> types) {
+        return postLoad(getDao().findActiveByVendorOrderByVendorAndName(vendor, types));
     }
 
     public List<Product> findByYandexId(String yandexId) {
