@@ -21,10 +21,10 @@ public class CurrencyParser {
     public static final String URL = "http://www.micex.ru/markets/currency/today";
 
     public static final Map<String, String> MAPPING = new HashMap<String, String>() {{
-        put("USD000000TOD", "USD_RUB");
+        put("USD000UTSTOM", "USD_RUB");
         put("BKTRUB000TOM", "USD_RUB_2");
-        put("EUR_RUB__TOD", "EUR_RUB");
-        put("EURUSD000TOD", "EUR_USD");
+        put("EUR_RUB__TOM", "EUR_RUB");
+        put("EURUSD000TOM", "EUR_USD");
     }};
 
     /**

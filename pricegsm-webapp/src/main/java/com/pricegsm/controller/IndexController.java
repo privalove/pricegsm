@@ -2,16 +2,11 @@ package com.pricegsm.controller;
 
 import com.pricegsm.config.Build;
 import com.pricegsm.config.PricegsmMessageSource;
+import com.pricegsm.domain.*;
 import com.pricegsm.domain.Currency;
-import com.pricegsm.domain.Product;
-import com.pricegsm.domain.WorldPrice;
-import com.pricegsm.domain.YandexPrice;
 import com.pricegsm.jackson.Wrappers;
 import com.pricegsm.securiry.PrincipalHolder;
-import com.pricegsm.service.CurrencyService;
-import com.pricegsm.service.ProductService;
-import com.pricegsm.service.WorldPriceService;
-import com.pricegsm.service.YandexPriceService;
+import com.pricegsm.service.*;
 import com.pricegsm.util.Utils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +47,9 @@ public class IndexController {
     private PrincipalHolder principalHolder;
 
     @Autowired
+    private ExchangeService exchangeService;
+
+    @Autowired
     private Build build;
 
     @RequestMapping(value = {"/", ""}, method = RequestMethod.GET)
@@ -85,7 +83,7 @@ public class IndexController {
             @RequestParam String chartData) {
 
         Product selected = productService.load(productId);
-        List<ProductPriceForm> prices = fetchPrices(vendor, types,dynRange, currency);
+        List<ProductPriceForm> prices = fetchPrices(vendor, types, dynRange, currency);
         OperationResult result = OperationResult.ok();
 
         if (!Utils.isEmpty(prices)) {
@@ -109,9 +107,9 @@ public class IndexController {
             shopDate = Utils.yandexTime(yandexPriceService.findLastDate(productId, Utils.today(shopDate), DateUtils.addDays(shopDate, 1)));
         }
 
-
         return result
                 .payload("currency", currencyService.load(Math.min(currency, Currency.RUB)))
+                .payload("courses", getCourses())
                 .payload("dynRange", dynRange)
                 .payload("shopDate", Wrappers.wrapDate(shopDate))
                 .payload("chartData", chartData)
@@ -329,4 +327,12 @@ public class IndexController {
         }
     }
 
+    private List<BigDecimal> getCourses() {
+        List<Exchange> lastExchanges = exchangeService.findLast();
+        List<BigDecimal> lastCourses = new ArrayList<>();
+        for (Exchange exchange : lastExchanges) {
+            lastCourses.add(exchange.getValue());
+        }
+        return lastCourses;
+    }
 }

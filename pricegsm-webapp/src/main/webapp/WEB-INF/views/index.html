@@ -1,5 +1,5 @@
 <div class="row" style="margin-top: 20px" xmlns:th="http://www.thymeleaf.org">
-    <div class="col-sm-3">
+    <div class="col-sm-2 right-padding-0">
         <div class="core-box btn-group">
             <button type="button" class="btn btn-default" ng-model="currency.id" btn-radio="1" th:text="#{currency.USD}"
                     ng-disabled="currencyDisabled">USD
@@ -12,7 +12,23 @@
             </button>
         </div>
     </div>
-    <div class="col-sm-3">
+    <div class="col-sm-3 right-padding-0 left-padding-0">
+        <table class="cell-lr-padding-5">
+            <thead>
+                <tr class="cell-bottom-padding-5">
+                    <th><span th:text="#{courses.USD.RUB}">USD/RUB</span></th>
+                    <th><span th:text="#{courses.EUR.RUB}">EUR/RUB</span></th>
+                    <th><span th:text="#{courses.EUR.USD}">EUR/USD</span></th>
+                </tr>
+            </thead>
+            <tr class="cell-top-padding-5">
+                <td class="text-center">{{courses[0]}}</td>
+                <td class="text-center">{{courses[1]}}</td>
+                <td class="text-center">{{courses[2]}}</td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-sm-2 text-right margin-top-5">
         <span th:text="#{page.main.dyn}">Динамику показывать за</span>
         <select ng-model="dynRange" ng-change="updateIndexPage()">
             <option>1</option>
@@ -23,24 +39,24 @@
         </select>
         <span th:text="#{page.main.day}">дней</span>
     </div>
-    <div class="col-sm-6">
-        <ul class="list-inline pg-vendors">
-            <li ng-class="{'active': product.vendor.id == 1 &amp;&amp; product.type.id == 1}">
+    <div class="col-sm-5">
+        <ul class="list-inline pg-vendors text-right">
+            <li ng-class="{'active': product.vendor.id == 1 &amp;&amp; product.type.id == 1}" class="left-padding-0">
                 <a ng-click="updateIndexPage(null, 1, 1)" class="btn btn-link btn-sm" role="button">Apple - mobile</a>
             </li>
-            <li ng-class="{'active': product.vendor.id == 1 &amp;&amp; product.type.id == 2}">
+            <li ng-class="{'active': product.vendor.id == 1 &amp;&amp; product.type.id == 2}" class="left-padding-0">
                 <a ng-click="updateIndexPage(null, 1, 2)" class="btn btn-link btn-sm" role="button">Apple - tablet</a>
             </li>
-            <li ng-class="{'active':product.vendor.id == 5}">
+            <li ng-class="{'active':product.vendor.id == 5}" class="left-padding-0">
                 <a ng-click="updateIndexPage(null, 5, [1,2])" class="btn btn-link btn-sm" role="button">Samsung</a>
             </li>
-            <li ng-class="{'active':product.vendor.id == 7}">
+            <li ng-class="{'active':product.vendor.id == 7}" class="left-padding-0">
                 <a ng-click="updateIndexPage(null, 7, [1,2])" class="btn btn-link btn-sm" role="button">Nokia</a>
             </li>
-            <li ng-class="{'active':product.vendor.id == 8}">
+            <li ng-class="{'active':product.vendor.id == 8}" class="left-padding-0">
                 <a ng-click="updateIndexPage(null, 8, [1,2])" class="btn btn-link btn-sm" role="button">HTC</a>
             </li>
-            <li ng-class="{'active':product.vendor.id == 3}">
+            <li ng-class="{'active':product.vendor.id == 3}" class="left-padding-0">
                 <a ng-click="updateIndexPage(null, 3, [1,2])" class="btn btn-link btn-sm" role="button">Sony</a>
             </li>
         </ul>
