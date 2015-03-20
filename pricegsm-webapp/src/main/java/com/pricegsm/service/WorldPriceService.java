@@ -2,6 +2,7 @@ package com.pricegsm.service;
 
 import com.pricegsm.dao.WorldPriceDao;
 import com.pricegsm.domain.WorldPrice;
+import com.pricegsm.parser.PriceListDescriptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +29,7 @@ public class WorldPriceService
         return getDao().findByDate(productId, date);
     }
 
-    public List<WorldPrice> findByDateForProduct(long productId) {
-        return postLoad(getDao().findByDateForProduct(productId));
+    public List<WorldPrice> findByDateForProduct(long productId, PriceListDescriptor descriptor) {
+        return postLoad(getDao().findByDateForProduct(productId, descriptor));
     }
 }

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
@@ -32,10 +31,10 @@ public class PriceListParserService {
     @Autowired
     private ExchangeService exchangeService;
 
-    public void parse(MultipartFile file) {
+    public void parse(MultipartFile file, String sellerName) {
         List<Product> products = productService.findActive();
 
-        PriceListExcelParser parser = new PriceListExcelParser();
+        PriceListExcelParser parser = new PriceListExcelParser(sellerName);
 
         List<WorldPrice> prices = parser.parse(file, products);
 
@@ -46,7 +45,7 @@ public class PriceListParserService {
         for (WorldPrice price : prices) {
             BigDecimal priceUsd = price.getPriceUsd();
             price.setPriceRub(priceUsd.multiply(rub.getValue()).setScale(0, RoundingMode.HALF_UP));
-            price.setPriceEur(priceUsd.multiply(eur.getValue()).setScale(0, RoundingMode.HALF_UP));
+            price.setPriceEur(priceUsd.divide(eur.getValue(), RoundingMode.HALF_UP));
             price.setDate(date);
 
             worldPriceService.save(price);

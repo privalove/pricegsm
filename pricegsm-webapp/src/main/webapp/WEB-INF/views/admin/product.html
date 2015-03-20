@@ -146,6 +146,19 @@
                             </div>
                         </div>
 
+                        <div class="form-group" th:classappend="${#fields.hasErrors('dunamisQuery')}? 'has-error'">
+                            <label class="col-sm-2 control-label" for="dunamisQuery" th:text="#{product.dunamis}">
+                                Dunamis
+                            </label>
+
+                            <div class="col-sm-9">
+                                <input type="text" id="dunamisQuery" class="tagsInput form-control"
+                                       th:field="*{dunamisQuery}"/>
+                                <span class="help-block" th:if="${#fields.hasErrors('dunamisQuery')}"
+                                      th:errors="*{dunamisQuery}">Ошибка</span>
+                            </div>
+                        </div>
+
                         <div class="form-group" th:classappend="${#fields.hasErrors('excludeQuery')}? 'has-error'">
                             <label class="col-sm-2 control-label" for="excludeQuery" th:text="#{product.excludeQuery}">
                                 Строка исключения

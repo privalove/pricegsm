@@ -21,8 +21,9 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
-    public String handleFileUpload(@RequestParam("file") MultipartFile file) {
-        priceListParserService.parse(file);
+    public String handleFileUpload(
+            @RequestParam("file") MultipartFile file, @RequestParam("seller") String seller) {
+        priceListParserService.parse(file, seller);
 
         return "redirect:/";
     }

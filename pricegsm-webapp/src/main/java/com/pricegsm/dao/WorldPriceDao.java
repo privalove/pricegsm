@@ -2,6 +2,7 @@ package com.pricegsm.dao;
 
 import com.pricegsm.domain.WorldPrice;
 import com.pricegsm.domain.YandexPrice;
+import com.pricegsm.parser.PriceListDescriptor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
@@ -36,15 +37,17 @@ public class WorldPriceDao
         }
     }
 
-    public List<WorldPrice> findByDateForProduct(long productId) {
+    public List<WorldPrice> findByDateForProduct(long productId, PriceListDescriptor descriptor) {
+        //noinspection unchecked
         return getEntityManager()
                 .createQuery("select w from WorldPrice w "
-                        + " where w.product.id = :product "
+                        + " where w.product.id = :product and w.seller = :seller "
                         + " and w.date = ("
                         + "     select max(date) from WorldPrice "
-                        + "     where product.id = :product) "
+                        + "     where product.id = :product and seller = :seller) "
                         + " order by w.priceRub")
                 .setParameter("product", productId)
+                .setParameter("seller", descriptor.getName())
                 .getResultList();
     }
 }

@@ -27,6 +27,8 @@ public class ProductForm {
 
     private String searchPriceListQuery;
 
+    private String dunamisQuery;
+
     private String excludeQuery;
 
     private ProductType type;
@@ -56,6 +58,7 @@ public class ProductForm {
         setName(product.getName());
         setSearchQuery(product.getSearchQuery());
         setSearchPriceListQuery(product.getSearchPriceListQuery());
+        setDunamisQuery(product.getDunamisQuery());
         setExcludeQuery(product.getExcludeQuery());
         setType(product.getType());
         setVendor(product.getVendor());
@@ -87,7 +90,7 @@ public class ProductForm {
             products.add(
                     new Product(
                             color.getProductId(), getName(), getYandexId(),getSearchQuery(),
-                             getSearchPriceListQuery(), getExcludeQuery(), color.getColorQuery(),
+                             getSearchPriceListQuery(), getDunamisQuery(), getExcludeQuery(), color.getColorQuery(),
                              getType(), getVendor(), color.getColor(), isActive(), getDescription())
             );
         }
@@ -180,6 +183,14 @@ public class ProductForm {
 
     public void setSearchPriceListQuery(String searchPriceListQuery) {
         this.searchPriceListQuery = searchPriceListQuery;
+    }
+
+    public String getDunamisQuery() {
+        return dunamisQuery;
+    }
+
+    public void setDunamisQuery(String dunamisQuery) {
+        this.dunamisQuery = dunamisQuery;
     }
 
     @Override

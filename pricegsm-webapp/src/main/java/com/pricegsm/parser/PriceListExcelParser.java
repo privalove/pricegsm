@@ -21,6 +21,10 @@ public class PriceListExcelParser extends PriceListParser<MultipartFile> {
     private Iterator<Row> rowIterator;
     private Sheet sheet;
 
+    public PriceListExcelParser(String sellerName) {
+        super(sellerName);
+    }
+
     @Override
     protected void openSource(MultipartFile source) throws IOException, InvalidFormatException {
         inputStream = source.getInputStream();

@@ -34,6 +34,8 @@ public class WorldPrice
 
     private int position;
 
+    private String seller;
+
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(generator = "YandexPrice")
@@ -125,5 +127,15 @@ public class WorldPrice
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Basic
+    @Column(name = "seller")
+    public void setSeller(String seller) {
+        this.seller = seller;
+    }
+
+    public String getSeller() {
+        return seller;
     }
 }

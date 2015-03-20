@@ -5,6 +5,7 @@ import com.pricegsm.config.PricegsmMessageSource;
 import com.pricegsm.domain.*;
 import com.pricegsm.domain.Currency;
 import com.pricegsm.jackson.Wrappers;
+import com.pricegsm.parser.PriceListDescriptor;
 import com.pricegsm.securiry.PrincipalHolder;
 import com.pricegsm.service.*;
 import com.pricegsm.util.Utils;
@@ -218,13 +219,15 @@ public class IndexController {
 
     private List<Map<String, Object>> fetchWorldPrices(
             Product selected, int currency) {
-
-        List<WorldPrice> prices = worldPriceService.findByDateForProduct(
-                selected.getId());
+        List<WorldPrice> prices = new ArrayList<>();
+        for (PriceListDescriptor descriptor : PriceListDescriptor.values()) {
+            prices.addAll(worldPriceService.findByDateForProduct(selected.getId(), descriptor));
+        }
 
         List<Map<String, Object>> result = new ArrayList<>();
         for (WorldPrice price : prices) {
             Map<String, Object> map = new HashMap<>();
+            map.put("seller", price.getSeller());
             map.put("name", price.getPriceListProductName());
             map.put("description", price.getDescription());
             map.put("price", getPrice(price, currency));

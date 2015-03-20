@@ -24,6 +24,8 @@ public class Product
 
     private String searchPriceListQuery;
 
+    private String dunamisQuery;
+
     private String excludeQuery;
 
     private String colorQuery;
@@ -43,14 +45,16 @@ public class Product
 
     public Product(
             long id, String name, String yandexId, String searchQuery,
-            String searchPriceListQuery, String excludeQuery, String colorQuery, ProductType type,
-            Vendor vendor, Color color, boolean active, String description) {
+            String searchPriceListQuery, String dunamisQuery, String excludeQuery,
+            String colorQuery, ProductType type, Vendor vendor, Color color,
+            boolean active, String description) {
 
         super(id);
         this.name = name;
         this.yandexId = yandexId;
         this.searchQuery = searchQuery;
         this.searchPriceListQuery = searchPriceListQuery;
+        this.dunamisQuery = dunamisQuery;
         this.excludeQuery = excludeQuery;
         this.colorQuery = colorQuery;
         this.type = type;
@@ -113,6 +117,17 @@ public class Product
 
     public void setSearchPriceListQuery(String searchPriceListQuery) {
         this.searchPriceListQuery = searchPriceListQuery;
+    }
+
+    @Size(max = 255)
+    @Basic
+    @Column(name = "dunamis_product_name")
+    public String getDunamisQuery() {
+        return dunamisQuery;
+    }
+
+    public void setDunamisQuery(String dunamisQuery) {
+        this.dunamisQuery = dunamisQuery;
     }
 
     @Size(max = 255)

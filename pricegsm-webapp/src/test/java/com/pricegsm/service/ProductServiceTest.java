@@ -163,12 +163,12 @@ public class ProductServiceTest {
 
         Product product11 = new Product(
                 200L, "prod1", "123456", "searchQuery1",
-                "search_Price_List_Query" , "excludeQuery1", "colorQuery11", type1,
+                "search_Price_List_Query" , "dunamisQuery", "excludeQuery1", "colorQuery11", type1,
                 vendor1, color11, true, "description1");
 
         Product product12 = new Product(
                 201L, "prod1", "123456", "searchQuery1",
-                "search_Price_List_Query", "excludeQuery1", "colorQuery12", type1,
+                "search_Price_List_Query", "dunamisQuery", "excludeQuery1", "colorQuery12", type1,
                 vendor1, color12, true, "description1");
 
         Color color21 = new Color(21L);
@@ -178,12 +178,12 @@ public class ProductServiceTest {
 
         Product product21 = new Product(
                 202L, "prod2", "654321", "searchQuery2",
-                "search_Price_List_Query", "excludeQuery2", "colorQuery21", type2,
+                "search_Price_List_Query", "dunamisQuery", "excludeQuery2", "colorQuery21", type2,
                 vendor2, color21, true, "description2");
 
         Product product22 = new Product(
                 203L, "prod2", "654321", "searchQuery2",
-                "search_Price_List_Query", "excludeQuery2", "colorQuery22", type2,
+                "search_Price_List_Query", "dunamisQuery", "excludeQuery2", "colorQuery22", type2,
                 vendor2, color22, true, "description2");
 
         List<Product> expectedProducts =
@@ -224,12 +224,12 @@ public class ProductServiceTest {
 
         Product product11 = new Product(
                 200L, "prod1", "123456", "searchQuery1",
-                "search_Price_List_Query", "excludeQuery1", "colorQuery11", type1,
+                "search_Price_List_Query", "dunamisQuery", "excludeQuery1", "colorQuery11", type1,
                 vendor1, color11, true, "description1");
 
         Product product12 = new Product(
                 201L, "prod1", "123456", "searchQuery1",
-                "search_Price_List_Query", "excludeQuery1", "colorQuery12", type1,
+                "search_Price_List_Query", "dunamisQuery", "excludeQuery1", "colorQuery12", type1,
                 vendor1, color12, true, "description1");
 
 
@@ -263,12 +263,12 @@ public class ProductServiceTest {
 
         Product expectedProduct1 = new Product(
                 200L, "prod1", "123456", "searchQuery1",
-                "search_Price_List_Query", "excludeQuery1", "colorQuery11", type1,
+                "search_Price_List_Query", "dunamisQuery", "excludeQuery1", "colorQuery11", type1,
                 vendor1, color11, true, "description1");
 
         Product expectedProduct2 = new Product(
                 201L, "prod1", "123456", "searchQuery1",
-                "search_Price_List_Query", "excludeQuery1", "colorQuery12", type1,
+                "search_Price_List_Query", "dunamisQuery", "excludeQuery1", "colorQuery12", type1,
                 vendor1, color12, true, "description1");
 
         when(productDao.findByYandexId("123456")).thenReturn(

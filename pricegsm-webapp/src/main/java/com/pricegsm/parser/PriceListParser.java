@@ -17,6 +17,12 @@ import java.util.List;
  */
 public abstract class PriceListParser<T> {
 
+    private PriceListDescriptor descriptor;
+
+    public PriceListParser(String sellerName) {
+        descriptor = PriceListDescriptor.getDescriptor(sellerName);
+    }
+
     public List<WorldPrice> parse(T source, List<Product> products) {
 
         ArrayList<WorldPrice> prices = new ArrayList<>();
@@ -47,7 +53,7 @@ public abstract class PriceListParser<T> {
 
     private List<WorldPrice> getResults(Product product) {
         List<Searcher> searchers = new ArrayList<>();
-        searchers.add(new ProductNameSearcher(product.getSearchPriceListQuery()));
+        searchers.add(new ProductNameSearcher(descriptor.getSearchQuery(product)));
         searchers.add(new ColorSearcher(product.getColorQuery()));
 
         List<List<String>> rows = findRows(searchers);
@@ -61,10 +67,11 @@ public abstract class PriceListParser<T> {
 //            todo kill magik numbers, introduce abstractions
             WorldPrice price = new WorldPrice();
             price.setProduct(product);
-            price.setPriceListProductName(row.get(1));
-            price.setPriceUsd(getPrice(row));
-            price.setDescription(row.get(3));
+            price.setPriceListProductName(row.get(descriptor.getProductNameIndex()));
+            price.setPriceUsd(new BigDecimal(row.get(descriptor.getPriceColumnIndex())));
+            price.setDescription(row.get(descriptor.getDescriptionColumnIndex()));
             price.setPosition(position);
+            price.setSeller(descriptor.getName());
             position++;
             worldPrices.add(price);
         }
@@ -89,10 +96,10 @@ public abstract class PriceListParser<T> {
 
     private boolean isNeededRow(List<String> row, List<Searcher> searchers) {
         Iterator<String> cellIterator = row.iterator();
+        List<Searcher> excludedSearchers = new ArrayList<>();
         int findCounter = 0;
         while (cellIterator.hasNext()) {
             String cell = cellIterator.next();
-            List<Searcher> excludedSearchers = new ArrayList<>();
             for (Searcher searcher : searchers) {
                 if (!excludedSearchers.contains(searcher)
                         && searcher.isCellFind(cell)) {
@@ -106,19 +113,5 @@ public abstract class PriceListParser<T> {
             }
         }
         return false;
-    }
-
-    //todo add exeption
-    private BigDecimal getPrice(List<String> row) {
-        BigDecimal price = null;
-        PriceSearcher priceSearcher = new PriceSearcher();
-        for (String cell : row) {
-            if (priceSearcher.isCellFind(cell)) {
-//               todo
-                price = new BigDecimal(cell);
-            }
-
-        }
-        return price;
     }
 }
