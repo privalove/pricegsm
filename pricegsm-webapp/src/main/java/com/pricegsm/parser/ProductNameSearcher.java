@@ -16,7 +16,7 @@ public class ProductNameSearcher implements Searcher {
     public ProductNameSearcher(String name) {
 
         searchQueries = new ArrayList<>();
-        if (name != null) {
+        if (name != null && !name.isEmpty()) {
             List<String> searchQueryStrings = Arrays.asList(name.split(","));
             for (String searchQuery : searchQueryStrings) {
                 searchQueries.add(Arrays.asList(searchQuery.split(" ")));
@@ -26,7 +26,7 @@ public class ProductNameSearcher implements Searcher {
 
     @Override
     public boolean isCellFind(String data) {
-        if (searchQueries.isEmpty()) {
+        if (searchQueries.isEmpty() || data.isEmpty()) {
             return false;
         }
         String lowerCaseData = data.toLowerCase();

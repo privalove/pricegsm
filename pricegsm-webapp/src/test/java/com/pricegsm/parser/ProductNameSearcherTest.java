@@ -86,4 +86,11 @@ public class ProductNameSearcherTest extends TestCase {
         assertEquals(true, productNameSearcher.isCellFind("iPhone 6 16gb"));
         assertEquals(false, productNameSearcher.isCellFind("iPhone 6 plus 16gb"));
     }
+
+    public void testEmpty() throws Exception {
+
+        ProductNameSearcher productNameSearcher = new ProductNameSearcher("");
+
+        assertEquals(false, productNameSearcher.isCellFind(""));
+    }
 }

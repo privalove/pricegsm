@@ -57,7 +57,7 @@ public class ParserService {
      * }}
      * </pre>
      */
-    @Scheduled(cron = "0 15,35,55 10,14,18 * * ?")
+    @Scheduled(cron = "0 15 10,14,18 * * ?")
     public void readYandexData2() throws IOException {
         List<Object[]> dates = yandexPriceService.findLastByColors();
 
@@ -270,7 +270,7 @@ public class ParserService {
      * }}
      * </pre>
      */
-    @Scheduled(cron = "0 10,11,12 10,14,18 * * ?")
+    @Scheduled(cron = "0 10 10,14,18 * * ?")
     public void readExchanges() throws IOException {
 
         Exchange last = exchangeService.getLast(Currency.USD, Currency.RUB);

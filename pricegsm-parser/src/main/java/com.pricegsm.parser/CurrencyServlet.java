@@ -13,11 +13,11 @@ import java.io.IOException;
 @WebServlet(name="currencyServlet", urlPatterns={"/currency"})
 public class CurrencyServlet extends HttpServlet {
 
-    private CurrencyParser parser;
+    private CurrencyParserYahooapis parser;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
-        parser = new CurrencyParser();
+        parser = new CurrencyParserYahooapis();
     }
 
     @Override
