@@ -36,6 +36,9 @@ public class IndexController {
     private ProductService productService;
 
     @Autowired
+    private VendorService vendorService;
+
+    @Autowired
     private WorldPriceService worldPriceService;
 
     @Autowired
@@ -115,6 +118,9 @@ public class IndexController {
                 .payload("shopDate", Wrappers.wrapDate(shopDate))
                 .payload("chartData", chartData)
                 .payload("product", selected)
+                .payload("vendors", vendorService.findAll())
+                .payload("vendorId", vendor)
+                .payload("types", types)
 
                 .payload("shopTime", shopDate)
                 .payload("prices", prices)

@@ -41,23 +41,14 @@
     </div>
     <div class="col-sm-5">
         <ul class="list-inline pg-vendors text-right">
-            <li ng-class="{'active': product.vendor.id == 1 &amp;&amp; product.type.id == 1}" class="left-padding-0">
+            <li ng-class="{'active': vendorId == 1 &amp;&amp; types == 1}" class="left-padding-0">
                 <a ng-click="updateIndexPage(null, 1, 1)" class="btn btn-link btn-sm" role="button">Apple - mobile</a>
             </li>
-            <li ng-class="{'active': product.vendor.id == 1 &amp;&amp; product.type.id == 2}" class="left-padding-0">
+            <li ng-class="{'active': vendorId == 1 &amp;&amp; types == 2}" class="left-padding-0">
                 <a ng-click="updateIndexPage(null, 1, 2)" class="btn btn-link btn-sm" role="button">Apple - tablet</a>
             </li>
-            <li ng-class="{'active':product.vendor.id == 5}" class="left-padding-0">
-                <a ng-click="updateIndexPage(null, 5, [1,2])" class="btn btn-link btn-sm" role="button">Samsung</a>
-            </li>
-            <li ng-class="{'active':product.vendor.id == 7}" class="left-padding-0">
-                <a ng-click="updateIndexPage(null, 7, [1,2])" class="btn btn-link btn-sm" role="button">Nokia</a>
-            </li>
-            <li ng-class="{'active':product.vendor.id == 8}" class="left-padding-0">
-                <a ng-click="updateIndexPage(null, 8, [1,2])" class="btn btn-link btn-sm" role="button">HTC</a>
-            </li>
-            <li ng-class="{'active':product.vendor.id == 3}" class="left-padding-0">
-                <a ng-click="updateIndexPage(null, 3, [1,2])" class="btn btn-link btn-sm" role="button">Sony</a>
+            <li ng-class="{'active': vendorId == vendor.id}" ng-repeat="vendor in vendors | filter: {id: '!1'}" class="left-padding-0">
+                <a ng-click="updateIndexPage(null, vendor.id, [1,2])" class="btn btn-link btn-sm" role="button">{{vendor.name}}</a>
             </li>
         </ul>
     </div>

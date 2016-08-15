@@ -58,4 +58,11 @@ public class ProductDao
                 .setParameter("yandexId", yandexId)
                 .executeUpdate();
     }
+
+    public List<Product> findAllByYandexId(String yandexId) {
+        return getEntityManager()
+                .createQuery("select p from Product p where p.yandexId = :yandexId")
+                .setParameter("yandexId", yandexId)
+                .getResultList();
+    }
 }

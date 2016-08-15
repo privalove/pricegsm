@@ -77,7 +77,7 @@ public class ProductService
     }
 
     public ProductForm getProductForm(String yandexId) {
-        List<Product> products = getDao().findByYandexId(yandexId);
+        List<Product> products = getDao().findAllByYandexId(yandexId);
         return new ProductForm(products);
     }
 

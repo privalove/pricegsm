@@ -44,8 +44,12 @@ public class PriceListParserService {
         Date date = new Date();
         for (WorldPrice price : prices) {
             BigDecimal priceUsd = price.getPriceUsd();
-            price.setPriceRub(priceUsd.multiply(rub.getValue()).setScale(0, RoundingMode.HALF_UP));
-            price.setPriceEur(priceUsd.divide(eur.getValue(), RoundingMode.HALF_UP));
+            if (rub != null) {
+                price.setPriceRub(priceUsd.multiply(rub.getValue()).setScale(0, RoundingMode.HALF_UP));
+            }
+            if (eur != null) {
+                price.setPriceEur(priceUsd.divide(eur.getValue(), RoundingMode.HALF_UP));
+            }
             price.setDate(date);
 
             worldPriceService.save(price);

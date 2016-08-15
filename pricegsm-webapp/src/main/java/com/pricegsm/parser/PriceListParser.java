@@ -68,8 +68,13 @@ public abstract class PriceListParser<T> {
             WorldPrice price = new WorldPrice();
             price.setProduct(product);
             price.setPriceListProductName(row.get(descriptor.getProductNameIndex()));
-            price.setPriceUsd(new BigDecimal(row.get(descriptor.getPriceColumnIndex())));
-            price.setDescription(row.get(descriptor.getDescriptionColumnIndex()));
+            try {
+                price.setPriceUsd(new BigDecimal(row.get(descriptor.getPriceColumnIndex())));
+                price.setDescription(row.get(descriptor.getDescriptionColumnIndex()));
+            } catch (Exception e) {
+                price.setDescription("ERROR! Can't parse price!");
+                price.setPriceUsd(new BigDecimal("0"));
+            }
             price.setPosition(position);
             price.setSeller(descriptor.getName());
             position++;
