@@ -171,6 +171,10 @@ function IndexCtrl($scope, $cookieStore, $filter, $locale, indexResource, IndexR
         ]
     };
 
+    $scope.notAppleId = function(value){
+        return value.id != 1;
+    };
+
     //on index resource load
     if (indexResource.ok) {
         angular.extend($scope, indexResource.payload);

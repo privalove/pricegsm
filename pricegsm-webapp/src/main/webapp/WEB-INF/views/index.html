@@ -47,7 +47,7 @@
             <li ng-class="{'active': vendorId == 1 &amp;&amp; types == 2}" class="left-padding-0">
                 <a ng-click="updateIndexPage(null, 1, 2)" class="btn btn-link btn-sm" role="button">Apple - tablet</a>
             </li>
-            <li ng-class="{'active': vendorId == vendor.id}" ng-repeat="vendor in vendors | filter: {id: '!1'}" class="left-padding-0">
+            <li ng-class="{'active': vendorId == vendor.id}" ng-repeat="vendor in vendors | filter: notAppleId" class="left-padding-0">
                 <a ng-click="updateIndexPage(null, vendor.id, [1,2])" class="btn btn-link btn-sm" role="button">{{vendor.name}}</a>
             </li>
         </ul>
