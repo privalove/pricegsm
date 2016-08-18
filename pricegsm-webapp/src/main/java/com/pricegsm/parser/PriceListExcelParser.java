@@ -73,6 +73,8 @@ public class PriceListExcelParser extends PriceListParser<MultipartFile> {
                 case Cell.CELL_TYPE_BLANK:
                     result.add("");
                     break;
+                default:
+                    result.add("");
             }
         }
 
