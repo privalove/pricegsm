@@ -15,6 +15,7 @@ import static org.springframework.test.util.AssertionErrors.assertEquals;
 import static org.springframework.test.util.AssertionErrors.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 /**
  * User: o.logunov
@@ -60,7 +61,7 @@ public class ProductControllerTest extends WebAppConfigurationAware {
         ProductForm productForm = new ProductForm(
                 "0", null, null, null, null,
                 null, null, true, null,
-                Arrays.asList(new ColorProductForm(0L, null, null)));
+                Arrays.asList(new ColorProductForm(0L, null, null, null)), false);
 
         mockMvc.perform(get("/admin/product/0/4"))
                 .andExpect(model().attribute("productForm", productForm))
@@ -70,13 +71,13 @@ public class ProductControllerTest extends WebAppConfigurationAware {
 
     @Test
     public void testEditProduct() throws Exception {
-        ColorProductForm colorProductForm1 = new ColorProductForm(102L, new Color(200L), "colorQuery1");
-        ColorProductForm colorProductForm2 = new ColorProductForm(1021L, new Color(201L), "colorQuery2");
+        ColorProductForm colorProductForm1 = new ColorProductForm(102L, new Color(200L), "colorQuery1", null);
+        ColorProductForm colorProductForm2 = new ColorProductForm(1021L, new Color(201L), "colorQuery2", null);
         ProductForm productForm =
                 new ProductForm(
                         "10495458", "product 3", "search_query", "search_pl_query", "exclude_query",
                         new ProductType(200L), new Vendor(100L), true, "description",
-                        Arrays.asList(colorProductForm1, colorProductForm2));
+                        Arrays.asList(colorProductForm1, colorProductForm2), false);
 
         mockMvc.perform(get("/admin/product/10495458/4"))
                 .andExpect(model().attribute("productForm", productForm))
@@ -129,17 +130,18 @@ public class ProductControllerTest extends WebAppConfigurationAware {
 
     @Test
     public void testAddColor() throws Exception {
-        ColorProductForm colorProductForm1 = new ColorProductForm(102L, new Color(200L), "colorQuery1");
-        ColorProductForm colorProductForm2 = new ColorProductForm(1021L, new Color(201L), "colorQuery2");
-        ColorProductForm colorProductForm3 = new ColorProductForm(0L, new Color(1L), "");
+        ColorProductForm colorProductForm1 = new ColorProductForm(102L, new Color(200L), "colorQuery1", "excludedColorQuery1");
+        ColorProductForm colorProductForm2 = new ColorProductForm(1021L, new Color(201L), "colorQuery2", "excludedColorQuery2");
+        ColorProductForm colorProductForm3 = new ColorProductForm(0L, new Color(1L), "", "");
         ProductForm productForm =
                 new ProductForm(
                         "10495458", "product 3", "search_query", "search_Price_List_Query", "exclude_query",
                         new ProductType(3L), new Vendor(8L), true, "desc",
-                        Arrays.asList(colorProductForm1, colorProductForm2, colorProductForm3));
+                        Arrays.asList(colorProductForm1, colorProductForm2, colorProductForm3), false);
 
 
-        mockMvc.perform(post("/admin/product/45495457/10").param("addColor", "")
+        mockMvc.perform(post("/admin/product/45495457/10")
+                .param("addColor", "")
                 .param("yandexId", "10495458")
                 .param("name", "product 3")
                 .param("searchQuery", "search_query")
@@ -148,26 +150,29 @@ public class ProductControllerTest extends WebAppConfigurationAware {
                 .param("vendor", "8")
                 .param("type", "3")
                 .param("active", "true")
+                .param("manufacturerWarranty", "false")
                 .param("description", "desc")
                 .param("colors[0].productId", "102")
                 .param("colors[0].color", "200")
                 .param("colors[0].colorQuery", "colorQuery1")
+                .param("colors[0].excludedColorQuery", "excludedColorQuery1")
                 .param("colors[1].productId", "1021")
                 .param("colors[1].color", "201")
                 .param("colors[1].colorQuery", "colorQuery2")
-        ).andExpect(view().name("admin/product"))
+                .param("colors[1].excludedColorQuery", "excludedColorQuery2")
+        ).andDo(print()).andExpect(view().name("admin/product"))
                 .andExpect(model().attribute("productForm", productForm))
                 .andExpect(model().attribute("vendorId", 10L));
     }
 
     @Test
     public void testRemoveProductByColorRemovingFromDB() throws Exception {
-        ColorProductForm colorProductForm = new ColorProductForm(1022L, new Color(200L), "colorQuery1");
+        ColorProductForm colorProductForm = new ColorProductForm(1022L, new Color(200L), "colorQuery1", null);
         ProductForm productForm =
                 new ProductForm(
                         "20495459", "product 3", "search_query", "search_pl_query", "exclude_query",
                         new ProductType(200L), new Vendor(100L), true, "description",
-                        Arrays.asList(colorProductForm));
+                        Arrays.asList(colorProductForm), false);
 
         mockMvc.perform(post("/admin/product/20495459/10").param("removeColor", "1")
                 .param("yandexId", "20495459")
@@ -196,13 +201,13 @@ public class ProductControllerTest extends WebAppConfigurationAware {
 
     @Test
     public void testRemoveJustAddedColor() throws Exception {
-        ColorProductForm colorProductForm1 = new ColorProductForm(1024L, new Color(200L), "colorQuery1");
-        ColorProductForm colorProductForm2 = new ColorProductForm(1025L, new Color(201L), "colorQuery2");
+        ColorProductForm colorProductForm1 = new ColorProductForm(1024L, new Color(200L), "colorQuery1", null);
+        ColorProductForm colorProductForm2 = new ColorProductForm(1025L, new Color(201L), "colorQuery2", null);
         ProductForm productForm =
                 new ProductForm(
                         "20495460", "product 3", "search_query", "search_pl_query", "exclude_query",
                         new ProductType(200L), new Vendor(100L), true, "description",
-                        Arrays.asList(colorProductForm1, colorProductForm2));
+                        Arrays.asList(colorProductForm1, colorProductForm2), false);
 
         mockMvc.perform(post("/admin/product/20495460/10").param("removeColor", "2")
                 .param("yandexId", "20495460")

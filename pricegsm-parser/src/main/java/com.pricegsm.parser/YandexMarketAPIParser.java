@@ -25,15 +25,15 @@ import java.util.List;
 
 public class YandexMarketAPIParser {
 
-    public static final String template = "http://market.icsystem.ru/v1/search.xml?category_id={0}&text={1}&sort=price&how=asc&onstock=1&geo_id=213";
+    public static final String template = "http://market.icsystem.ru/v1/search.xml?category_id={0}&text={1}&sort=price&how=asc&onstock=1&geo_id=213{2}";
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    protected XmlPage getFirstPage(String query, long yandexTypeId, WebClient webClient) throws IOException {
-        return webClient.getPage(new MessageFormat(template).format(new Object[]{String.valueOf(yandexTypeId), URLEncoder.encode(query, "UTF-8")}));
+    protected XmlPage getFirstPage(String query, long yandexTypeId, boolean manufacturerWarranty, WebClient webClient) throws IOException {
+        return webClient.getPage(new MessageFormat(template).format(new Object[]{String.valueOf(yandexTypeId), URLEncoder.encode(query, "UTF-8"), manufacturerWarranty ? "&warranty=1" :""}));
     }
 
-    public String parse(String query, long yandexTypeId) {
+    public String parse(String query, long yandexTypeId, boolean manufacturerWarranty) {
         final WebClient webClient = new WebClient(BrowserVersion.FIREFOX_17);
         webClient.getOptions().setJavaScriptEnabled(false);
 
@@ -51,7 +51,7 @@ public class YandexMarketAPIParser {
 
 //            logger.error("query: " + query + "\nyandexTypeId: " +yandexTypeId + "\n");
 
-            page = getFirstPage(query, yandexTypeId, webClient);
+            page = getFirstPage(query, yandexTypeId, manufacturerWarranty, webClient);
 
 //            String s = UrlFetchUtil.processXSL(page.asXml(), "/template/yandex4.xsl", Collections.<String, Object>emptyMap());
 //            logger.error("from yandex: \n" + page.asXml());

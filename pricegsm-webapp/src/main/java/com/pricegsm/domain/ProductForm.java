@@ -41,6 +41,8 @@ public class ProductForm {
 
     private List<ColorProductForm> colors = new ArrayList<>();
 
+    private boolean manufacturerWarranty = false;
+
     public ProductForm() {
     }
 
@@ -49,7 +51,7 @@ public class ProductForm {
         for (Product product : products) {
             colors.add(
                     new ColorProductForm(
-                            product.getId(), product.getColor(), product.getColorQuery())
+                            product.getId(), product.getColor(), product.getColorQuery(), product.getExcludedColorQuery())
             );
         }
 
@@ -65,13 +67,14 @@ public class ProductForm {
         setActive(product.isActive());
         setDescription(product.getDescription());
         setColors(colors);
+        setManufacturerWarranty(product.isManufacturerWarranty());
     }
 
     public ProductForm(
             String yandexId, String name,
             String searchQuery, String searchPriceListQuery, String excludeQuery,
             ProductType type, Vendor vendor, boolean active,
-            String description, List<ColorProductForm> colors) {
+            String description, List<ColorProductForm> colors, boolean manufacturerWarranty) {
         this.name = name;
         this.yandexId = yandexId;
         this.searchQuery = searchQuery;
@@ -82,6 +85,7 @@ public class ProductForm {
         this.active = active;
         this.description = description;
         this.colors = colors;
+        this.manufacturerWarranty = manufacturerWarranty;
     }
 
     public List<Product> convertToProducts() {
@@ -89,9 +93,10 @@ public class ProductForm {
         for (ColorProductForm color : colors) {
             products.add(
                     new Product(
-                            color.getProductId(), getName(), getYandexId(),getSearchQuery(),
-                             getSearchPriceListQuery(), getDunamisQuery(), getExcludeQuery(), color.getColorQuery(),
-                             getType(), getVendor(), color.getColor(), isActive(), getDescription())
+                            color.getProductId(), getName(), getYandexId(), getSearchQuery(),
+                            getSearchPriceListQuery(), getDunamisQuery(), getExcludeQuery(), color.getColorQuery(),
+                            color.getExcludedColorQuery(), getType(), getVendor(), color.getColor(), isActive(),
+                            getDescription(), isManufacturerWarranty())
             );
         }
         return products;
@@ -193,6 +198,14 @@ public class ProductForm {
         this.dunamisQuery = dunamisQuery;
     }
 
+    public boolean isManufacturerWarranty() {
+        return manufacturerWarranty;
+    }
+
+    public void setManufacturerWarranty(boolean manufacturerWarranty) {
+        this.manufacturerWarranty = manufacturerWarranty;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -211,6 +224,7 @@ public class ProductForm {
         builder.append(getType(), that.getType());
         builder.append(getVendor(), that.getVendor());
         builder.append(getYandexId(), that.getYandexId());
+        builder.append(isManufacturerWarranty(), that.isManufacturerWarranty());
 
         return builder.isEquals();
     }
@@ -228,6 +242,7 @@ public class ProductForm {
                 .append(isActive())
                 .append(getDescription())
                 .append(getColors())
+                .append(isManufacturerWarranty())
                 .toHashCode();
     }
 
@@ -244,6 +259,7 @@ public class ProductForm {
                 .append("active", active)
                 .append("description", description)
                 .append("colors", colors)
+                .append("manufacturerWarranty", manufacturerWarranty)
                 .toString();
     }
 }

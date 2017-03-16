@@ -108,15 +108,23 @@
                         </div>
 
                         <div class="form-group" th:classappend="${#fields.hasErrors('yandexId')}? 'has-error'">
-                            <label class="col-sm-2 control-label" for="yandexId" th:text="#{product.yandexId}">
+                            <label class="col-xs-2 control-label" for="yandexId" th:text="#{product.yandexId}">
                                 Yandex Id
                             </label>
 
-                            <div class="col-sm-9">
+                            <div class="col-xs-7">
                                 <input type="text" id="yandexId" class="form-control"
                                        th:field="*{yandexId}"/>
                                 <span class="help-block" th:if="${#fields.hasErrors('yandexId')}"
                                       th:errors="*{yandexId}">Ошибка</span>
+                            </div>
+
+                            <div class="col-xs-2">
+                                <label class="checkbox-inline" for="manufacturerWarranty">
+                                    <input type="checkbox" id="manufacturerWarranty" class="teal"
+                                           th:field="*{manufacturerWarranty}"/>
+                                    <span th:text="#{product.manufacturerWarranty}"></span>
+                                </label>
                             </div>
                         </div>
 
@@ -183,7 +191,7 @@
                                 Цвет
                             </label>
 
-                            <div class="col-sm-2">
+                            <div class="col-sm-1">
                                 <select id="color" class="form-control"
                                         th:field="*{colors[__${colorStat.index}__].color}">
                                     <option value="0" th:text="#{option.select}"></option>
@@ -201,18 +209,34 @@
 
 
                         <div th:classappend="${#fields.hasErrors('colors[__${colorStat.index}__].colorQuery')}? 'has-error'">
-                            <label class="col-sm-2 control-label" th:for="${'colorQuery' + colorStat.index}"
+                            <label class="col-sm-1 control-label" th:for="${'colorQuery' + colorStat.index}"
                                    th:text="#{product.colorQuery}">
                                 Строка цвета
                             </label>
 
-                            <div class="col-sm-3">
+                            <div class="col-sm-2">
                                 <input type="text" th:id="${'colorQuery' + colorStat.index}"
                                        class="tagsInput form-control"
                                        th:field="*{colors[__${colorStat.index}__].colorQuery}"/>
                                     <span class="help-block"
                                           th:if="${#fields.hasErrors('colors[__${colorStat.index}__].colorQuery')}"
                                           th:errors="*{colors[__${colorStat.index}__].colorQuery}">Ошибка</span>
+                            </div>
+                        </div>
+
+                        <div th:classappend="${#fields.hasErrors('colors[__${colorStat.index}__].excludedColorQuery')}? 'has-error'">
+                            <label class="col-sm-1 control-label" th:for="${'excludedColorQuery' + colorStat.index}"
+                                   th:text="#{product.excludedColorQuery}">
+                                Строка цвета
+                            </label>
+
+                            <div class="col-sm-2">
+                                <input type="text" th:id="${'excludedColorQuery' + colorStat.index}"
+                                       class="tagsInput form-control"
+                                       th:field="*{colors[__${colorStat.index}__].excludedColorQuery}"/>
+                                    <span class="help-block"
+                                          th:if="${#fields.hasErrors('colors[__${colorStat.index}__].excludedColorQuery')}"
+                                          th:errors="*{colors[__${colorStat.index}__].excludedColorQuery}">Ошибка</span>
                             </div>
                         </div>
                     </div>

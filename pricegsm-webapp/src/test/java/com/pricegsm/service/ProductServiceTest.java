@@ -164,13 +164,13 @@ public class ProductServiceTest {
 
         Product product11 = new Product(
                 200L, "prod1", "123456", "searchQuery1",
-                "search_Price_List_Query" , "dunamisQuery", "excludeQuery1", "colorQuery11", type1,
-                vendor1, color11, true, "description1");
+                "search_Price_List_Query" , "dunamisQuery", "excludeQuery1", "colorQuery11", "", type1,
+                vendor1, color11, true, "description1", false);
 
         Product product12 = new Product(
                 201L, "prod1", "123456", "searchQuery1",
-                "search_Price_List_Query", "dunamisQuery", "excludeQuery1", "colorQuery12", type1,
-                vendor1, color12, true, "description1");
+                "search_Price_List_Query", "dunamisQuery", "excludeQuery1", "colorQuery12", "", type1,
+                vendor1, color12, true, "description1", false);
 
         Color color21 = new Color(21L);
         Color color22 = new Color(22L);
@@ -179,13 +179,13 @@ public class ProductServiceTest {
 
         Product product21 = new Product(
                 202L, "prod2", "654321", "searchQuery2",
-                "search_Price_List_Query", "dunamisQuery", "excludeQuery2", "colorQuery21", type2,
-                vendor2, color21, true, "description2");
+                "search_Price_List_Query", "dunamisQuery", "excludeQuery2", "colorQuery21", "", type2,
+                vendor2, color21, true, "description2", false);
 
         Product product22 = new Product(
                 203L, "prod2", "654321", "searchQuery2",
-                "search_Price_List_Query", "dunamisQuery", "excludeQuery2", "colorQuery22", type2,
-                vendor2, color22, true, "description2");
+                "search_Price_List_Query", "dunamisQuery", "excludeQuery2", "colorQuery22", "", type2,
+                vendor2, color22, true, "description2", false);
 
         List<Product> expectedProducts =
                 Arrays.asList(product11, product12, product21, product22);
@@ -196,21 +196,21 @@ public class ProductServiceTest {
         List<ProductForm> productsGroupingByYandexId = productService.getProductsGroupingByYandexId();
 
         // Then
-        ColorProductForm colorProductForm11 = new ColorProductForm(200L, new Color(11L), "colorQuery11");
-        ColorProductForm colorProductForm12 = new ColorProductForm(201L, new Color(12L), "colorQuery12");
+        ColorProductForm colorProductForm11 = new ColorProductForm(200L, new Color(11L), "colorQuery11", "");
+        ColorProductForm colorProductForm12 = new ColorProductForm(201L, new Color(12L), "colorQuery12", "");
         ProductForm productForm1 =
                 new ProductForm(
                         "123456", "prod1", "searchQuery1", "search_Price_List_Query", "excludeQuery1",
                         new ProductType(1L), new Vendor(1L), true, "description1",
-                        Arrays.asList(colorProductForm11, colorProductForm12));
+                        Arrays.asList(colorProductForm11, colorProductForm12), false);
 
-        ColorProductForm colorProductForm21 = new ColorProductForm(202L, new Color(21L), "colorQuery21");
-        ColorProductForm colorProductForm22 = new ColorProductForm(203L, new Color(22L), "colorQuery22");
+        ColorProductForm colorProductForm21 = new ColorProductForm(202L, new Color(21L), "colorQuery21", "");
+        ColorProductForm colorProductForm22 = new ColorProductForm(203L, new Color(22L), "colorQuery22", "");
         ProductForm productForm2 =
                 new ProductForm(
                         "654321", "prod2", "searchQuery2", "search_Price_List_Query", "excludeQuery2",
                         new ProductType(2L), new Vendor(2L), true, "description2",
-                        Arrays.asList(colorProductForm21, colorProductForm22));
+                        Arrays.asList(colorProductForm21, colorProductForm22), false);
 
         assertThat(productsGroupingByYandexId).isEqualTo(Arrays.asList(productForm1, productForm2));
     }
@@ -226,13 +226,13 @@ public class ProductServiceTest {
 
         Product product11 = new Product(
                 200L, "prod1", "123456", "searchQuery1",
-                "search_Price_List_Query", "dunamisQuery", "excludeQuery1", "colorQuery11", type1,
-                vendor1, color11, true, "description1");
+                "search_Price_List_Query", "dunamisQuery", "excludeQuery1", "colorQuery11", "", type1,
+                vendor1, color11, true, "description1", false);
 
         Product product12 = new Product(
                 201L, "prod1", "123456", "searchQuery1",
-                "search_Price_List_Query", "dunamisQuery", "excludeQuery1", "colorQuery12", type1,
-                vendor1, color12, true, "description1");
+                "search_Price_List_Query", "dunamisQuery", "excludeQuery1", "colorQuery12", "", type1,
+                vendor1, color12, true, "description1", false);
 
 
         List<Product> expectedProducts =
@@ -244,13 +244,13 @@ public class ProductServiceTest {
         ProductForm productForm = productService.getProductForm("123456");
 
         // Then
-        ColorProductForm colorProductForm11 = new ColorProductForm(200L, new Color(11L), "colorQuery11");
-        ColorProductForm colorProductForm12 = new ColorProductForm(201L, new Color(12L), "colorQuery12");
+        ColorProductForm colorProductForm11 = new ColorProductForm(200L, new Color(11L), "colorQuery11", "");
+        ColorProductForm colorProductForm12 = new ColorProductForm(201L, new Color(12L), "colorQuery12", "");
         ProductForm expectedProductForm =
                 new ProductForm(
                         "123456", "prod1", "searchQuery1", "search_Price_List_Query", "excludeQuery1",
                         new ProductType(1L), new Vendor(1L), true, "description1",
-                        Arrays.asList(colorProductForm11, colorProductForm12));
+                        Arrays.asList(colorProductForm11, colorProductForm12), false);
 
         assertThat(productForm).isEqualTo(expectedProductForm);
     }
@@ -265,24 +265,24 @@ public class ProductServiceTest {
 
         Product expectedProduct1 = new Product(
                 200L, "prod1", "123456", "searchQuery1",
-                "search_Price_List_Query", "dunamisQuery", "excludeQuery1", "colorQuery11", type1,
-                vendor1, color11, true, "description1");
+                "search_Price_List_Query", "dunamisQuery", "excludeQuery1", "colorQuery11", "", type1,
+                vendor1, color11, true, "description1", false);
 
         Product expectedProduct2 = new Product(
                 201L, "prod1", "123456", "searchQuery1",
-                "search_Price_List_Query", "dunamisQuery", "excludeQuery1", "colorQuery12", type1,
-                vendor1, color12, true, "description1");
+                "search_Price_List_Query", "dunamisQuery", "excludeQuery1", "colorQuery12", "", type1,
+                vendor1, color12, true, "description1", false);
 
         when(productDao.findByYandexId("123456")).thenReturn(
                 Arrays.asList(expectedProduct1, expectedProduct2));
 
-        ColorProductForm colorProductForm11 = new ColorProductForm(200L, new Color(11L), "colorQuery11");
-        ColorProductForm colorProductForm12 = new ColorProductForm(201L, new Color(12L), "colorQuery12");
+        ColorProductForm colorProductForm11 = new ColorProductForm(200L, new Color(11L), "colorQuery11", "");
+        ColorProductForm colorProductForm12 = new ColorProductForm(201L, new Color(12L), "colorQuery12", "");
         ProductForm productForm =
                 new ProductForm(
                         "123456", "prod1", "searchQuery1", "search_Price_List_Query", "excludeQuery1",
                         new ProductType(1L), new Vendor(1L), true, "description1",
-                        Arrays.asList(colorProductForm11, colorProductForm12));
+                        Arrays.asList(colorProductForm11, colorProductForm12), false);
 
         // When
         productService.saveProductFromProductForm(productForm);

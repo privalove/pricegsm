@@ -22,9 +22,10 @@ public class YandexMarket2Servlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String query = req.getParameter("query");
         long yandexTypeId = Long.parseLong(req.getParameter("yandexTypeId"));
+        boolean manufacturerWarranty = Boolean.parseBoolean(req.getParameter("manufacturerWarranty"));
 
 
-        String content = parser.parse(query, yandexTypeId);
+        String content = parser.parse(query, yandexTypeId, manufacturerWarranty);
 
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("application/json");

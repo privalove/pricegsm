@@ -167,7 +167,8 @@ function IndexCtrl($scope, $cookieStore, $filter, $locale, indexResource, IndexR
             {field: 'seller', displayName: 'Поставщик'},
             {field: 'name', displayName: 'Наименование'},
             {field: 'description', displayName: 'Примечание'},
-            {field: 'price', displayName: 'Цена', cellTemplate: 'resources/template/yandexPriceCellTemplate.html'}
+            {field: 'price', displayName: 'Цена', cellTemplate: 'resources/template/yandexPriceCellTemplate.html'},
+            {field: 'date', displayName: 'Добaвлен', cellFilter: 'date:dd-MM-yyyy'}
         ]
     };
 

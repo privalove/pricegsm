@@ -91,7 +91,11 @@ public class ParserService {
                                 : "";
                         String query = search + color + exclude;
 
-                        String url = AppSettings.getParserUrl() + "/yandex2?query=" + URLEncoder.encode(query, "UTF-8") + "&yandexTypeId=" + product.getType().getYandexId();
+                        String url =
+                                AppSettings.getParserUrl() + "/yandex2"
+                                        + "?query=" + URLEncoder.encode(query, "UTF-8")
+                                        + "&yandexTypeId=" + product.getType().getYandexId()
+                                        + "&manufacturerWarranty=" + product.isManufacturerWarranty();
 
                         logger.info("Fetch url: {}", url);
 

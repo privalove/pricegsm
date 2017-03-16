@@ -20,13 +20,16 @@ public class ColorProductForm {
 
     private String colorQuery;
 
+    private String excludedColorQuery;
+
     public ColorProductForm() {
     }
 
-    public ColorProductForm(Long productId, Color color, String colorQuery) {
+    public ColorProductForm(Long productId, Color color, String colorQuery, String excludedColorQuery) {
         this.productId = productId;
         this.color = color;
         this.colorQuery = colorQuery;
+        this.excludedColorQuery = excludedColorQuery;
     }
 
     public Long getProductId() {
@@ -54,6 +57,14 @@ public class ColorProductForm {
         this.colorQuery = colorQuery;
     }
 
+    public String getExcludedColorQuery() {
+        return excludedColorQuery;
+    }
+
+    public void setExcludedColorQuery(String excludedColorQuery) {
+        this.excludedColorQuery = excludedColorQuery;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -65,6 +76,7 @@ public class ColorProductForm {
         builder.append(getProductId(), that.getProductId());
         builder.append(getColor(), that.getColor());
         builder.append(getColorQuery(), that.getColorQuery());
+        builder.append(getExcludedColorQuery(), that.getExcludedColorQuery());
 
         return builder.isEquals();
     }
@@ -75,6 +87,7 @@ public class ColorProductForm {
                 .append(getProductId())
                 .append(getColor())
                 .append(getColorQuery())
+                .append(getExcludedColorQuery())
                 .toHashCode();
     }
 
@@ -84,6 +97,7 @@ public class ColorProductForm {
                 .append("productId", productId)
                 .append("color", color)
                 .append("colorQuery", colorQuery)
+                .append("excludedColorQuery", excludedColorQuery)
                 .toString();
     }
 }

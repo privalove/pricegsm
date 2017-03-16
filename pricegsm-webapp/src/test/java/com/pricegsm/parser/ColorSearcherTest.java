@@ -12,7 +12,7 @@ public class ColorSearcherTest extends TestCase {
     @Test
     public void testIsCellFind() {
         // Given
-        ColorSearcher colorSearcher = new ColorSearcher("gold,золотoй");
+        ColorSearcher colorSearcher = new ColorSearcher("gold,золотoй", "Rose Gold, Розовый Золотой");
         // When
         // Then
         assertEquals(true, colorSearcher.isCellFind("gold"));
@@ -44,5 +44,11 @@ public class ColorSearcherTest extends TestCase {
         assertEquals(false, colorSearcher.isCellFind("GRAY СЕРЫЙ"));
         assertEquals(false, colorSearcher.isCellFind("СЕРЫЙ"));
         assertEquals(false, colorSearcher.isCellFind("GRAY"));
+
+        assertEquals(false, colorSearcher.isCellFind("Rose Gold"));
+        assertEquals(false, colorSearcher.isCellFind("Розовый Золотой"));
+        assertEquals(false, colorSearcher.isCellFind("Розовый Золотой, Rose Gold"));
+        assertEquals(false, colorSearcher.isCellFind("Rose Gold, Розовый Золотой"));
+
     }
 }

@@ -237,6 +237,7 @@ public class IndexController {
             map.put("name", price.getPriceListProductName());
             map.put("description", price.getDescription());
             map.put("price", getPrice(price, currency));
+            map.put("date", price.getDate());
             result.add(map);
         }
 

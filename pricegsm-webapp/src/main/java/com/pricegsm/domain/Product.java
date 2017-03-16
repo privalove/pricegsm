@@ -30,6 +30,8 @@ public class Product
 
     private String colorQuery;
 
+    private String excludedColorQuery;
+
     private ProductType type;
 
     private Vendor vendor;
@@ -40,14 +42,16 @@ public class Product
 
     private String description;
 
+    private boolean manufacturerWarranty = false;
+
     public Product() {
     }
 
     public Product(
             long id, String name, String yandexId, String searchQuery,
             String searchPriceListQuery, String dunamisQuery, String excludeQuery,
-            String colorQuery, ProductType type, Vendor vendor, Color color,
-            boolean active, String description) {
+            String colorQuery, String excludedColorQuery, ProductType type, Vendor vendor, Color color,
+            boolean active, String description, boolean manufacturerWarranty) {
 
         super(id);
         this.name = name;
@@ -62,6 +66,8 @@ public class Product
         this.color = color;
         this.active = active;
         this.description = description;
+        this.excludedColorQuery = excludedColorQuery;
+        this.manufacturerWarranty = manufacturerWarranty;
     }
 
     @Id
@@ -207,5 +213,26 @@ public class Product
 
     public void setColorQuery(String colorQuery) {
         this.colorQuery = colorQuery;
+    }
+
+    @Size(max = 255)
+    @Basic
+    @Column(name = "excluded_color_query")
+    public String getExcludedColorQuery() {
+        return excludedColorQuery;
+    }
+
+    public void setExcludedColorQuery(String excludedColorQuery) {
+        this.excludedColorQuery = excludedColorQuery;
+    }
+
+    @Basic
+    @Column(name = "manufacturer_warranty", nullable = false)
+    public boolean isManufacturerWarranty() {
+        return manufacturerWarranty;
+    }
+
+    public void setManufacturerWarranty(boolean manufacturerWarranty) {
+        this.manufacturerWarranty = manufacturerWarranty;
     }
 }

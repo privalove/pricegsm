@@ -54,7 +54,7 @@ public abstract class PriceListParser<T> {
     private List<WorldPrice> getResults(Product product) {
         List<Searcher> searchers = new ArrayList<>();
         searchers.add(new ProductNameSearcher(descriptor.getSearchQuery(product)));
-        searchers.add(new ColorSearcher(product.getColorQuery()));
+        searchers.add(new ColorSearcher(product.getColorQuery(), product.getExcludedColorQuery()));
 
         List<List<String>> rows = findRows(searchers);
 

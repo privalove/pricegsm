@@ -73,7 +73,7 @@ public class    ProductController {
             @PathVariable long vendorId,
             final ProductForm productForm, Model model) {
 
-        productForm.getColors().add(new ColorProductForm(0L, colorService.load(1L), ""));
+        productForm.getColors().add(new ColorProductForm(0L, colorService.load(1L), "", ""));
         model.addAttribute("vendorId", vendorId);
         return "admin/product";
     }

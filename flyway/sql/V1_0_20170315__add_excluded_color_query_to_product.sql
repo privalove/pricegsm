@@ -1,0 +1,1 @@
+alter table "product" add column "excluded_color_query" varchar(255);

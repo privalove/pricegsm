@@ -1,0 +1,1 @@
+alter table "product" add column "manufacturer_warranty" BOOLEAN NOT NULL DEFAULT FALSE;
